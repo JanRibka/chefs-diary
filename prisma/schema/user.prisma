@@ -8,4 +8,5 @@ model User {
   TwoFactor            Boolean?           @default(false) @map("twoFactor")
   UserInfo             UserInfo?
   UserLoginHistory     UserLoginHistory[]
+  UserLoginCode        UserLoginCode[]
 }

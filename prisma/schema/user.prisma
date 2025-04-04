@@ -1,0 +1,11 @@
+model User {
+  IdUser               Int                @id @default(autoincrement()) @map("idUser") @db.Integer
+  Uuid                 String             @unique @map("uuid") @db.VarChar(36)
+  Login                String             @unique @map("login") @db.VarChar(25)
+  Password             String             @map("password") @db.VarChar(75)
+  IsDisabled           Boolean?           @default(false) @map("isDisabled")
+  LoginRestrictedUntil DateTime?          @map("loginRestrictedUntil") @db.Timestamp(0)
+  TwoFactor            Boolean?           @default(false) @map("twoFactor")
+  UserInfo             UserInfo?
+  UserLoginHistory     UserLoginHistory[]
+}

@@ -9,4 +9,6 @@ model User {
   UserInfo             UserInfo?
   UserLoginHistory     UserLoginHistory[]
   UserLoginCode        UserLoginCode[]
+
+  // @@index([Uuid])  I can define an Index
 }

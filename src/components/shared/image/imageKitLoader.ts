@@ -14,7 +14,7 @@ const imageKitLoader = ({ src, width, quality }: ImageKitLoaderProps) => {
   }
 
   const paramsString = params.join(",");
-  let urlEndpoint = `https://ik.imagekit.io/${process.env.NEXT_PUBLIC_IMAGE_KIT_ID}`;
+  let urlEndpoint = process.env.NEXT_PUBLIC_IMAGE_KIT_LINK as string;
 
   if (urlEndpoint[urlEndpoint.length - 1] === "/")
     urlEndpoint = urlEndpoint.substring(0, urlEndpoint.length - 1);

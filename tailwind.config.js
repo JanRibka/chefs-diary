@@ -3,8 +3,8 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
-  // important: "#_next",
-  // prefix: "tw-",
+  important: "#__next",
+  prefix: "tw-",
   darkMode: "class",
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",

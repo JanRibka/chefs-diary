@@ -1,10 +1,12 @@
 import { Metadata } from "next";
 
+import LoginForm from "./_loginForm/LoginForm";
+
 export const metadata: Metadata = {
   title: "Přihlášení",
   description: "Získejte přístup k administraci webu Kuchařův deník",
 };
 
-export default function Login() {
-  return <h1>Login</h1>;
+export default function LoginPage() {
+  return <LoginForm />;
 }

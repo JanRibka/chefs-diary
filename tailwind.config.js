@@ -1,14 +1,12 @@
+import { heroui } from "@heroui/theme";
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  corePlugins: {
-    preflight: false,
-  },
-  important: "#__next",
-  prefix: "tw-",
   darkMode: "class",
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,mdx,tsx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -26,6 +24,6 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [heroui()],
   // plugins: ["tailwindcss-animate"],
 };

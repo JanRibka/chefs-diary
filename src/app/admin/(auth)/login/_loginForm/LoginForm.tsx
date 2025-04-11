@@ -6,8 +6,7 @@ import { useEffect, useRef } from "react";
 import Form from "@/components/shared/form/Form";
 import FormHeading from "@/components/shared/form/FormHeading";
 import PasswordInput from "@/components/shared/password-input/PasswordInput";
-import SubmitButton from "@/components/shared/submit-button/SubmitButton";
-import { Checkbox, Input } from "@heroui/react";
+import { Button, Checkbox, Input } from "@heroui/react";
 import { Tooltip } from "@heroui/tooltip";
 
 export default function LoginForm() {
@@ -24,7 +23,7 @@ export default function LoginForm() {
       <div className="flex flex-col items-center">
         <FormHeading>Přihlášení</FormHeading>
 
-        <Form className="flex flex-col items-center" noValidate>
+        <Form className="flex flex-col items-center">
           <Input
             ref={refLogin}
             name="login"
@@ -57,15 +56,13 @@ export default function LoginForm() {
               <Checkbox name="persistLogin">Zůstat přihlášený</Checkbox>
             </Tooltip>
             <p>
-              <Link href={"#"} className="text-primary">
-                Zapomněli jste heslo?
-              </Link>
+              <Link href={"#"}>Zapomněli jste heslo?</Link>
             </p>
           </div>
 
-          <SubmitButton fullWidth color="primary">
+          <Button fullWidth color="primary">
             Přihlásit
-          </SubmitButton>
+          </Button>
         </Form>
       </div>
     </section>

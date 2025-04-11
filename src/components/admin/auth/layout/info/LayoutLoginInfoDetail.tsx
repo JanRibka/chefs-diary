@@ -1,7 +1,6 @@
 import Image from "@/components/shared/image/Image";
 
 const LayoutLoginInfoDetail = () => {
-  // TODO: Tady se bude na49tat dodatecne info, podle videa router. Je to n2kde na konci
   return (
     <div className="relative flex flex-col w-full h-full z-2">
       <div className="flex w-full">
@@ -19,9 +18,8 @@ const LayoutLoginInfoDetail = () => {
       <div className="z-0 flex items-center h-full">
         <div className="mx-5 md:mx-12">
           <div className="mb-12">
-            <h1 className="mb-6 text-white typography">Vítejte zpět!</h1>
-            {/* <h1 className="mb-6 text-white">Vítejte zpět!</h1> */}
-            <em className="italic tracking-wider text-white">
+            <h1 className="mb-6 text-white">Vítejte zpět!</h1>
+            <em className="text-white">
               Získejte přístup k administraci webu Kuchařův deník
             </em>
           </div>

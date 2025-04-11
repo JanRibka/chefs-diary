@@ -1,0 +1,14 @@
+@tailwind base;
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    outline-color: currentColor;
+  }
+}

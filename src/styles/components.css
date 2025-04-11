@@ -1,0 +1,15 @@
+@tailwind components;
+
+@layer components {
+  h1 {
+    @apply text-6xl font-bold tracking-tight leading-15;
+  }
+
+  h3 {
+    @apply text-3xl font-bold leading-9 tracking-[-0.007em];
+  }
+
+  em {
+    @apply text-lg italic leading-6 tracking-wider font-inherit;
+  }
+}

@@ -29,10 +29,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <body
-        className={mergeStyles(
-          "min-h-screen font-sans antialiased",
-          fontSans.variable
-        )}
+        className={mergeStyles("min-h-screen font-sans", fontSans.variable)}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           {children}

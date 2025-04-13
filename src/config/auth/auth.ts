@@ -66,6 +66,13 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           throw new Error("No user ID found in token");
         }
 
+        // // Zkontrolujte, zda je "rememberMe" nastaveno
+        // const rememberMe = params.token.rememberMe || false;
+
+        // const expires = rememberMe
+        //   ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 dní
+        //   : null; // Platnost pouze po dobu relace
+
         const createdSession = await adapter.createSession?.({
           sessionToken: sessionToken,
           userId: params.token.sub,

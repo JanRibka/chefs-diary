@@ -12,6 +12,10 @@ export const signUp = async (formData: FormData) => {
   return executeAction({
     actionFn: async () => {
       // TODO: Pokus se n2co posere, tak se mus9 ud2lat rollback
+      // const [posts, totalPosts] = await prisma.$transaction([
+      //   prisma.post.findMany({ where: { title: { contains: 'prisma' } } }),
+      //   prisma.post.count(),
+      // ])
       const login = formData.get("userName");
       const email = formData.get("email");
       const password = formData.get("password");

@@ -1,0 +1,8 @@
+model VerificationToken {
+  Identifier String   @map("identifier") @db.VarChar(255)
+  Token      String   @map("token") @db.VarChar(255)
+  Expires    DateTime @map("expires") @db.Timestamp(0)
+
+  @@unique([Identifier, Token])
+  @@map("verification_tokens")
+}

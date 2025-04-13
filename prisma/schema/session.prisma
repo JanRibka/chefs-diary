@@ -1,0 +1,9 @@
+model Session {
+  IdSession    String   @id @default(cuid()) @map("id") @db.VarChar(25)
+  SessionToken String   @unique @map("session_token") @db.VarChar(255)
+  IdUser       String   @map("user_id") @db.VarChar(25)
+  Expires      DateTime @map("expires") @db.Timestamp(0)
+  User         User     @relation(fields: [IdUser], references: [IdUser], onDelete: Cascade)
+
+  @@map("sessions")
+}

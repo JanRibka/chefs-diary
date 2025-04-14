@@ -1,6 +1,5 @@
 "use client";
 
-import { redirect } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import { signUp } from "@/actions/auth/auth";
@@ -8,7 +7,6 @@ import ConfirmPassword from "@/components/shared/confirmPassword/ConfirmPassword
 import Form from "@/components/shared/form/Form";
 import FormHeading from "@/components/shared/form/FormHeading";
 import SubmitButton from "@/components/shared/submitButton/SubmitButton";
-import webRoutes from "@/lib/routes/web/routes";
 import { Checkbox, Input } from "@heroui/react";
 
 export default function RegisterForm() {
@@ -25,22 +23,10 @@ export default function RegisterForm() {
       <div className="flex flex-col items-center">
         <FormHeading>Registrace</FormHeading>
 
-        <Form
-          className="flex flex-col items-center"
-          noValidate
-          action={async (formData: FormData) => {
-            "use server";
-            //TODO: Toto by mohlo b7t cel0 v signUp
-            const res = await signUp(formData);
-
-            if (res.success) {
-              redirect(webRoutes.Login);
-            }
-          }}
-        >
+        <Form className="flex flex-col items-center" noValidate action={signUp}>
           <Input
             ref={refLogin}
-            name="login"
+            name="userName"
             label="Uživatelské jméno"
             className="mb-4"
             required

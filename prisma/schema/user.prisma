@@ -18,5 +18,5 @@ model User {
   // Optional for WebAuthn support
   Authenticator        Authenticator[]
 
-  //@@index([Uuid])  I can define an Index
+  //@@index([Email])  I can define an Index. Pokud hled8m 4asto t5eba by email, tak na něj dám index
 }

@@ -1,4 +1,4 @@
-import { compare, hash } from "bcrypt";
+// import { compare, hash } from "bcrypt";
 import NextAuth from "next-auth";
 import { encode } from "next-auth/jwt";
 import Credentials, {
@@ -8,7 +8,7 @@ import Google from "next-auth/providers/google";
 import { v4 as uuid } from "uuid";
 
 import { prisma } from "@/lib/prisma";
-import { loginSchema } from "@/lib/validations/web/login/loginSchema";
+// import { loginSchema } from "@/lib/validations/schemas/web/signIn/loginSchema";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
 const adapter = PrismaAdapter(prisma);
@@ -22,23 +22,23 @@ const credentials: CredentialsConfig = {
     password: {},
   },
   authorize: async (credentials) => {
-    const validatedCredentials = loginSchema.parse(credentials);
+    // const validatedCredentials = loginSchema.parse(credentials);
+    console.log("credentials", credentials);
+    // const user = await prisma.user.findFirst({
+    //   where: {
+    //     Email: validatedCredentials?.email,
+    //     Password: await hash(validatedCredentials?.password, 10),
+    //   },
+    // });
 
-    const user = await prisma.user.findFirst({
-      where: {
-        Email: validatedCredentials?.email,
-        Password: await hash(validatedCredentials?.password, 10),
-      },
-    });
+    // if (!user) {
+    //   throw new Error("Invalid credentials");
+    // }
 
-    if (!user) {
-      throw new Error("Invalid credentials");
-    }
-
-    // Porovn8vat se bude hashovane heslo
-    if (!(await compare(validatedCredentials.password, user.Password))) {
-      return null;
-    }
+    // // Porovn8vat se bude hashovane heslo
+    // if (!(await compare(validatedCredentials.password, user.Password))) {
+    //   return null;
+    // }
 
     return {};
   },

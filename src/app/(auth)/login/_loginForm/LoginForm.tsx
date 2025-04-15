@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
-import { signIn } from "@/actions/auth/auth";
+import { signInAction } from "@/actions/auth/auth";
 import Form from "@/components/shared/form/Form";
 import FormHeading from "@/components/shared/form/FormHeading";
 import PasswordInput from "@/components/shared/passwordInput/PasswordInput";
@@ -25,7 +25,11 @@ export default function LoginForm() {
       <div className="flex flex-col items-center">
         <FormHeading>Přihlášení</FormHeading>
 
-        <Form className="flex flex-col items-center" noValidate action={signIn}>
+        <Form
+          className="flex flex-col items-center"
+          noValidate
+          action={signInAction}
+        >
           <Input
             ref={refLogin}
             name="login"

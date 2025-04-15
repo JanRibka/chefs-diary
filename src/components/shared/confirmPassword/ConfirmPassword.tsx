@@ -1,6 +1,8 @@
 import { HTMLAttributes, useRef } from "react";
 
+import { nameof } from "@/lib/utils/nameof";
 import { mergeStyles } from "@/lib/utils/styles";
+import { SignUpFormType } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 
 import PasswordInput from "../passwordInput/PasswordInput";
 
@@ -17,7 +19,7 @@ export default function ConfirmPassword({ className, ...restProps }: Props) {
     >
       <PasswordInput
         ref={refPassword}
-        name="password"
+        name={nameof<SignUpFormType>("password")}
         label="Heslo"
         required
         className="mb-4"
@@ -29,7 +31,7 @@ export default function ConfirmPassword({ className, ...restProps }: Props) {
       />
       <PasswordInput
         ref={refConfirmPassword}
-        name="confirmPassword"
+        name={nameof<SignUpFormType>("confirmPassword")}
         label="Potvrdit heslo"
         required
         className="mb-4"

@@ -13,7 +13,7 @@ import signUpFormValidationSchema, {
   SignUpFormType,
 } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 import validateSignUpForm from "@/lib/validations/validations/web/signUp/validateSignUpForm";
-import { Checkbox, Input } from "@heroui/react";
+import { Checkbox } from "@heroui/react";
 
 export default function RegisterForm() {
   // References
@@ -64,21 +64,23 @@ export default function RegisterForm() {
             fullWidth
             variant="faded"
             color="primary"
-            fieldValidationSchema={signUpFormValidationSchema}
+            validationSchema={signUpFormValidationSchema}
           />
 
-          <Input
+          <ValidateInput
             name={nameof<SignUpFormType>("email")}
             label="Email"
             type="email"
             className="mb-4"
             required
-            // error={false}
-            // helperText={""}
+            defaultValue={state.form?.userName}
+            isInvalid={!!state.errors?.userName}
+            errorMessage={state.errors?.userName}
             autoComplete="email"
             fullWidth
             variant="faded"
             color="primary"
+            validationSchema={signUpFormValidationSchema}
           />
 
           <ConfirmPassword className="mb-4" />

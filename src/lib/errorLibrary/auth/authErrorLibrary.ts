@@ -5,8 +5,8 @@ const errorTexts: LibraryType = {
   registerUserMainError: "Registrace skončila chybou, zkuste to prosím znovu",
   loginUserMainError: "Přihlášení skončilo chybou, zkuste to prosím znovu",
   loginRequired: "Uživatelské jméno je povinné",
-  loginMinLength: "Uživatelské jméno musí mít alespoň {0} znaků",
-  loginMaxLength: "Uživatelské jméno může mít maximálně {0} znaků",
+  loginMinLength: "Uživatelské jméno musí mít alespoň {0} znak",
+  loginMaxLength: "Uživatelské jméno může mít maximálně {0} znak",
   loginStartWithLetter: "Uživatelské jméno musí začínat písmenem",
   loginAllowedCharacters:
     "Uživatelské jméno může obsahovat pouze písmena, čísla, pomlčku a podtržítko",
@@ -14,8 +14,8 @@ const errorTexts: LibraryType = {
   emailInvalid: "Email není platná emailová adresa",
   emailExists: "Email již existuje",
   passwordRequired: "Heslo je povinné",
-  passwordMinLength: "Heslo musí mít alespoň {0} znaků",
-  passwordMaxLength: "Heslo může mít maximálně {0} znaků",
+  passwordMinLength: "Heslo musí mít alespoň {0} znak",
+  passwordMaxLength: "Heslo může mít maximálně {0} znak",
   passwordLoweCase: "Heslo musí obsahovat alespoň jedno malé písmeno",
   passwordUpperCase: "Heslo musí obsahovat alespoň jedno velké písmeno",
   passwordNumbers: "Heslo musí obsahovat alespoň jednu číslici",
@@ -27,10 +27,20 @@ const errorTexts: LibraryType = {
 
 const getErrorTextByKey = (key: keyof LibraryType, ...args: string[]) => {
   if (args.length > 0) {
-    return stringFormat(errorTexts?.[key as keyof LibraryType] ?? key, ...args);
+    const errorText = stringFormat(
+      errorTexts?.[key as keyof LibraryType] ?? key,
+      ...args
+    ).replace("znak", getZnakText(parseInt(args[0])));
+    return errorText;
   }
 
   return errorTexts?.[key as keyof LibraryType] ?? key;
+};
+
+const getZnakText = (count: number) => {
+  if (count === 1) return "znak";
+  if (count >= 2 && count <= 4) return "znaky";
+  return "znaků";
 };
 
 export default getErrorTextByKey;

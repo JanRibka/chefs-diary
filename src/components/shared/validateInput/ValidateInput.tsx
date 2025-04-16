@@ -1,10 +1,11 @@
 import { useCallback, useState } from "react";
 import * as Yup from "yup";
 
+import { validateField } from "@/lib/validations/validations/field/validateField";
 import { Input, InputProps } from "@heroui/react";
 
 type Props<T extends object> = InputProps & {
-  fieldValidationSchema: Yup.ObjectSchema<T>;
+  validationSchema: Yup.ObjectSchema<T>;
 };
 
 export default function ValidateInput<T extends object>({
@@ -13,28 +14,21 @@ export default function ValidateInput<T extends object>({
   errorMessage,
   name,
   onChange,
-  fieldValidationSchema,
+  validationSchema,
   ...restProps
 }: Props<T>) {
   const [fieldValue, setFieldValue] = useState<string | undefined>(value);
 
   const getErrorMessage = useCallback(() => {
-    debugger;
-    //TODO: Ve validac9ch ud2lat asunchronni metodu pro validaci jedne polozyky z modelu
-    try {
-      fieldValidationSchema.validateSync(
-        { [name as string]: fieldValue },
-        { abortEarly: false }
-      );
-    } catch (error) {
-      console.error("Validation error:", error);
-      debugger;
+    if (!!!fieldValue) {
+      return "";
     }
 
-    return "";
+    return validateField<T>(validationSchema, name!, fieldValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldValue]);
 
-  const fieldErrorMessage = errorMessage ?? getErrorMessage();
+  const fieldErrorMessage = (errorMessage as string) ?? getErrorMessage();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(event.target.value);
@@ -44,8 +38,8 @@ export default function ValidateInput<T extends object>({
   return (
     <Input
       value={value}
-      isInvalid={isInvalid || !!!fieldErrorMessage}
-      errorMessage={errorMessage ?? fieldErrorMessage}
+      isInvalid={isInvalid || !!fieldErrorMessage}
+      errorMessage={fieldErrorMessage}
       onChange={handleChange}
       {...restProps}
     />

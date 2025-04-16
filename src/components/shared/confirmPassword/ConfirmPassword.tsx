@@ -4,7 +4,7 @@ import { nameof } from "@/lib/utils/nameof";
 import { mergeStyles } from "@/lib/utils/styles";
 import { SignUpFormType } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 
-import PasswordInput from "../passwordInput/PasswordInput";
+import PasswordInput from "../ValidatePasswordInput/ValidatePasswordInput";
 
 type Props = HTMLAttributes<Omit<HTMLDivElement, "children">> & {};
 

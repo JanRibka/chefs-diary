@@ -6,8 +6,8 @@ import { useEffect, useRef } from "react";
 import { signInAction } from "@/actions/auth/auth";
 import Form from "@/components/shared/form/Form";
 import FormHeading from "@/components/shared/form/FormHeading";
-import PasswordInput from "@/components/shared/passwordInput/PasswordInput";
 import SubmitButton from "@/components/shared/submitButton/SubmitButton";
+import PasswordInput from "@/components/shared/ValidatePasswordInput/ValidatePasswordInput";
 import { Checkbox, Input } from "@heroui/react";
 import { Tooltip } from "@heroui/tooltip";
 

@@ -20,12 +20,12 @@ const signUpFormValidationSchema = object().shape({
       getErrorTextByKey("loginStartWithLetter")
     )
     .matches(
-      new RegExp(`${loweUpperCaseNumberSpecialCharRegex("-_")}$`),
+      new RegExp(`^${loweUpperCaseNumberSpecialCharRegex("-_")}*$`),
       getErrorTextByKey("loginAllowedCharacters")
     ),
   email: string()
-    .email(getErrorTextByKey("emailInvalid"))
     .required(getErrorTextByKey("emailRequired"))
+    .email(getErrorTextByKey("emailInvalid"))
     .matches(new RegExp(EMAIL_END_REGEX), getErrorTextByKey("emailInvalid")),
   password: string()
     .required(getErrorTextByKey("passwordRequired"))

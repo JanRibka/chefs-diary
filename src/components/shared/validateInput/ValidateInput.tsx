@@ -28,7 +28,7 @@ export default function ValidateInput<T extends object>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldValue]);
 
-  const fieldErrorMessage = (errorMessage as string) ?? getErrorMessage();
+  const fieldErrorMessage = errorMessage ?? getErrorMessage();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(event.target.value);

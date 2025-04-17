@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/config/auth/auth";
 
-import LoginForm from "./_loginForm/LoginForm";
+import SignInForm from "./_signInForm/SignInForm";
 
 export const metadata: Metadata = {
   title: "Přihlášení",
@@ -15,5 +15,5 @@ export default async function LoginPage() {
   const session = await auth();
   if (session) redirect("");
 
-  return <LoginForm />;
+  return <SignInForm />;
 }

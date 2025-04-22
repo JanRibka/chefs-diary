@@ -1,19 +1,20 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 
 import { signUpAction } from "@/actions/auth/auth";
 import ConfirmPassword from "@/components/shared/confirmPassword/ConfirmPassword";
 import Form from "@/components/shared/form/Form";
 import FormHeading from "@/components/shared/form/FormHeading";
 import SubmitButton from "@/components/shared/submitButton/SubmitButton";
+import ValidateCheckbox from "@/components/shared/validateCheckbox/ValidateCheckbox";
 import ValidateInput from "@/components/shared/validateInput/ValidateInput";
 import { nameof } from "@/lib/utils/nameof";
 import signUpFormValidationSchema, {
+  SignUpFormErrorType,
   SignUpFormType,
 } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
-import validateSignUpForm from "@/lib/validations/validations/web/signUp/validateSignUpForm";
-import { Checkbox } from "@heroui/react";
+import { validateSignUpForm } from "@/lib/validations/validations/web/signUp/validateSignUpForm";
 
 export default function RegisterForm() {
   // References
@@ -21,23 +22,24 @@ export default function RegisterForm() {
   //   const refErrorMessage = useRef<HTMLParagraphElement>(null);
 
   const [state, action] = useActionState(signUpAction, {});
+  const [errors, setErrors] = useState<SignUpFormErrorType>({});
 
   useEffect(() => {
     refLogin.current?.focus();
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
-    const validationResult = await validateSignUpForm<SignUpFormType>(data);
+    const validationResult = validateSignUpForm<SignUpFormType>(data);
 
     if (Object.keys(validationResult).length > 0) {
+      event.preventDefault();
+      setErrors(validationResult);
       return;
     }
 
-    event.currentTarget.submit();
+    setErrors({});
   };
 
   return (
@@ -57,9 +59,8 @@ export default function RegisterForm() {
             label="Uživatelské jméno"
             className="mb-4"
             required
-            defaultValue={state.form?.userName}
-            isInvalid={!!state.errors?.userName}
-            errorMessage={state.errors?.userName}
+            isInvalid={!!errors.userName || !!state.errors?.userName}
+            errorMessage={errors.userName ?? state.errors?.userName}
             autoComplete="off"
             fullWidth
             variant="faded"
@@ -73,9 +74,8 @@ export default function RegisterForm() {
             type="email"
             className="mb-4"
             required
-            defaultValue={state.form?.userName}
-            isInvalid={!!state.errors?.userName}
-            errorMessage={state.errors?.userName}
+            isInvalid={!!errors.email || !!state.errors?.email}
+            errorMessage={errors.email ?? state.errors?.userName}
             autoComplete="email"
             fullWidth
             variant="faded"
@@ -83,14 +83,19 @@ export default function RegisterForm() {
             validationSchema={signUpFormValidationSchema}
           />
 
-          <ConfirmPassword className="mb-4" />
+          <ConfirmPassword className="mb-4" errors={errors} />
 
-          <Checkbox
+          <ValidateCheckbox
             name={nameof<SignUpFormType>("termsAgreement")}
             className="mb-4"
+            required
+            isInvalid={
+              !!errors.termsAgreement || !!state.errors?.termsAgreement
+            }
+            errorMessage={errors.termsAgreement ?? state.errors?.termsAgreement}
           >
             Souhlasím s podmínkami použití a ochranou osobních údajů
-          </Checkbox>
+          </ValidateCheckbox>
 
           <SubmitButton fullWidth color="primary">
             Registrovat

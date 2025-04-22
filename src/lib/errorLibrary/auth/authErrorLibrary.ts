@@ -23,6 +23,7 @@ const errorTexts: LibraryType = {
   confirmPasswordOneOf: "Hesla se neshodují",
   incorrectLoginPassword: "Neplatné uživatelské jméno, nebo heslo",
   accessDenied: "Byl vám odepřen přístup",
+  termsAgreementRequired: "Chybí souhlas s podmínkami",
 };
 
 const getErrorTextByKey = (key: keyof LibraryType, ...args: string[]) => {

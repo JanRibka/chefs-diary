@@ -5,7 +5,10 @@ import { mergeStyles } from "@/lib/utils/styles";
 import confirmPasswordValidationSchema, {
   ConfirmPasswordFormType,
 } from "@/lib/validations/schemas/shared/confirmPassword/confirmPasswordSchema";
-import { SignUpFormType } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
+import {
+  SignUpFormErrorType,
+  SignUpFormType,
+} from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 import { validateConfirmPassword } from "@/lib/validations/validations/admin/confirmPassword/confirmPassword";
 import { validateField } from "@/lib/validations/validations/field/validateField";
 
@@ -13,11 +16,13 @@ import PasswordInput from "../passwordInput/PasswordInput";
 
 type Props = HTMLAttributes<Omit<HTMLDivElement, "children">> & {
   passwordErrorMessage?: string;
+  errors: SignUpFormErrorType;
 };
 
 export default function ConfirmPassword({
   className,
   passwordErrorMessage,
+  // errors,
   ...restProps
 }: Props) {
   const refPassword = useRef<HTMLInputElement>(null);

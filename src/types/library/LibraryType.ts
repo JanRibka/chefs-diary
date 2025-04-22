@@ -18,7 +18,8 @@ type LibraryTypeProperty =
   | "confirmPasswordRequired"
   | "confirmPasswordOneOf"
   | "incorrectLoginPassword"
-  | "accessDenied";
+  | "accessDenied"
+  | "termsAgreementRequired";
 
 type LibraryType = Record<LibraryTypeProperty, string>;
 

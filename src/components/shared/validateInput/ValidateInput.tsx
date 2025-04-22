@@ -31,13 +31,16 @@ export default function ValidateInput<T extends object>({
   const fieldErrorMessage = errorMessage ?? getErrorMessage();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldValue(event.target.value);
+    const value = event.target.value;
+
+    setFieldValue(value);
     onChange?.(event);
   };
 
   return (
     <Input
-      value={value}
+      name={name}
+      value={fieldValue}
       isInvalid={isInvalid || !!fieldErrorMessage}
       errorMessage={fieldErrorMessage}
       onChange={handleChange}

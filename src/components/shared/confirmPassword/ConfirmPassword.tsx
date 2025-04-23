@@ -9,7 +9,7 @@ import {
   SignUpFormErrorType,
   SignUpFormType,
 } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
-import { validateConfirmPassword } from "@/lib/validations/validations/admin/confirmPassword/confirmPassword";
+import { validateConfirmPassword } from "@/lib/validations/validations/admin/confirmPassword/validateConfirmPassword";
 import { validateField } from "@/lib/validations/validations/field/validateField";
 
 import PasswordInput from "../passwordInput/PasswordInput";

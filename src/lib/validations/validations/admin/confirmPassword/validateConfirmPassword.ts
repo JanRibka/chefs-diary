@@ -2,6 +2,7 @@ import { ValidationError } from "yup";
 
 import confirmPasswordValidationSchema from "@/lib/validations/schemas/shared/confirmPassword/confirmPasswordSchema";
 
+// TODO: Zvazit jestli tu mus9 b7t generika, ted s emi nechce nad t9m premyslet
 export const validateConfirmPassword = <T extends object>(
   formData: Record<string, FormDataEntryValue>
 ) => {

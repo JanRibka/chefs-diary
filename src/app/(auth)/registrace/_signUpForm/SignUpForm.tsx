@@ -35,11 +35,13 @@ export default function RegisterForm() {
 
     if (Object.keys(validationResult).length > 0) {
       event.preventDefault();
-      setErrors(validationResult);
-      return;
+      setErrors({
+        ...validationResult,
+        timestamp: new Date().getTime().toString(),
+      });
     }
 
-    setErrors({});
+    // TODO: Tady budu nastavovat error ze state
   };
 
   return (
@@ -59,8 +61,7 @@ export default function RegisterForm() {
             label="Uživatelské jméno"
             className="mb-4"
             required
-            isInvalid={!!errors.userName || !!state.errors?.userName}
-            errorMessage={errors.userName ?? state.errors?.userName}
+            errors={errors}
             autoComplete="off"
             fullWidth
             variant="faded"
@@ -74,8 +75,7 @@ export default function RegisterForm() {
             type="email"
             className="mb-4"
             required
-            isInvalid={!!errors.email || !!state.errors?.email}
-            errorMessage={errors.email ?? state.errors?.userName}
+            errors={errors}
             autoComplete="email"
             fullWidth
             variant="faded"

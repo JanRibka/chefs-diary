@@ -31,7 +31,7 @@ export default function RegisterForm() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
-    const validationResult = validateSignUpForm<SignUpFormType>(data);
+    const validationResult = validateSignUpForm(data);
 
     if (Object.keys(validationResult).length > 0) {
       event.preventDefault();

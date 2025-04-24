@@ -28,10 +28,6 @@ export default confirmPasswordValidationSchema;
 export type ConfirmPasswordFormType = InferType<
   typeof confirmPasswordValidationSchema
 >;
-
-export type ConfirmPasswordValidationResultState = {
-  form?: Partial<ConfirmPasswordFormType>;
-  errors?: {
-    [K in keyof ConfirmPasswordFormType]?: string;
-  };
+export type ConfirmPasswordFormErrorType = {
+  [K in keyof ConfirmPasswordFormType]?: string;
 };

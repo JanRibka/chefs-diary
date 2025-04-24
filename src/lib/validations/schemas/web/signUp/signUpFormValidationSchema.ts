@@ -36,8 +36,3 @@ export type SignUpFormType = InferType<typeof signUpFormValidationSchema>;
 export type SignUpFormErrorType = {
   [K in keyof SignUpFormType | "timestamp"]?: string;
 };
-
-export type SignUpValidationResultState = {
-  form?: Partial<SignUpFormType>;
-  errors?: SignUpFormErrorType;
-};

@@ -1,12 +1,13 @@
 import { ValidationError } from "yup";
 
-import confirmPasswordValidationSchema from "@/lib/validations/schemas/shared/confirmPassword/confirmPasswordSchema";
+import confirmPasswordValidationSchema, {
+  ConfirmPasswordFormErrorType,
+} from "@/lib/validations/schemas/shared/confirmPassword/confirmPasswordSchema";
 
-// TODO: Zvazit jestli tu mus9 b7t generika, ted s emi nechce nad t9m premyslet
-export const validateConfirmPassword = <T extends object>(
+export const validateConfirmPassword = (
   formData: Record<string, FormDataEntryValue>
 ) => {
-  const errors: { [K in keyof T]?: string } = {};
+  const errors: ConfirmPasswordFormErrorType = {};
 
   try {
     confirmPasswordValidationSchema.validateSync(formData, {
@@ -14,7 +15,7 @@ export const validateConfirmPassword = <T extends object>(
     });
   } catch (error) {
     (error as ValidationError).inner.forEach((err: ValidationError) => {
-      const path = err.path as keyof T;
+      const path = err.path as keyof ConfirmPasswordFormErrorType;
 
       if (!!!errors[path]) {
         errors[path] = err.message;
@@ -25,10 +26,10 @@ export const validateConfirmPassword = <T extends object>(
   return errors;
 };
 
-export const validateConfirmPasswordAsync = async <T extends object>(
+export const validateConfirmPasswordAsync = async (
   formData: Record<string, FormDataEntryValue>
 ) => {
-  const errors: { [K in keyof T]?: string } = {};
+  const errors: ConfirmPasswordFormErrorType = {};
 
   try {
     confirmPasswordValidationSchema.validateSync(formData, {
@@ -36,7 +37,7 @@ export const validateConfirmPasswordAsync = async <T extends object>(
     });
   } catch (error) {
     (error as ValidationError).inner.forEach((err: ValidationError) => {
-      const path = err.path as keyof T;
+      const path = err.path as keyof ConfirmPasswordFormErrorType;
 
       if (!!!errors[path]) {
         errors[path] = err.message;

@@ -1,5 +1,5 @@
 "use client";
-
+// TODO: P5i registraci p5es socialni sit2 neprve kliknu na tlacitko socialni site a potom se zobrazi okno se souhlasem podminek
 import { useActionState, useEffect, useRef, useState } from "react";
 
 import { signUpAction } from "@/actions/auth/auth";
@@ -88,11 +88,8 @@ export default function RegisterForm() {
           <ValidateCheckbox
             name={nameof<SignUpFormType>("termsAgreement")}
             className="mb-4"
-            required
-            isInvalid={
-              !!errors.termsAgreement || !!state.errors?.termsAgreement
-            }
-            errorMessage={errors.termsAgreement ?? state.errors?.termsAgreement}
+            errors={errors}
+            validationSchema={signUpFormValidationSchema}
           >
             Souhlasím s podmínkami použití a ochranou osobních údajů
           </ValidateCheckbox>

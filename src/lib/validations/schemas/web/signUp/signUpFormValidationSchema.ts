@@ -34,5 +34,5 @@ export default signUpFormValidationSchema;
 
 export type SignUpFormType = InferType<typeof signUpFormValidationSchema>;
 export type SignUpFormErrorType = {
-  [K in keyof SignUpFormType | "timestamp"]?: string;
+  [K in keyof SignUpFormType | "general" | "timestamp"]?: string;
 };

@@ -3,15 +3,22 @@
 import { redirect } from "next/navigation";
 
 import { signIn as logIn } from "@/config/auth/auth";
+import signUpActionValidator from "@/lib/actionValidators/auth/signUpActionValidator";
 // import { prisma } from "@/lib/prisma";
 import webRoutes from "@/lib/routes/web/routes";
+import { SignUpFormErrorType } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
+
 // import { loginSchema } from "@/lib/validations/web/login/loginSchema";
-import { SignUpActionState } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 
 export const signUpAction = async (
-  _prev: SignUpActionState,
+  _prev: SignUpFormErrorType,
   formData: FormData
-): Promise<SignUpActionState> => {
+): Promise<SignUpFormErrorType> => {
+  const validationResult = await signUpActionValidator(formData);
+
+  if (!validationResult.success) {
+    return validationResult.errors;
+  }
   // TODO: Pokus se n2co posere, tak se mus9 ud2lat rollback
   // const [posts, totalPosts] = await prisma.$transaction([
   //   prisma.post.findMany({ where: { title: { contains: 'prisma' } } }),

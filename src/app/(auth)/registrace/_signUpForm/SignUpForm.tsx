@@ -16,12 +16,15 @@ import signUpFormValidationSchema, {
 } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 import { validateSignUpForm } from "@/lib/validations/validations/web/signUp/validateSignUpForm";
 
-export default function RegisterForm() {
+export default function SignUprForm() {
   // References
   const refLogin = useRef<HTMLInputElement>(null);
   //   const refErrorMessage = useRef<HTMLParagraphElement>(null);
 
-  const [state, action] = useActionState(signUpAction, {});
+  const [state, action] = useActionState(
+    signUpAction,
+    {} as SignUpFormErrorType
+  );
   const [errors, setErrors] = useState<SignUpFormErrorType>({});
 
   useEffect(() => {
@@ -33,15 +36,13 @@ export default function RegisterForm() {
     const data = Object.fromEntries(formData);
     const validationResult = validateSignUpForm(data);
 
-    if (Object.keys(validationResult).length > 0) {
+    if (!validationResult.success) {
       event.preventDefault();
       setErrors({
-        ...validationResult,
+        ...validationResult.errors,
         timestamp: new Date().getTime().toString(),
       });
     }
-
-    // TODO: Tady budu nastavovat error ze state
   };
 
   return (

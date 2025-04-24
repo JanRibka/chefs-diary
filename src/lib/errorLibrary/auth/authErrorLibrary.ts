@@ -1,5 +1,5 @@
-import { stringFormat } from "@/lib/utils/string";
-import LibraryType from "@/types/library/LibraryType";
+import LibraryType from '@/lib/types/library/LibraryType';
+import { stringFormat } from '@/lib/utils/string';
 
 const errorTexts: LibraryType = {
   registerUserMainError: "Registrace skončila chybou, zkuste to prosím znovu",

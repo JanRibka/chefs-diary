@@ -8,6 +8,6 @@ export const metadata: Metadata = {
     "Zaregistruj se pomocí svého e-mailu a osobních údajů, abys mohl začít!",
 };
 
-export default function RegisterPage() {
+export default function SignUpPage() {
   return <SignUpForm />;
 }

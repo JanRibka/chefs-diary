@@ -1,15 +1,16 @@
 import { ValidationError } from "yup";
 
+import ValidationResultType from "@/lib/types/validation/ValidationResultType";
 import signUpFormValidationSchema, {
   SignUpFormErrorType,
 } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 
-type ErrorType = Omit<SignUpFormErrorType, "timestamp">;
+type ErrorType = Omit<SignUpFormErrorType, "timestamp" | "general">;
 
 export const validateSignUpForm = (
   formData: Record<string, FormDataEntryValue>
 ) => {
-  const errors: ErrorType = {};
+  const result: ValidationResultType<ErrorType> = { success: true, errors: {} };
 
   try {
     signUpFormValidationSchema.validateSync(formData, {
@@ -19,19 +20,20 @@ export const validateSignUpForm = (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!errors[path]) {
-        errors[path] = err.message;
+      if (!!!result.errors[path]) {
+        result.errors[path] = err.message;
+        result.success = false;
       }
     });
   }
 
-  return errors;
+  return result;
 };
 
 export const validateSignUpFormAsync = async (
   formData: Record<string, FormDataEntryValue>
 ) => {
-  const errors: ErrorType = {};
+  const result: ValidationResultType<ErrorType> = { success: true, errors: {} };
 
   try {
     await signUpFormValidationSchema.validate(formData, {
@@ -41,11 +43,12 @@ export const validateSignUpFormAsync = async (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!errors[path]) {
-        errors[path] = err.message;
+      if (!!!result.errors[path]) {
+        result.errors[path] = err.message;
+        result.success = false;
       }
     });
   }
 
-  return errors;
+  return result;
 };

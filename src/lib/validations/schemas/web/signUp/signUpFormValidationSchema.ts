@@ -1,16 +1,14 @@
-import { bool, InferType, string } from "yup";
+import { bool, InferType, string } from 'yup';
 
-import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
+import getErrorTextByKey from '@/lib/errorLibrary/auth/authErrorLibrary';
 import {
-  EMAIL_END_REGEX,
-  LOWER_UPPERCASE_REGEX,
-  loweUpperCaseNumberSpecialCharRegex,
-} from "@/lib/errorLibrary/auth/regexes/common/commonRegexes";
+    EMAIL_END_REGEX, LOWER_UPPERCASE_REGEX, loweUpperCaseNumberSpecialCharRegex
+} from '@/lib/errorLibrary/auth/regexes/common/commonRegexes';
 
-import confirmPasswordValidationSchema from "../../shared/confirmPassword/confirmPasswordSchema";
+import confirmPasswordValidationSchema from '../../shared/confirmPassword/confirmPasswordSchema';
 
 const signUpFormValidationSchema = confirmPasswordValidationSchema.shape({
-  userName: string()
+  login: string()
     .required(getErrorTextByKey("loginRequired"))
     .matches(
       new RegExp(`^${LOWER_UPPERCASE_REGEX}`),

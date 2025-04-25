@@ -1,0 +1,7 @@
+model UserRole {
+  IdUserRole     Int          @id @default(autoincrement()) @map("idUserRole") @db.Integer
+  IdUser         String       @map("idUser") @db.VarChar(25)
+  User           User         @relation(fields: [IdUser], references: [IdUser])
+  IdUserRoleType Int          @default(autoincrement()) @map("idUserRoleType") @db.Integer
+  UserRoleType   UserRoleType @relation(fields: [IdUserRoleType], references: [IdUserRoleType])
+}

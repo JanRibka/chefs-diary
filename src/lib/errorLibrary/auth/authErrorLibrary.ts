@@ -1,5 +1,5 @@
-import LibraryType from '@/lib/types/library/LibraryType';
-import { stringFormat } from '@/lib/utils/string';
+import LibraryType from "@/lib/types/library/LibraryType";
+import { stringFormat } from "@/lib/utils/string";
 
 const errorTexts: LibraryType = {
   registerUserMainError: "Registrace skončila chybou, zkuste to prosím znovu",
@@ -10,6 +10,7 @@ const errorTexts: LibraryType = {
   loginStartWithLetter: "Uživatelské jméno musí začínat písmenem",
   loginAllowedCharacters:
     "Uživatelské jméno může obsahovat pouze písmena, čísla, pomlčku a podtržítko",
+  loginExists: "Uživatelské jméno již existuje",
   emailRequired: "Email je povinný",
   emailInvalid: "Email není platná emailová adresa",
   emailExists: "Email již existuje",

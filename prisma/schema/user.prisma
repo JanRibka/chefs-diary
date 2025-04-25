@@ -13,6 +13,7 @@ model User {
   TwoFactor            Boolean?           @default(false) @map("twoFactor")
   UserInfo             UserInfo?
   UserLoginHistory     UserLoginHistory[]
+  UseRoles             UserRole[]
   Accounts             Account[]
   Sessions             Session[]
   // Optional for WebAuthn support

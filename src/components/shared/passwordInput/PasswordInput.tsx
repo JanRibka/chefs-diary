@@ -1,8 +1,8 @@
 "use client";
 
-import { memo, SVGProps, useState } from "react";
+import { memo, SVGProps, useState } from 'react';
 
-import { Input, InputProps } from "@heroui/react";
+import { Input, InputProps } from '@heroui/react';
 
 export const EyeSlashFilledIcon = memo((props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -66,15 +66,29 @@ EyeFilledIcon.displayName = "EyeFilledIcon";
 
 type Props = InputProps & {};
 
-export default function PasswordInput(props: Props) {
+export default function PasswordInput({
+  value,
+  onChange,
+  ...restProps
+}: Props) {
+  const [localValue, setLocalValue] = useState<string>(value ?? "");
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+
+    setLocalValue(value);
+    onChange?.(event);
+  };
+
   return (
     <Input
-      {...props}
+      value={localValue}
+      {...restProps}
       type={isVisible ? "text" : "password"}
+      onChange={handleChange}
       endContent={
         <button
           aria-label="toggle password visibility"

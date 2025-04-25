@@ -1,35 +1,41 @@
 "use client";
 // TODO: P5i registraci p5es socialni sit2 neprve kliknu na tlacitko socialni site a potom se zobrazi okno se souhlasem podminek
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from 'react';
 
-import { signUpAction } from "@/actions/auth/auth";
-import ConfirmPassword from "@/components/shared/confirmPassword/ConfirmPassword";
-import Form from "@/components/shared/form/Form";
-import FormHeading from "@/components/shared/form/FormHeading";
-import SubmitButton from "@/components/shared/submitButton/SubmitButton";
-import ValidateCheckbox from "@/components/shared/validateCheckbox/ValidateCheckbox";
-import ValidateInput from "@/components/shared/validateInput/ValidateInput";
-import { nameof } from "@/lib/utils/nameof";
+import { signUpAction } from '@/actions/web/auth';
+import ConfirmPassword from '@/components/shared/confirmPassword/ConfirmPassword';
+import Form from '@/components/shared/form/Form';
+import FormHeading from '@/components/shared/form/FormHeading';
+import SubmitButton from '@/components/shared/submitButton/SubmitButton';
+import ValidateCheckbox from '@/components/shared/validateCheckbox/ValidateCheckbox';
+import ValidateInput from '@/components/shared/validateInput/ValidateInput';
+import useIsFirstRender from '@/lib/hooks/useIsFirstRender';
+import { nameof } from '@/lib/utils/nameof';
 import signUpFormValidationSchema, {
-  SignUpFormErrorType,
-  SignUpFormType,
-} from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
-import { validateSignUpForm } from "@/lib/validations/validations/web/signUp/validateSignUpForm";
+    SignUpFormErrorType, SignUpFormType
+} from '@/lib/validations/schemas/web/signUp/signUpFormValidationSchema';
+import { validateSignUpForm } from '@/lib/validations/validations/web/signUp/validateSignUpForm';
 
 export default function SignUprForm() {
   // References
   const refLogin = useRef<HTMLInputElement>(null);
   //   const refErrorMessage = useRef<HTMLParagraphElement>(null);
 
-  const [state, action] = useActionState(
-    signUpAction,
-    {} as SignUpFormErrorType
-  );
+  const isFirstRender = useIsFirstRender();
+
+  const [state, action] = useActionState(signUpAction, {});
   const [errors, setErrors] = useState<SignUpFormErrorType>({});
 
   useEffect(() => {
     refLogin.current?.focus();
   }, []);
+
+  useEffect(() => {
+    if (isFirstRender || !state.errors) return;
+
+    setErrors(state.errors);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
@@ -58,7 +64,9 @@ export default function SignUprForm() {
         >
           <ValidateInput
             ref={refLogin}
-            name={nameof<SignUpFormType>("userName")}
+            value={state.form?.login}
+            defaultValue="sdf"
+            name={nameof<SignUpFormType>("login")}
             label="Uživatelské jméno"
             className="mb-4"
             required
@@ -71,6 +79,7 @@ export default function SignUprForm() {
           />
 
           <ValidateInput
+            value={state.form?.email}
             name={nameof<SignUpFormType>("email")}
             label="Email"
             type="email"
@@ -84,7 +93,12 @@ export default function SignUprForm() {
             validationSchema={signUpFormValidationSchema}
           />
 
-          <ConfirmPassword className="mb-4" errors={errors} />
+          <ConfirmPassword
+            valuePassword={state.form?.password}
+            valueConfirmPassword={state.form?.confirmPassword}
+            className="mb-4"
+            errors={errors}
+          />
 
           <ValidateCheckbox
             name={nameof<SignUpFormType>("termsAgreement")}

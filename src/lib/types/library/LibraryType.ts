@@ -6,6 +6,7 @@ type LibraryTypeProperty =
   | "loginMaxLength"
   | "loginStartWithLetter"
   | "loginAllowedCharacters"
+  | "loginExists"
   | "emailRequired"
   | "emailInvalid"
   | "emailExists"

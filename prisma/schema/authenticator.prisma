@@ -1,14 +1,14 @@
 model Authenticator {
-  IdCredential         String  @unique @map("credentialID") @db.VarChar(25)
-  IdUser               String  @map("userId") @db.VarChar(25)
-  IdProviderAccount    String  @map("providerAccountId") @db.VarChar(25)
-  CredentialPublicKey  String  @map("credentialPublicKey") @db.VarChar(25)
-  Counter              Int     @map("counter") @db.Integer
-  CredentialDeviceType String  @map("credentialDeviceType") @db.VarChar(25)
-  CredentialBackedUp   Boolean @map("credentialBackedUp")
-  Transports           String? @map("transports") @db.VarChar(25)
+  credentialID         String  @unique @db.VarChar(25)
+  userId               String  @db.VarChar(25)
+  providerAccountId    String  @db.VarChar(25)
+  credentialPublicKey  String  @db.VarChar(25)
+  counter              Int     @db.Integer()
+  credentialDeviceType String  @db.VarChar(25)
+  credentialBackedUp   Boolean @db.Boolean()
+  transports           String? @db.VarChar(25)
 
-  user User @relation(fields: [IdUser], references: [IdUser], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [IdUser], onDelete: Cascade)
 
-  @@id([IdUser, IdCredential])
+  @@id([userId, credentialID])
 }

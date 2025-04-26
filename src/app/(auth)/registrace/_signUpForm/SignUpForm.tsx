@@ -77,7 +77,6 @@ export default function SignUprForm() {
           <ValidateInput
             ref={refLogin}
             value={state.form?.login}
-            defaultValue="sdf"
             name={nameof<SignUpFormType>("login")}
             label="Uživatelské jméno"
             className="mb-4"

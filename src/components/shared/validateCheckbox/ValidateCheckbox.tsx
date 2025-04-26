@@ -51,7 +51,6 @@ export default function ValidateCheckbox<T extends object>({
       <Checkbox
         name={name}
         value={isSelected.toString()}
-        // isInvalid={isInvalid && !isSelected}
         isInvalid={!!localErrorMessage}
         onValueChange={handleValueChange}
         {...restProps}

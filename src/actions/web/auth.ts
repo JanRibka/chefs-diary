@@ -3,18 +3,22 @@
 import { redirect } from "next/navigation";
 
 import { signIn as logIn } from "@/config/auth/auth";
+import logInActionValidator from "@/lib/actionValidators/auth/logInActionValidator";
 import signUpActionValidator from "@/lib/actionValidators/auth/signUpActionValidator";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
+import AuthError from "@/lib/errors/AuthError";
 import webRoutes from "@/lib/routes/web/routes";
 import { register as registerUser } from "@/lib/services/authService";
 import logger from "@/lib/services/loggerService";
 import FormActionState from "@/lib/types/actions/FormActionState";
 import {
+  LogInFormErrorType,
+  LogInFormType,
+} from "@/lib/validations/schemas/web/logIn/logInSchema";
+import {
   SignUpFormErrorType,
   SignUpFormType,
 } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
-
-// import { loginSchema } from "@/lib/validations/web/login/loginSchema";
 
 export const signUpAction = async (
   _prev: FormActionState<SignUpFormType, SignUpFormErrorType>,
@@ -42,6 +46,7 @@ export const signUpAction = async (
 
   try {
     await registerUser(login, email, password);
+    // TODO: M2la by se asi obeit hlaska, ze registrace bla uspesna. ZKusit se někde zaregitrovat
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.stack || error.message : String(error);
@@ -60,17 +65,59 @@ export const signUpAction = async (
   redirect(webRoutes.Login);
 };
 
-export const signInAction = async (formData: FormData) => {
-  const email = formData.get("email")?.toString();
-  const password = formData.get("password")?.toString();
-  // const validatedData = loginSchema.parse({ email, password });
-  const response = await logIn("credentials", {
+export const logInAction = async (
+  _prev: FormActionState<LogInFormType, LogInFormErrorType>,
+  formData: FormData
+): Promise<FormActionState<LogInFormType, LogInFormErrorType>> => {
+  const validationResult = await logInActionValidator(formData);
+
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const persistLogin = JSON.parse(formData.get("persistLogin") as string);
+
+  const form: LogInFormType = {
     email,
     password,
-    redirect: false, //TODO: Zjistit, co to dělá
-  });
+    persistLogin,
+  };
 
-  if (response?.ok) redirect("/dashboard");
-  if (response?.error) {
+  if (!validationResult.success) {
+    return { form, errors: validationResult.errors };
   }
+
+  try {
+    await logIn("credentials", {
+      email,
+      password,
+      persistLogin,
+      redirect: false,
+    });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      const errorMessage = error.message;
+
+      return {
+        form,
+        errors: {
+          general: errorMessage,
+          timestamp: new Date().getTime().toString(),
+        },
+      };
+    }
+
+    const errorMessage =
+      error instanceof Error ? error.stack || error.message : String(error);
+
+    logger.error(errorMessage);
+
+    return {
+      form,
+      errors: {
+        general: getErrorTextByKey("loginUserMainError"),
+        timestamp: new Date().getTime().toString(),
+      },
+    };
+  }
+
+  redirect("/dashboard");
 };

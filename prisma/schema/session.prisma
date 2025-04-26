@@ -1,9 +1,9 @@
 model Session {
-  IdSession    String   @id @default(cuid()) @map("id") @db.VarChar(25)
-  SessionToken String   @unique @map("session_token") @db.VarChar(255)
-  IdUser       String   @map("user_id") @db.VarChar(25)
-  Expires      DateTime @map("expires") @db.Timestamp(0)
-  User         User     @relation(fields: [IdUser], references: [IdUser], onDelete: Cascade)
+  sessionToken String   @unique @db.VarChar(255)
+  userId       String   @db.VarChar(25)
+  expires      DateTime @db.Timestamp(0)
+  user         User     @relation(fields: [userId], references: [IdUser], onDelete: Cascade)
 
-  @@map("sessions")
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
 }

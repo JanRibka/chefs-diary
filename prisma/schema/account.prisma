@@ -1,18 +1,20 @@
 model Account {
-  IdUser            String  @map("userId") @db.VarChar(25)
-  Type              String  @map("type") @db.VarChar(25)
-  Provider          String  @map("provider") @db.VarChar(25)
-  IdProviderAccount String  @map("providerAccountId") @db.VarChar(25)
-  RefreshToken      String? @map("refresh_token") @db.VarChar(255)
-  AccessToken       String? @map("access_token") @db.VarChar(255)
-  ExpiresAt         Int?    @map("expires_at") @db.Integer
-  TokenType         String? @map("token_type") @db.VarChar(255)
-  Scope             String? @map("scope") @db.VarChar(255)
-  IdToken           String? @map("id_token") @db.VarChar(255)
-  SessionState      String? @map("session_state") @db.VarChar(255)
+  userId            String  @db.VarChar(25)
+  type              String  @db.VarChar(25)
+  provider          String  @db.VarChar(25)
+  providerAccountId String  @db.VarChar(25)
+  refresh_token     String? @db.VarChar(255)
+  access_token      String? @db.VarChar(255)
+  expires_at        Int?    @db.Integer()
+  token_type        String? @db.VarChar(255)
+  scope             String? @db.VarChar(255)
+  id_token          String? @db.VarChar(25)
+  session_state     String? @db.VarChar(25)
 
-  user User @relation(fields: [IdUser], references: [IdUser], onDelete: Cascade)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
 
-  @@unique([Provider, IdProviderAccount])
-  @@map("accounts")
+  user User @relation(fields: [userId], references: [IdUser], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
 }

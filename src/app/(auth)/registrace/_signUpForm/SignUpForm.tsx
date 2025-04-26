@@ -1,25 +1,25 @@
 "use client";
 // TODO: P5i registraci p5es socialni sit2 neprve kliknu na tlacitko socialni site a potom se zobrazi okno se souhlasem podminek
-import { useActionState, useEffect, useRef, useState } from 'react';
+import { useActionState, useEffect, useRef, useState } from "react";
 
-import { signUpAction } from '@/actions/web/auth';
-import ConfirmPassword from '@/components/shared/confirmPassword/ConfirmPassword';
-import Form from '@/components/shared/form/Form';
-import FormHeading from '@/components/shared/form/FormHeading';
-import SubmitButton from '@/components/shared/submitButton/SubmitButton';
-import ValidateCheckbox from '@/components/shared/validateCheckbox/ValidateCheckbox';
-import ValidateInput from '@/components/shared/validateInput/ValidateInput';
-import useIsFirstRender from '@/lib/hooks/useIsFirstRender';
-import { nameof } from '@/lib/utils/nameof';
+import { signUpAction } from "@/actions/web/auth";
+import ConfirmPassword from "@/components/shared/confirmPassword/ConfirmPassword";
+import Form from "@/components/shared/form/Form";
+import FormAlert from "@/components/shared/form/FormAlert";
+import FormHeading from "@/components/shared/form/FormHeading";
+import SubmitButton from "@/components/shared/submitButton/SubmitButton";
+import ValidateCheckbox from "@/components/shared/validateCheckbox/ValidateCheckbox";
+import ValidateInput from "@/components/shared/validateInput/ValidateInput";
+import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
+import { nameof } from "@/lib/utils/nameof";
 import signUpFormValidationSchema, {
-    SignUpFormErrorType, SignUpFormType
-} from '@/lib/validations/schemas/web/signUp/signUpFormValidationSchema';
-import { validateSignUpForm } from '@/lib/validations/validations/web/signUp/validateSignUpForm';
+  SignUpFormErrorType,
+  SignUpFormType,
+} from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
+import { validateSignUpForm } from "@/lib/validations/validations/web/signUp/validateSignUpForm";
 
 export default function SignUprForm() {
-  // References
   const refLogin = useRef<HTMLInputElement>(null);
-  //   const refErrorMessage = useRef<HTMLParagraphElement>(null);
 
   const isFirstRender = useIsFirstRender();
 
@@ -51,16 +51,28 @@ export default function SignUprForm() {
     }
   };
 
+  const handleChange = () => {
+    if (errors.general) {
+      console.log(errors);
+      setErrors((prev) => ({
+        ...prev,
+        general: "",
+      }));
+    }
+  };
+
   return (
     <section>
       <div className="flex flex-col items-center">
         <FormHeading>Registrace</FormHeading>
+        <FormAlert className="mb-4" title={errors.general} />
 
         <Form
           className="flex flex-col items-center"
           noValidate
           onSubmit={handleSubmit}
           action={action}
+          onChange={handleChange}
         >
           <ValidateInput
             ref={refLogin}

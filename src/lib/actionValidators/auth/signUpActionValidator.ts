@@ -1,13 +1,12 @@
-import getErrorTextByKey from '@/lib/errorLibrary/auth/authErrorLibrary';
-import { getUserByEmail, getUserByLogin } from '@/lib/repositories/userRepository';
-import logger from '@/lib/services/loggerService';
-import ValidationResultType from '@/lib/types/validation/ValidationResultType';
+import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 import {
-    SignUpFormErrorType
-} from '@/lib/validations/schemas/web/signUp/signUpFormValidationSchema';
-import {
-    validateSignUpFormAsync
-} from '@/lib/validations/validations/web/signUp/validateSignUpForm';
+  getUserByEmail,
+  getUserByLogin,
+} from "@/lib/repositories/userRepository";
+import logger from "@/lib/services/loggerService";
+import ValidationResultType from "@/lib/types/validation/ValidationResultType";
+import { SignUpFormErrorType } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
+import { validateSignUpFormAsync } from "@/lib/validations/validations/web/signUp/validateSignUpForm";
 
 export default async function signUpActionValidator(
   formData: FormData

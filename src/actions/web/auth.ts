@@ -1,17 +1,18 @@
 "use server";
 
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
-import { signIn as logIn } from '@/config/auth/auth';
-import signUpActionValidator from '@/lib/actionValidators/auth/signUpActionValidator';
-import getErrorTextByKey from '@/lib/errorLibrary/auth/authErrorLibrary';
-import webRoutes from '@/lib/routes/web/routes';
-import { register as registerUser } from '@/lib/services/authService';
-import logger from '@/lib/services/loggerService';
-import FormActionState from '@/lib/types/actions/FormActionState';
+import { signIn as logIn } from "@/config/auth/auth";
+import signUpActionValidator from "@/lib/actionValidators/auth/signUpActionValidator";
+import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
+import webRoutes from "@/lib/routes/web/routes";
+import { register as registerUser } from "@/lib/services/authService";
+import logger from "@/lib/services/loggerService";
+import FormActionState from "@/lib/types/actions/FormActionState";
 import {
-    SignUpFormErrorType, SignUpFormType
-} from '@/lib/validations/schemas/web/signUp/signUpFormValidationSchema';
+  SignUpFormErrorType,
+  SignUpFormType,
+} from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 
 // import { loginSchema } from "@/lib/validations/web/login/loginSchema";
 

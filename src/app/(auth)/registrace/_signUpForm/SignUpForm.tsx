@@ -19,7 +19,7 @@ import signUpFormValidationSchema, {
 import { validateSignUpForm } from "@/lib/validations/validations/web/signUp/validateSignUpForm";
 
 export default function SignUprForm() {
-  const refLogin = useRef<HTMLInputElement>(null);
+  const refName = useRef<HTMLInputElement>(null);
 
   const isFirstRender = useIsFirstRender();
 
@@ -27,7 +27,7 @@ export default function SignUprForm() {
   const [errors, setErrors] = useState<SignUpFormErrorType>({});
 
   useEffect(() => {
-    refLogin.current?.focus();
+    refName.current?.focus();
   }, []);
 
   useEffect(() => {
@@ -75,9 +75,9 @@ export default function SignUprForm() {
           onChange={handleChange}
         >
           <ValidateInput
-            ref={refLogin}
-            value={state.form?.login}
-            name={nameof<SignUpFormType>("login")}
+            ref={refName}
+            value={state.form?.name}
+            name={nameof<SignUpFormType>("name")}
             label="Uživatelské jméno"
             className="mb-4"
             required

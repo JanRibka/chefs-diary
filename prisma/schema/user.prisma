@@ -4,7 +4,6 @@ model User {
   Email                String             @unique @map("email") @db.VarChar(50)
   EmailVerified        DateTime?          @map("emailVerified") @db.Timestamp(0)
   Password             String             @map("password") @db.VarChar(255)
-  Login                String             @unique @map("login") @db.VarChar(25)
   Image                String?            @map("image") @db.VarChar(255)
   CreatedAt            DateTime           @default(now()) @map("createdAt") @db.Timestamp(0)
   UpdatedAt            DateTime?          @map("UpdatedAt") @db.Timestamp(0)

@@ -25,13 +25,13 @@ export default async function signUpActionValidator(
 
   try {
     const email = data.email as string;
-    const login = data.login as string;
+    const name = data.name as string;
 
-    let user = await getUserByLogin(login);
+    let user = await getUserByLogin(name);
 
     if (user) {
       result.success = false;
-      result.errors.login = getErrorTextByKey("loginExists");
+      result.errors.name = getErrorTextByKey("loginExists");
       result.errors.timestamp = new Date().getTime().toString();
     }
 

@@ -1,6 +1,6 @@
 model VerificationToken {
-  identifier String   @db.VarChar(255)
-  token      String   @db.VarChar(255)
+  identifier String   @db.VarChar(25)
+  token      String   @db.VarChar(25)
   expires    DateTime @db.Timestamp(0)
 
   @@unique([identifier, token])

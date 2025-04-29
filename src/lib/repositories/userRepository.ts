@@ -1,13 +1,13 @@
 import type { User, UserInfo } from "@prisma/client";
 
-import UserRoleTypeEnum from '../enums/UserRoleTypeEnum';
-import { prisma } from '../prisma';
-import { hashPassword } from '../services/hashService';
+import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
+import { prisma } from "../prisma";
+import { hashPassword } from "../services/hashService";
 
-export async function getUserByLogin(login: string): Promise<User | null> {
-  return await prisma.user.findUnique({
+export async function getUserByLogin(name: string): Promise<User | null> {
+  return await prisma.user.findFirst({
     where: {
-      Login: login,
+      Name: name,
     },
   });
 }
@@ -29,7 +29,7 @@ export async function insertUserInfo(idUser: string): Promise<UserInfo> {
 }
 
 export async function createUser(
-  login: string,
+  name: string,
   email: string,
   password: string
 ): Promise<User> {
@@ -38,7 +38,7 @@ export async function createUser(
   return await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({
       data: {
-        Login: login,
+        Name: name,
         Email: email,
         Password: hashedPassword,
       },
@@ -70,5 +70,50 @@ export async function createUser(
     );
 
     return user;
+  });
+}
+
+export async function getUserRoleValuesByIdUser(idUser: string) {
+  const userRoles = await prisma.userRole.findMany({
+    relationLoadStrategy: "join",
+    include: {
+      UserRoleType: true,
+      User: true,
+    },
+    where: {
+      IdUser: idUser,
+    },
+  });
+
+  return userRoles.map((item) => item.UserRoleType.Value);
+}
+
+export async function logLoginAttempt(
+  idUser: string,
+  loginSuccessful?: boolean
+) {
+  return await prisma.userLoginHistory.create({
+    data: {
+      IdUser: idUser,
+      LoginSuccessful: loginSuccessful,
+    },
+  });
+}
+
+export async function getSessionExists(sessionToken: string) {
+  return (
+    (await prisma.session.findFirst({
+      where: {
+        sessionToken: sessionToken,
+      },
+    })) !== null
+  );
+}
+
+export async function deleteSessionByIdUser(idUser: string) {
+  return await prisma.session.deleteMany({
+    where: {
+      userId: idUser,
+    },
   });
 }

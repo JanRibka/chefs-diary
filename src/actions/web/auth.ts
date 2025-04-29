@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { signIn as logIn } from "@/config/auth/auth";
+import { signIn } from "@/config/auth/auth";
 import logInActionValidator from "@/lib/actionValidators/auth/logInActionValidator";
 import signUpActionValidator from "@/lib/actionValidators/auth/signUpActionValidator";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
@@ -24,16 +24,17 @@ export const signUpAction = async (
   _prev: FormActionState<SignUpFormType, SignUpFormErrorType>,
   formData: FormData
 ): Promise<FormActionState<SignUpFormType, SignUpFormErrorType>> => {
+  debugger;
   const validationResult = await signUpActionValidator(formData);
 
-  const login = formData.get("login") as string;
+  const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
   const termsAgreement = JSON.parse(formData.get("termsAgreement") as string);
 
   const form: SignUpFormType = {
-    login,
+    name,
     email,
     password,
     confirmPassword,
@@ -45,7 +46,7 @@ export const signUpAction = async (
   }
 
   try {
-    await registerUser(login, email, password);
+    await registerUser(name, email, password);
     // TODO: M2la by se asi obeit hlaska, ze registrace bla uspesna. ZKusit se někde zaregitrovat
   } catch (error) {
     const errorMessage =
@@ -86,7 +87,7 @@ export const logInAction = async (
   }
 
   try {
-    await logIn("credentials", {
+    await signIn("credentials", {
       email,
       password,
       persistLogin,

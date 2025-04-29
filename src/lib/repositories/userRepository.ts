@@ -99,21 +99,3 @@ export async function logLoginAttempt(
     },
   });
 }
-
-export async function getSessionExists(sessionToken: string) {
-  return (
-    (await prisma.session.findFirst({
-      where: {
-        sessionToken: sessionToken,
-      },
-    })) !== null
-  );
-}
-
-export async function deleteSessionByIdUser(idUser: string) {
-  return await prisma.session.deleteMany({
-    where: {
-      userId: idUser,
-    },
-  });
-}

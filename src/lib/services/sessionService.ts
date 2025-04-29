@@ -35,3 +35,21 @@ export async function createSession(
     return sessionToken;
   }
 }
+
+export async function getSessionExists(sessionToken: string) {
+  return (
+    (await prisma.session.findFirst({
+      where: {
+        sessionToken: sessionToken,
+      },
+    })) !== null
+  );
+}
+
+export async function deleteSessionByIdUser(idUser: string) {
+  return await prisma.session.deleteMany({
+    where: {
+      userId: idUser,
+    },
+  });
+}

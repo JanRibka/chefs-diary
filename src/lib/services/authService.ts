@@ -11,12 +11,14 @@ import getErrorTextByKey from "../errorLibrary/auth/authErrorLibrary";
 import AuthError from "../errors/AuthError";
 import {
   createUser,
-  deleteSessionByIdUser,
-  getSessionExists,
   getUserByEmail,
   logLoginAttempt,
 } from "../repositories/userRepository";
-import { createSession } from "./sessionService";
+import {
+  createSession,
+  deleteSessionByIdUser,
+  getSessionExists,
+} from "./sessionService";
 
 export async function register(
   name: string,
@@ -80,7 +82,7 @@ export async function logIn(
   );
   const idUser: string = params.token?.sub ?? "";
 
-  logLoginAttempt(idUser, true);
+  await logLoginAttempt(idUser, true);
 
   if (sessionCookieValue) {
     // Scenario added here:
@@ -93,11 +95,11 @@ export async function logIn(
     // Detected refresh token reuse!
     if (!foundSession) {
       // Clear out ALL previous refresh tokens
-      deleteSessionByIdUser(idUser);
+      await deleteSessionByIdUser(idUser);
     }
 
     await deleteCookieAsync(process.env.AUTH_COOKIE_NAME!);
   }
 
-  return createSession(params);
+  return await createSession(params);
 }

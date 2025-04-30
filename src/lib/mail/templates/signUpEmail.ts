@@ -1,13 +1,22 @@
 import transporter from "@/config/nodemailer/nodemailer";
 import logger from "@/lib/services/loggerService";
 
-const send = async (to: string) => {
+import signUpEmailHtml from "./signUpEmail.html";
+
+const sendSignUpEmail = async (to: string) => {
   try {
+    const html = signUpEmailHtml({
+      confirmationUrl: "#",
+    });
+
     await transporter.sendMail({
-      from: process.env.MAILER_FROM,
+      from: {
+        name: process.env.APP_NAME!,
+        address: process.env.MAILER_FROM!,
+      },
       to: to,
       subject: "[Kuchařův deník] Potvrďte prosím svou e-mailovou adresu",
-      html: "",
+      html,
     });
   } catch (error) {
     const errorMessage =
@@ -19,4 +28,4 @@ const send = async (to: string) => {
   }
 };
 
-export default send;
+export default sendSignUpEmail;

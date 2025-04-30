@@ -1,5 +1,5 @@
 model Session {
-  sessionToken String   @unique @db.VarChar(25)
+  sessionToken String   @unique @db.VarChar(36)
   userId       String   @db.VarChar(25)
   expires      DateTime @db.Timestamp(0)
   user         User     @relation(fields: [userId], references: [IdUser], onDelete: Cascade)

@@ -20,11 +20,16 @@ import {
   SignUpFormType,
 } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 
+/**
+ * Sign up action
+ * @param _prev
+ * @param formData
+ * @returns
+ */
 export const signUpAction = async (
   _prev: FormActionState<SignUpFormType, SignUpFormErrorType>,
   formData: FormData
 ): Promise<FormActionState<SignUpFormType, SignUpFormErrorType>> => {
-  debugger;
   const validationResult = await signUpActionValidator(formData);
 
   const name = formData.get("name") as string;
@@ -47,7 +52,6 @@ export const signUpAction = async (
 
   try {
     await registerUser(name, email, password);
-    // TODO: M2la by se asi obeit hlaska, ze registrace bla uspesna. ZKusit se někde zaregitrovat
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.stack || error.message : String(error);
@@ -66,6 +70,12 @@ export const signUpAction = async (
   redirect(webRoutes.Login);
 };
 
+/**
+ * Login action
+ * @param _prev
+ * @param formData
+ * @returns
+ */
 export const logInAction = async (
   _prev: FormActionState<LogInFormType, LogInFormErrorType>,
   formData: FormData

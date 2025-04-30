@@ -35,8 +35,9 @@ export async function createSession(
     return sessionToken;
   }
 }
-
+//TODO: Toto p5ejebat do session repository
 export async function getSessionExists(sessionToken: string) {
+  // await
   return (
     (await prisma.session.findFirst({
       where: {
@@ -47,9 +48,24 @@ export async function getSessionExists(sessionToken: string) {
 }
 
 export async function deleteSessionByIdUser(idUser: string) {
-  return await prisma.session.deleteMany({
+  const sessions = await prisma.session.findMany({
     where: {
       userId: idUser,
     },
   });
+
+  await prisma.user.update({
+    where: {
+      IdUser: idUser,
+    },
+    data: {
+      Sessions: {
+        deleteMany: {},
+      },
+    },
+  });
+
+  await Promise.all(
+    sessions.map((item) => adapter.deleteSession?.(item.sessionToken))
+  );
 }

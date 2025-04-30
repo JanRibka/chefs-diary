@@ -1,4 +1,4 @@
-import type { User, UserInfo } from "@prisma/client";
+import type { User, UserInfo, UserLoginHistory } from "@prisma/client";
 
 import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
 import { prisma } from "../prisma";
@@ -91,7 +91,7 @@ export async function getUserRoleValuesByIdUser(idUser: string) {
 export async function logLoginAttempt(
   idUser: string,
   loginSuccessful?: boolean
-) {
+): Promise<UserLoginHistory> {
   return await prisma.userLoginHistory.create({
     data: {
       IdUser: idUser,

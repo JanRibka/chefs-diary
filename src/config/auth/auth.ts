@@ -55,7 +55,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
   jwt: {
     encode: async function (params) {
-      debugger;
       const sessionToken = await logIn(params);
 
       if (typeof sessionToken === "string") {

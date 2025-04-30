@@ -53,14 +53,13 @@ export default function SignUprForm() {
 
   const handleChange = () => {
     if (errors.general) {
-      console.log(errors);
       setErrors((prev) => ({
         ...prev,
         general: "",
       }));
     }
   };
-
+  //TODO: Nefunguje loading p5i akci
   return (
     <section>
       <div className="flex flex-col items-center">

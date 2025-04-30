@@ -11,7 +11,7 @@ const sendSignUpEmail = async (to: string) => {
 
     await transporter.sendMail({
       from: {
-        name: process.env.APP_NAME!,
+        name: process.env.MAILER_FROM_NAME!,
         address: process.env.MAILER_FROM!,
       },
       to: to,

@@ -7,6 +7,7 @@ import {
 } from "@/lib/services/cookieService";
 import { User } from "@prisma/client";
 
+import LogInStatusEnum from "../enums/LogInStatusEnum";
 import getErrorTextByKey from "../errorLibrary/auth/authErrorLibrary";
 import AuthError from "../errors/AuthError";
 import sendSignUpEmail from "../mail/templates/signUpEmail";
@@ -49,18 +50,19 @@ export async function register(
 export async function attemptLogIn(
   email: string,
   password: string
-): Promise<User> {
+): Promise<User | LogInStatusEnum> {
   const user = await getUserByEmail(email);
 
   if (!user) {
     throw new AuthError(getErrorTextByKey("incorrectLoginPassword"));
   }
 
-  if (user.IsDisabled) {
-    throw new AuthError(getErrorTextByKey("accessDenied"));
+  if (!user.EmailVerified) {
+    return LogInStatusEnum.EMAIL_NOT_VERIFIED;
   }
 
-  if (!user.EmailVerified) {
+  if (user.IsDisabled) {
+    throw new AuthError(getErrorTextByKey("accessDenied"));
   }
 
   if (!(await checkCredentials(user, password))) {
@@ -72,11 +74,12 @@ export async function attemptLogIn(
   //TODO: Budu kontrolovat, zada ma overeny email
 
   if (user.TwoFactor) {
-    login2FA(user);
-    //TODO: Tady by se mělo něco vráti, aby se pak dal zadat kod pro 2fa
+    await login2FA(user);
+
+    return LogInStatusEnum.TWO_FA;
   }
   //TODO: BUdu ověřovat Zda admin pro administraci
-  //TODO: Login se bude volat za create createdSession
+
   return user;
 }
 

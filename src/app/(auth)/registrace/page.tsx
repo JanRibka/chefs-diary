@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import SignUpForm from "./_signUpForm/SignUpForm";
+import SignUp from "./_signUp/SignUp";
 
 export const metadata: Metadata = {
   title: "Registrace",
@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function SignUpPage() {
-  return <SignUpForm />;
+  return <SignUp />;
 }

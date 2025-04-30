@@ -1,4 +1,5 @@
-type FormActionState<Form extends object, Errors extends object> = {
+type FormActionState<State, Form extends object, Errors extends object> = {
+  generalState?: State;
   form?: Form;
   errors?: Errors;
 };

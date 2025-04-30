@@ -5,7 +5,7 @@ import { ButtonProps } from "@heroui/react";
 
 import Button from "../button/Button";
 
-type Props = Omit<ButtonProps, "type" | "isLoading"> & {
+type Props = Omit<ButtonProps, "type"> & {
   disableLoadingState?: boolean;
 };
 
@@ -14,6 +14,7 @@ export default function SubmitButton({
   disableLoadingState,
   className,
   disabled,
+  isLoading,
   ...restProps
 }: Props) {
   const { pending } = useFormStatus();
@@ -22,8 +23,8 @@ export default function SubmitButton({
     <Button
       type="submit"
       className={mergeStyles("submit-button", className)}
-      disabled={pending || disabled}
-      isLoading={!disableLoadingState && pending}
+      disabled={isLoading || pending || disabled}
+      isLoading={!disableLoadingState && (pending || isLoading)}
       {...restProps}
     >
       {children}

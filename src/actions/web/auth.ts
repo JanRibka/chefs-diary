@@ -5,9 +5,10 @@ import { redirect } from "next/navigation";
 import { signIn } from "@/config/auth/auth";
 import logInActionValidator from "@/lib/actionValidators/auth/logInActionValidator";
 import signUpActionValidator from "@/lib/actionValidators/auth/signUpActionValidator";
+import LogInStatusEnum from "@/lib/enums/LogInStatusEnum";
+import SignUpStatusEnum from "@/lib/enums/SignUpStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 import AuthError from "@/lib/errors/AuthError";
-import webRoutes from "@/lib/routes/web/routes";
 import { register as registerUser } from "@/lib/services/authService";
 import logger from "@/lib/services/loggerService";
 import FormActionState from "@/lib/types/actions/FormActionState";
@@ -27,9 +28,11 @@ import {
  * @returns
  */
 export const signUpAction = async (
-  _prev: FormActionState<SignUpFormType, SignUpFormErrorType>,
+  _prev: FormActionState<SignUpStatusEnum, SignUpFormType, SignUpFormErrorType>,
   formData: FormData
-): Promise<FormActionState<SignUpFormType, SignUpFormErrorType>> => {
+): Promise<
+  FormActionState<SignUpStatusEnum, SignUpFormType, SignUpFormErrorType>
+> => {
   const validationResult = await signUpActionValidator(formData);
 
   const name = formData.get("name") as string;
@@ -52,6 +55,15 @@ export const signUpAction = async (
 
   try {
     await registerUser(name, email, password);
+
+    return {
+      generalState: SignUpStatusEnum.SUCCESS,
+      form,
+      errors: {
+        general: getErrorTextByKey("registerUserMainError"),
+        timestamp: new Date().getTime().toString(),
+      },
+    };
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.stack || error.message : String(error);
@@ -66,8 +78,6 @@ export const signUpAction = async (
       },
     };
   }
-
-  redirect(webRoutes.Login);
 };
 
 /**
@@ -77,9 +87,11 @@ export const signUpAction = async (
  * @returns
  */
 export const logInAction = async (
-  _prev: FormActionState<LogInFormType, LogInFormErrorType>,
+  _prev: FormActionState<LogInStatusEnum, LogInFormType, LogInFormErrorType>,
   formData: FormData
-): Promise<FormActionState<LogInFormType, LogInFormErrorType>> => {
+): Promise<
+  FormActionState<LogInStatusEnum, LogInFormType, LogInFormErrorType>
+> => {
   const validationResult = await logInActionValidator(formData);
 
   const email = formData.get("email") as string;

@@ -7,20 +7,16 @@ import {
 } from "@/lib/services/cookieService";
 import { User } from "@prisma/client";
 
-import LogInStatusEnum from "../enums/LogInStatusEnum";
 import getErrorTextByKey from "../errorLibrary/auth/authErrorLibrary";
 import AuthError from "../errors/AuthError";
 import sendSignUpEmail from "../mail/templates/signUpEmail";
+import { deleteSessionByIdUser } from "../repositories/sessionRepository";
 import {
   createUser,
   getUserByEmail,
   logLoginAttempt,
 } from "../repositories/userRepository";
-import {
-  createSession,
-  deleteSessionByIdUser,
-  getSessionExists,
-} from "./sessionService";
+import { createSession, getSessionExists } from "./sessionService";
 
 /**
  * Register user
@@ -36,7 +32,7 @@ export async function register(
 ): Promise<User> {
   const user = await createUser(name, email, password);
 
-  await sendSignUpEmail(user.Email);
+  await sendSignUpEmail(user.IdUser, user.Email);
 
   return user;
 }
@@ -50,7 +46,7 @@ export async function register(
 export async function attemptLogIn(
   email: string,
   password: string
-): Promise<User | LogInStatusEnum> {
+): Promise<User> {
   const user = await getUserByEmail(email);
 
   if (!user) {
@@ -58,7 +54,7 @@ export async function attemptLogIn(
   }
 
   if (!user.EmailVerified) {
-    return LogInStatusEnum.EMAIL_NOT_VERIFIED;
+    // return LogInStatusEnum.EMAIL_NOT_VERIFIED;
   }
 
   if (user.IsDisabled) {
@@ -76,7 +72,7 @@ export async function attemptLogIn(
   if (user.TwoFactor) {
     await login2FA(user);
 
-    return LogInStatusEnum.TWO_FA;
+    // return LogInStatusEnum.TWO_FA;
   }
   //TODO: BUdu ověřovat Zda admin pro administraci
 
@@ -114,11 +110,10 @@ export async function login2FA(user: User) {
 export async function logIn(
   params: JWTEncodeParams
 ): Promise<string | undefined> {
-  debugger;
   const sessionCookieValue = await getCookieAsync(
     process.env.AUTH_COOKIE_NAME!
   );
-  const idUser: string = params.token?.sub ?? "";
+  const idUser: string = (params.token?.idUser as string) ?? "";
 
   await logLoginAttempt(idUser, true);
 
@@ -135,9 +130,8 @@ export async function logIn(
       // Clear out ALL previous refresh tokens
       await deleteSessionByIdUser(idUser);
     }
-
+    //TODO: Cookie nejde smazat
     await deleteCookieAsync(process.env.AUTH_COOKIE_NAME!);
-    // await deleteCookieAsync(process.env.AUTH_COOKIE_NAME!);
   }
 
   return await createSession(params);

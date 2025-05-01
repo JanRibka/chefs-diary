@@ -11,7 +11,8 @@
     "prisma:migrate_dev": "npx prisma migrate dev",
     "prisma:migrate_prod": "prisma generate --no-engine && npx prisma migrate deploy",
     "prisma:studio": "npx prisma studio",
-    "prisma:seed": "npx prisma db seed"
+    "prisma:seed": "npx prisma db seed",
+    "prisma:reset": "npx prisma migrate reset"
   },
   "prisma": {
     "schema": "prisma/schema",

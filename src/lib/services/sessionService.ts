@@ -1,11 +1,10 @@
 import { JWTEncodeParams } from "next-auth/jwt";
 import { v4 as uuid } from "uuid";
 
-import { PrismaAdapter } from "@auth/prisma-adapter";
-
-import { prisma } from "../prisma";
-
-const adapter = PrismaAdapter(prisma);
+import {
+  createSession as createSessionRepository,
+  getSessionBySessionToken,
+} from "@/lib/repositories/sessionRepository";
 
 export async function createSession(
   params: JWTEncodeParams
@@ -18,16 +17,16 @@ export async function createSession(
     }
 
     const persistLogin = params.token.persistLogin;
-
+    //TODO: Nějak bych měl nastavit platnost na session, pokud persistLogin na false
     const expires = persistLogin
       ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 dní
       : new Date(Date.now() + 1 * 60 * 60 * 1000); // 1 hodina
 
-    const createdSession = await adapter.createSession?.({
-      sessionToken: sessionToken,
-      userId: params.token.sub,
-      expires: expires,
-    });
+    const createdSession = await createSessionRepository(
+      sessionToken,
+      params.token.idUser as string,
+      expires
+    );
     if (!createdSession) {
       throw new Error("Failed to create session");
     }
@@ -35,37 +34,7 @@ export async function createSession(
     return sessionToken;
   }
 }
-//TODO: Toto p5ejebat do session repository
+
 export async function getSessionExists(sessionToken: string) {
-  // await
-  return (
-    (await prisma.session.findFirst({
-      where: {
-        sessionToken: sessionToken,
-      },
-    })) !== null
-  );
-}
-
-export async function deleteSessionByIdUser(idUser: string) {
-  const sessions = await prisma.session.findMany({
-    where: {
-      userId: idUser,
-    },
-  });
-
-  await prisma.user.update({
-    where: {
-      IdUser: idUser,
-    },
-    data: {
-      Sessions: {
-        deleteMany: {},
-      },
-    },
-  });
-
-  await Promise.all(
-    sessions.map((item) => adapter.deleteSession?.(item.sessionToken))
-  );
+  return (await getSessionBySessionToken(sessionToken)) !== null;
 }

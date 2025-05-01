@@ -1,8 +1,22 @@
 interface Props {
   confirmationUrl: string;
+  expirationDays: number;
 }
 
-export default function signUpEmailHtml({ confirmationUrl }: Props): string {
+const getYear = () => {
+  const actualYear = new Date().getFullYear();
+
+  if (actualYear === 2025) {
+    return "2025";
+  } else {
+    return `2025 - ${actualYear}`;
+  }
+};
+
+export default function signUpEmailHtml({
+  confirmationUrl,
+  expirationDays,
+}: Props): string {
   return `
     <table width="100%" cellpadding="0" cellspacing="0" style="background: #f9f9f9; padding: 40px 0; font-family: Arial, sans-serif;">
       <tr>
@@ -32,7 +46,7 @@ export default function signUpEmailHtml({ confirmationUrl }: Props): string {
                   ">Potvrdit e-mail</a>
                 </div>
                 <p style="font-size: 14px; color: #555;">
-                  Tento odkaz vyprší za 24 hodin. Pokud jsi o registraci nežádal(a), tento e-mail můžeš ignorovat.
+                  Tento odkaz vyprší za ${expirationDays} hodin. Pokud jsi o registraci nežádal(a), tento e-mail můžeš ignorovat.
                 </p>
                 <p style="font-size: 14px; color: #555;">
                   Přejeme hodně inspirace v kuchyni!<br />
@@ -42,7 +56,7 @@ export default function signUpEmailHtml({ confirmationUrl }: Props): string {
             </tr>
             <tr>
               <td style="background-color: #f0f0f0; text-align: center; padding: 20px; font-size: 12px; color: #888;">
-                &copy; ${new Date().getFullYear()} Kuchařův deník. Všechna práva vyhrazena.
+                &copy; ${getYear()} Kuchařův deník. Všechna práva vyhrazena.
               </td>
             </tr>
           </table>

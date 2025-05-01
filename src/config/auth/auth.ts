@@ -45,6 +45,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async jwt({ token, account, user }) {
       if (account?.provider === "credentials") {
         token.credentials = true;
+        token.idUser = user.id;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         token.persistLogin = (user as any).persistLogin;
       }

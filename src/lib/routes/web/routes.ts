@@ -1,8 +1,9 @@
-export type RouteProperty = "Login";
-export type RouteValue = "/prihlaseni";
+export type RouteProperty = "LogIn" | "SignUp";
+export type RouteValue = "/prihlaseni" | "/registrace";
 
 const webRoutes: Record<RouteProperty, RouteValue> = {
-  Login: "/prihlaseni",
+  LogIn: "/prihlaseni",
+  SignUp: "/registrace",
 };
 
 export default webRoutes;

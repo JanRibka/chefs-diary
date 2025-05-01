@@ -1,6 +1,11 @@
 import LayoutLoginInfoDetail from "./LayoutLoginInfoDetail";
 
-const LayoutLoginInfo = () => {
+type Props = {
+  header: string;
+  description: string;
+};
+
+const LayoutLoginInfo = ({ header, description }: Props) => {
   const loginImage = `${process.env.NEXT_PUBLIC_IMAGE_KIT_LINK}/admin/auth/login-bg.jpg`;
 
   return (
@@ -11,7 +16,7 @@ const LayoutLoginInfo = () => {
           style={{ backgroundImage: `url(${loginImage})` }}
         />
         <div className="absolute top-0 left-0 w-full h-full opacity-50 z-1 bg-primary" />
-        <LayoutLoginInfoDetail />
+        <LayoutLoginInfoDetail header={header} description={description} />
       </div>
     </section>
   );

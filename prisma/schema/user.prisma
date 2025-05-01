@@ -1,3 +1,5 @@
+//TODO: Udelat to podle predchoziho projektu
+
 model User {
   IdUser               String             @id @default(cuid()) @map("id") @db.VarChar(25)
   Name                 String?            @map("name") @db.VarChar(25)
@@ -13,10 +15,7 @@ model User {
   UserInfo             UserInfo?
   UserLoginHistory     UserLoginHistory[]
   UseRoles             UserRole[]
-  Accounts             Account[]
   Sessions             Session[]
-  // Optional for WebAuthn support
-  Authenticator        Authenticator[]
 
   //@@index([Email])  I can define an Index. Pokud hled8m 4asto t5eba by email, tak na něj dám index
 }

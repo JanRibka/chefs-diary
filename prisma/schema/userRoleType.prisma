@@ -1,7 +1,7 @@
 model UserRoleType {
-  IdUserRoleType Int        @id @default(autoincrement()) @map("idUserRoleType") @db.Integer
-  Code           String     @unique @map("code") @db.VarChar(20)
-  Value          Int        @unique @map("value") @db.SmallInt
-  Description    String     @map("description") @db.VarChar(20)
+  IdUserRoleType Int        @id @default(autoincrement()) @db.Integer
+  Code           String     @unique @db.VarChar(20)
+  Value          Int        @unique @db.SmallInt
+  Description    String     @db.VarChar(20)
   UserRole       UserRole[]
 }

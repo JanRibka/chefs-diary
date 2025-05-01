@@ -28,7 +28,7 @@ export async function createConfirmationUrl(
   const baseUrl = process.env.APP_URL?.replace(/\/$/, "") || "";
 
   return new URL(
-    `/evereni-emailu/${verificationToken?.token}`,
+    `/overeni-emailu/${verificationToken?.Token}`,
     baseUrl
   ).toString();
 }

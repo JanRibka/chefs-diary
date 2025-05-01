@@ -1,15 +1,14 @@
-import { HTMLAttributes, useEffect, useRef, useState } from 'react';
+import { HTMLAttributes, useEffect, useRef, useState } from "react";
 
-import { nameof } from '@/lib/utils/nameof';
-import { mergeStyles } from '@/lib/utils/styles';
+import { nameof } from "@/lib/utils/nameof";
+import { mergeStyles } from "@/lib/utils/styles";
 import {
-    SignUpFormErrorType, SignUpFormType
-} from '@/lib/validations/schemas/web/signUp/signUpFormValidationSchema';
-import {
-    validateConfirmPassword
-} from '@/lib/validations/validations/admin/confirmPassword/validateConfirmPassword';
+  SignUpFormErrorType,
+  SignUpFormType,
+} from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
+import { validateConfirmPassword } from "@/lib/validations/validations/admin/confirmPassword/validateConfirmPassword";
 
-import PasswordInput from '../passwordInput/PasswordInput';
+import PasswordInput from "../passwordInput/PasswordInput";
 
 type Props = HTMLAttributes<
   Omit<HTMLDivElement, "children" | "isInvalid" | "errorMessage">

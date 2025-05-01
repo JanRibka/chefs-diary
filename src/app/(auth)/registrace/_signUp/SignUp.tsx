@@ -8,6 +8,7 @@ import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
 import { SignUpFormErrorType } from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 import { validateSignUpForm } from "@/lib/validations/validations/web/signUp/validateSignUpForm";
 
+import LoginUser from "../_LoginUser/LoginUser";
 import SignUpForm from "./SignUpForm";
 import SignUpSuccessful from "./SignUpSuccessfull";
 
@@ -49,17 +50,20 @@ export default function SignUp() {
 
   return (
     <section>
-      {state.generalState === SignUpStatusEnum.SUCCESS ? (
+      {state?.generalState === SignUpStatusEnum.SUCCESS ? (
         <SignUpSuccessful state={state} />
       ) : (
-        <SignUpForm
-          state={state}
-          errors={errors}
-          isLoading={isLoading}
-          action={action}
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-        />
+        <>
+          <SignUpForm
+            state={state}
+            errors={errors}
+            isLoading={isLoading}
+            action={action}
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+          />
+          <LoginUser />
+        </>
       )}
     </section>
   );

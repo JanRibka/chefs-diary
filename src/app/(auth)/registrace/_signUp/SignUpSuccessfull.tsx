@@ -1,13 +1,14 @@
-import Link from 'next/link';
+import Link from "next/link";
 
-import Button from '@/components/shared/button/Button';
-import FormHeading from '@/components/shared/form/FormHeading';
-import SignUpStatusEnum from '@/lib/enums/SignUpStatusEnum';
-import webRoutes from '@/lib/routes/web/routes';
-import FormActionState from '@/lib/types/actions/FormActionState';
+import Button from "@/components/shared/button/Button";
+import FormHeading from "@/components/shared/form/FormHeading";
+import SignUpStatusEnum from "@/lib/enums/SignUpStatusEnum";
+import webRoutes from "@/lib/routes/web/routes";
+import FormActionState from "@/lib/types/actions/FormActionState";
 import {
-    SignUpFormErrorType, SignUpFormType
-} from '@/lib/validations/schemas/web/signUp/signUpFormValidationSchema';
+  SignUpFormErrorType,
+  SignUpFormType,
+} from "@/lib/validations/schemas/web/signUp/signUpFormValidationSchema";
 
 type Props = {
   state: FormActionState<SignUpStatusEnum, SignUpFormType, SignUpFormErrorType>;
@@ -28,7 +29,7 @@ export default function SignUpSuccessful({ state }: Props) {
         pro ověření.
       </p>
 
-      <Link href={webRoutes.Login}>
+      <Link href={webRoutes.LogIn}>
         <Button color="primary">Zpět na přihlášení</Button>
       </Link>
     </div>

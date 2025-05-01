@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 
-import LoginUser from "./_LoginUser/LoginUser";
 import SignUp from "./_signUp/SignUp";
 
 export const metadata: Metadata = {
@@ -13,7 +12,6 @@ export default function SignUpPage() {
   return (
     <>
       <SignUp />
-      <LoginUser />
     </>
   );
 }

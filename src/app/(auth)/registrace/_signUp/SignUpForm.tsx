@@ -83,7 +83,6 @@ export default function SignUpForm({
         <ConfirmPassword
           valuePassword={state.form?.password}
           valueConfirmPassword={state.form?.confirmPassword}
-          className="mb-4"
           errors={errors}
         />
 

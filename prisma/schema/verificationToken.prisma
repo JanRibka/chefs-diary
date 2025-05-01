@@ -1,9 +1,6 @@
 model VerificationToken {
-  id         Int      @id @default(autoincrement()) @db.Integer
-  identifier String   @unique @db.VarChar(25)
-  token      String   @db.VarChar(36)
-  expires    DateTime @db.Timestamp(0)
-
-  @@unique([identifier, token])
-  @@map("verification_tokens")
+  IdVerificationToken Int      @id @default(autoincrement()) @db.Integer
+  Identifier          String   @unique @db.VarChar(25)
+  Token               String   @unique @db.VarChar(36)
+  Expires             DateTime @db.Timestamp(0)
 }

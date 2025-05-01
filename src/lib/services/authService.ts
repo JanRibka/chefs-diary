@@ -9,7 +9,7 @@ import { User } from "@prisma/client";
 
 import getErrorTextByKey from "../errorLibrary/auth/authErrorLibrary";
 import AuthError from "../errors/AuthError";
-import sendSignUpEmail from "../mail/templates/signUpEmail";
+import sendSignUpEmail from "../mail/signUpEmail";
 import { deleteSessionByIdUser } from "../repositories/sessionRepository";
 import {
   createUser,
@@ -20,10 +20,10 @@ import { createSession, getSessionExists } from "./sessionService";
 
 /**
  * Register user
- * @param name
- * @param email
- * @param password
- * @returns
+ * @param name User name
+ * @param email User email
+ * @param password User password
+ * @returns {Promise<User>}
  */
 export async function register(
   name: string,
@@ -39,9 +39,9 @@ export async function register(
 
 /**
  * Attempt to login - Check if user is allowed to login
- * @param email
- * @param password
- * @returns
+ * @param email User email
+ * @param password User password
+ * @returns {Promise<User>}
  */
 export async function attemptLogIn(
   email: string,
@@ -81,9 +81,9 @@ export async function attemptLogIn(
 
 /**
  * Check credentials
- * @param user
- * @param password
- * @returns
+ * @param user User
+ * @param password Password to verify
+ * @returns {Promise<boolean>}
  */
 export async function checkCredentials(
   user: User,
@@ -104,8 +104,8 @@ export async function login2FA(user: User) {
 
 /**
  * Login user
- * @param params
- * @returns
+ * @param params JWT encode parameters
+ * @returns {Promise<string | undefined>}
  */
 export async function logIn(
   params: JWTEncodeParams

@@ -1,8 +1,13 @@
-import 'winston-daily-rotate-file';
+import "winston-daily-rotate-file";
 
-import { createLogger, format, transports } from 'winston';
+import { createLogger, format, Logger, transports } from "winston";
 
-const logger = (fileName: string = "application") => {
+/**
+ * Logger
+ * @param fileName File name
+ * @returns {Logger}
+ */
+const logger = (fileName: string = "application"): Logger => {
   const fileLogTransport = new transports.DailyRotateFile({
     level: process.env.LOG_LEVEL || "info",
     filename: `logs/${fileName}-%DATE%.log`,

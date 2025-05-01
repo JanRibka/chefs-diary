@@ -4,6 +4,11 @@ import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
 import { prisma } from "../prisma";
 import { hashPassword } from "../services/hashService";
 
+/**
+ * Gets user by login
+ * @param name User name
+ * @returns {Promise<User | null>}
+ */
 export async function getUserByLogin(name: string): Promise<User | null> {
   return await prisma.user.findFirst({
     where: {
@@ -12,6 +17,11 @@ export async function getUserByLogin(name: string): Promise<User | null> {
   });
 }
 
+/**
+ * Gets user by email
+ * @param email User email
+ * @returns {Promise<Session | null>}
+ */
 export async function getUserByEmail(email: string): Promise<User | null> {
   return await prisma.user.findUnique({
     where: {
@@ -20,6 +30,11 @@ export async function getUserByEmail(email: string): Promise<User | null> {
   });
 }
 
+/**
+ * Inserts user info
+ * @param idUser User Id
+ * @returns {Promise<UserInfo>}
+ */
 export async function insertUserInfo(idUser: string): Promise<UserInfo> {
   return prisma.userInfo.create({
     data: {
@@ -28,6 +43,13 @@ export async function insertUserInfo(idUser: string): Promise<UserInfo> {
   });
 }
 
+/**
+ * Creates user
+ * @param name User name
+ * @param email User email
+ * @param password User password
+ * @returns {Promise<User>}
+ */
 export async function createUser(
   name: string,
   email: string,
@@ -73,7 +95,14 @@ export async function createUser(
   });
 }
 
-export async function getUserRoleValuesByIdUser(idUser: string) {
+/**
+ * Gets user roles by IdUser
+ * @param idUser User Id
+ * @returns {Promise<Array<number>>}
+ */
+export async function getUserRoleValuesByIdUser(
+  idUser: string
+): Promise<Array<number>> {
   const userRoles = await prisma.userRole.findMany({
     relationLoadStrategy: "join",
     include: {
@@ -88,6 +117,12 @@ export async function getUserRoleValuesByIdUser(idUser: string) {
   return userRoles.map((item) => item.UserRoleType.Value);
 }
 
+/**
+ * Logs login attempt
+ * @param idUser User id
+ * @param loginSuccessful Login successful
+ * @returns {Promise<UserLoginHistory>}
+ */
 export async function logLoginAttempt(
   idUser: string,
   loginSuccessful?: boolean

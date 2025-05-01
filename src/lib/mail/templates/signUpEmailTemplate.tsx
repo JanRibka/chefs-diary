@@ -13,7 +13,7 @@ const getYear = () => {
   }
 };
 
-export default function signUpEmailHtml({
+export default function signUpEmailTemplate({
   confirmationUrl,
   expirationDays,
 }: Props): string {

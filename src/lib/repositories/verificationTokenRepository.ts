@@ -7,10 +7,10 @@ const adapter = PrismaAdapter(prisma);
 
 /**
  * Creates verification token
- * @param identifier
- * @param token
- * @param expires
- * @returns VerificationToken
+ * @param identifier Token identifier (IdUser)
+ * @param token Token
+ * @param expires Token expires at
+ * @returns {Promise<Omit<VerificationToken, "id"> | null | undefined>}
  */
 export async function createVerificationToken(
   identifier: string,

@@ -4,10 +4,16 @@ import { v4 as uuid } from "uuid";
 
 import { createVerificationToken } from "../repositories/verificationTokenRepository";
 
+/**
+ * Creates email confirmation URL
+ * @param idUser User Id
+ * @param expirationTime Expiration time in days
+ * @returns {Promise<string>}
+ */
 export async function createConfirmationUrl(
   idUser: string,
   expirationTime: number
-) {
+): Promise<string> {
   const token = uuid();
   const expires = new Date();
 

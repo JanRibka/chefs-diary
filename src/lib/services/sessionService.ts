@@ -6,6 +6,11 @@ import {
   getSessionBySessionToken,
 } from "@/lib/repositories/sessionRepository";
 
+/**
+ * Creates session
+ * @param params JWT encode parameters
+ * @returns {Promise<string | undefined>}
+ */
 export async function createSession(
   params: JWTEncodeParams
 ): Promise<string | undefined> {
@@ -35,6 +40,11 @@ export async function createSession(
   }
 }
 
-export async function getSessionExists(sessionToken: string) {
+/**
+ * Gets if session exists by session token
+ * @param sessionToken Session token
+ * @returns {Promise<boolean>}
+ */
+export async function getSessionExists(sessionToken: string): Promise<boolean> {
   return (await getSessionBySessionToken(sessionToken)) !== null;
 }

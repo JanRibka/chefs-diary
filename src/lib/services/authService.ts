@@ -7,9 +7,8 @@ import {
 } from "@/lib/services/cookieService";
 import { User, UserInfo } from "@prisma/client";
 
-import getErrorTextByKey from "../errorLibrary/auth/authErrorLibrary";
 import AuthError from "../errors/AuthError";
-import sendSignUpEmail from "../mail/signUpEmail";
+import { sendSignUpEmail } from "../mail/signUpEmail";
 import { deleteSessionByIdUser } from "../repositories/sessionRepository";
 import {
   createUser,
@@ -26,7 +25,7 @@ import { createSession, getSessionExists } from "./sessionService";
  * @param password User password
  * @returns {Promise<User>}
  */
-export async function register(
+export async function registerUser(
   userName: string,
   email: string,
   password: string
@@ -34,7 +33,7 @@ export async function register(
   const user = await createUser(userName, email, password);
   const userInfo = await getUserInfoByIdUser(user.IdUser);
 
-  await sendSignUpEmail(user.IdUser, userInfo?.Email ?? "");
+  await sendSignUpEmail(userInfo?.Email ?? "", userInfo?.Email ?? "", false);
 
   return user;
 }
@@ -52,31 +51,27 @@ export async function verifyUser(
   const user = await getUserByEmail(email);
 
   if (!user) {
-    throw new AuthError(getErrorTextByKey("incorrectLoginPassword"));
+    throw new AuthError("incorrectLoginPassword");
   }
 
   const userInfo = await getUserInfoByIdUser(user.IdUser);
 
-  if (!userInfo?.EmailVerified) {
-    // return LogInStatusEnum.EMAIL_NOT_VERIFIED;
+  if (!userInfo?.EmailVerifiedAt) {
+    throw new AuthError("emailNotVerified");
   }
 
   if (user.IsDisabled) {
-    throw new AuthError(getErrorTextByKey("accessDenied"));
+    throw new AuthError("accessDenied");
   }
 
   if (!(await checkCredentials(user, password))) {
     logLoginAttempt(user.IdUser);
 
-    throw new AuthError(getErrorTextByKey("incorrectLoginPassword"));
+    throw new AuthError("incorrectLoginPassword");
   }
-
-  //TODO: Budu kontrolovat, zada ma overeny email
 
   if (user.TwoFactor) {
     await login2FA(user);
-
-    // return LogInStatusEnum.TWO_FA;
   }
   //TODO: BUdu ověřovat Zda admin pro administraci
 

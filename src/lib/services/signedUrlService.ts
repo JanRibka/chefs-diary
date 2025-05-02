@@ -2,28 +2,39 @@
 
 import { v4 as uuid } from "uuid";
 
-import { createVerificationToken } from "../repositories/verificationTokenRepository";
+import { VerificationToken } from "@prisma/client";
+
+import {
+  createVerificationToken,
+  updateVerificationTokenByEmail,
+} from "../repositories/verificationTokenRepository";
 
 /**
  * Creates email confirmation URL
- * @param idUser User Id
+ * @param email User email
  * @param expirationTime Expiration time in days
+ * @param update Update verification token
  * @returns {Promise<string>}
  */
-export async function createConfirmationUrl(
-  idUser: string,
-  expirationTime: number
+export async function createUpdateConfirmationUrl(
+  email: string,
+  expirationTime: number,
+  update: boolean
 ): Promise<string> {
   const token = uuid();
   const expires = new Date();
+  let verificationToken: VerificationToken | null | undefined;
 
   expires.setTime(expires.getTime() + expirationTime * 60 * 60 * 1000);
 
-  const verificationToken = await createVerificationToken(
-    idUser,
-    token,
-    expires
-  );
+  if (update) {
+    verificationToken = await updateVerificationTokenByEmail(email, {
+      Token: token,
+      Expires: expires,
+    });
+  } else {
+    verificationToken = await createVerificationToken(email, token, expires);
+  }
 
   const baseUrl = process.env.APP_URL?.replace(/\/$/, "") || "";
 

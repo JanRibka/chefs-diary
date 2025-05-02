@@ -22,13 +22,17 @@ const credentials: CredentialsConfig = {
     const persistLogin =
       JSON.parse(credentials.persistLogin as string) ?? false;
 
-    const user = await verifyUser(email, password);
+    const userInfo = await verifyUser(email, password);
+
+    if (!userInfo) {
+      return null;
+    }
 
     return {
-      id: user.IdUser,
-      name: user.UserName,
-      email: user.Email,
-      image: user.Image,
+      id: userInfo.IdUser,
+      name: userInfo.UserName,
+      email: userInfo.Email,
+      image: userInfo.Image,
       persistLogin: persistLogin,
     };
   },

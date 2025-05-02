@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import Form from "@/components/shared/form/Form";
 import FormHeading from "@/components/shared/form/FormHeading";
 import PasswordInput from "@/components/shared/passwordInput/PasswordInput";
+import webRoutes from "@/lib/routes/web/routes";
 import { Button, Checkbox, Input } from "@heroui/react";
 import { Tooltip } from "@heroui/tooltip";
 
@@ -56,7 +57,9 @@ export default function LoginForm() {
               <Checkbox name="persistLogin">Zůstat přihlášený</Checkbox>
             </Tooltip>
             <p>
-              <Link href={"#"}>Zapomněli jste heslo?</Link>
+              <Link href={webRoutes.ForgottenPassword}>
+                Zapomněli jste heslo?
+              </Link>
             </p>
           </div>
 

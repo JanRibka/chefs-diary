@@ -155,3 +155,17 @@ export async function getUserInfoByIdUser(
     },
   });
 }
+
+export async function updateUserInfoByEmail(
+  email: string,
+  userInfo: Partial<Omit<UserInfo, "Email">>
+) {
+  return await prisma.userInfo.update({
+    where: {
+      Email: email,
+    },
+    data: {
+      ...userInfo,
+    },
+  });
+}

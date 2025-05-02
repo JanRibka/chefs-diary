@@ -1,5 +1,6 @@
+import Alert from "@/components/shared/Alert/Alert";
 import { mergeStyles } from "@/lib/utils/styles";
-import { Alert, AlertProps } from "@heroui/react";
+import { AlertProps } from "@heroui/react";
 
 type Props = AlertProps & {};
 

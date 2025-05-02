@@ -10,7 +10,10 @@ export default function FormHeading({
   ...restProps
 }: Props) {
   return (
-    <h3 className={mergeStyles("text-3xl, mb-7", className)} {...restProps}>
+    <h3
+      className={mergeStyles("text-3xl, mb-7 text-center", className)}
+      {...restProps}
+    >
       {children}
     </h3>
   );

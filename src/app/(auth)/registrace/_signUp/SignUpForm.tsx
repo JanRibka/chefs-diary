@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 
 import ConfirmPassword from "@/components/shared/confirmPassword/ConfirmPassword";
@@ -39,66 +41,68 @@ export default function SignUpForm({
   }, []);
 
   return (
-    <div className="flex flex-col items-center">
-      <FormHeading>Registrace</FormHeading>
-      <FormAlert className="mb-4" title={errors.general} />
+    <section>
+      <div className="flex flex-col items-center">
+        <FormHeading>Registrace</FormHeading>
+        <FormAlert className="mb-4" title={errors.general} />
 
-      <Form
-        className="flex flex-col items-center"
-        noValidate
-        onSubmit={handleSubmit}
-        action={action}
-        onChange={handleChange}
-      >
-        <ValidateInput
-          ref={refName}
-          value={state.form?.userName}
-          name={nameof<SignUpFormType>("userName")}
-          label="Uživatelské jméno"
-          className="mb-4"
-          required
-          errors={errors}
-          autoComplete="off"
-          fullWidth
-          variant="faded"
-          color="primary"
-          validationSchema={signUpFormValidationSchema}
-        />
-
-        <ValidateInput
-          value={state.form?.email}
-          name={nameof<SignUpFormType>("email")}
-          label="Email"
-          type="email"
-          className="mb-4"
-          required
-          errors={errors}
-          autoComplete="email"
-          fullWidth
-          variant="faded"
-          color="primary"
-          validationSchema={signUpFormValidationSchema}
-        />
-
-        <ConfirmPassword
-          valuePassword={state.form?.password}
-          valueConfirmPassword={state.form?.confirmPassword}
-          errors={errors}
-        />
-
-        <ValidateCheckbox
-          name={nameof<SignUpFormType>("termsAgreement")}
-          className="mb-4"
-          errors={errors}
-          validationSchema={signUpFormValidationSchema}
+        <Form
+          className="flex flex-col items-center"
+          noValidate
+          onSubmit={handleSubmit}
+          action={action}
+          onChange={handleChange}
         >
-          Souhlasím s podmínkami použití a ochranou osobních údajů
-        </ValidateCheckbox>
+          <ValidateInput
+            ref={refName}
+            value={state.form?.userName}
+            name={nameof<SignUpFormType>("userName")}
+            label="Uživatelské jméno"
+            className="mb-4"
+            required
+            errors={errors}
+            autoComplete="off"
+            fullWidth
+            variant="faded"
+            color="primary"
+            validationSchema={signUpFormValidationSchema}
+          />
 
-        <SubmitButton fullWidth color="primary" isLoading={isLoading}>
-          Registrovat
-        </SubmitButton>
-      </Form>
-    </div>
+          <ValidateInput
+            value={state.form?.email}
+            name={nameof<SignUpFormType>("email")}
+            label="Email"
+            type="email"
+            className="mb-4"
+            required
+            errors={errors}
+            autoComplete="email"
+            fullWidth
+            variant="faded"
+            color="primary"
+            validationSchema={signUpFormValidationSchema}
+          />
+
+          <ConfirmPassword
+            valuePassword={state.form?.password}
+            valueConfirmPassword={state.form?.confirmPassword}
+            errors={errors}
+          />
+
+          <ValidateCheckbox
+            name={nameof<SignUpFormType>("termsAgreement")}
+            className="mb-4"
+            errors={errors}
+            validationSchema={signUpFormValidationSchema}
+          >
+            Souhlasím s podmínkami použití a ochranou osobních údajů
+          </ValidateCheckbox>
+
+          <SubmitButton fullWidth color="primary" isLoading={isLoading}>
+            Registrovat
+          </SubmitButton>
+        </Form>
+      </div>
+    </section>
   );
 }

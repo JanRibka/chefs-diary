@@ -1,3 +1,5 @@
+"use client";
+
 import { mergeStyles } from "@/lib/utils/styles";
 import { Button as HeroButton, ButtonProps } from "@heroui/react";
 

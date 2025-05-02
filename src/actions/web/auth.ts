@@ -9,9 +9,10 @@ import LogInStatusEnum from "@/lib/enums/LogInStatusEnum";
 import SignUpStatusEnum from "@/lib/enums/SignUpStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 import AuthError from "@/lib/errors/AuthError";
-import { register as registerUser } from "@/lib/services/authService";
+import { registerUser } from "@/lib/services/authService";
 import logger from "@/lib/services/loggerService";
 import FormActionState from "@/lib/types/actions/FormActionState";
+import ErrorLibraryType from "@/lib/types/errorLibrary/ErrorLibraryType";
 import {
   LogInFormErrorType,
   LogInFormType,
@@ -114,15 +115,22 @@ export const logInAction = async (
       persistLogin,
       redirect: false,
     });
-    //POkud naprs neautorizovany email tak redirect, nebo taty nastavim generalState a pak se neco udela na view
   } catch (error) {
     if (error instanceof AuthError) {
-      const errorMessage = error.message;
+      const errorMessage = error.message as keyof ErrorLibraryType;
+      let generalState = LogInStatusEnum.UNDEFINED;
+      let generalErrorMessage = getErrorTextByKey(errorMessage);
+
+      if (errorMessage === "emailNotVerified") {
+        generalState = LogInStatusEnum.EMAIL_NOT_VERIFIED;
+        generalErrorMessage = "";
+      }
 
       return {
+        generalState,
         form,
         errors: {
-          general: errorMessage,
+          general: generalErrorMessage,
           timestamp: new Date().getTime().toString(),
         },
       };

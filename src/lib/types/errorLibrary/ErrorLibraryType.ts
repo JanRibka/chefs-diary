@@ -10,6 +10,7 @@ type LibraryTypeProperty =
   | "emailRequired"
   | "emailInvalid"
   | "emailExists"
+  | "emailNotVerified"
   | "passwordRequired"
   | "passwordMinLength"
   | "passwordMaxLength"
@@ -20,8 +21,12 @@ type LibraryTypeProperty =
   | "confirmPasswordOneOf"
   | "incorrectLoginPassword"
   | "accessDenied"
-  | "termsAgreementRequired";
+  | "termsAgreementRequired"
+  | "resendVerificationEmailMainError"
+  | "verificationTokenNotFound"
+  | "verificationTokenExpired"
+  | "verifyTokenMainError";
 
-type LibraryType = Record<LibraryTypeProperty, string>;
+type ErrorLibraryType = Record<LibraryTypeProperty, string>;
 
-export default LibraryType;
+export default ErrorLibraryType;

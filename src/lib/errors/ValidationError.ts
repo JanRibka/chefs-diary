@@ -1,13 +1,11 @@
-import { AuthError as NextAuthError } from "next-auth";
-
 import ErrorLibraryType from "../types/errorLibrary/ErrorLibraryType";
 
-class AuthError extends NextAuthError {
+class ValidationError extends Error {
   constructor(message: keyof ErrorLibraryType) {
     super(message);
-    this.name = "AuthError";
+    this.name = "ValidationError";
     this.message = message;
   }
 }
 
-export default AuthError;
+export default ValidationError;

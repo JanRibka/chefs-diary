@@ -1,24 +1,62 @@
+import logger from "@/lib/services/loggerService";
+
+import VerifyEmailStatusEnum from "../enums/VerifyEmailStatusEnum";
+import ValidationError from "../errors/ValidationError";
+import { sendSignUpEmail } from "../mail/signUpEmail";
+import { updateUserInfoByEmail } from "../repositories/userRepository";
 import {
   deleteVerificationTokenByTokenAndIdentifier,
+  getVerificationTokenByEmail,
   getVerificationTokenByToken,
 } from "../repositories/verificationTokenRepository";
 
-export async function verifyEmail(token: string) {
-  debugger;
+/**
+ * Verifies email
+ * @param token
+ * @returns {Promise<VerifyEmailStatusEnum>}
+ */
+export async function verifyEmail(
+  token: string
+): Promise<VerifyEmailStatusEnum> {
   const verificationToken = await getVerificationTokenByToken(token);
 
   if (!verificationToken) {
-    return 0;
+    return VerifyEmailStatusEnum.TOKEN_NOT_FOUND;
   } else if (verificationToken.Expires < new Date()) {
-    return 1;
+    return VerifyEmailStatusEnum.TOKEN_EXPIRED;
   }
 
-  await deleteVerificationTokenByTokenAndIdentifier(
-    verificationToken?.Identifier,
-    verificationToken?.Token
-  );
+  try {
+    await deleteVerificationTokenByTokenAndIdentifier(
+      verificationToken?.Identifier,
+      verificationToken?.Token
+    );
 
-  return 2;
+    await updateUserInfoByEmail(verificationToken.Identifier, {
+      EmailVerifiedAt: new Date(),
+    });
+
+    return VerifyEmailStatusEnum.SUCCESS;
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.stack || error.message : String(error);
+
+    logger.error(errorMessage);
+
+    return VerifyEmailStatusEnum.VALIDATION_ERROR;
+  }
 }
 
-export async function resendVerificationEmail() {}
+/**
+ * Resents verification email
+ * @param email
+ */
+export async function resendVerificationEmail(email: string) {
+  const verificationToken = await getVerificationTokenByEmail(email);
+
+  if (!verificationToken) {
+    throw new ValidationError("verificationTokenNotFound");
+  }
+
+  await sendSignUpEmail(email, email, true);
+}

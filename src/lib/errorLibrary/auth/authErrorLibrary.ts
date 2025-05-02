@@ -1,7 +1,7 @@
-import LibraryType from "@/lib/types/library/LibraryType";
+import ErrorLibraryType from "@/lib/types/errorLibrary/ErrorLibraryType";
 import { stringFormat } from "@/lib/utils/string";
 
-const errorTexts: LibraryType = {
+const errorTexts: ErrorLibraryType = {
   registerUserMainError: "Registrace skončila chybou, zkuste to prosím znovu",
   loginUserMainError: "Přihlášení skončilo chybou, zkuste to prosím znovu",
   loginRequired: "Uživatelské jméno je povinné",
@@ -14,6 +14,7 @@ const errorTexts: LibraryType = {
   emailRequired: "Email je povinný",
   emailInvalid: "Email není platná emailová adresa",
   emailExists: "Email již existuje",
+  emailNotVerified: "Email není ověřený",
   passwordRequired: "Heslo je povinné",
   passwordMinLength: "Heslo musí obsahovat alespoň {0} znak",
   passwordMaxLength: "Heslo může obsahovat maximálně {0} znak",
@@ -25,18 +26,24 @@ const errorTexts: LibraryType = {
   incorrectLoginPassword: "Neplatné uživatelské jméno, nebo heslo",
   accessDenied: "Byl vám odepřen přístup",
   termsAgreementRequired: "Chybí souhlas s podmínkami",
+  resendVerificationEmailMainError:
+    "Odeslání nového odkazu skončilo chybou, zkuste to prosím znovu",
+  verificationTokenNotFound: "Odkaz pro ověření e-mailu není platný",
+  verificationTokenExpired: "Platnost odkazu vypršela",
+  verifyTokenMainError:
+    "Ověřování emailu skončilo chybou, zkuste to prosím znovu",
 };
 
-const getErrorTextByKey = (key: keyof LibraryType, ...args: string[]) => {
+const getErrorTextByKey = (key: keyof ErrorLibraryType, ...args: string[]) => {
   if (args.length > 0) {
     const errorText = stringFormat(
-      errorTexts?.[key as keyof LibraryType] ?? key,
+      errorTexts?.[key as keyof ErrorLibraryType] ?? key,
       ...args
     ).replace("znak", getZnakText(parseInt(args[0])));
     return errorText;
   }
 
-  return errorTexts?.[key as keyof LibraryType] ?? key;
+  return errorTexts?.[key as keyof ErrorLibraryType] ?? key;
 };
 
 const getZnakText = (count: number) => {

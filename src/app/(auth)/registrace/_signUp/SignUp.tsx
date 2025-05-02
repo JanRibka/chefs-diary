@@ -48,23 +48,21 @@ export default function SignUp() {
     }
   };
 
+  if (state?.generalState === SignUpStatusEnum.SUCCESS) {
+    return <SignUpSuccessful state={state} />;
+  }
+
   return (
-    <section>
-      {state?.generalState === SignUpStatusEnum.SUCCESS ? (
-        <SignUpSuccessful state={state} />
-      ) : (
-        <>
-          <SignUpForm
-            state={state}
-            errors={errors}
-            isLoading={isLoading}
-            action={action}
-            handleSubmit={handleSubmit}
-            handleChange={handleChange}
-          />
-          <LoginUser />
-        </>
-      )}
-    </section>
+    <>
+      <SignUpForm
+        state={state}
+        errors={errors}
+        isLoading={isLoading}
+        action={action}
+        handleSubmit={handleSubmit}
+        handleChange={handleChange}
+      />
+      <LoginUser />
+    </>
   );
 }

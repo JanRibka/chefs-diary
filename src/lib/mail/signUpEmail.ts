@@ -1,13 +1,21 @@
 import transporter from "@/config/nodemailer/nodemailer";
 import logger from "@/lib/services/loggerService";
-import { createConfirmationUrl } from "@/lib/services/signedUrlService";
+import { createUpdateConfirmationUrl } from "@/lib/services/signedUrlService";
 
 import signUpEmailTemplate from "./templates/signUpEmailTemplate";
 
-const sendSignUpEmail = async (idUser: string, to: string) => {
+export async function sendSignUpEmail(
+  email: string,
+  to: string,
+  update: boolean
+) {
   try {
     const expirationDays = 24;
-    const confirmationUrl = await createConfirmationUrl(idUser, expirationDays);
+    const confirmationUrl = await createUpdateConfirmationUrl(
+      email,
+      expirationDays,
+      update
+    );
     const html = signUpEmailTemplate({
       confirmationUrl,
       expirationDays,
@@ -30,6 +38,4 @@ const sendSignUpEmail = async (idUser: string, to: string) => {
 
     throw new Error(errorMessage);
   }
-};
-
-export default sendSignUpEmail;
+}

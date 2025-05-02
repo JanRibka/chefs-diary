@@ -1,10 +1,9 @@
 model Session {
-  id           Int      @id @default(autoincrement()) @db.Integer
-  sessionToken String   @unique @db.VarChar(36)
-  userId       String   @db.VarChar(25)
-  expires      DateTime @db.Timestamp(0)
-  user         User     @relation(fields: [userId], references: [IdUser], onDelete: Cascade)
-
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  IdSession    Int      @id @default(autoincrement()) @db.Integer
+  SessionToken String   @unique @db.VarChar(36)
+  IdUser       String   @db.VarChar(25)
+  Expires      DateTime @db.Timestamp(0)
+  CreatedAt    DateTime @default(now()) @db.Timestamp(0)
+  UpdatedAt    DateTime @updatedAt @db.Timestamp(0)
+  User         User     @relation(fields: [IdUser], references: [IdUser], onDelete: Cascade)
 }

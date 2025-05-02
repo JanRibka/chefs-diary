@@ -1,11 +1,6 @@
-import { AdapterSession } from "next-auth/adapters";
-
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import { Session } from "@prisma/client";
 
 import { prisma } from "../prisma";
-
-const adapter = PrismaAdapter(prisma);
 
 /**
  * Create session
@@ -18,11 +13,13 @@ export async function createSession(
   sessionToken: string,
   idUser: string,
   expires: Date
-): Promise<AdapterSession | undefined> {
-  return await adapter.createSession?.({
-    sessionToken: sessionToken,
-    userId: idUser,
-    expires: expires,
+): Promise<Session | undefined> {
+  return await prisma.session.create({
+    data: {
+      SessionToken: sessionToken,
+      IdUser: idUser,
+      Expires: expires,
+    },
   });
 }
 
@@ -36,7 +33,7 @@ export async function getSessionBySessionToken(
 ): Promise<Session | null> {
   return await prisma.session.findFirst({
     where: {
-      sessionToken: sessionToken,
+      SessionToken: sessionToken,
     },
   });
 }
@@ -48,7 +45,7 @@ export async function getSessionBySessionToken(
 export async function deleteSessionByIdUser(idUser: string): Promise<void> {
   await prisma.session.deleteMany({
     where: {
-      userId: idUser,
+      IdUser: idUser,
     },
   });
 }

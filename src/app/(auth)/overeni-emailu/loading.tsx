@@ -1,5 +1,6 @@
 import Alert from "@/components/shared/Alert/Alert";
 
+//TODO: Místo alertu tu bude circular loading
 export default function Loading() {
   return (
     <section>

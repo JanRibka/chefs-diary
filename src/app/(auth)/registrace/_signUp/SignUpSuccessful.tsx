@@ -20,12 +20,14 @@ export default function SignUpSuccessful({ state }: Props) {
       <div className="flex flex-col items-center">
         <FormHeading>Úspěšná registrace</FormHeading>
 
-        <p className="text-center mb-2">
+        <p className="text-center mb-2 text-sm">
           Na adresu{" "}
-          <span className="font-bold text-primary">{state.form?.email}</span>{" "}
+          <span className="font-bold text-primary text-sm">
+            {state.form?.email}
+          </span>{" "}
           jsme právě odeslali e-mail s potvrzovacím odkazem.
         </p>
-        <p className="text-center mb-8">
+        <p className="text-center mb-8 text-sm">
           Pro dokončení registrace prosíme otevři tento e-mail a klikni na odkaz
           pro ověření.
         </p>

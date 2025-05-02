@@ -37,10 +37,10 @@ export default function EmailNotVerifiedForm({
         <FormHeading>Ověření e-mailu</FormHeading>
         <FormAlert className="mb-4" title={errors.general} />
 
-        <p className="mb-1 w-full text-center">
+        <p className="mb-1 w-full text-sm text-center">
           Před přihlášením je nutné ověřit tvou e-mailovou adresu.
         </p>
-        <p className="mb-4 w-full text-center">
+        <p className="mb-4 w-full text-sm text-center">
           Chceš zaslat nový ověřovací odkaz?
         </p>
 

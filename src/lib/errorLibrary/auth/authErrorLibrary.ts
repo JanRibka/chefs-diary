@@ -28,7 +28,7 @@ const errorTexts: ErrorLibraryType = {
   termsAgreementRequired: "Chybí souhlas s podmínkami",
   resendVerificationEmailMainError:
     "Odeslání nového odkazu skončilo chybou, zkuste to prosím znovu",
-  verificationTokenNotFound: "Odkaz pro ověření e-mailu není platný",
+  verificationTokenNotFound: "E-mail pro odeslání odkazu není platný",
   verificationTokenExpired: "Platnost odkazu vypršela",
   verifyTokenMainError:
     "Ověřování emailu skončilo chybou, zkuste to prosím znovu",

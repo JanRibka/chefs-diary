@@ -8,7 +8,12 @@ export default function VerifyEmailSuccessful() {
   return (
     <section>
       <div className="flex flex-col items-center">
-        <FormHeading>Registrace dokončena</FormHeading>
+        <FormHeading className="mb-4">Registrace dokončena</FormHeading>
+
+        <p className="mb-8y text-sm text-center">
+          Tvoje e-mailová adresa byla úspěšně ověřena. Můžeš se přihlásit a
+          začít používat Kuchařův deník.
+        </p>
 
         <Link href={webRoutes.LogIn} className="w-full">
           <Button color="primary" fullWidth>

@@ -35,14 +35,14 @@ export const signUpAction = async (
 > => {
   const validationResult = await signUpActionValidator(formData);
 
-  const name = formData.get("name") as string;
+  const userName = formData.get("userName") as string;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
   const termsAgreement = JSON.parse(formData.get("termsAgreement") as string);
 
   const form: SignUpFormType = {
-    name,
+    userName,
     email,
     password,
     confirmPassword,
@@ -54,13 +54,12 @@ export const signUpAction = async (
   }
 
   try {
-    await registerUser(name, email, password);
+    await registerUser(userName, email, password);
 
     return {
       generalState: SignUpStatusEnum.SUCCESS,
       form,
       errors: {
-        general: getErrorTextByKey("registerUserMainError"),
         timestamp: new Date().getTime().toString(),
       },
     };
@@ -115,6 +114,7 @@ export const logInAction = async (
       persistLogin,
       redirect: false,
     });
+    //POkud naprs neautorizovany email tak redirect, nebo taty nastavim generalState a pak se neco udela na view
   } catch (error) {
     if (error instanceof AuthError) {
       const errorMessage = error.message;

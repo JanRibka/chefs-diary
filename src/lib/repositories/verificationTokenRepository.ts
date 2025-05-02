@@ -5,7 +5,7 @@ import { prisma } from "../prisma";
 //TODO: asi bych mohl odevsud odjebat adapter a poutivat porismu aupravit si tabulky podle sebe
 /**
  * Creates verification token
- * @param identifier Token identifier (IdUser)
+ * @param identifier Token identifier (User uuid)
  * @param token Token
  * @param expires Token expires at
  * @returns {Promise<Omit<VerificationToken, "id"> | null | undefined>}
@@ -41,7 +41,7 @@ export async function getVerificationTokenByToken(
 
 /**
  * Deletes verification token
- * @param identifier Token identifier (IdUser)
+ * @param identifier Token identifier (User uuid)
  * @param token Token
  */
 export async function deleteVerificationTokenByTokenAndIdentifier(

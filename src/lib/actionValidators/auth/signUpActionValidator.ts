@@ -31,7 +31,7 @@ export default async function signUpActionValidator(
 
     if (user) {
       result.success = false;
-      result.errors.name = getErrorTextByKey("loginExists");
+      result.errors.userName = getErrorTextByKey("loginExists");
       result.errors.timestamp = new Date().getTime().toString();
     }
 

@@ -5,7 +5,7 @@ import {
   deleteCookieAsync,
   getCookieAsync,
 } from "@/lib/services/cookieService";
-import { User } from "@prisma/client";
+import { User, UserInfo } from "@prisma/client";
 
 import getErrorTextByKey from "../errorLibrary/auth/authErrorLibrary";
 import AuthError from "../errors/AuthError";
@@ -14,25 +14,27 @@ import { deleteSessionByIdUser } from "../repositories/sessionRepository";
 import {
   createUser,
   getUserByEmail,
+  getUserInfoByIdUser,
   logLoginAttempt,
 } from "../repositories/userRepository";
 import { createSession, getSessionExists } from "./sessionService";
 
 /**
  * Register user
- * @param name User name
+ * @param userName User name
  * @param email User email
  * @param password User password
  * @returns {Promise<User>}
  */
 export async function register(
-  name: string,
+  userName: string,
   email: string,
   password: string
 ): Promise<User> {
-  const user = await createUser(name, email, password);
+  const user = await createUser(userName, email, password);
+  const userInfo = await getUserInfoByIdUser(user.IdUser);
 
-  await sendSignUpEmail(user.IdUser, user.Email);
+  await sendSignUpEmail(user.IdUser, userInfo?.Email ?? "");
 
   return user;
 }
@@ -41,19 +43,21 @@ export async function register(
  * Attempt to login - Check if user is allowed to login
  * @param email User email
  * @param password User password
- * @returns {Promise<User>}
+ * @returns {Promise<UserInfo>}
  */
-export async function attemptLogIn(
+export async function verifyUser(
   email: string,
   password: string
-): Promise<User> {
+): Promise<UserInfo> {
   const user = await getUserByEmail(email);
 
   if (!user) {
     throw new AuthError(getErrorTextByKey("incorrectLoginPassword"));
   }
 
-  if (!user.EmailVerified) {
+  const userInfo = await getUserInfoByIdUser(user.IdUser);
+
+  if (!userInfo?.EmailVerified) {
     // return LogInStatusEnum.EMAIL_NOT_VERIFIED;
   }
 
@@ -76,7 +80,7 @@ export async function attemptLogIn(
   }
   //TODO: BUdu ověřovat Zda admin pro administraci
 
-  return user;
+  return userInfo!;
 }
 
 /**

@@ -52,8 +52,8 @@ export default function SignUpForm({
       >
         <ValidateInput
           ref={refName}
-          value={state.form?.name}
-          name={nameof<SignUpFormType>("name")}
+          value={state.form?.userName}
+          name={nameof<SignUpFormType>("userName")}
           label="Uživatelské jméno"
           className="mb-4"
           required

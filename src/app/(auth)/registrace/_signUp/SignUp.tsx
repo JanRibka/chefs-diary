@@ -10,7 +10,7 @@ import { validateSignUpForm } from "@/lib/validations/validations/web/signUp/val
 
 import LoginUser from "../_LoginUser/LoginUser";
 import SignUpForm from "./SignUpForm";
-import SignUpSuccessful from "./SignUpSuccessfull";
+import SignUpSuccessful from "./SignUpSuccessful";
 
 export default function SignUp() {
   const isFirstRender = useIsFirstRender();

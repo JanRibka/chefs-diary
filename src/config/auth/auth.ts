@@ -5,11 +5,7 @@ import Credentials, {
 } from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
-import { prisma } from "@/lib/prisma";
-import { attemptLogIn, logIn } from "@/lib/services/authService";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-
-const adapter = PrismaAdapter(prisma);
+import { logIn, verifyUser } from "@/lib/services/authService";
 
 const credentials: CredentialsConfig = {
   id: "credentials",
@@ -26,11 +22,11 @@ const credentials: CredentialsConfig = {
     const persistLogin =
       JSON.parse(credentials.persistLogin as string) ?? false;
 
-    const user = await attemptLogIn(email, password);
+    const user = await verifyUser(email, password);
 
     return {
       id: user.IdUser,
-      name: user.Name,
+      name: user.UserName,
       email: user.Email,
       image: user.Image,
       persistLogin: persistLogin,
@@ -39,7 +35,6 @@ const credentials: CredentialsConfig = {
 };
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  adapter,
   providers: [Credentials(credentials), Google],
   callbacks: {
     async jwt({ token, account, user }) {

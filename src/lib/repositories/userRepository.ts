@@ -6,13 +6,15 @@ import { hashPassword } from "../services/hashService";
 
 /**
  * Gets user by login
- * @param name User name
+ * @param userName User name
  * @returns {Promise<User | null>}
  */
-export async function getUserByLogin(name: string): Promise<User | null> {
+export async function getUserByLogin(userName: string): Promise<User | null> {
   return await prisma.user.findFirst({
     where: {
-      Name: name,
+      UserInfo: {
+        UserName: userName,
+      },
     },
   });
 }
@@ -20,12 +22,14 @@ export async function getUserByLogin(name: string): Promise<User | null> {
 /**
  * Gets user by email
  * @param email User email
- * @returns {Promise<Session | null>}
+ * @returns {Promise<User | null>}
  */
 export async function getUserByEmail(email: string): Promise<User | null> {
-  return await prisma.user.findUnique({
+  return await prisma.user.findFirst({
     where: {
-      Email: email,
+      UserInfo: {
+        Email: email,
+      },
     },
   });
 }
@@ -35,23 +39,25 @@ export async function getUserByEmail(email: string): Promise<User | null> {
  * @param idUser User Id
  * @returns {Promise<UserInfo>}
  */
-export async function insertUserInfo(idUser: string): Promise<UserInfo> {
-  return prisma.userInfo.create({
-    data: {
-      IdUser: idUser,
-    },
-  });
-}
+// export async function insertUserInfo(
+//   userInfo: Partial<UserInfo>
+// ): Promise<UserInfo> {
+//   return prisma.userInfo.create({
+//     data: {
+//       ...userInfo
+//     },
+//   });
+// }
 
 /**
  * Creates user
- * @param name User name
+ * @param userName User name
  * @param email User email
  * @param password User password
  * @returns {Promise<User>}
  */
 export async function createUser(
-  name: string,
+  userName: string,
   email: string,
   password: string
 ): Promise<User> {
@@ -60,8 +66,6 @@ export async function createUser(
   return await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({
       data: {
-        Name: name,
-        Email: email,
         Password: hashedPassword,
       },
     });
@@ -69,6 +73,8 @@ export async function createUser(
     await tx.userInfo.create({
       data: {
         IdUser: user.IdUser,
+        UserName: userName,
+        Email: email,
       },
     });
 
@@ -131,6 +137,21 @@ export async function logLoginAttempt(
     data: {
       IdUser: idUser,
       LoginSuccessful: loginSuccessful,
+    },
+  });
+}
+
+/**
+ * Gets user info by IdUser
+ * @param idUser User id
+ * @returns {Promise<UserInfo | null>}
+ */
+export async function getUserInfoByIdUser(
+  idUser: string
+): Promise<UserInfo | null> {
+  return await prisma.userInfo.findFirst({
+    where: {
+      IdUser: idUser,
     },
   });
 }

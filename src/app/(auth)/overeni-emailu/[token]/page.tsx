@@ -8,6 +8,7 @@ export default async function VerifyEmailToken({ params }: Props) {
   const { token } = await params;
   debugger;
   const verificationResult = await verifyEmail(token);
+  console.log(verificationResult);
 
   return <h1>{token}</h1>;
 }

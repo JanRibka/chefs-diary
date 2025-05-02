@@ -10,7 +10,7 @@ import {
 import confirmPasswordValidationSchema from "../../shared/confirmPassword/confirmPasswordSchema";
 
 const signUpFormValidationSchema = confirmPasswordValidationSchema.shape({
-  name: string()
+  userName: string()
     .required(getErrorTextByKey("loginRequired"))
     .matches(
       new RegExp(`^${LOWER_UPPERCASE_REGEX}`),

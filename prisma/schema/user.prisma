@@ -1,17 +1,11 @@
 //TODO: Udelat to podle predchoziho projektu
 
 model User {
-  IdUser               String             @id @default(cuid()) @map("id") @db.VarChar(25)
-  Name                 String?            @map("name") @db.VarChar(25)
-  Email                String             @unique @map("email") @db.VarChar(50)
-  EmailVerified        DateTime?          @map("emailVerified") @db.Timestamp(0)
-  Password             String             @map("password") @db.VarChar(255)
-  Image                String?            @map("image") @db.VarChar(255)
-  CreatedAt            DateTime           @default(now()) @map("createdAt") @db.Timestamp(0)
-  UpdatedAt            DateTime?          @map("UpdatedAt") @db.Timestamp(0)
-  IsDisabled           Boolean?           @default(false) @map("isDisabled")
-  LoginRestrictedUntil DateTime?          @map("loginRestrictedUntil") @db.Timestamp(0)
-  TwoFactor            Boolean?           @default(false) @map("twoFactor")
+  IdUser               String             @id @default(cuid()) @db.VarChar(25)
+  Password             String             @db.VarChar(255)
+  IsDisabled           Boolean?           @default(false)
+  LoginRestrictedUntil DateTime?          @db.Timestamp(0)
+  TwoFactor            Boolean?           @default(false)
   UserInfo             UserInfo?
   UserLoginHistory     UserLoginHistory[]
   UseRoles             UserRole[]

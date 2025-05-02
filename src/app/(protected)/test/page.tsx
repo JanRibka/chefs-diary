@@ -8,7 +8,7 @@ export default async function TestPage() {
   const session = await auth();
 
   if (!session) {
-    redirect(webRoutes.Login);
+    redirect(webRoutes.LogIn);
   }
 
   return <div>Test</div>;

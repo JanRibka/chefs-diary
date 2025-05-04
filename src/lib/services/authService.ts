@@ -1,10 +1,7 @@
 import { compare } from "bcrypt";
 import { JWTEncodeParams } from "next-auth/jwt";
 
-import {
-  deleteCookieAsync,
-  getCookieAsync,
-} from "@/lib/services/cookieService";
+import { getCookieAsync } from "@/lib/services/cookieService";
 import { User, UserInfo } from "@prisma/client";
 
 import AuthError from "../errors/AuthError";
@@ -12,9 +9,11 @@ import { sendSignUpEmail } from "../mail/signUpEmail";
 import { deleteSessionByIdUser } from "../repositories/sessionRepository";
 import {
   createUser,
+  getFailedLoginAttemptsCountByIdUser,
   getUserByEmail,
   getUserInfoByIdUser,
   logLoginAttempt,
+  updateUserByIdUser,
 } from "../repositories/userRepository";
 import { createSession, getSessionExists } from "./sessionService";
 
@@ -46,7 +45,8 @@ export async function registerUser(
  */
 export async function verifyUser(
   email: string,
-  password: string
+  password: string,
+  verifyAdmin: boolean = false
 ): Promise<UserInfo> {
   const user = await getUserByEmail(email);
 
@@ -64,47 +64,16 @@ export async function verifyUser(
     throw new AuthError("accessDenied");
   }
 
-  //TODO: Tady budu ověřovat jestli se uživatel za poslednich 10 minut nepřihlásil 10x a napisu mu hlasku, ye mu zbyvaji poslendi 3 prihlaseni
-
-  //   Nejčastější praxe:
-  // 1. Počet pokusů + časové okno (rate limit per user)
-  // Např. povolit max. 5 pokusů během 15 minut. Po překročení:
-
-  // zablokovat přihlášení na 15–30 minut,
-
-  // nebo přidat CAPTCHA.
-
-  // ⏳ Tím se účinně omezí možnost útoku hrubou silou.
-
-  // 2. Sledování podle e-mailu i IP adresy
-  // Kromě kontroly podle e-mailu sledují některé systémy i IP adresu (např. 20 pokusů z jedné IP za hodinu) a aplikují podobný limit.
-
-  // 3. Zpomalení (exponential backoff)
-  // S každým dalším pokusem se prodlužuje odezva systému (1s → 2s → 4s), což odrazuje automatizované útoky.
-
-  // 4. Po překročení limitu:
-  // Zobrazit obecnou hlášku typu:
-  // „Přihlášení je dočasně zablokováno z bezpečnostních důvodů. Zkuste to prosím za pár minut.“
-
-  // Volitelně: poslat bezpečnostní e-mail uživateli.
-
-  // Někdy je možné nabídnout reset hesla.
-
-  // 5. Reset pokusů po úspěšném přihlášení
-  // 🔒 Příklad nastavení:
-
-  // Parametr	Doporučení
-  // Maximální pokusy	5
-  // Časové okno	15 minut
-  // Blok po překročení	15–30 minut
-  // Ochrana podle	Uživatele a IP adresy
-  // Dodatečná obrana	CAPTCHA nebo 2FA
-  // Pokud máš Redis nebo podobný datastore, můžeš pokusy ukládat tam – je rychlý a ideální na tyto účely.
-
-  // Chceš krátký příklad v Next.js s Prisma nebo Redisem?
+  if (user.LoginRestrictedUntil && user.LoginRestrictedUntil >= new Date()) {
+    throw new AuthError("loginRestricted");
+  }
 
   if (!(await checkCredentials(user, password))) {
-    logLoginAttempt(user.IdUser);
+    await logLoginAttempt(user.IdUser, false);
+
+    if (await getIpFailedLoginCountReachedLimitLast15Minutes(10, user.IdUser)) {
+      throw new AuthError("loginRestricted");
+    }
 
     throw new AuthError("incorrectLoginPassword");
   }
@@ -112,7 +81,10 @@ export async function verifyUser(
   if (user.TwoFactor) {
     await login2FA(user);
   }
-  //TODO: BUdu ověřovat Zda admin pro administraci
+
+  if (verifyAdmin) {
+    //TODO: BUdu ověřovat Zda admin pro administraci
+  }
 
   return userInfo!;
 }
@@ -168,9 +140,35 @@ export async function logIn(
       // Clear out ALL previous refresh tokens
       await deleteSessionByIdUser(idUser);
     }
-    //TODO: Cookie nejde smazat
-    await deleteCookieAsync(process.env.AUTH_COOKIE_NAME!);
   }
 
   return await createSession(params);
+}
+
+/**
+ * Gets if maximal login limit form same IP address was reached and sets login restricted until to user table
+ * @param loginLimit Maximal login limit
+ * @param idUser User Id
+ * @returns {Promise<boolean>}
+ */
+export async function getIpFailedLoginCountReachedLimitLast15Minutes(
+  loginLimit: number,
+  idUser: string
+): Promise<boolean> {
+  const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+
+  const loginCount = await getFailedLoginAttemptsCountByIdUser(
+    idUser,
+    fifteenMinutesAgo
+  );
+
+  if (loginCount >= loginLimit) {
+    await updateUserByIdUser(idUser, {
+      LoginRestrictedUntil: new Date(Date.now() + 15 * 60 * 1000),
+    });
+
+    return true;
+  }
+
+  return false;
 }

@@ -19,6 +19,7 @@
     "seed": "ts-node prisma/seeds.js"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.9.0",
     "@heroui/system": "^2.4.15",
     "@heroui/theme": "^2.4.15",
     "@heroui/tooltip": "^2.2.16",

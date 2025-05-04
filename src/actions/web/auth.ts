@@ -150,5 +150,5 @@ export const logInAction = async (
     };
   }
 
-  redirect("/dashboard");
+  redirect("/test");
 };

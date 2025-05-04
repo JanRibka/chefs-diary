@@ -35,21 +35,6 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 }
 
 /**
- * Inserts user info
- * @param idUser User Id
- * @returns {Promise<UserInfo>}
- */
-// export async function insertUserInfo(
-//   userInfo: Partial<UserInfo>
-// ): Promise<UserInfo> {
-//   return prisma.userInfo.create({
-//     data: {
-//       ...userInfo
-//     },
-//   });
-// }
-
-/**
  * Creates user
  * @param userName User name
  * @param email User email
@@ -131,7 +116,7 @@ export async function getUserRoleValuesByIdUser(
  */
 export async function logLoginAttempt(
   idUser: string,
-  loginSuccessful?: boolean
+  loginSuccessful: boolean
 ): Promise<UserLoginHistory> {
   return await prisma.userLoginHistory.create({
     data: {
@@ -156,16 +141,63 @@ export async function getUserInfoByIdUser(
   });
 }
 
+/**
+ * Updates user info
+ * @param email User email
+ * @param userInfo User info
+ * @returns {Promise<UserInfo>}
+ */
 export async function updateUserInfoByEmail(
   email: string,
   userInfo: Partial<Omit<UserInfo, "Email">>
-) {
+): Promise<UserInfo> {
   return await prisma.userInfo.update({
     where: {
       Email: email,
     },
     data: {
       ...userInfo,
+    },
+  });
+}
+
+/**
+ * Gets failed login attempts
+ * @param idUser User Id
+ * @param loginAttemptDateLimit A date from which the attempts should be find
+ * @returns {Promise<number>}
+ */
+export async function getFailedLoginAttemptsCountByIdUser(
+  idUser: string,
+  loginAttemptDateLimit: Date
+): Promise<number> {
+  return await prisma.userLoginHistory.count({
+    where: {
+      IdUser: idUser,
+      LoginSuccessful: false,
+      LoginAttemptDate: {
+        gte: loginAttemptDateLimit,
+      },
+    },
+  });
+}
+
+/**
+ * Updates user
+ * @param idUser User Id
+ * @param user User
+ * @returns {Promise<User>}
+ */
+export async function updateUserByIdUser(
+  idUser: string,
+  user: Partial<User>
+): Promise<User> {
+  return await prisma.user.update({
+    where: {
+      IdUser: idUser,
+    },
+    data: {
+      ...user,
     },
   });
 }

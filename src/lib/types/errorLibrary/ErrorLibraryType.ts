@@ -7,6 +7,7 @@ type LibraryTypeProperty =
   | "loginStartWithLetter"
   | "loginAllowedCharacters"
   | "loginExists"
+  | "loginRestricted"
   | "emailRequired"
   | "emailInvalid"
   | "emailExists"

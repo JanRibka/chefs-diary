@@ -5,7 +5,11 @@ import Credentials, {
 } from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
+import { prisma } from "@/lib/prisma";
 import { logIn, verifyUser } from "@/lib/services/authService";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+
+const adapter = PrismaAdapter(prisma);
 
 const credentials: CredentialsConfig = {
   id: "credentials",
@@ -24,10 +28,6 @@ const credentials: CredentialsConfig = {
 
     const userInfo = await verifyUser(email, password);
 
-    if (!userInfo) {
-      return null;
-    }
-
     return {
       id: userInfo.IdUser,
       name: userInfo.UserName,
@@ -39,6 +39,7 @@ const credentials: CredentialsConfig = {
 };
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  adapter,
   providers: [Credentials(credentials), Google],
   callbacks: {
     async jwt({ token, account, user }) {
@@ -51,6 +52,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       return token;
     },
+  },
+
+  session: {
+    strategy: "database",
   },
 
   jwt: {

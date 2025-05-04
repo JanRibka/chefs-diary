@@ -21,6 +21,7 @@ import logInFormValidationSchema, {
 import { Checkbox } from "@heroui/react";
 import { Tooltip } from "@heroui/tooltip";
 
+//TODO: Form bude v components a bude společný jak pro admina tyak pro web
 type Props = {
   state: FormActionState<LogInStatusEnum, LogInFormType, LogInFormErrorType>;
   errors: Record<string, string>;

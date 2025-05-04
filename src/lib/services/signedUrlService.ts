@@ -36,7 +36,7 @@ export async function createUpdateConfirmationUrl(
     verificationToken = await createVerificationToken(email, token, expires);
   }
 
-  const baseUrl = process.env.APP_URL?.replace(/\/$/, "") || "";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "";
 
   return new URL(
     `/overeni-emailu/${verificationToken?.Token}`,

@@ -10,7 +10,7 @@ export default function VerifyEmailSuccessful() {
       <div className="flex flex-col items-center">
         <FormHeading className="mb-4">Registrace dokončena</FormHeading>
 
-        <p className="mb-8y text-sm text-center">
+        <p className="mb-8 text-sm text-center">
           Tvoje e-mailová adresa byla úspěšně ověřena. Můžeš se přihlásit a
           začít používat Kuchařův deník.
         </p>

@@ -7,7 +7,7 @@ export default async function TestPage() {
   // TODO: Toto bych asi dal do layoutu
   const session = await auth();
 
-  if (!session) {
+  if (!session || typeof session !== "object" || !("userId" in session)) {
     redirect(webRoutes.LogIn);
   }
 

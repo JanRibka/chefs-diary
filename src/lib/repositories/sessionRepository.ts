@@ -16,9 +16,9 @@ export async function createSession(
 ): Promise<Session | undefined> {
   return await prisma.session.create({
     data: {
-      SessionToken: sessionToken,
-      IdUser: idUser,
-      Expires: expires,
+      sessionToken: sessionToken,
+      userId: idUser,
+      expires: expires,
     },
   });
 }
@@ -33,7 +33,7 @@ export async function getSessionBySessionToken(
 ): Promise<Session | null> {
   return await prisma.session.findFirst({
     where: {
-      SessionToken: sessionToken,
+      sessionToken: sessionToken,
     },
   });
 }
@@ -45,7 +45,7 @@ export async function getSessionBySessionToken(
 export async function deleteSessionByIdUser(idUser: string): Promise<void> {
   await prisma.session.deleteMany({
     where: {
-      IdUser: idUser,
+      userId: idUser,
     },
   });
 }

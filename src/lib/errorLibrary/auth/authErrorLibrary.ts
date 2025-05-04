@@ -10,6 +10,8 @@ const errorTexts: ErrorLibraryType = {
   loginStartWithLetter: "Uživatelské jméno musí začínat písmenem",
   loginAllowedCharacters:
     "Uživatelské jméno může obsahovat pouze písmena, čísla, pomlčku a podtržítko",
+  loginRestricted:
+    "Byl zaznamenán velký počet přihlášení. Přihlášení je dočasně zablokováno z bezpečnostních důvodů. Zkuste to prosím za pár minut.",
   loginExists: "Uživatelské jméno již existuje",
   emailRequired: "Email je povinný",
   emailInvalid: "Email není platná emailová adresa",

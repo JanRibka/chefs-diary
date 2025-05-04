@@ -1,9 +1,9 @@
 model Session {
   IdSession    Int      @id @default(autoincrement()) @db.Integer
-  SessionToken String   @unique @db.VarChar(36)
-  IdUser       String   @db.VarChar(25)
-  Expires      DateTime @db.Timestamp(0)
-  CreatedAt    DateTime @default(now()) @db.Timestamp(0)
-  UpdatedAt    DateTime @updatedAt @db.Timestamp(0)
-  User         User     @relation(fields: [IdUser], references: [IdUser], onDelete: Cascade)
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [IdUser], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

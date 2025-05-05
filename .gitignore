@@ -43,5 +43,5 @@ next-env.d.ts
 
 # prisma
 .prisma
-migration.sql
-migration_lock.toml
+# migration.sql
+# migration_lock.toml

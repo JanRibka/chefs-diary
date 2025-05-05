@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { encode } from "next-auth/jwt";
+import { encode as defaultEncode } from "next-auth/jwt";
 import Credentials, {
   CredentialsConfig,
 } from "next-auth/providers/credentials";
@@ -66,7 +66,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         return sessionToken;
       }
 
-      return encode(params);
+      return defaultEncode(params);
     },
   },
 });

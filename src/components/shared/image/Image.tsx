@@ -3,7 +3,7 @@ import NextImage, { ImageProps } from "next/image";
 import imageKitLoader from "./imageKitLoader";
 
 type Props = ImageProps & {};
-
+//TODO: Pro nahrani obrazku pouzit file manager. M;6u pri nahrani obrazku zkontrolovat, zda je obrazek v2t3i ne6 full hd a apokud ano, tak ho o59znu na full hd a origin8l zahodim, at se mi nezasira disk. Zva6it jestli neud2lat pri nahravani vice velikosti obr8zku a ty podle velikosti okna a pokud jsem na mobilu zobrazovat
 const Image = async ({
   src,
   loading,

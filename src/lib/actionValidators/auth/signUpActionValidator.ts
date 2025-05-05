@@ -1,7 +1,7 @@
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 import {
   getUserByEmail,
-  getUserByLogin,
+  getUserByUserName,
 } from "@/lib/repositories/userRepository";
 import logger from "@/lib/services/loggerService";
 import ValidationResultType from "@/lib/types/validation/ValidationResultType";
@@ -25,13 +25,13 @@ export default async function signUpActionValidator(
 
   try {
     const email = data.email as string;
-    const name = data.name as string;
+    const userName = data.userName as string;
 
-    let user = await getUserByLogin(name);
+    let user = await getUserByUserName(userName);
 
     if (user) {
       result.success = false;
-      result.errors.userName = getErrorTextByKey("loginExists");
+      result.errors.userName = getErrorTextByKey("userNameExists");
       result.errors.timestamp = new Date().getTime().toString();
     }
 

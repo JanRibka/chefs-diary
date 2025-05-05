@@ -3,16 +3,16 @@ import { stringFormat } from "@/lib/utils/string";
 
 const errorTexts: ErrorLibraryType = {
   registerUserMainError: "Registrace skončila chybou, zkuste to prosím znovu",
-  loginUserMainError: "Přihlášení skončilo chybou, zkuste to prosím znovu",
-  loginRequired: "Uživatelské jméno je povinné",
-  loginMinLength: "Uživatelské jméno musí obsahovat alespoň {0} znak",
-  loginMaxLength: "Uživatelské jméno může obsahovat maximálně {0} znak",
-  loginStartWithLetter: "Uživatelské jméno musí začínat písmenem",
-  loginAllowedCharacters:
+  userNameUserMainError: "Přihlášení skončilo chybou, zkuste to prosím znovu",
+  userNameRequired: "Uživatelské jméno je povinné",
+  userNameMinLength: "Uživatelské jméno musí obsahovat alespoň {0} znak",
+  userNameMaxLength: "Uživatelské jméno může obsahovat maximálně {0} znak",
+  userNameStartWithLetter: "Uživatelské jméno musí začínat písmenem",
+  userNameAllowedCharacters:
     "Uživatelské jméno může obsahovat pouze písmena, čísla, pomlčku a podtržítko",
-  loginRestricted:
+  userNameRestricted:
     "Byl zaznamenán velký počet přihlášení. Přihlášení je dočasně zablokováno z bezpečnostních důvodů. Zkuste to prosím za pár minut.",
-  loginExists: "Uživatelské jméno již existuje",
+  userNameExists: "Uživatelské jméno již existuje",
   emailRequired: "Email je povinný",
   emailInvalid: "Email není platná emailová adresa",
   emailExists: "Email již existuje",

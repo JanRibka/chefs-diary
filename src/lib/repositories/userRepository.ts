@@ -5,11 +5,13 @@ import { prisma } from "../prisma";
 import { hashPassword } from "../services/hashService";
 
 /**
- * Gets user by login
+ * Gets user by user name
  * @param userName User name
  * @returns {Promise<User | null>}
  */
-export async function getUserByLogin(userName: string): Promise<User | null> {
+export async function getUserByUserName(
+  userName: string
+): Promise<User | null> {
   return await prisma.user.findFirst({
     where: {
       UserInfo: {

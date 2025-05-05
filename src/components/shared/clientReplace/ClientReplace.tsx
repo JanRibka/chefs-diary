@@ -3,11 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-interface ClientReplaceProps {
+interface Props {
   path: string;
 }
 
-export default function ClientReplace({ path }: ClientReplaceProps) {
+export default function ClientReplace({ path }: Props) {
   const router = useRouter();
 
   useEffect(() => {

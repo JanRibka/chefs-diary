@@ -65,14 +65,14 @@ export async function verifyUser(
   }
 
   if (user.LoginRestrictedUntil && user.LoginRestrictedUntil >= new Date()) {
-    throw new AuthError("loginRestricted");
+    throw new AuthError("userNameRestricted");
   }
 
   if (!(await checkCredentials(user, password))) {
     await logLoginAttempt(user.IdUser, false);
 
     if (await getIpFailedLoginCountReachedLimitLast15Minutes(10, user.IdUser)) {
-      throw new AuthError("loginRestricted");
+      throw new AuthError("userNameRestricted");
     }
 
     throw new AuthError("incorrectLoginPassword");

@@ -3,15 +3,13 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-import { RouteProperty } from "@/lib/routes/web/routes";
+import { RouteValue as WebRouteValue } from "@/lib/routes/web/routes";
 
-interface ClientReplaceGetReturnToUrlProps {
-  defaultRoute: RouteProperty;
+interface Props {
+  defaultRoute: WebRouteValue;
 }
 
-export default function ClientReplaceGetReturnToUrl({
-  defaultRoute,
-}: ClientReplaceGetReturnToUrlProps) {
+export default function ClientReplaceGetReturnToUrl({ defaultRoute }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 

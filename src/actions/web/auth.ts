@@ -151,7 +151,7 @@ export const logInAction = async (
       generalState: LogInStatusEnum.UNDEFINED,
       form,
       errors: {
-        general: getErrorTextByKey("loginUserMainError"),
+        general: getErrorTextByKey("userNameUserMainError"),
         timestamp: new Date().getTime().toString(),
       },
     };

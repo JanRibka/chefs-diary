@@ -11,17 +11,17 @@ import confirmPasswordValidationSchema from "../../shared/confirmPassword/confir
 
 const signUpFormValidationSchema = confirmPasswordValidationSchema.shape({
   userName: string()
-    .required(getErrorTextByKey("loginRequired"))
+    .required(getErrorTextByKey("userNameRequired"))
     .matches(
       new RegExp(`^${LOWER_UPPERCASE_REGEX}`),
-      getErrorTextByKey("loginStartWithLetter")
+      getErrorTextByKey("userNameStartWithLetter")
     )
     .matches(
       new RegExp(`^${loweUpperCaseNumberSpecialCharRegex("-_")}*$`),
-      getErrorTextByKey("loginAllowedCharacters")
+      getErrorTextByKey("userNameAllowedCharacters")
     )
-    .min(4, getErrorTextByKey("loginMinLength", "4"))
-    .max(24, getErrorTextByKey("loginMaxLength", "24")),
+    .min(4, getErrorTextByKey("userNameMinLength", "4"))
+    .max(24, getErrorTextByKey("userNameMaxLength", "24")),
   email: string()
     .required(getErrorTextByKey("emailRequired"))
     .email(getErrorTextByKey("emailInvalid"))

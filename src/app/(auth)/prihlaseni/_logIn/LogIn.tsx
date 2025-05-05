@@ -33,7 +33,7 @@ export default function LogIn() {
   }, [state]);
 
   if (state?.generalState === LogInStatusEnum.SUCCESS) {
-    return <ClientReplaceGetReturnToUrl defaultRoute="Test" />;
+    return <ClientReplaceGetReturnToUrl defaultRoute="/test" />;
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -52,7 +52,6 @@ export default function LogIn() {
 
   const handleChange = () => {
     if (errors.general) {
-      console.log(errors);
       setErrors((prev) => ({
         ...prev,
         general: "",

@@ -49,7 +49,6 @@ export default function EmailNotVerified({ email }: Props) {
 
   const handleChange = () => {
     if (errors.general) {
-      console.log(errors);
       setErrors((prev) => ({
         ...prev,
         general: "",

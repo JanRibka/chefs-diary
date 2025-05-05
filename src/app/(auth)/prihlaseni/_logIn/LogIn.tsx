@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 
 import { logInAction } from "@/actions/web/auth";
+import ClientReplaceGetReturnToUrl from "@/components/shared/clientReplaceGetReturnToUrl/ClientReplaceGetReturnToUrl";
 import LogInStatusEnum from "@/lib/enums/LogInStatusEnum";
 import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
 import { LogInFormErrorType } from "@/lib/validations/schemas/web/logIn/logInSchema";
@@ -30,6 +31,10 @@ export default function LogIn() {
     setErrors(state.errors);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
+  if (state?.generalState === LogInStatusEnum.SUCCESS) {
+    return <ClientReplaceGetReturnToUrl defaultRoute="Test" />;
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);

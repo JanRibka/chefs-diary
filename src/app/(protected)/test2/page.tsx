@@ -1,3 +1,3 @@
 export default async function TestPage() {
-  return <div>Test</div>;
+  return <div>Test2</div>;
 }

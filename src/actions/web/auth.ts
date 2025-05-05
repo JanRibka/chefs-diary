@@ -1,7 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
-
 import { signIn } from "@/config/auth/auth";
 import logInActionValidator from "@/lib/actionValidators/auth/logInActionValidator";
 import signUpActionValidator from "@/lib/actionValidators/auth/signUpActionValidator";
@@ -115,6 +113,14 @@ export const logInAction = async (
       persistLogin,
       redirect: false,
     });
+
+    return {
+      generalState: LogInStatusEnum.SUCCESS,
+      form,
+      errors: {
+        timestamp: new Date().getTime().toString(),
+      },
+    };
   } catch (error) {
     if (error instanceof AuthError) {
       const errorMessage = error.message as keyof ErrorLibraryType;
@@ -142,6 +148,7 @@ export const logInAction = async (
     logger.error(errorMessage);
 
     return {
+      generalState: LogInStatusEnum.UNDEFINED,
       form,
       errors: {
         general: getErrorTextByKey("loginUserMainError"),
@@ -149,6 +156,4 @@ export const logInAction = async (
       },
     };
   }
-
-  redirect("/test");
 };

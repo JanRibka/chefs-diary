@@ -8,7 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage() {
-  // TODO: Mělo by mě to přesměrovat tam, kam jsem chtěl jít. POdle původní aplikace
-
   return <LogIn />;
 }

@@ -27,13 +27,14 @@ export function authMiddleware(middleware: CustomMiddleware): CustomMiddleware {
     event: NextFetchEvent,
     response: NextResponse
   ) => {
+    debugger;
     const token = await getToken({
       req: request,
-      secret: process.env.NEXTAUTH_SECRET,
+      secret: process.env.AUTH_COOKIE_NAME,
     });
-
+    // request.nextUrl.pathname
     if (!token) {
-      return NextResponse.redirect(new URL("/api/auth/signin", request.url));
+      return NextResponse.redirect(new URL("/prihlaseni", request.url));
     }
 
     return middleware(request, event, response);

@@ -1,9 +1,10 @@
-import { JWTEncodeParams } from 'next-auth/jwt';
-import { v4 as uuid } from 'uuid';
+import { JWTEncodeParams } from "next-auth/jwt";
+import { v4 as uuid } from "uuid";
 
 import {
-    createSession as createSessionRepository, getSessionBySessionToken
-} from '@/lib/repositories/sessionRepository';
+  createSession as createSessionRepository,
+  getSessionBySessionToken,
+} from "@/lib/repositories/sessionRepository";
 
 /**
  * Creates session
@@ -19,12 +20,11 @@ export async function createSession(
     if (!params.token.sub) {
       throw new Error("No user ID found in token");
     }
-    debugger;
+
     const persistLogin = params.token.persistLogin;
-    //TODO: Nějak bych měl nastavit platnost na session, pokud persistLogin na false
     const expires = persistLogin
       ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 dní
-      : null;
+      : new Date(Date.now() + 1 * 60 * 60 * 1000); // 1 hodina
 
     const createdSession = await createSessionRepository(
       sessionToken,

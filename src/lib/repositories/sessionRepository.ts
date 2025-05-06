@@ -1,6 +1,6 @@
-import { Session } from '@prisma/client';
+import { Session } from "@prisma/client";
 
-import { prisma } from '../prisma';
+import { prisma } from "../prisma";
 
 /**
  * Create session
@@ -12,7 +12,7 @@ import { prisma } from '../prisma';
 export async function createSession(
   sessionToken: string,
   idUser: string,
-  expires: Date | null
+  expires: Date
 ): Promise<Session | undefined> {
   return await prisma.session.create({
     data: {

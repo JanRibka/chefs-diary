@@ -1,15 +1,12 @@
-import Alert from "@/components/shared/Alert/Alert";
+import { CircularProgress } from "@heroui/progress";
 
-//TODO: Místo alertu tu bude circular loading
 export default function Loading() {
   return (
     <section>
       <div className="w-full">
-        <Alert
-          title="Probíhá ověřování vaší e-mailove adresy"
-          color="default"
-          variant="faded"
-        />
+        <div>
+          <CircularProgress aria-label="Loading..." color="primary" size="lg" />
+        </div>
       </div>
     </section>
   );

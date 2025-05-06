@@ -34,6 +34,8 @@ const errorTexts: ErrorLibraryType = {
   verificationTokenExpired: "Platnost odkazu vypršela",
   verifyTokenMainError:
     "Ověřování emailu skončilo chybou, zkuste to prosím znovu",
+  verifyEmailVerificationTokenNotFound:
+    "Nelze ověřit e-mail - bezpečnostní token není platný",
 };
 
 const getErrorTextByKey = (key: keyof ErrorLibraryType, ...args: string[]) => {

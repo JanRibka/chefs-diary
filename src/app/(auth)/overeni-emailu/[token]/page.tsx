@@ -10,6 +10,7 @@ import VerifyEmailSuccessful from "./_verifyEmailSuccess/VerifyEmailSuccess";
 type Props = {
   params: Promise<{ token: string }>;
 };
+
 //TODO: Nav3echny page bych m2l m9t metadata
 export default async function VerifyEmailToken({ params }: Props) {
   const { token } = await params;
@@ -19,7 +20,11 @@ export default async function VerifyEmailToken({ params }: Props) {
   if (verificationResult === VerifyEmailStatusEnum.VALIDATION_ERROR) {
     return <FormAlert title={getErrorTextByKey("verifyTokenMainError")} />;
   } else if (verificationResult === VerifyEmailStatusEnum.TOKEN_NOT_FOUND) {
-    return <FormAlert title={getErrorTextByKey("verificationTokenNotFound")} />;
+    return (
+      <FormAlert
+        title={getErrorTextByKey("verifyEmailVerificationTokenNotFound")}
+      />
+    );
   } else if (verificationResult === VerifyEmailStatusEnum.TOKEN_EXPIRED) {
     const verificationToken = await getVerificationTokenByToken(token);
     return <EmailNotVerified email={verificationToken?.Identifier ?? ""} />;

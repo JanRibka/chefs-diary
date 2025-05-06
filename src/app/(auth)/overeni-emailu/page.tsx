@@ -1,4 +1,15 @@
-//TODO: Tady bude hlaska, ze chyb9 token
+import Alert from "@/components/shared/Alert/Alert";
+
 export default function VerifyEmail() {
-  return <h1>Neco</h1>;
+  return (
+    <section>
+      <div className="w-full">
+        <Alert
+          title="Nelze ověřit e-mail – chybí bezpečnostní token"
+          color="danger"
+          variant="faded"
+        />
+      </div>
+    </section>
+  );
 }

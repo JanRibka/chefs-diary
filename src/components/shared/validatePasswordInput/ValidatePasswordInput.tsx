@@ -4,7 +4,7 @@ import { memo, SVGProps, useEffect, useState } from "react";
 import * as Yup from "yup";
 
 import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
-import { validateField } from "@/lib/validations/validations/field/validateField";
+import { validateField } from "@/lib/validations/validations/shared/field/validateField";
 import { Input, InputProps } from "@heroui/react";
 
 export const EyeSlashFilledIcon = memo((props: SVGProps<SVGSVGElement>) => (

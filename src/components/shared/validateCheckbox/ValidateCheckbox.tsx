@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import * as Yup from "yup";
 
 import { mergeStyles } from "@/lib/utils/styles";
-import { validateField } from "@/lib/validations/validations/field/validateField";
+import { validateField } from "@/lib/validations/validations/shared/field/validateField";
 import { Checkbox, CheckboxProps } from "@heroui/react";
 
 type Props<T extends object> = Omit<

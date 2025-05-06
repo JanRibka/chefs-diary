@@ -54,18 +54,12 @@ export async function verifyUser(
     throw new AuthError("incorrectLoginPassword");
   }
 
-  const userInfo = await getUserInfoByIdUser(user.IdUser);
-
-  if (!userInfo?.EmailVerifiedAt) {
-    throw new AuthError("emailNotVerified");
+  if (user.LoginRestrictedUntil && user.LoginRestrictedUntil >= new Date()) {
+    throw new AuthError("userNameRestricted");
   }
 
   if (user.IsDisabled) {
     throw new AuthError("accessDenied");
-  }
-
-  if (user.LoginRestrictedUntil && user.LoginRestrictedUntil >= new Date()) {
-    throw new AuthError("userNameRestricted");
   }
 
   if (!(await checkCredentials(user, password))) {
@@ -78,6 +72,12 @@ export async function verifyUser(
     throw new AuthError("incorrectLoginPassword");
   }
 
+  const userInfo = await getUserInfoByIdUser(user.IdUser);
+
+  if (!userInfo?.EmailVerifiedAt) {
+    throw new AuthError("emailNotVerified");
+  }
+
   if (user.TwoFactor) {
     await login2FA(user);
   }
@@ -86,7 +86,7 @@ export async function verifyUser(
     //TODO: BUdu ověřovat Zda admin pro administraci
   }
 
-  return userInfo!;
+  return userInfo;
 }
 
 /**
@@ -137,7 +137,7 @@ export async function logIn(
 
     // Detected refresh token reuse!
     if (!foundSession) {
-      // Clear out ALL previous refresh tokens
+      // Clear out ALL previous sessions
       await deleteSessionByIdUser(idUser);
     }
   }

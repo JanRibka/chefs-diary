@@ -1,6 +1,6 @@
 import ValidationResultType from "@/lib/types/validation/ValidationResultType";
-import { LogInFormErrorType } from "@/lib/validations/schemas/web/logIn/logInSchema";
-import { validateLogInFormAsync } from "@/lib/validations/validations/web/logIn/validateLogInForm";
+import { LogInFormErrorType } from "@/lib/validations/schemas/shared/logIn/logInSchema";
+import { validateLogInFormAsync } from "@/lib/validations/validations/shared/logIn/validateLogInForm";
 
 export default async function logInActionValidator(
   formData: FormData

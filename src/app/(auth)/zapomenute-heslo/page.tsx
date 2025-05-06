@@ -1,3 +1,13 @@
+import { Metadata } from "next";
+
+import ForgottenPassword from "./_forgottenPassword/ForgottenPassword";
+
+export const metadata: Metadata = {
+  title: "Zapomenuté heslo - Kuchařův deník",
+  description:
+    "Zapomněli jste heslo? Zadejte svůj e‑mail a my vám pošleme odkaz pro obnovení hesla",
+};
+
 export default function ForgottenPasswordPage() {
-  return <h1>Zapomenute heslo</h1>;
+  return <ForgottenPassword />;
 }

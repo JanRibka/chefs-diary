@@ -12,10 +12,10 @@ const errorTexts: ErrorLibraryType = {
     "Uživatelské jméno může obsahovat pouze písmena, čísla, pomlčku a podtržítko",
   userNameRestricted:
     "Byl zaznamenán velký počet přihlášení. Přihlášení je dočasně zablokováno z bezpečnostních důvodů. Zkuste to prosím za pár minut.",
-  userNameExists: "Uživatelské jméno již existuje",
+  userNameExists: "Toto uživatelské jméno je již obsazené",
   emailRequired: "Email je povinný",
   emailInvalid: "Email není platná emailová adresa",
-  emailExists: "Email již existuje",
+  emailExists: "Nelze vytvořit účet. Zkuste se přihlásit nebo si obnovit heslo",
   emailNotVerified: "Email není ověřený",
   passwordRequired: "Heslo je povinné",
   passwordMinLength: "Heslo musí obsahovat alespoň {0} znak",

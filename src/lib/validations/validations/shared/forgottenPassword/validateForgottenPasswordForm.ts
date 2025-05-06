@@ -1,19 +1,19 @@
 import { ValidationError } from "yup";
 
 import ValidationResultType from "@/lib/types/validation/ValidationResultType";
-import logInFormValidationSchema, {
-  LogInFormErrorType,
-} from "@/lib/validations/schemas/web/logIn/logInSchema";
+import forgottenPasswordFormValidationSchema, {
+  ForgottenPasswordFormErrorType,
+} from "@/lib/validations/schemas/shared/forgottenPassword/ForgottenPassword";
 
-type ErrorType = Omit<LogInFormErrorType, "timestamp" | "general">;
+type ErrorType = Omit<ForgottenPasswordFormErrorType, "timestamp" | "general">;
 
-export const validateLogInForm = (
+export const validateForgottenPasswordForm = (
   formData: Record<string, FormDataEntryValue>
 ) => {
   const result: ValidationResultType<ErrorType> = { success: true, errors: {} };
 
   try {
-    logInFormValidationSchema.validateSync(formData, {
+    forgottenPasswordFormValidationSchema.validateSync(formData, {
       abortEarly: false,
     });
   } catch (error) {
@@ -30,13 +30,13 @@ export const validateLogInForm = (
   return result;
 };
 
-export const validateLogInFormAsync = async (
+export const validateForgottenPasswordFormAsync = async (
   formData: Record<string, FormDataEntryValue>
 ) => {
   const result: ValidationResultType<ErrorType> = { success: true, errors: {} };
 
   try {
-    await logInFormValidationSchema.validate(formData, {
+    await forgottenPasswordFormValidationSchema.validate(formData, {
       abortEarly: false,
     });
   } catch (error) {

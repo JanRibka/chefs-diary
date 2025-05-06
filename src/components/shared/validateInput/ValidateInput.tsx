@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import * as Yup from 'yup';
+import { useEffect, useState } from "react";
+import * as Yup from "yup";
 
-import useIsFirstRender from '@/lib/hooks/useIsFirstRender';
-import { validateField } from '@/lib/validations/validations/field/validateField';
-import { Input, InputProps } from '@heroui/react';
+import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
+import { validateField } from "@/lib/validations/validations/shared/field/validateField";
+import { Input, InputProps } from "@heroui/react";
 
 type Props<T extends object> = Omit<
   InputProps,

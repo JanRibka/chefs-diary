@@ -15,7 +15,7 @@ const LayoutLoginInfo = ({ header, description }: Props) => {
           className="absolute top-0 left-0 z-0 w-full h-full ease-in delay-300 bg-center bg-no-repeat bg-cover transition-background-image"
           style={{ backgroundImage: `url(${loginImage})` }}
         />
-        <div className="absolute top-0 left-0 w-full h-full opacity-50 z-1 bg-primary" />
+        <div className="absolute top-0 left-0 w-full h-full opacity-60 z-1 bg-primary" />
         <LayoutLoginInfoDetail header={header} description={description} />
       </div>
     </section>

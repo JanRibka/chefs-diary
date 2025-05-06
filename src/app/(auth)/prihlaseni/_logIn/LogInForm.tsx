@@ -17,7 +17,7 @@ import { nameof } from "@/lib/utils/nameof";
 import logInFormValidationSchema, {
   LogInFormErrorType,
   LogInFormType,
-} from "@/lib/validations/schemas/web/logIn/logInSchema";
+} from "@/lib/validations/schemas/shared/logIn/logInSchema";
 import { Checkbox } from "@heroui/react";
 import { Tooltip } from "@heroui/tooltip";
 

@@ -77,7 +77,7 @@ export default function EmailNotVerifiedForm({
         </Form>
 
         <Link href={webRoutes.LogIn} className="w-full">
-          <Button color="primary" fullWidth>
+          <Button color="primary" fullWidth variant="light">
             Zpět na přihlášení
           </Button>
         </Link>

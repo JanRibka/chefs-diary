@@ -1,29 +1,23 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import { logInAction } from "@/actions/web/auth";
 import ClientReplaceGetReturnToUrl from "@/components/shared/clientReplaceGetReturnToUrl/ClientReplaceGetReturnToUrl";
 import LogInStatusEnum from "@/lib/enums/LogInStatusEnum";
 import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
-import { LogInFormErrorType } from "@/lib/validations/schemas/web/logIn/logInSchema";
-import { validateLogInForm } from "@/lib/validations/validations/web/logIn/validateLogInForm";
+import { LogInFormErrorType } from "@/lib/validations/schemas/shared/logIn/logInSchema";
+import { validateLogInForm } from "@/lib/validations/validations/shared/logIn/validateLogInForm";
 
 import CreateAccount from "../_createAccount/CreateAccount";
 import EmailNotVerified from "./EmailNotVerified";
 import LogInForm from "./LogInForm";
 
 export default function LogIn() {
-  const refLogin = useRef<HTMLInputElement>(null);
-
   const isFirstRender = useIsFirstRender();
 
   const [state, action, isLoading] = useActionState(logInAction, {});
   const [errors, setErrors] = useState<LogInFormErrorType>({});
-
-  useEffect(() => {
-    refLogin.current?.focus();
-  }, []);
 
   useEffect(() => {
     if (isFirstRender || !state.errors) return;

@@ -27,22 +27,28 @@ export default async function signUpActionValidator(
     const email = data.email as string;
     const userName = data.userName as string;
 
-    let user = await getUserByUserName(userName);
+    let user = await getUserByEmail(email);
 
     if (user) {
-      result.success = false;
-      result.errors.userName = getErrorTextByKey("userNameExists");
-      result.errors.timestamp = new Date().getTime().toString();
+      return {
+        success: false,
+        errors: {
+          general: getErrorTextByKey("emailExists"),
+          timestamp: new Date().getTime().toString(),
+        },
+      };
     }
 
-    user = await getUserByEmail(email);
+    user = await getUserByUserName(userName);
 
     if (user) {
-      result.success = false;
-      result.errors.email = getErrorTextByKey("emailExists");
-      result.errors.timestamp = !!result.errors.timestamp
-        ? result.errors.timestamp
-        : new Date().getTime().toString();
+      return {
+        success: false,
+        errors: {
+          userName: getErrorTextByKey("userNameExists"),
+          timestamp: new Date().getTime().toString(),
+        },
+      };
     }
   } catch (error) {
     const errorMessage =

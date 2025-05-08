@@ -5,8 +5,8 @@ type Props = { children: React.ReactNode };
 export default function Layout({ children }: Props) {
   return (
     <AuthLayout
-      header="Jste zde nový?"
-      description="Stačí pár údajů a e‑mail a můžete začít objevovat, sdílet a ukládat recepty."
+      header="Obnovení hesla"
+      description="Zvolte si nové bezpečné heslo a zadejte ho pro jistotu ještě jednou."
     >
       {children}
     </AuthLayout>

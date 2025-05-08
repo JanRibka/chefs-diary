@@ -10,7 +10,7 @@ export default function LoginUser() {
           Máte účet?{" "}
           <Link
             href={webRoutes.LogIn}
-            className="font-bold underlined text-primary"
+            className="font-bold underline text-primary"
           >
             Přihlašte se
           </Link>

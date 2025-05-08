@@ -4,9 +4,12 @@ import { useActionState, useEffect, useState } from "react";
 
 import { forgottenPasswordAction } from "@/actions/shared/forgottenPassword";
 import ForgottenPasswordForm from "@/components/shared/forgottenPasswordForm/ForgottenPasswordForm";
+import ForgottenPasswordStatusEnum from "@/lib/enums/ForgottenPasswordStatusEnum";
 import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
 import { ForgottenPasswordFormErrorType } from "@/lib/validations/schemas/shared/forgottenPassword/ForgottenPassword";
 import { validateForgottenPasswordForm } from "@/lib/validations/validations/shared/forgottenPassword/validateForgottenPasswordForm";
+
+import ForgottenPasswordSuccessful from "./ForgottenPasswordSuccess";
 
 export default function ForgottenPassword() {
   const isFirstRender = useIsFirstRender();
@@ -23,6 +26,10 @@ export default function ForgottenPassword() {
     setErrors(state.errors);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
+  if (state.generalState === ForgottenPasswordStatusEnum.SUCCESS) {
+    return <ForgottenPasswordSuccessful />;
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);

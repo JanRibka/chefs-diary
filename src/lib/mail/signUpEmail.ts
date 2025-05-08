@@ -1,6 +1,6 @@
 import transporter from "@/config/nodemailer/nodemailer";
 import logger from "@/lib/services/loggerService";
-import { createUpdateConfirmationUrl } from "@/lib/services/signedUrlService";
+import { createUpdateEmailConfirmationUrl } from "@/lib/services/signedUrlService";
 
 import signUpEmailTemplate from "./templates/signUpEmailTemplate";
 
@@ -11,7 +11,7 @@ export async function sendSignUpEmail(
 ) {
   try {
     const expirationDays = 24;
-    const confirmationUrl = await createUpdateConfirmationUrl(
+    const confirmationUrl = await createUpdateEmailConfirmationUrl(
       email,
       expirationDays,
       update
@@ -27,7 +27,7 @@ export async function sendSignUpEmail(
         address: process.env.MAILER_FROM!,
       },
       to: to,
-      subject: "[Kuchařův deník] Potvrďte prosím svou e-mailovou adresu",
+      subject: "[Kuchařův deník] Ověřte svou e-mailovou adresu",
       html,
     });
   } catch (error) {

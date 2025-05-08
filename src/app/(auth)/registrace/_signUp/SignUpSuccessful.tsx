@@ -28,8 +28,8 @@ export default function SignUpSuccessful({ state }: Props) {
           jsme právě odeslali e-mail s potvrzovacím odkazem.
         </p>
         <p className="text-center mb-8 text-sm">
-          Pro dokončení registrace prosíme otevři tento e-mail a klikni na odkaz
-          pro ověření.
+          Pro dokončení registrace prosíme otevřete tento e-mail a klikněte na
+          odkaz pro ověření.
         </p>
 
         <Link href={webRoutes.LogIn}>

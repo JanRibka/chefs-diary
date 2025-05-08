@@ -58,6 +58,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     strategy: "database",
   },
 
+  cookies: {
+    sessionToken: {
+      name: process.env.AUTH_COOKIE_NAME,
+    },
+  },
+
   jwt: {
     encode: async function (params) {
       const sessionToken = await logIn(params);

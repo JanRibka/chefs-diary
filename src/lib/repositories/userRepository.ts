@@ -185,7 +185,7 @@ export async function getFailedLoginAttemptsCountByIdUser(
 }
 
 /**
- * Updates user
+ * Updates user by Id user
  * @param idUser User Id
  * @param user User
  * @returns {Promise<User>}

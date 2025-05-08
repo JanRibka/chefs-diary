@@ -1,5 +1,10 @@
+"use server";
+
 import forgottenPasswordActionValidator from "@/lib/actionValidators/auth/forgottenPasswordActionValidator";
 import ForgottenPasswordStatusEnum from "@/lib/enums/ForgottenPasswordStatusEnum";
+import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
+import logger from "@/lib/services/loggerService";
+import { forgottenPasswordRequest } from "@/lib/services/passwordResetService";
 import FormActionState from "@/lib/types/actions/FormActionState";
 import {
   ForgottenPasswordFormErrorType,
@@ -38,52 +43,28 @@ export const forgottenPasswordAction = async (
     return { form, errors: validationResult.errors };
   }
 
-  //try {
-  // await signIn("credentials", {
-  //   email,
-  //   password,
-  //   persistLogin,
-  //   redirect: false,
-  // });
+  try {
+    await forgottenPasswordRequest(email);
 
-  return {
-    generalState: ForgottenPasswordStatusEnum.SUCCESS,
-    form,
-    errors: {
-      timestamp: new Date().getTime().toString(),
-    },
-  };
-  //} catch (error) {
-  // if (error instanceof AuthError) {
-  //   const errorMessage = error.message as keyof ErrorLibraryType;
-  //   let generalState = LogInStatusEnum.UNDEFINED;
-  //   let generalErrorMessage = getErrorTextByKey(errorMessage);
-  //   if (errorMessage === "emailNotVerified") {
-  //     generalState = LogInStatusEnum.EMAIL_NOT_VERIFIED;
-  //     generalErrorMessage = "";
-  //   }
-  //   return {
-  //     generalState,
-  //     form,
-  //     errors: {
-  //       general: generalErrorMessage,
-  //       timestamp: new Date().getTime().toString(),
-  //     },
-  //   };
-  //}
+    return {
+      generalState: ForgottenPasswordStatusEnum.SUCCESS,
+      form,
+      errors: {
+        timestamp: new Date().getTime().toString(),
+      },
+    };
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.stack || error.message : String(error);
 
-  // const errorMessage =
-  //   error instanceof Error ? error.stack || error.message : String(error);
+    logger.error(errorMessage);
 
-  // logger.error(errorMessage);
-
-  // return {
-  //   generalState: LogInStatusEnum.UNDEFINED,
-  //   form,
-  //   errors: {
-  //     general: getErrorTextByKey("userNameUserMainError"),
-  //     timestamp: new Date().getTime().toString(),
-  //   },
-  // };
-  //}
+    return {
+      form,
+      errors: {
+        general: getErrorTextByKey("passwordResetMainError"),
+        timestamp: new Date().getTime().toString(),
+      },
+    };
+  }
 };

@@ -1,4 +1,4 @@
-import Alert from "@/components/shared/Alert/Alert";
+import Alert from "@/components/shared/alert/Alert";
 import { mergeStyles } from "@/lib/utils/styles";
 import { AlertProps } from "@heroui/react";
 

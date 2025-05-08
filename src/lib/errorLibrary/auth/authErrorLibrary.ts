@@ -31,11 +31,15 @@ const errorTexts: ErrorLibraryType = {
   resendVerificationEmailMainError:
     "Odeslání nového odkazu skončilo chybou, zkuste to prosím znovu",
   verificationTokenNotFound: "E-mail pro odeslání odkazu není platný",
-  verificationTokenExpired: "Platnost odkazu vypršela",
+  verificationTokenExpired: "Platnost odkazu pro potvrzení e-mailu vypršela",
   verifyTokenMainError:
     "Ověřování emailu skončilo chybou, zkuste to prosím znovu",
   verifyEmailVerificationTokenNotFound:
-    "Nelze ověřit e-mail - bezpečnostní token není platný",
+    "Nelze ověřit e-mail - Odkaz již není platný",
+  passwordResetMainError:
+    "Nastavení nohého hesla se nepovedlo. Zkuste to prosím znovu.",
+  passwordResetTokenNotFound: "Nelze obnovit heslo - Odkaz již není platný",
+  passwordResetTokenExpired: "Platnost odkazu pro obnovení hesla vypršela",
 };
 
 const getErrorTextByKey = (key: keyof ErrorLibraryType, ...args: string[]) => {

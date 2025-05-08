@@ -26,39 +26,6 @@ type Props = {
   handleChange: () => void;
 };
 
-//TODO: To je dobrá poznámka — a právě taková nekonzistence může vést k bezpečnostním slabinám.
-
-// Pokud registrace vrací „E‑mail již existuje“:
-// Tím aplikace nepřímo potvrzuje, že daný e‑mail existuje, což umožňuje tzv. user enumeration útoky i přes registrační formulář. To je běžný problém, ale dá se řešit několika způsoby:
-
-// 🔒 Doporučené bezpečné řešení (lepší UX i bezpečnost):
-// Registrace:
-
-// Pokud e‑mail existuje:
-
-// Nezobrazuj zprávu „Uživatel již existuje“.
-
-// Místo toho napiš něco jako:
-
-// „Pokud u nás už máte účet, můžete se přihlásit nebo si nechat obnovit heslo.“
-
-// Nebo:
-
-// „Nelze vytvořit účet. Zkuste se přihlásit nebo si obnovit heslo.“
-
-// Obnova hesla:
-
-// Jak jsi správně zmínil – zobrazit jednotnou zprávu bez ohledu na existenci e‑mailu:
-
-// „Pokud u nás máte účet, poslali jsme vám e‑mail s instrukcemi.“
-
-// 🤖 Alternativa (akceptovat user enumeration):
-// Pokud ti to nevadí (např. z obchodních důvodů nebo jde o interní systém), můžeš user enumeration povolit. Ale je třeba si být vědom rizik:
-
-// může sloužit k mapování účtů,
-
-// zvyšuje riziko cílených útoků (např. spear phishing).
-
 export default function SignUpForm({
   state,
   errors,

@@ -31,7 +31,7 @@ export default function signUpEmailTemplate({
               <td style="padding: 40px;">
                 <h2 style="margin-top: 0;">Ahoj kuchaři,</h2>
                 <p style="font-size: 16px; line-height: 1.5; color: #333;">
-                  Děkujeme za registraci na webu <strong>Kuchařův deník</strong>! Než začneš sdílet a ukládat recepty, je potřeba ověřit tvou e-mailovou adresu.
+                  Děkujeme za registraci na webu <strong>Kuchařův deník</strong>! Než začnete sdílet a ukládat recepty, je potřeba ověřit Vaší e-mailovou adresu.
                 </p>
                 <div style="text-align: center; margin: 40px 0;">
                   <a href="${confirmationUrl}" style="
@@ -46,7 +46,7 @@ export default function signUpEmailTemplate({
                   ">Potvrdit e-mail</a>
                 </div>
                 <p style="font-size: 14px; color: #555;">
-                  Tento odkaz vyprší za ${expirationDays} hodin. Pokud jsi o registraci nežádal(a), tento e-mail můžeš ignorovat.
+                  Tento odkaz vyprší za ${expirationDays} hodin. Pokud jste o registraci nežádal(a), tento e-mail můžete ignorovat.
                 </p>
                 <p style="font-size: 14px; color: #555;">
                   Přejeme hodně inspirace v kuchyni!<br />

@@ -4,10 +4,10 @@ import { prisma } from "../prisma";
 
 /**
  * Creates verification token
- * @param identifier Token identifier (User uuid)
+ * @param identifier Token identifier (Email)
  * @param token Token
  * @param expires Token expires at
- * @returns {Promise<Omit<VerificationToken, "id"> | null | undefined>}
+ * @returns {Promise<VerificationToken | null | undefined>}
  */
 export async function createVerificationToken(
   identifier: string,

@@ -27,7 +27,10 @@ type LibraryTypeProperty =
   | "verificationTokenNotFound"
   | "verificationTokenExpired"
   | "verifyTokenMainError"
-  | "verifyEmailVerificationTokenNotFound";
+  | "verifyEmailVerificationTokenNotFound"
+  | "passwordResetMainError"
+  | "passwordResetTokenNotFound"
+  | "passwordResetTokenExpired";
 
 type ErrorLibraryType = Record<LibraryTypeProperty, string>;
 

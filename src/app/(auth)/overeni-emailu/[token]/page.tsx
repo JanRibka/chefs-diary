@@ -12,7 +12,7 @@ type Props = {
 };
 
 //TODO: Nav3echny page bych m2l m9t metadata
-export default async function VerifyEmailToken({ params }: Props) {
+export default async function VerifyEmailTokenPage({ params }: Props) {
   const { token } = await params;
 
   const verificationResult = await verifyEmail(token);

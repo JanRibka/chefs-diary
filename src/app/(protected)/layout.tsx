@@ -6,7 +6,7 @@ import webRoutes from "@/lib/routes/web/routes";
 
 type Props = { children: React.ReactNode };
 
-export default async function Layout({ children }: Props) {
+export default async function ProtectedLayout({ children }: Props) {
   const session = await auth();
 
   if (!session || typeof session !== "object" || !("userId" in session)) {
@@ -19,5 +19,6 @@ export default async function Layout({ children }: Props) {
       />
     );
   }
-  return <div>{children}</div>;
+
+  return <>{children}</>;
 }

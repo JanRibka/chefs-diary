@@ -16,7 +16,8 @@ export default function VerifyLinkSentSuccess({ email }: Props) {
 
         <p className="text-center mb-2">
           Na adresu <span className="font-bold text-primary">{email}</span> jsme
-          právě odeslali e-mail s potvrzovacím odkazem.
+          právě odeslali e-mail s potvrzovacím odkazem. Pokud Vám nedorazí
+          zkontrolujte spam, nebo si jej pošlete znovu.
         </p>
         <p className="text-center mb-8">
           Pro dokončení registrace prosíme otevřete tento e-mail a klikněte na

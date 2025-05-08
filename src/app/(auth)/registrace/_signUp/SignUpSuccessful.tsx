@@ -25,7 +25,8 @@ export default function SignUpSuccessful({ state }: Props) {
           <span className="font-bold text-primary text-sm">
             {state.form?.email}
           </span>{" "}
-          jsme právě odeslali e-mail s potvrzovacím odkazem.
+          jsme právě odeslali e-mail s potvrzovacím odkazem. Pokud Vám nedorazí
+          zkontrolujte spam, nebo si jej pošlete znovu.
         </p>
         <p className="text-center mb-8 text-sm">
           Pro dokončení registrace prosíme otevřete tento e-mail a klikněte na

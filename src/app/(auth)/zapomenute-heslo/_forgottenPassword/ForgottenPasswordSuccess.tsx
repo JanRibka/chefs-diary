@@ -12,7 +12,8 @@ export default function ForgottenPasswordSuccessful() {
 
         <p className="mb-2 text-sm text-center">
           Pokud u nás máte účet, poslali jsme vám e‑mail s odkazem pro obnovení
-          hesla.
+          hesla. Pokud Vám nedorazí zkontrolujte spam, nebo si jej pošlete
+          znovu.
         </p>
 
         <p className="mb-8 text-sm text-center">

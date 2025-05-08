@@ -10,9 +10,14 @@ export default function ForgottenPasswordSuccessful() {
       <div className="flex flex-col items-center">
         <FormHeading className="mb-4">Zapomenuté heslo</FormHeading>
 
-        <p className="mb-8 text-sm text-center">
+        <p className="mb-2 text-sm text-center">
           Pokud u nás máte účet, poslali jsme vám e‑mail s odkazem pro obnovení
           hesla.
+        </p>
+
+        <p className="mb-8 text-sm text-center">
+          Pro obnovení hesla prosíme otevřete tento e-mail a klikněte na odkaz
+          pro obnovení.
         </p>
 
         <Link href={webRoutes.LogIn} className="w-full mb-4">

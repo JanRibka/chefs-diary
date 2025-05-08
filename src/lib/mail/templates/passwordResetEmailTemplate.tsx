@@ -46,7 +46,7 @@ export default function passwordResetEmailTemplate({
               <td style="padding: 40px;">                
                 <h2 style="margin-top: 0;">Obnova hesla</h2>
                 <p style="font-size: 16px; line-height: 1.5; color: #333;">                  
-                  Na základě žádosti o obnovu hesla Vám zasíláme odkaz, pomocí kterého můžete heslo změnit. Pokud jste žádost neposlal(a) Vy, tento e-mail ignorujte.
+                  Na základě žádosti o obnovu hesla Vám zasíláme odkaz, pomocí kterého můžete heslo změnit.
                 </p>
                 <div style="text-align: center; margin: 40px 0;">                  
                   <a
@@ -57,11 +57,13 @@ export default function passwordResetEmailTemplate({
                   </a>
                 </div>
                 <p style="font-size: 14px; color: #555;">                  
-                  Tento odkaz vyprší za ${getExpirationText(expirationHours)}.
+                  Tento odkaz vyprší za ${getExpirationText(
+                    expirationHours
+                  )}. Pokud jste žádost neposlal(a) Vy, tento e-mail ignorujte.
                 </p>
                 <p style="font-size: 14px; color: #555;">                  
-                  S přáním pohodového vaření,
-                  <br /> <strong>Tým Kuchařův deník</strong>
+                  Přejeme hodně inspirace v kuchyni!<br />
+                  <strong>Tým Kuchařův deník</strong>
                 </p>
               </td>
             </tr>

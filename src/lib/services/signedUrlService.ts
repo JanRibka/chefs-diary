@@ -1,13 +1,12 @@
 import { v4 as uuid } from "uuid";
 
-import { VerificationToken } from "@prisma/client";
-
 import {
   createPasswordResetToken,
   invalidateAllPasswordResetTokensByEmail,
 } from "../repositories/passwordResetRepository";
 import {
   createVerificationToken,
+  getVerificationTokenByEmail,
   updateVerificationTokenByEmail,
 } from "../repositories/verificationTokenRepository";
 
@@ -15,21 +14,19 @@ import {
  * Creates email confirmation URL
  * @param email User email
  * @param expirationTime Expiration time in days
- * @param update Update verification token
  * @returns {Promise<string>}
  */
 export async function createUpdateEmailConfirmationUrl(
   email: string,
-  expirationTime: number,
-  update: boolean
+  expirationTime: number
 ): Promise<string> {
+  let verificationToken = await getVerificationTokenByEmail(email);
   const token = uuid();
   const expires = new Date();
-  let verificationToken: VerificationToken | null | undefined;
 
   expires.setTime(expires.getTime() + expirationTime * 60 * 60 * 1000);
 
-  if (update) {
+  if (verificationToken) {
     verificationToken = await updateVerificationTokenByEmail(email, {
       Token: token,
       Expires: expires,

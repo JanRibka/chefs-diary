@@ -44,7 +44,7 @@ export default function passwordResetEmailTemplate({
             </tr>
             <tr>              
               <td style="padding: 40px;">                
-                <h2 style="margin-top: 0;">Obnova hesla</h2>
+                <h2 style="margin-top: 0;">Ahoj kuchaři,</h2>
                 <p style="font-size: 16px; line-height: 1.5; color: #333;">                  
                   Na základě žádosti o obnovu hesla Vám zasíláme odkaz, pomocí kterého můžete heslo změnit.
                 </p>

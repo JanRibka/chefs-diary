@@ -4,17 +4,12 @@ import { createUpdateEmailConfirmationUrl } from "@/lib/services/signedUrlServic
 
 import signUpEmailTemplate from "./templates/signUpEmailTemplate";
 
-export async function sendSignUpEmail(
-  email: string,
-  to: string,
-  update: boolean
-) {
+export async function sendSignUpEmail(email: string, to: string) {
   try {
     const expirationDays = 24;
     const confirmationUrl = await createUpdateEmailConfirmationUrl(
       email,
-      expirationDays,
-      update
+      expirationDays
     );
     const html = signUpEmailTemplate({
       confirmationUrl,

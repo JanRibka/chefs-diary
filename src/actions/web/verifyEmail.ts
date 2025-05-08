@@ -4,8 +4,8 @@ import resendVerificationLinkActionValidator from "@/lib/actionValidators/auth/r
 import ResendVerificationLinkStatusEnum from "@/lib/enums/ResendVerificationLinkStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 import ValidationError from "@/lib/errors/ValidationError";
+import { sendSignUpEmail } from "@/lib/mail/signUpEmail";
 import logger from "@/lib/services/loggerService";
-import { resendVerificationEmail } from "@/lib/services/verifyEmailService";
 import FormActionState from "@/lib/types/actions/FormActionState";
 import ErrorLibraryType from "@/lib/types/errorLibrary/ErrorLibraryType";
 import {
@@ -47,7 +47,7 @@ export const resendVerificationLinkAction = async (
   }
 
   try {
-    await resendVerificationEmail(email);
+    await sendSignUpEmail(email, email);
 
     return {
       generalState: ResendVerificationLinkStatusEnum.SUCCESS,

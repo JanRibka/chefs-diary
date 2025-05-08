@@ -39,7 +39,8 @@ const errorTexts: ErrorLibraryType = {
   passwordResetMainError:
     "Nastavení nohého hesla se nepovedlo. Zkuste to prosím znovu.",
   passwordResetTokenNotFound: "Nelze obnovit heslo - Odkaz již není platný",
-  passwordResetTokenExpired: "Platnost odkazu pro obnovení hesla vypršela",
+  passwordResetTokenExpired:
+    "Nelze obnovit heslo - Platnost odkazu pro obnovení hesla vypršela",
 };
 
 const getErrorTextByKey = (key: keyof ErrorLibraryType, ...args: string[]) => {

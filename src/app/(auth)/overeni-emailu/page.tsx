@@ -1,15 +1,13 @@
-import Alert from "@/components/shared/alert/Alert";
+import PasswordResetAlert from "@/components/shared/passwordResetAlert/PasswordResetAlert";
+import webRoutes from "@/lib/routes/web/routes";
 
 export default function VerifyEmailPage() {
   return (
-    <section>
-      <div className="w-full">
-        <Alert
-          title="Nelze ověřit e-mail – Chybí bezpečnostní token"
-          color="danger"
-          variant="faded"
-        />
-      </div>
-    </section>
+    <PasswordResetAlert
+      alertTitle="Nelze ověřit e-mail – Chybí bezpečnostní odkaz"
+      link={webRoutes.LogIn}
+      description="Bezpečnostní odkaz pro ověření e‑mailu je neplatný nebo expiroval. Přihlaste se prosím znovu a nechte si zaslat nový."
+      buttonTitle="Zpět na přihlášení"
+    />
   );
 }

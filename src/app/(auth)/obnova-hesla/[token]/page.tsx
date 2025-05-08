@@ -1,6 +1,7 @@
-import FormAlert from "@/components/shared/form/FormAlert";
+import PasswordResetAlert from "@/components/shared/passwordResetAlert/PasswordResetAlert";
 import PasswordResetStatusEnum from "@/lib/enums/PasswordResetStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
+import webRoutes from "@/lib/routes/web/routes";
 import { verifyPasswordResetToken } from "@/lib/services/passwordResetService";
 
 import PasswordReset from "./_passwordReset/PasswordReset";
@@ -17,7 +18,12 @@ export default async function PasswordResetRequestFormPage({ params }: Props) {
 
   if (verificationResult === PasswordResetStatusEnum.TOKEN_NOT_FOUND) {
     return (
-      <FormAlert title={getErrorTextByKey("passwordResetTokenNotFound")} />
+      <PasswordResetAlert
+        alertTitle={getErrorTextByKey("passwordResetTokenNotFound")}
+        link={webRoutes.ForgottenPassword}
+        description="Pro obnovení hesla klikněte na tlačítko níže a vyplňte formulář."
+        buttonTitle="Obnovit heslo"
+      />
     );
   } else if (verificationResult === PasswordResetStatusEnum.TOKEN_EXPIRED) {
     return <TokenExpired />;

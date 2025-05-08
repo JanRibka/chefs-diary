@@ -1,16 +1,13 @@
-import Alert from "@/components/shared/alert/Alert";
+import PasswordResetAlert from "@/components/shared/passwordResetAlert/PasswordResetAlert";
+import webRoutes from "@/lib/routes/web/routes";
 
 export default function PasswordResetPage() {
-  //TODO: Mel by tu byt cudl na zpet na prihlaseni a taky vsude, kde je jenom alert
   return (
-    <section>
-      <div className="w-full">
-        <Alert
-          title="Nelze obnovit heslo – Chybí bezpečnostní token"
-          color="danger"
-          variant="faded"
-        />
-      </div>
-    </section>
+    <PasswordResetAlert
+      alertTitle="Nelze obnovit heslo – Chybí bezpečnostní odkaz"
+      link={webRoutes.ForgottenPassword}
+      description="Pro obnovení hesla klikněte na tlačítko níže a vyplňte formulář."
+      buttonTitle="Obnovit heslo"
+    />
   );
 }

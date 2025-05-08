@@ -3,10 +3,11 @@
 import { useActionState, useEffect, useState } from "react";
 
 import { passwordResetAction } from "@/actions/shared/passwordReset";
-import FormAlert from "@/components/shared/form/FormAlert";
+import PasswordResetAlert from "@/components/shared/passwordResetAlert/PasswordResetAlert";
 import PasswordResetStatusEnum from "@/lib/enums/PasswordResetStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
+import webRoutes from "@/lib/routes/web/routes";
 import { PasswordResetFormErrorType } from "@/lib/validations/schemas/shared/passwordReset/passwordResetFormValidationSchema";
 import { validatePasswordResetForm } from "@/lib/validations/validations/shared/passwordReset/validatePasswordResetForm";
 
@@ -56,7 +57,12 @@ export default function PasswordReset({ token }: Props) {
 
   if (state.generalState === PasswordResetStatusEnum.TOKEN_NOT_FOUND) {
     return (
-      <FormAlert title={getErrorTextByKey("passwordResetTokenNotFound")} />
+      <PasswordResetAlert
+        alertTitle={getErrorTextByKey("passwordResetTokenNotFound")}
+        link={webRoutes.ForgottenPassword}
+        description="Pro obnovení hesla klikněte na tlačítko níže a vyplňte formulář."
+        buttonTitle="Obnovit heslo"
+      />
     );
   } else if (state.generalState === PasswordResetStatusEnum.TOKEN_EXPIRED) {
     return <TokenExpired />;

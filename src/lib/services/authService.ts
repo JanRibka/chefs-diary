@@ -32,7 +32,7 @@ export async function registerUser(
   const user = await createUser(userName, email, password);
   const userInfo = await getUserInfoByIdUser(user.IdUser);
 
-  await sendSignUpEmail(userInfo?.Email ?? "", userInfo?.Email ?? "", false);
+  await sendSignUpEmail(userInfo?.Email ?? "", userInfo?.Email ?? "");
 
   return user;
 }

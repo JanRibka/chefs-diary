@@ -1,12 +1,9 @@
 import logger from "@/lib/services/loggerService";
 
 import VerifyEmailStatusEnum from "../enums/VerifyEmailStatusEnum";
-import ValidationError from "../errors/ValidationError";
-import { sendSignUpEmail } from "../mail/signUpEmail";
 import { updateUserInfoByEmail } from "../repositories/userRepository";
 import {
   deleteVerificationTokenByTokenAndIdentifier,
-  getVerificationTokenByEmail,
   getVerificationTokenByToken,
 } from "../repositories/verificationTokenRepository";
 
@@ -45,18 +42,4 @@ export async function verifyEmail(
 
     return VerifyEmailStatusEnum.VALIDATION_ERROR;
   }
-}
-
-/**
- * Resents verification email
- * @param email
- */
-export async function resendVerificationEmail(email: string) {
-  const verificationToken = await getVerificationTokenByEmail(email);
-
-  if (!verificationToken) {
-    throw new ValidationError("verificationTokenNotFound");
-  }
-
-  await sendSignUpEmail(email, email, true);
 }

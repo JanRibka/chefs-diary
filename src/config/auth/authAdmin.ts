@@ -158,9 +158,10 @@ import Google from "next-auth/providers/google";
 
 import { prisma } from "@/lib/prisma";
 import { logIn, verifyUser } from "@/lib/services/authService";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 
-const adapter = PrismaAdapter(prisma);
+import PrismaAdapterAdmin from "../prisma/PrismAdapterAdmin";
+
+const adapter = PrismaAdapterAdmin(prisma);
 
 const credentials: CredentialsConfig = {
   id: "credentials",
@@ -177,13 +178,10 @@ const credentials: CredentialsConfig = {
     const persistLogin =
       JSON.parse(credentials.persistLogin as string) ?? false;
 
-    const userInfo = await verifyUser(email, password);
+    const user = await verifyUser(email, password);
 
     return {
-      id: userInfo.IdUser,
-      name: userInfo.UserName,
-      email: userInfo.Email,
-      image: userInfo.Image,
+      ...user,
       persistLogin: persistLogin,
     };
   },

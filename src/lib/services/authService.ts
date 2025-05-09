@@ -1,8 +1,9 @@
 import { compare } from "bcrypt";
+import { AdapterUser } from "next-auth/adapters";
 import { JWTEncodeParams } from "next-auth/jwt";
 
 import { getCookieAsync } from "@/lib/services/cookieService";
-import { User, UserInfo } from "@prisma/client";
+import { User } from "@prisma/client";
 
 import AuthError from "../errors/AuthError";
 import { sendSignUpEmail } from "../mail/signUpEmail";
@@ -41,13 +42,13 @@ export async function registerUser(
  * Attempt to login - Check if user is allowed to login
  * @param email User email
  * @param password User password
- * @returns {Promise<UserInfo>}
+ * @returns {Promise<AdapterUser>}
  */
 export async function verifyUser(
   email: string,
   password: string,
   verifyAdmin: boolean = false
-): Promise<UserInfo> {
+): Promise<AdapterUser> {
   const user = await getUserByEmail(email);
 
   if (!user) {
@@ -86,7 +87,13 @@ export async function verifyUser(
     //TODO: BUdu ověřovat Zda admin pro administraci
   }
 
-  return userInfo;
+  return {
+    id: user.IdUser,
+    name: userInfo.UserName,
+    email: userInfo.Email,
+    emailVerified: userInfo.EmailVerifiedAt,
+    image: userInfo.Image,
+  };
 }
 
 /**

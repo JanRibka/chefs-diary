@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import AuthLayout from "@/components/shared/auth/layout/AuthLayout";
 
 export const metadata: Metadata = {
-  title: "Přihlášení",
+  title: "Přihlášení - Administrace",
   description: "Získejte přístup k administraci webu Kuchařův deník",
 };
 

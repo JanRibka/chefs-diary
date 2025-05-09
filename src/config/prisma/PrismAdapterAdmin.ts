@@ -1,4 +1,4 @@
-import type { Adapter } from "next-auth/adapters";
+import type { Adapter, AdapterSession, AdapterUser } from "next-auth/adapters";
 
 import { PrismaClient } from "@prisma/client";
 
@@ -59,8 +59,34 @@ export default function PrismaAdapterAdmin(
     async createSession(session) {
       return await p.sessionAdmin.create({ data: session });
     },
-    async getSessionAndUser() {
-      return null;
+    async getSessionAndUser(sessionToken) {
+      const userAndSession = await p.sessionAdmin.findUnique({
+        where: { sessionToken },
+        include: { user: true },
+      });
+
+      if (!userAndSession) return null;
+
+      const { user: sessionUser, ...session } = userAndSession;
+
+      const userInfo = await p.userInfo.findUnique({
+        where: {
+          IdUser: sessionUser.IdUser,
+        },
+      });
+
+      const user: AdapterUser = {
+        id: sessionUser.IdUser,
+        name: userInfo?.UserName,
+        email: userInfo?.Email ?? "",
+        emailVerified: userInfo?.EmailVerifiedAt ?? new Date(),
+        image: userInfo?.Image,
+      };
+
+      return { user, session } as {
+        user: AdapterUser;
+        session: AdapterSession;
+      };
     },
     async updateSession(session) {
       return await p.sessionAdmin.update({

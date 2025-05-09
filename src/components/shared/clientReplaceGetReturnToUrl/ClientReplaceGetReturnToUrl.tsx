@@ -3,10 +3,11 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
+import { RouteValue as AdminRouteValue } from "@/lib/routes/adminRoutes";
 import { RouteValue as WebRouteValue } from "@/lib/routes/webRoutes";
 
 interface Props {
-  defaultRoute: WebRouteValue;
+  defaultRoute: WebRouteValue | AdminRouteValue;
 }
 
 export default function ClientReplaceGetReturnToUrl({ defaultRoute }: Props) {

@@ -26,6 +26,7 @@ type Props = {
   state: FormActionState<LogInStatusEnum, LogInFormType, LogInFormErrorType>;
   errors: Record<string, string>;
   isLoading: boolean;
+  persistLoginCookieName: string;
   forgottenPasswordLink:
     | typeof webRoutes.ForgottenPassword
     | typeof adminRoutes.ForgottenPassword;
@@ -38,6 +39,7 @@ export default function LogInForm({
   state,
   errors,
   isLoading,
+  persistLoginCookieName,
   forgottenPasswordLink,
   action,
   handleSubmit,
@@ -45,7 +47,10 @@ export default function LogInForm({
 }: Props) {
   const refLogin = useRef<HTMLInputElement>(null);
 
-  const [persistLogin, setPersistLogin] = useToggle("persistLogin", false);
+  const [persistLogin, setPersistLogin] = useToggle(
+    persistLoginCookieName,
+    false
+  );
 
   useEffect(() => {
     refLogin.current?.focus();

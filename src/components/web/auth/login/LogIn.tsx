@@ -28,7 +28,7 @@ export default function LogIn() {
   }, [state]);
 
   if (state?.generalState === LogInStatusEnum.SUCCESS) {
-    return <ClientReplaceGetReturnToUrl defaultRoute="/test" />;
+    return <ClientReplaceGetReturnToUrl defaultRoute={webRoutes.Test} />;
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -64,6 +64,7 @@ export default function LogIn() {
         state={state}
         errors={errors}
         isLoading={isLoading}
+        persistLoginCookieName="persistLogin"
         forgottenPasswordLink={webRoutes.ForgottenPassword}
         action={action}
         handleSubmit={handleSubmit}

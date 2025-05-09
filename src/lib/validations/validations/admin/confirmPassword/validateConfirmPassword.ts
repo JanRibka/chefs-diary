@@ -2,7 +2,7 @@ import { ValidationError } from "yup";
 
 import confirmPasswordValidationSchema, {
   ConfirmPasswordFormErrorType,
-} from "@/lib/validations/schemas/shared/confirmPassword/confirmPasswordSchema";
+} from "@/lib/validations/schemas/shared/confirmPassword/confirmPasswordValidationSchema";
 
 export const validateConfirmPassword = (
   formData: Record<string, FormDataEntryValue>

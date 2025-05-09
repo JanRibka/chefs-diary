@@ -1,14 +1,15 @@
 model User {
-  IdUser               String             @id @default(cuid()) @db.VarChar(25)
-  Password             String             @db.VarChar(255)
-  IsDisabled           Boolean?           @default(false)
-  LoginRestrictedUntil DateTime?          @db.Timestamp(0)
-  TwoFactor            Boolean?           @default(false)
-  UserInfo             UserInfo?
-  UserLoginHistory     UserLoginHistory[]
-  UseRoles             UserRole[]
-  Sessions             Session[]
-  SessionAdmin         SessionAdmin[]
+  IdUser                    String             @id @default(cuid()) @db.VarChar(25)
+  Password                  String             @db.VarChar(255)
+  IsDisabled                Boolean?           @default(false)
+  WebLoginRestrictedUntil   DateTime?          @db.Timestamp(0)
+  AdminLoginRestrictedUntil DateTime?          @db.Timestamp(0)
+  TwoFactor                 Boolean?           @default(false)
+  UserInfo                  UserInfo?
+  UserLoginHistory          UserLoginHistory[]
+  UseRoles                  UserRole[]
+  Sessions                  Session[]
+  SessionAdmin              SessionAdmin[]
 
   //@@index([Email])  I can define an Index. Pokud hled8m 4asto t5eba by email, tak na něj dám index
 }

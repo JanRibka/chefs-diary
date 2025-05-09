@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import webRoutes, { RouteValue } from "./lib/routes/web/routes";
+import adminRoutes, {
+  RouteValue as AdminRouteValue,
+} from "./lib/routes/adminRoutes";
+import webRoutes, { RouteValue as WebRouteValue } from "./lib/routes/webRoutes";
 
 export default function middleware(request: NextRequest) {
-  //TODO: Přidat admin routes
-  const routeValues = Object.values(webRoutes);
+  const routeValues = [
+    ...Object.values(webRoutes),
+    ...Object.values(adminRoutes),
+  ];
 
-  if (routeValues.includes(request.nextUrl.pathname as RouteValue)) {
+  if (
+    routeValues.includes(
+      request.nextUrl.pathname as WebRouteValue | AdminRouteValue
+    )
+  ) {
     const url = new URL(request.url);
     const origin = url.origin;
     const pathname = url.pathname;

@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 
-import ForgottenPassword from "./_forgottenPassword/ForgottenPassword";
+import webRoutes from "@/lib/routes/webRoutes";
+
+import ForgottenPassword from "../../../components/web/auth/forgottenPassword/ForgottenPassword";
 
 export const metadata: Metadata = {
   title: "Zapomenuté heslo - Kuchařův deník",
@@ -9,5 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default function ForgottenPasswordPage() {
-  return <ForgottenPassword />;
+  return (
+    <ForgottenPassword
+      backToLoginLink={webRoutes.LogIn}
+      forgottenPasswordLink={webRoutes.ForgottenPassword}
+    />
+  );
 }

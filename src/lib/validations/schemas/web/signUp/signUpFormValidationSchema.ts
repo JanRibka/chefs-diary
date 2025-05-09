@@ -7,7 +7,7 @@ import {
   loweUpperCaseNumberSpecialCharRegex,
 } from "@/lib/errorLibrary/auth/regexes/common/commonRegexes";
 
-import confirmPasswordValidationSchema from "../../shared/confirmPassword/confirmPasswordSchema";
+import confirmPasswordValidationSchema from "../../shared/confirmPassword/confirmPasswordValidationSchema";
 
 const signUpFormValidationSchema = confirmPasswordValidationSchema.shape({
   userName: string()

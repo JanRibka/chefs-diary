@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-import { RouteValue as WebRouteValue } from "@/lib/routes/web/routes";
+import { RouteValue as WebRouteValue } from "@/lib/routes/webRoutes";
 
 interface Props {
   defaultRoute: WebRouteValue;

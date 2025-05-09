@@ -1,12 +1,5 @@
-import { Metadata } from "next";
+import LogIn from "@/components/web/auth/login/LogIn";
 
-import LogIn from "./_logIn/LogIn";
-
-export const metadata: Metadata = {
-  title: "Přihlášení",
-  description: "Získejte přístup k administraci webu Kuchařův deník",
-};
-
-export default async function LoginPage() {
+export default function LoginPage() {
   return <LogIn />;
 }

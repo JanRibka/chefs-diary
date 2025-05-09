@@ -9,7 +9,7 @@ import FormActionState from "@/lib/types/actions/FormActionState";
 import {
   ForgottenPasswordFormErrorType,
   ForgottenPasswordFormType,
-} from "@/lib/validations/schemas/shared/forgottenPassword/ForgottenPassword";
+} from "@/lib/validations/schemas/shared/forgottenPassword/forgottenPasswordValidationSchema";
 
 /**
  * Forgotten password action

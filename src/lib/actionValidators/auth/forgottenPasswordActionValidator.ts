@@ -1,5 +1,5 @@
 import ValidationResultType from "@/lib/types/validation/ValidationResultType";
-import { ForgottenPasswordFormErrorType } from "@/lib/validations/schemas/shared/forgottenPassword/ForgottenPassword";
+import { ForgottenPasswordFormErrorType } from "@/lib/validations/schemas/shared/forgottenPassword/forgottenPasswordValidationSchema";
 import { validateForgottenPasswordFormAsync } from "@/lib/validations/validations/shared/forgottenPassword/validateForgottenPasswordForm";
 
 export default async function forgottenPasswordActionValidator(

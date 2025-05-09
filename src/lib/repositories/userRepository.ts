@@ -1,5 +1,6 @@
 import type { User, UserInfo, UserLoginHistory } from "@prisma/client";
 
+import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";
 import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
 import { prisma } from "../prisma";
 import { hashPassword } from "../services/hashService";
@@ -114,16 +115,19 @@ export async function getUserRoleValuesByIdUser(
  * Logs login attempt
  * @param idUser User id
  * @param loginSuccessful Login successful
+ * @param authMode Authentication mode WEB/ADMIN
  * @returns {Promise<UserLoginHistory>}
  */
 export async function logLoginAttempt(
   idUser: string,
-  loginSuccessful: boolean
+  loginSuccessful: boolean,
+  authMode: AuthenticationModeEnum
 ): Promise<UserLoginHistory> {
   return await prisma.userLoginHistory.create({
     data: {
       IdUser: idUser,
       LoginSuccessful: loginSuccessful,
+      AuthMode: authMode,
     },
   });
 }
@@ -167,11 +171,13 @@ export async function updateUserInfoByEmail(
  * Gets failed login attempts
  * @param idUser User Id
  * @param loginAttemptDateLimit A date from which the attempts should be find
+ * @param authMode Authentication mode WEB/ADMIN
  * @returns {Promise<number>}
  */
 export async function getFailedLoginAttemptsCountByIdUser(
   idUser: string,
-  loginAttemptDateLimit: Date
+  loginAttemptDateLimit: Date,
+  authMode: AuthenticationModeEnum
 ): Promise<number> {
   return await prisma.userLoginHistory.count({
     where: {
@@ -180,6 +186,7 @@ export async function getFailedLoginAttemptsCountByIdUser(
       LoginAttemptDate: {
         gte: loginAttemptDateLimit,
       },
+      AuthMode: authMode,
     },
   });
 }

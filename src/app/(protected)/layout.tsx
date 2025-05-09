@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 
 import ClientReplace from "@/components/shared/clientReplace/ClientReplace";
 import { auth } from "@/config/auth/auth";
-import webRoutes from "@/lib/routes/web/routes";
+import webRoutes from "@/lib/routes/webRoutes";
 
 type Props = { children: React.ReactNode };
 

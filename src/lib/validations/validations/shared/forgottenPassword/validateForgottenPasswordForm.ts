@@ -3,7 +3,7 @@ import { ValidationError } from "yup";
 import ValidationResultType from "@/lib/types/validation/ValidationResultType";
 import forgottenPasswordFormValidationSchema, {
   ForgottenPasswordFormErrorType,
-} from "@/lib/validations/schemas/shared/forgottenPassword/ForgottenPassword";
+} from "@/lib/validations/schemas/shared/forgottenPassword/forgottenPasswordValidationSchema";
 
 type ErrorType = Omit<ForgottenPasswordFormErrorType, "timestamp" | "general">;
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { RouteValue } from "@/lib/routes/web/routes";
+import { RouteValue } from "@/lib/routes/webRoutes";
 
 import Alert from "../alert/Alert";
 import Button from "../button/Button";

@@ -1,6 +1,6 @@
 import { InferType } from "yup";
 
-import confirmPasswordValidationSchema from "../confirmPassword/confirmPasswordSchema";
+import confirmPasswordValidationSchema from "../confirmPassword/confirmPasswordValidationSchema";
 
 const passwordResetFormValidationSchema = confirmPasswordValidationSchema.shape(
   {}

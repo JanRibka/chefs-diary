@@ -1,5 +1,5 @@
 import PasswordResetAlert from "@/components/shared/passwordResetAlert/PasswordResetAlert";
-import webRoutes from "@/lib/routes/web/routes";
+import webRoutes from "@/lib/routes/webRoutes";
 
 export default function VerifyEmailPage() {
   return (

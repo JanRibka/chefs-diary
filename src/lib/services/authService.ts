@@ -5,18 +5,29 @@ import { JWTEncodeParams } from "next-auth/jwt";
 import { getCookieAsync } from "@/lib/services/cookieService";
 import { User } from "@prisma/client";
 
+import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";
+import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
 import AuthError from "../errors/AuthError";
 import { sendSignUpEmail } from "../mail/signUpEmail";
-import { deleteSessionByIdUser } from "../repositories/sessionRepository";
+import {
+  deleteSessionAdminByIdUser,
+  deleteSessionByIdUser,
+} from "../repositories/sessionRepository";
 import {
   createUser,
   getFailedLoginAttemptsCountByIdUser,
   getUserByEmail,
   getUserInfoByIdUser,
+  getUserRoleValuesByIdUser,
   logLoginAttempt,
   updateUserByIdUser,
 } from "../repositories/userRepository";
-import { createSession, getSessionExists } from "./sessionService";
+import {
+  createSession,
+  createSessionAdmin,
+  getSessionAdminExists,
+  getSessionExists,
+} from "./sessionService";
 
 /**
  * Register user
@@ -42,6 +53,7 @@ export async function registerUser(
  * Attempt to login - Check if user is allowed to login
  * @param email User email
  * @param password User password
+ * @param verifyAdmin Verify administration rights
  * @returns {Promise<AdapterUser>}
  */
 export async function verifyUser(
@@ -55,7 +67,19 @@ export async function verifyUser(
     throw new AuthError("incorrectLoginPassword");
   }
 
-  if (user.LoginRestrictedUntil && user.LoginRestrictedUntil >= new Date()) {
+  if (
+    !verifyAdmin &&
+    user.WebLoginRestrictedUntil &&
+    user.WebLoginRestrictedUntil >= new Date()
+  ) {
+    throw new AuthError("userNameRestricted");
+  }
+
+  if (
+    verifyAdmin &&
+    user.AdminLoginRestrictedUntil &&
+    user.AdminLoginRestrictedUntil >= new Date()
+  ) {
     throw new AuthError("userNameRestricted");
   }
 
@@ -63,10 +87,20 @@ export async function verifyUser(
     throw new AuthError("accessDenied");
   }
 
-  if (!(await checkCredentials(user, password))) {
-    await logLoginAttempt(user.IdUser, false);
+  const authenticationMode = verifyAdmin
+    ? AuthenticationModeEnum.ADMIN
+    : AuthenticationModeEnum.WEB;
 
-    if (await getIpFailedLoginCountReachedLimitLast15Minutes(10, user.IdUser)) {
+  if (!(await checkCredentials(user, password))) {
+    await logLoginAttempt(user.IdUser, false, authenticationMode);
+
+    if (
+      await getIpFailedLoginCountReachedLimitLast15Minutes(
+        10,
+        user.IdUser,
+        authenticationMode
+      )
+    ) {
       throw new AuthError("userNameRestricted");
     }
 
@@ -85,7 +119,11 @@ export async function verifyUser(
   }
 
   if (verifyAdmin) {
-    //TODO: BUdu ověřovat Zda admin pro administraci
+    const userRoles = await getUserRoleValuesByIdUser(user.IdUser);
+
+    if (!userRoles.some((s) => s === UserRoleTypeEnum.ADMIN)) {
+      throw new AuthError("adminRequired");
+    }
   }
 
   return {
@@ -133,7 +171,7 @@ export async function logIn(
   );
   const idUser: string = (params.token?.idUser as string) ?? "";
 
-  await logLoginAttempt(idUser, true);
+  await logLoginAttempt(idUser, true, AuthenticationModeEnum.WEB);
 
   if (sessionCookieValue) {
     // Scenario added here:
@@ -154,6 +192,39 @@ export async function logIn(
 }
 
 /**
+ * Login user to administration
+ * @param params JWT encode parameters
+ * @returns {Promise<string | undefined>}
+ */
+export async function logInAdmin(
+  params: JWTEncodeParams
+): Promise<string | undefined> {
+  const sessionCookieValue = await getCookieAsync(
+    process.env.AUTH_ADMIN_COOKIE_NAME!
+  );
+  const idUser: string = (params.token?.idUser as string) ?? "";
+
+  await logLoginAttempt(idUser, true, AuthenticationModeEnum.ADMIN);
+
+  if (sessionCookieValue) {
+    // Scenario added here:
+    // 1) User logs in but never uses Session and does not logout
+    // 2) Session is stolen
+    // 3) If 1 & 2, reuse detection is needed to clear all Sessions when user logs in
+
+    const foundSession = await getSessionAdminExists(sessionCookieValue);
+
+    // Detected refresh token reuse!
+    if (!foundSession) {
+      // Clear out ALL previous sessions
+      await deleteSessionAdminByIdUser(idUser);
+    }
+  }
+
+  return await createSessionAdmin(params);
+}
+
+/**
  * Gets if maximal login limit form same IP address was reached and sets login restricted until to user table
  * @param loginLimit Maximal login limit
  * @param idUser User Id
@@ -161,18 +232,22 @@ export async function logIn(
  */
 export async function getIpFailedLoginCountReachedLimitLast15Minutes(
   loginLimit: number,
-  idUser: string
+  idUser: string,
+  authMode: AuthenticationModeEnum
 ): Promise<boolean> {
   const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
 
   const loginCount = await getFailedLoginAttemptsCountByIdUser(
     idUser,
-    fifteenMinutesAgo
+    fifteenMinutesAgo,
+    authMode
   );
 
   if (loginCount >= loginLimit) {
     await updateUserByIdUser(idUser, {
-      LoginRestrictedUntil: new Date(Date.now() + 15 * 60 * 1000),
+      [`${authMode}LoginRestrictedUntil`]: new Date(
+        Date.now() + 15 * 60 * 1000
+      ),
     });
 
     return true;

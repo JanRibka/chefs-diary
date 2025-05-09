@@ -1,11 +1,11 @@
 import PasswordResetAlert from "@/components/shared/passwordResetAlert/PasswordResetAlert";
 import PasswordResetStatusEnum from "@/lib/enums/PasswordResetStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
-import webRoutes from "@/lib/routes/web/routes";
+import webRoutes from "@/lib/routes/webRoutes";
 import { verifyPasswordResetToken } from "@/lib/services/passwordResetService";
 
-import PasswordReset from "./_passwordReset/PasswordReset";
-import TokenExpired from "./_tokenExpired/TokenExpired";
+import PasswordReset from "../../../../components/shared/auth/passwordReset/PasswordReset";
+import TokenExpired from "../../../../components/shared/auth/tokenExpired/TokenExpired";
 
 type Props = {
   params: Promise<{ token: string }>;

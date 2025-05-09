@@ -14,7 +14,7 @@ import ErrorLibraryType from "@/lib/types/errorLibrary/ErrorLibraryType";
 import {
   LogInFormErrorType,
   LogInFormType,
-} from "@/lib/validations/schemas/shared/logIn/logInSchema";
+} from "@/lib/validations/schemas/shared/logIn/logInValidationSchema";
 import {
   SignUpFormErrorType,
   SignUpFormType,

@@ -157,7 +157,7 @@ import Credentials, {
 import Google from "next-auth/providers/google";
 
 import { prisma } from "@/lib/prisma";
-import { logIn, verifyUser } from "@/lib/services/authService";
+import { logInAdmin, verifyUser } from "@/lib/services/authService";
 
 import PrismaAdapterAdmin from "../prisma/PrismAdapterAdmin";
 
@@ -178,7 +178,7 @@ const credentials: CredentialsConfig = {
     const persistLogin =
       JSON.parse(credentials.persistLogin as string) ?? false;
 
-    const user = await verifyUser(email, password);
+    const user = await verifyUser(email, password, true);
 
     return {
       ...user,
@@ -215,7 +215,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
   jwt: {
     encode: async function (params) {
-      const sessionToken = await logIn(params);
+      const sessionToken = await logInAdmin(params);
 
       if (typeof sessionToken === "string") {
         return sessionToken;

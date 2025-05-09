@@ -1,13 +1,13 @@
-import FormAlert from "@/components/shared/form/FormAlert";
-import PasswordResetAlert from "@/components/shared/passwordResetAlert/PasswordResetAlert";
-import VerifyEmailStatusEnum from "@/lib/enums/VerifyEmailStatusEnum";
-import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
-import { getVerificationTokenByToken } from "@/lib/repositories/verificationTokenRepository";
-import webRoutes from "@/lib/routes/web/routes";
-import { verifyEmail } from "@/lib/services/verifyEmailService";
+import FormAlert from '@/components/shared/form/FormAlert';
+import PasswordResetAlert from '@/components/shared/passwordResetAlert/PasswordResetAlert';
+import VerifyEmailStatusEnum from '@/lib/enums/VerifyEmailStatusEnum';
+import getErrorTextByKey from '@/lib/errorLibrary/auth/authErrorLibrary';
+import { getVerificationTokenByToken } from '@/lib/repositories/verificationTokenRepository';
+import webRoutes from '@/lib/routes/webRoutes';
+import { verifyEmail } from '@/lib/services/verifyEmailService';
 
-import EmailNotVerified from "./_emailNotVerified/EmailNotVerified";
-import VerifyEmailSuccessful from "./_verifyEmailSuccess/VerifyEmailSuccess";
+import EmailNotVerified from '../../../../components/shared/auth/emailNotVerified/EmailNotVerified';
+import VerifyEmailSuccessful from '../../../../components/shared/auth/verifyEmailSuccess/VerifyEmailSuccess';
 
 type Props = {
   params: Promise<{ token: string }>;

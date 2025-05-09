@@ -4,13 +4,14 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 
 import ForgottenPasswordStatusEnum from "@/lib/enums/ForgottenPasswordStatusEnum";
-import webRoutes from "@/lib/routes/web/routes";
+import adminRoutes from "@/lib/routes/adminRoutes";
+import webRoutes from "@/lib/routes/webRoutes";
 import FormActionState from "@/lib/types/actions/FormActionState";
 import { nameof } from "@/lib/utils/nameof";
 import forgottenPasswordFormValidationSchema, {
   ForgottenPasswordFormErrorType,
   ForgottenPasswordFormType,
-} from "@/lib/validations/schemas/shared/forgottenPassword/ForgottenPassword";
+} from "@/lib/validations/schemas/shared/forgottenPassword/forgottenPasswordValidationSchema";
 
 import Button from "../button/Button";
 import Form from "../form/Form";
@@ -27,6 +28,7 @@ type Props = {
   >;
   errors: Record<string, string>;
   isLoading: boolean;
+  backToLoginLink: typeof webRoutes.LogIn | typeof adminRoutes.LogIn;
   action: (payload: FormData) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handleChange: () => void;
@@ -36,6 +38,7 @@ export default function ForgottenPasswordForm({
   state,
   errors,
   isLoading,
+  backToLoginLink,
   action,
   handleSubmit,
   handleChange,
@@ -83,7 +86,7 @@ export default function ForgottenPasswordForm({
             Odeslat
           </SubmitButton>
 
-          <Link href={webRoutes.LogIn} className="w-full">
+          <Link href={backToLoginLink} className="w-full">
             <Button color="primary" fullWidth variant="light">
               Zpět na přihlášení
             </Button>

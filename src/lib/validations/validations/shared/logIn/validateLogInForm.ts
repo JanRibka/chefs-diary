@@ -3,7 +3,7 @@ import { ValidationError } from "yup";
 import ValidationResultType from "@/lib/types/validation/ValidationResultType";
 import logInFormValidationSchema, {
   LogInFormErrorType,
-} from "@/lib/validations/schemas/shared/logIn/logInSchema";
+} from "@/lib/validations/schemas/shared/logIn/logInValidationSchema";
 
 type ErrorType = Omit<LogInFormErrorType, "timestamp" | "general">;
 

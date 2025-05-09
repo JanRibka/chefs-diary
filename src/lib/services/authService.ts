@@ -80,6 +80,7 @@ export async function verifyUser(
   }
 
   if (user.TwoFactor) {
+    //TODO: Toto by asi m2lo b7t n2kde jinde, ale to tu stejn2 nebudu pouzivat
     await login2FA(user);
   }
 

@@ -67,7 +67,7 @@ export default function PrismaAdapterAdmin(
 
       if (!userAndSession) return null;
 
-      const { user: sessionUser, ...session } = userAndSession;
+      const { user: sessionUser, ...sessionSession } = userAndSession;
 
       const userInfo = await p.userInfo.findUnique({
         where: {
@@ -81,6 +81,12 @@ export default function PrismaAdapterAdmin(
         email: userInfo?.Email ?? "",
         emailVerified: userInfo?.EmailVerifiedAt ?? new Date(),
         image: userInfo?.Image,
+      };
+
+      const session: AdapterSession = {
+        expires: sessionSession.expires,
+        sessionToken: sessionSession.sessionToken,
+        userId: sessionSession.userId,
       };
 
       return { user, session } as {

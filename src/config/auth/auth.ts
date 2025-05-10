@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { logIn, verifyUser } from "@/lib/services/authService";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
+//TODO: Asi bych m2l ud2lat adaúter pro i pro web. GetSesionAndUser mi bude vracet nějaké blbosti kvůli user
 const adapter = PrismaAdapter(prisma);
 
 const credentials: CredentialsConfig = {

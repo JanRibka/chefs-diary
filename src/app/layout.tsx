@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import { fontSans } from "@/config/app/fonts";
 import { mergeStyles } from "@/lib/utils/styles";
 
-import { Providers } from "./providers";
+import { Providers } from "../config/heroUI/providers";
 
 export const metadata: Metadata = {
   title: "Kuchařův deník",

@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn } from "@/config/auth/authAdmin";
+import { signIn, signOut } from "@/config/auth/authAdmin";
 import logInActionValidator from "@/lib/actionValidators/auth/logInActionValidator";
 import LogInStatusEnum from "@/lib/enums/LogInStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
@@ -91,4 +91,8 @@ export const logInAction = async (
       },
     };
   }
+};
+
+export const signOutAction = async () => {
+  await signOut();
 };

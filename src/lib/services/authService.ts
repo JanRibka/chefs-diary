@@ -2,7 +2,7 @@ import { compare } from "bcrypt";
 import { AdapterUser } from "next-auth/adapters";
 import { JWTEncodeParams } from "next-auth/jwt";
 
-import { getCookieAsync } from "@/lib/services/cookieService";
+import { getCookieAsync } from "@/lib/services/cookieServerService";
 import { User } from "@prisma/client";
 
 import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";

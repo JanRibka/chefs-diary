@@ -79,8 +79,14 @@ const UserLogin = () => {
               Režim
             </DropdownItem>
 
-            <DropdownItem key="sign-out" startContent={<FaSignOutAlt />}>
-              <button type="submit">Odhlásit</button>
+            <DropdownItem
+              key="sign-out"
+              startContent={<FaSignOutAlt />}
+              isReadOnly
+            >
+              <button type="submit" className="w-full h-full text-left">
+                Odhlásit
+              </button>
             </DropdownItem>
           </DropdownMenu>
         </form>

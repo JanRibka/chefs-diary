@@ -93,6 +93,9 @@ export const logInAction = async (
   }
 };
 
+/**
+ * Sign out action
+ */
 export const signOutAction = async () => {
   await signOut();
 };

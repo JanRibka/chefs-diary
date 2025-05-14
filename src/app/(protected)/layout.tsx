@@ -9,7 +9,7 @@ type Props = { children: React.ReactNode };
 export default async function ProtectedLayout({ children }: Props) {
   const session = await auth();
 
-  if (!session || typeof session !== "object" || !("userId" in session)) {
+  if (!session?.user?.id) {
     const headersList = await headers();
     const returnTo = headersList.get("x-pathname") ?? webRoutes.Test;
 

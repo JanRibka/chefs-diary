@@ -1,43 +1,48 @@
-import { FaRegUser } from 'react-icons/fa';
-import { MdDashboard } from 'react-icons/md';
+"use client";
 
-import Accordion from './accordion/Accordion';
-import AccordionItem from './accordion/item/AccordionItem';
-import NavLinksUser from './navLinks/user/NavLinksUser';
+import { useState } from "react";
+import { FaRegUser } from "react-icons/fa";
+import { MdDashboard } from "react-icons/md";
+
+import { useSideBarContext } from "@/context/SideBarContext";
+import { Accordion, AccordionItem } from "@heroui/react";
+
+import NavLinksUser from "./navLinks/user/NavLinksUser";
+import { sideBarVariants } from "./sideBarVariants";
 
 const SideBar = () => {
-  // Store
-  const sideBar = useSelector(selectSideBar);
-  const { setActualValue } = useSideBarSlice();
+  // Sidebar context
+  const { opened } = useSideBarContext();
 
-  // Other
-  const handleOnClick = (value: string) => {
-    const selectedValue = value === sideBar.actualValue ? "" : value;
-
-    setActualValue(selectedValue);
-  };
-
-  // Styles
+  // Sidebar state
+  // TODO: Toto by asi mohlo byt v contextu
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["dashboard"]));
 
   return (
-    <aside className={sideBarVariants({ opened: sideBar.open })}>
+    <aside className={sideBarVariants({ opened })}>
       <div className="my-4 flex w-full h-full">
-        <Accordion actualValue={sideBar.actualValue} onClick={handleOnClick}>
+        <Accordion
+          variant="bordered"
+          selectedKeys={selectedKeys}
+          onSelectionChange={setSelectedKeys}
+        >
           <AccordionItem
-            actualValue={sideBar.actualValue}
-            label="Dashboard"
-            labelIcon={MdDashboard}
-            onClick={handleOnClick}
+            key="dashboard"
+            aria-label="Dashboard"
+            title="Dashboard"
             value="dashboard"
-          />
-          <AccordionItem
+            startContent={<MdDashboard />}
+          >
+            asfdsdfsdf
+          </AccordionItem>
+          {/* <AccordionItem
             actualValue={sideBar.actualValue}
             content={<NavLinksUser />}
             label="Uživatel"
             labelIcon={FaRegUser}
             onClick={handleOnClick}
             value="user"
-          />
+          /> */}
         </Accordion>
       </div>
     </aside>

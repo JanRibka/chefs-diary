@@ -1,12 +1,12 @@
-import { AdapterUser } from 'next-auth/adapters';
-import { useTheme } from 'next-themes';
-import { FaSignOutAlt, FaUser } from 'react-icons/fa';
-import { HiMoon, HiSun } from 'react-icons/hi';
-import { IoIosColorPalette } from 'react-icons/io';
+import { AdapterUser } from "next-auth/adapters";
+import { useTheme } from "next-themes";
+import { FaSignOutAlt, FaUser } from "react-icons/fa";
+import { HiMoon, HiSun } from "react-icons/hi";
+import { IoIosColorPalette } from "react-icons/io";
 
-import { signOutAction } from '@/actions/admin/auth';
-import NavbarMenuItem from '@/components/shared/navbarMenuItem/NavbarMenuItem';
-import { NavbarMenu, Switch, User } from '@heroui/react';
+import { signOutAction } from "@/actions/admin/auth";
+import NavbarMenuItem from "@/components/shared/navbarMenuItem/NavbarMenuItem";
+import { NavbarMenu, Switch, User } from "@heroui/react";
 
 export default function MobileMenuContent({
   user,
@@ -57,17 +57,15 @@ export default function MobileMenuContent({
         Režim
       </NavbarMenuItem>
       {/* TODO: Text by m2l b7t v button kv;li a11y */}
-      <NavbarMenuItem
-        key="sign-out"
-        startContent={<FaSignOutAlt />}
-        className="relative"
-      >
+      <NavbarMenuItem key="sign-out">
         <form action={signOutAction} className="w-full h-full">
           <button
             type="submit"
-            className="absolute left-0 top-0 w-full h-full text-left"
-          />
-          Odhlásit se
+            className="w-full h-full text-left flex items-center gap-2"
+          >
+            {<FaSignOutAlt />}
+            <span className="flex-1">Odhlásit se</span>
+          </button>
         </form>
       </NavbarMenuItem>
     </NavbarMenu>

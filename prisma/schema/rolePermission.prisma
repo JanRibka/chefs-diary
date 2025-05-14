@@ -1,0 +1,37 @@
+model RolePermission {
+  IdUserRoleType Int          @db.Integer
+  UserRoleType   UserRoleType @relation(fields: [IdUserRoleType], references: [IdUserRoleType])
+  IdPermission   Int          @db.Integer
+  Permission     Permission   @relation(fields: [IdPermission], references: [IdPermission])
+
+  @@id([IdUserRoleType, IdPermission])
+}
+
+// | IdUserRoleType (Role) | IdPermission (Oprávnění) |
+// | --------------------- | ------------------------ |
+// | 1 (`ADMIN`)           | 1 (`VIEW_DASHBOARD`)     |
+// | 1                     | 2 (`EDIT_USER`)          |
+// | 1                     | 3 (`DELETE_USER`)        |
+// | 1                     | 4 (`VIEW_LOGS`)          |
+// | 1                     | 5 (`EDIT_ARTICLE`)       |
+// | 1                     | 6 (`PUBLISH_ARTICLE`)    |
+// | 2 (`EDITOR`)          | 1 (`VIEW_DASHBOARD`)     |
+// | 2                     | 5 (`EDIT_ARTICLE`)       |
+// | 2                     | 6 (`PUBLISH_ARTICLE`)    |
+// | 2                     | 6 (`ADD_IMAGE`)    |
+// | 2                     | 6 (`ADD_COMMENT`)    |
+// | 3 (`VIEWER`)          | 1 (`VIEW_DASHBOARD`)     |
+
+// | Tabulka                  | Hodnota                                          |
+// | ------------------------ | ------------------------------------------------ |
+// | `Permission`             | `EDIT_USER`, `VIEW_STATS`                        |
+// | `UserRoleType`           | `ADMIN`, `EDITOR`                                |
+// | `RolePermission`         | `ADMIN` má `EDIT_USER` i `VIEW_STATS`            |
+// | `UserPermissionOverride` | Uživatel s `ADMIN` rolí má `VIEW_STATS` zakázáno |
+
+// Příklad: Jak to funguje
+// User ➝ UserRole ➝ UserRoleType = Uživatel má roli.
+
+// UserRoleType ➝ RolePermission ➝ Permission = Roli jsou přiřazena oprávnění.
+
+// (Volitelně) UserPermissionOverride = Změna jen pro konkrétního uživatele.

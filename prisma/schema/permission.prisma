@@ -1,0 +1,17 @@
+model Permission {
+  IdPermission            Int                      @id @default(autoincrement()) @db.Integer
+  Code                    String                   @unique @db.VarChar(20)
+  Description             String                   @db.VarChar(50)
+  Value                   Int                      @unique @db.SmallInt
+  RolePermission          RolePermission[]
+  UserPermissionsOverride UserPermissionOverride[]
+}
+
+// | IdPermission | Code              | Description       |
+// | ------------ | ----------------- | ----------------- |
+// | 1            | `VIEW_DASHBOARD`  | Zobrazit přehled  |
+// | 2            | `EDIT_USER`       | Upravit uživatele |
+// | 3            | `DELETE_USER`     | Smazat uživatele  |
+// | 4            | `VIEW_LOGS`       | Zobrazit logy     |
+// | 5            | `EDIT_ARTICLE`    | Upravit článek    |
+// | 6            | `PUBLISH_ARTICLE` | Publikovat článek |

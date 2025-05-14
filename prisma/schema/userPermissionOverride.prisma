@@ -1,0 +1,13 @@
+model UserPermissionOverride {
+  IdUser       String     @db.VarChar(25)
+  IdPermission Int        @db.Integer
+  Allow        Boolean // true = přidá oprávnění, false = zakáže
+  User         User       @relation(fields: [IdUser], references: [IdUser])
+  Permission   Permission @relation(fields: [IdPermission], references: [IdPermission])
+
+  @@id([IdUser, IdPermission])
+}
+
+// | IdUser (uživatel) | IdPermission    | Allow |
+// | ----------------- | --------------- | ----- |
+// | `user123`         | 4 (`VIEW_LOGS`) | true  |

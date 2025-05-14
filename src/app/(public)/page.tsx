@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+//TODO: Na webu budu mít formulář, kde se budou moct hlásit chyby a ty se budou ukládat do databáze TY budou mít svůj status. Kopie se pošle tomu, co chyby nahlásil a zmeny stavy a poznánky k chybě s ebudou posílat uživateli mailem
 export default async function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">

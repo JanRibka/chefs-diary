@@ -78,6 +78,9 @@ importers:
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       dotenv-cli:
         specifier: ^8.0.0
         version: 8.0.0

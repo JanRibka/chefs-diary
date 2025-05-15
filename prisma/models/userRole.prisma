@@ -5,4 +5,5 @@ model UserRole {
   UserRoleType   UserRoleType @relation(fields: [IdUserRoleType], references: [IdUserRoleType])
 
   @@id([IdUser, IdUserRoleType])
+  @@index([IdUser])
 }

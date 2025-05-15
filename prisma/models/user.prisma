@@ -1,10 +1,10 @@
 model User {
   IdUser                    String    @id @default(cuid()) @db.VarChar(25)
   Password                  String    @db.VarChar(255)
-  IsDisabled                Boolean?  @default(false)
+  IsDisabled                Boolean?  @default(false) @db.Boolean
   WebLoginRestrictedUntil   DateTime? @db.Timestamp(0)
   AdminLoginRestrictedUntil DateTime? @db.Timestamp(0)
-  TwoFactor                 Boolean?  @default(false)
+  TwoFactor                 Boolean?  @default(false) @db.Boolean
 
   UserInfo               UserInfo?
   UserLoginHistory       UserLoginHistory[]

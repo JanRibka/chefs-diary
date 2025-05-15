@@ -1,9 +1,9 @@
 model FavoriteRecipeGroup {
-    IdFavoriteGroup Int      @id @default(autoincrement())
+    IdFavoriteGroup Int      @id @default(autoincrement()) @db.Integer
     IdUser          String   @db.VarChar(25)
-    Name            String   @db.VarChar(50) // Např. "Cukroví"
-    CreatedAt       DateTime @default(now())
+    Name            String   @db.VarChar(50)
+    CreatedAt       DateTime @default(now()) @db.Timestamp(0)
 
-    User   User             @relation(fields: [IdUser], references: [IdUser])
-    Recipe FavoriteRecipe[] // Napojené recepty
+    User           User             @relation(fields: [IdUser], references: [IdUser])
+    FavoriteRecipe FavoriteRecipe[]
 }

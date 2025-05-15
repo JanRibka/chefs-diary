@@ -1,11 +1,11 @@
 model FavoriteRecipe {
     IdUser          String @db.VarChar(25)
-    IdRecipe        Int
-    IdFavoriteGroup Int
+    IdRecipe        Int    @db.Integer
+    IdFavoriteGroup Int    @db.Integer
 
-    User          User                @relation(fields: [IdUser], references: [IdUser])
-    Recipe        Recipe              @relation(fields: [IdRecipe], references: [IdRecipe])
-    FavoriteGroup FavoriteRecipeGroup @relation(fields: [IdFavoriteGroup], references: [IdFavoriteGroup])
+    User                User                @relation(fields: [IdUser], references: [IdUser])
+    Recipe              Recipe              @relation(fields: [IdRecipe], references: [IdRecipe])
+    FavoriteRecipeGroup FavoriteRecipeGroup @relation(fields: [IdFavoriteGroup], references: [IdFavoriteGroup])
 
     @@id([IdUser, IdRecipe, IdFavoriteGroup]) // Recept může být ve více skupinách daného uživatele
 }

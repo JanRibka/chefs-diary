@@ -7,18 +7,21 @@ import { prisma } from "../prisma";
  * @param sessionToken Session token value
  * @param idUser User Id
  * @param expires Expiration date
+ * @param ipAddress IP address
  * @returns {Promise<AdapterSession | undefined>}
  */
 export async function createSession(
   sessionToken: string,
   idUser: string,
-  expires: Date
+  expires: Date,
+  ipAddress: string
 ): Promise<Session | undefined> {
   return await prisma.session.create({
     data: {
       sessionToken: sessionToken,
       userId: idUser,
       expires: expires,
+      ipAddress: ipAddress,
     },
   });
 }
@@ -28,18 +31,21 @@ export async function createSession(
  * @param sessionToken Session token value
  * @param idUser User Id
  * @param expires Expiration date
+ * @param ipAddress IP address
  * @returns {Promise<AdapterSession | undefined>}
  */
 export async function createSessionAdmin(
   sessionToken: string,
   idUser: string,
-  expires: Date
+  expires: Date,
+  ipAddress: string
 ): Promise<Session | undefined> {
   return await prisma.sessionAdmin.create({
     data: {
       sessionToken: sessionToken,
       userId: idUser,
       expires: expires,
+      ipAddress: ipAddress,
     },
   });
 }

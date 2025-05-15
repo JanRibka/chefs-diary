@@ -1,8 +1,8 @@
 model RecipeRating {
-    IdRating Int    @id @default(autoincrement())
+    IdRating Int    @id @default(autoincrement()) @db.Integer
     IdUser   String @db.VarChar(25)
-    IdRecipe Int
-    Rating   Int    @db.SmallInt // např. 1–5
+    IdRecipe Int    @db.Integer
+    Rating   Int    @db.SmallInt
 
     User   User   @relation(fields: [IdUser], references: [IdUser])
     Recipe Recipe @relation(fields: [IdRecipe], references: [IdRecipe])

@@ -14,7 +14,7 @@ const logger = (fileName: string = "application"): Logger => {
     datePattern: "YYYY-MM-DD",
     zippedArchive: true,
     maxSize: "20m",
-    maxFiles: "90d",
+    maxFiles: "30d",
   });
 
   const consoleTransport = new transports.Console({

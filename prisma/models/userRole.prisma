@@ -1,8 +1,9 @@
 model UserRole {
-  IdUser         String       @db.VarChar(25)
-  User           User         @relation(fields: [IdUser], references: [IdUser])
-  IdUserRoleType Int          @db.Integer
-  UserRoleType   UserRoleType @relation(fields: [IdUserRoleType], references: [IdUserRoleType])
+  IdUser         String @db.VarChar(25)
+  IdUserRoleType Int    @db.Integer
+
+  User         User         @relation(fields: [IdUser], references: [IdUser])
+  UserRoleType UserRoleType @relation(fields: [IdUserRoleType], references: [IdUserRoleType])
 
   @@id([IdUser, IdUserRoleType])
   @@index([IdUser])

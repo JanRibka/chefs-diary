@@ -1,9 +1,10 @@
 model UserPermissionOverride {
-  IdUser       String     @db.VarChar(25)
-  IdPermission Int        @db.Integer
-  Allow        Boolean // true = přidá oprávnění, false = zakáže
-  User         User       @relation(fields: [IdUser], references: [IdUser])
-  Permission   Permission @relation(fields: [IdPermission], references: [IdPermission])
+  IdUser       String  @db.VarChar(25)
+  IdPermission Int     @db.Integer
+  Allow        Boolean @db.Boolean // true = přidá oprávnění, false = zakáže
+
+  User       User       @relation(fields: [IdUser], references: [IdUser])
+  Permission Permission @relation(fields: [IdPermission], references: [IdPermission])
 
   @@id([IdUser, IdPermission])
 }

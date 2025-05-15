@@ -121,8 +121,10 @@ export async function verifyUser(
   const userRoles = await getUserRoleValuesByIdUser(user.IdUser);
 
   if (verifyAdmin && !getIisAdminRole(userRoles)) {
+    await logLoginAttempt(user.IdUser, false, authenticationMode);
     throw new AuthError("adminRequired");
   } else if (!getIisEditorRole) {
+    await logLoginAttempt(user.IdUser, false, authenticationMode);
     throw new AuthError("editorRequired");
   }
 

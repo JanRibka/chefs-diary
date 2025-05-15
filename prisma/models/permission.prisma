@@ -1,8 +1,9 @@
 model Permission {
-  IdPermission            Int                      @id @default(autoincrement()) @db.Integer
-  Code                    String                   @unique @db.VarChar(20)
-  Description             String                   @db.VarChar(35)
-  Value                   Int                      @unique @db.SmallInt
+  IdPermission Int    @id @default(autoincrement()) @db.Integer
+  Code         String @unique @db.VarChar(20)
+  Description  String @db.VarChar(35)
+  Value        Int    @unique @db.SmallInt
+
   RolePermission          RolePermission[]
   UserPermissionsOverride UserPermissionOverride[]
 }

@@ -45,5 +45,6 @@ next-env.d.ts
 
 # prisma
 .prisma
+prisma/generated-client
 # migration.sql
 # migration_lock.toml

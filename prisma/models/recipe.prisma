@@ -1,8 +1,8 @@
 model Recipe {
-    IdRecipe  Int      @id @default(autoincrement())
-    Title     String   @db.VarChar(255)
-    CreatedAt DateTime @default(now())
-    UpdatedAt DateTime @updatedAt
+    IdRecipe  Int      @id @default(autoincrement()) @db.Integer
+    Title     String   @db.VarChar(100)
+    CreatedAt DateTime @default(now()) @db.Timestamp(0)
+    UpdatedAt DateTime @updatedAt @db.Timestamp(0)
     IdUser    String   @db.VarChar(25)
 
     User                  User                    @relation(fields: [IdUser], references: [IdUser])

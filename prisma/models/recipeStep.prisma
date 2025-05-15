@@ -1,8 +1,8 @@
 model RecipeStep {
-    IdRecipeStep Int    @id @default(autoincrement())
-    IdRecipe     Int
-    StepNumber   Int // Např. 1, 2, 3...
-    Description  String // Text jednotlivého kroku
+    IdRecipeStep Int    @id @default(autoincrement()) @db.Integer
+    IdRecipe     Int    @db.Integer
+    StepNumber   Int    @db.SmallInt
+    Description  String @db.Text // Text jednotlivého kroku
 
     Recipe Recipe @relation(fields: [IdRecipe], references: [IdRecipe])
 

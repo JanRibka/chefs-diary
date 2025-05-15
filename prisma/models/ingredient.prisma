@@ -1,8 +1,6 @@
 model Ingredient {
-    IdIngredient Int    @id @default(autoincrement())
-    Name         String @unique @db.VarChar(100)
-    // CreatedAt    DateTime @default(now())
-    // UpdatedAt    DateTime @updatedAt
+    IdIngredient Int    @id @default(autoincrement()) @db.Integer
+    Name         String @unique @db.VarChar(50)
 
-    Recipes RecipeIngredient[]
+    RecipeIngredient RecipeIngredient[]
 }

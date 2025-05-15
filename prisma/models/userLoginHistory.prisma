@@ -1,10 +1,11 @@
 model UserLoginHistory {
   IdUserLogHistory Int      @id @default(autoincrement()) @db.Integer
   IdUser           String   @db.VarChar(25)
-  User             User     @relation(fields: [IdUser], references: [IdUser])
   AuthMode         String   @db.VarChar(5)
   LoginAttemptDate DateTime @default(now()) @db.Timestamp(0)
-  LoginSuccessful  Boolean  @default(false)
+  LoginSuccessful  Boolean  @default(false) @db.Boolean
+
+  User User @relation(fields: [IdUser], references: [IdUser])
 
   @@index([IdUser, LoginSuccessful, LoginAttemptDate, AuthMode])
 }

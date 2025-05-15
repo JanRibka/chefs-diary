@@ -118,12 +118,12 @@ export async function verifyUser(
     await login2FA(user);
   }
 
-  if (verifyAdmin) {
-    const userRoles = await getUserRoleValuesByIdUser(user.IdUser);
+  const userRoles = await getUserRoleValuesByIdUser(user.IdUser);
 
-    if (!userRoles.some((s) => s === UserRoleTypeEnum.ADMIN)) {
-      throw new AuthError("adminRequired");
-    }
+  if (verifyAdmin && !getIisAdminRole(userRoles)) {
+    throw new AuthError("adminRequired");
+  } else if (!getIisEditorRole) {
+    throw new AuthError("editorRequired");
   }
 
   return {
@@ -254,4 +254,30 @@ export async function getIpFailedLoginCountReachedLimitLast15Minutes(
   }
 
   return false;
+}
+
+/**
+ * Gets if user has administration rights
+ * @param userRoles User roles
+ * @returns {boolean}
+ */
+function getIisAdminRole(userRoles: number[]): boolean {
+  return userRoles.some((role) =>
+    [
+      UserRoleTypeEnum.SUPER_ADMIN,
+      UserRoleTypeEnum.ADMIN,
+      UserRoleTypeEnum.MODERATOR,
+      UserRoleTypeEnum.AUDITOR,
+      UserRoleTypeEnum.SUPPORT,
+    ].includes(role)
+  );
+}
+
+/**
+ * Gets if user has editor rights
+ * @param userRoles User roles
+ * @returns {boolean}
+ */
+function getIisEditorRole(userRoles: number[]): boolean {
+  return userRoles.includes(UserRoleTypeEnum.EDITOR);
 }

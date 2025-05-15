@@ -7,12 +7,12 @@ async function main() {
   const auditor = await prisma.userRoleType.upsert({
     where: { Code: "AUDITOR" },
     update: {
-      Value: 765,
+      Value: 7625,
       Description: "Auditor",
     },
     create: {
       Code: "AUDITOR",
-      Value: 765,
+      Value: 7625,
       Description: "Auditor",
     },
   });
@@ -20,12 +20,12 @@ async function main() {
   const support = await prisma.userRoleType.upsert({
     where: { Code: "SUPPORT" },
     update: {
-      Value: 1468,
+      Value: 4468,
       Description: "Podpora",
     },
     create: {
       Code: "SUPPORT",
-      Value: 1468,
+      Value: 4468,
       Description: "Podpora",
     },
   });
@@ -72,12 +72,12 @@ async function main() {
   const superAdmin = await prisma.userRoleType.upsert({
     where: { Code: "SUPER_ADMIN" },
     update: {
-      Value: 9821,
+      Value: 2821,
       Description: "Super administrátor",
     },
     create: {
       Code: "SUPER_ADMIN",
-      Value: 9821,
+      Value: 2821,
       Description: "Super administrátor",
     },
   });
@@ -124,96 +124,180 @@ async function main() {
   const roleAssign = await prisma.permission.upsert({
     where: { Code: "ROLE_ASSIGN" },
     update: {
-      Value: 4,
+      Value: 10,
       Description: "Přiřazovat role",
     },
     create: {
       Code: "ROLE_ASSIGN",
-      Value: 4,
+      Value: 10,
       Description: "Přiřazovat role",
     },
   });
   const permissionEdit = await prisma.permission.upsert({
     where: { Code: "PERMISSION_EDIT" },
     update: {
-      Value: 5,
+      Value: 20,
       Description: "Správa oprávnění",
     },
     create: {
       Code: "PERMISSION_EDIT",
-      Value: 5,
+      Value: 20,
       Description: "Správa oprávnění",
     },
   });
   const logView = await prisma.permission.upsert({
     where: { Code: "LOG_VIEW" },
     update: {
-      Value: 6,
+      Value: 30,
       Description: "Zobrazit systémové logy",
     },
     create: {
       Code: "LOG_VIEW",
-      Value: 6,
+      Value: 30,
       Description: "Zobrazit systémové logy",
     },
   });
   const postApprove = await prisma.permission.upsert({
     where: { Code: "POST_APPROVE" },
     update: {
-      Value: 7,
+      Value: 40,
       Description: "Schválit příspěvek",
     },
     create: {
       Code: "POST_APPROVE",
-      Value: 7,
+      Value: 40,
       Description: "Schválit příspěvek",
     },
   });
-  const contentEdit = await prisma.permission.upsert({
-    where: { Code: "CONTENT_EDIT" },
+  const recipePublish = await prisma.permission.upsert({
+    where: { Code: "RECIPE_PUBLISH" },
     update: {
-      Value: 8,
-      Description: "Upravit obsah (texty, články...)",
+      Value: 50,
+      Description: "Publikovat recept",
     },
     create: {
-      Code: "CONTENT_EDIT",
-      Value: 8,
-      Description: "Upravit obsah (texty, články...)",
+      Code: "RECIPE_PUBLISH",
+      Value: 50,
+      Description: "Publikovat recept",
+    },
+  });
+  const recipeEdit = await prisma.permission.upsert({
+    where: { Code: "RECIPE_EDIT" },
+    update: {
+      Value: 51,
+      Description: "Upravovat recept",
+    },
+    create: {
+      Code: "RECIPE_EDIT",
+      Value: 51,
+      Description: "Upravovat recept",
+    },
+  });
+  const recipeDelete = await prisma.permission.upsert({
+    where: { Code: "RECIPE_DELETE" },
+    update: {
+      Value: 52,
+      Description: "Mazat recept recept",
+    },
+    create: {
+      Code: "RECIPE_DELETE",
+      Value: 52,
+      Description: "Publikovat recept",
+    },
+  });
+  const imagePublish = await prisma.permission.upsert({
+    where: { Code: "IMAGE_PUBLISH" },
+    update: {
+      Value: 60,
+      Description: "Publikovat obrázky",
+    },
+    create: {
+      Code: "IMAGE_PUBLISH",
+      Value: 60,
+      Description: "Publikovat obrázky",
+    },
+  });
+  const imageDelete = await prisma.permission.upsert({
+    where: { Code: "IMAGE_DELETE" },
+    update: {
+      Value: 61,
+      Description: "Mazat obrázky",
+    },
+    create: {
+      Code: "IMAGE_DELETE",
+      Value: 61,
+      Description: "Mazat obrázky",
+    },
+  });
+  const commentPublish = await prisma.permission.upsert({
+    where: { Code: "COMMENT_PUBLISH" },
+    update: {
+      Value: 70,
+      Description: "Publikovat komentáře",
+    },
+    create: {
+      Code: "COMMENT_PUBLISH",
+      Value: 70,
+      Description: "Publikovat komentáře",
+    },
+  });
+  const commentDelete = await prisma.permission.upsert({
+    where: { Code: "COMMENT_DELETE" },
+    update: {
+      Value: 71,
+      Description: "Mazat komentáře",
+    },
+    create: {
+      Code: "COMMENT_DELETE",
+      Value: 71,
+      Description: "Mazat komentáře",
+    },
+  });
+  const ratingPublish = await prisma.permission.upsert({
+    where: { Code: "RATING_PUBLISH" },
+    update: {
+      Value: 80,
+      Description: "Publikovat hodnocení",
+    },
+    create: {
+      Code: "RATING_PUBLISH",
+      Value: 80,
+      Description: "Publikovat hodnocení",
     },
   });
   const ticketView = await prisma.permission.upsert({
     where: { Code: "TICKET_VIEW" },
     update: {
-      Value: 9,
+      Value: 90,
       Description: "Zobrazit tikety podpory",
     },
     create: {
       Code: "TICKET_VIEW",
-      Value: 9,
+      Value: 90,
       Description: "Zobrazit tikety podpory",
     },
   });
   const ticketManage = await prisma.permission.upsert({
     where: { Code: "TICKET_MANAGE" },
     update: {
-      Value: 10,
+      Value: 91,
       Description: "Spravovat tikety",
     },
     create: {
       Code: "TICKET_MANAGE",
-      Value: 10,
+      Value: 91,
       Description: "Spravovat tikety",
     },
   });
   const settingsEdit = await prisma.permission.upsert({
     where: { Code: "SETTINGS_EDIT" },
     update: {
-      Value: 11,
+      Value: 100,
       Description: "Spravovat nastavení systému",
     },
     create: {
       Code: "SETTINGS_EDIT",
-      Value: 11,
+      Value: 100,
       Description: "Spravovat nastavení systému",
     },
   });
@@ -225,7 +309,14 @@ async function main() {
     permissionEdit,
     logView,
     postApprove,
-    contentEdit,
+    recipePublish,
+    recipeEdit,
+    recipeDelete,
+    imagePublish,
+    imageDelete,
+    commentPublish,
+    commentDelete,
+    ratingPublish,
     ticketView,
     ticketManage,
     settingsEdit,
@@ -240,35 +331,47 @@ async function main() {
 
   const getPermissionId = (code) =>
     allPermissions.find((p) => p.Code === code)?.IdPermission;
-  //TODO: Pridat vsechny role a opravneni udelat podle userView. a Zkonztrolovat hodnoty v tabulce podle userROle
-  //TODO: Pridat dze meho uzivatele a pridat mu superAdmin roli
 
   // Mapování rolí na oprávnění
   const rolePermissionMap = {
     SUPER_ADMIN: [
       userView.Code,
-      "USER_EDIT",
-      "USER_DELETE",
-      "TICKET_VIEW",
-      "TICKET_MANAGE",
-      "CONTENT_EDIT",
-      "ROLE_ASSIGN",
-      "PERMISSION_EDIT",
-      "LOG_VIEW",
-      "POST_APPROVE",
-      "SETTINGS_EDIT",
+      userEdit.Code,
+      userDelete.Code,
+      roleAssign.Code,
+      permissionEdit.Code,
+      logView.Code,
+      postApprove.Code,
+      ticketView.Code,
+      ticketManage.Code,
+      settingsEdit.Code,
     ],
     ADMIN: [
-      "USER_VIEW",
-      "USER_EDIT",
-      "ROLE_ASSIGN",
-      "CONTENT_EDIT",
-      "TICKET_VIEW",
+      userView.Code,
+      userEdit.Code,
+      roleAssign.Code,
+      permissionEdit.Code,
+      logView.Code,
+      ticketView.Code,
+      ticketManage.Code,
     ],
-    SUPPORT: ["TICKET_VIEW", "TICKET_MANAGE"],
-    MODERATOR: ["POST_APPROVE", "TICKET_VIEW"],
-    EDITOR: ["CONTENT_EDIT"],
-    AUDITOR: ["LOG_VIEW", "USER_VIEW"],
+    MODERATOR: [
+      postApprove.Code,
+      ticketView.Code,
+      commentDelete.Code,
+      recipeDelete.Code,
+    ],
+    SUPPORT: [ticketView.Code, ticketManage.Code],
+    EDITOR: [
+      recipePublish.Code,
+      recipeEdit.Code,
+      recipeDelete.Code,
+      imagePublish.Code,
+      imageDelete.Code,
+      commentPublish.Code,
+      ratingPublish.Code,
+    ],
+    AUDITOR: [userView.Code, logView.Code],
   };
 
   for (const [roleCode, permissionCodes] of Object.entries(rolePermissionMap)) {

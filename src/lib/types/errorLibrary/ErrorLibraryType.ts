@@ -31,7 +31,8 @@ type LibraryTypeProperty =
   | "passwordResetMainError"
   | "passwordResetTokenNotFound"
   | "passwordResetTokenExpired"
-  | "adminRequired";
+  | "adminRequired"
+  | "editorRequired";
 
 type ErrorLibraryType = Record<LibraryTypeProperty, string>;
 

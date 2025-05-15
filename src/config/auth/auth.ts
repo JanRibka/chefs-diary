@@ -28,7 +28,7 @@ const credentials: CredentialsConfig = {
       JSON.parse(credentials.persistLogin as string) ?? false;
 
     const user = await verifyUser(email, password);
-
+    //TODO: Nekde bych tu měl do session pridat value z rolí a oprávnění. Pouze por admina
     return {
       ...user,
       persistLogin: persistLogin,

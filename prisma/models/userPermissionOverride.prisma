@@ -11,3 +11,170 @@ model UserPermissionOverride {
 // | IdUser (uživatel) | IdPermission    | Allow |
 // | ----------------- | --------------- | ----- |
 // | `user123`         | 4 (`VIEW_LOGS`) | true  |
+
+// Tvoje tabulka UserPermissionOverride představuje ruční úpravu oprávnění pro konkrétního uživatele – tedy výjimky vůči běžnému oprávnění z rolí. To je velmi užitečný návrh. Tady je, jak bys ji měl ideálně používat:
+
+// Co znamená Allow?
+// true: uživatel má dané oprávnění, i kdyby ho neměl přes roli.
+
+// false: uživateli se odebere oprávnění, i kdyby ho měl přes roli.
+
+// Jak načítat oprávnění uživatele
+// Získat oprávnění z rolí (standardní přístup):
+
+// ts
+// Zkopírovat
+// Upravit
+// const rolePermissions = await prisma.permission.findMany({
+//   where: {
+//     UserRoleType: {
+//       some: {
+//         UserRole: {
+//           some: {
+//             IdUser: userId,
+//           },
+//         },
+//       },
+//     },
+//   },
+// });
+// Získat přepsaná oprávnění z tabulky UserPermissionOverride:
+
+// ts
+// Zkopírovat
+// Upravit
+// const overrides = await prisma.userPermissionOverride.findMany({
+//   where: {
+//     IdUser: userId,
+//   },
+// });
+// Kombinovat výsledky:
+
+// Například v JavaScriptu:
+
+// ts
+// Zkopírovat
+// Upravit
+// const permissionMap = new Map<number, boolean>();
+
+// // Naplníme oprávnění z rolí (všechna jako true)
+// for (const perm of rolePermissions) {
+//   permissionMap.set(perm.IdPermission, true);
+// }
+
+// // Aplikujeme override – přepíše předchozí stav
+// for (const override of overrides) {
+//   permissionMap.set(override.IdPermission, override.Allow);
+// }
+
+// // Výsledek: jen ty oprávnění, která mají hodnotu true
+// const finalPermissions = Array.from(permissionMap.entries())
+//   .filter(([_, allow]) => allow)
+//   .map(([id]) => id);
+// Proč je to důležité?
+// Umožňuješ správci systému jemně doladit oprávnění pro jednotlivce.
+
+// Výborné pro výjimky typu: „Tento uživatel má roli 'Redaktor', ale nesmí mazat články.“
+
+// Indexy pro výkon
+// Přidej si index na IdUser, pokud často hledáš podle uživatele:
+
+// prisma
+// Zkopírovat
+// Upravit
+// @@index([IdUser])
+// Shrnutí
+// Tabulku UserPermissionOverride použij jako vrstvu navíc, která:
+
+// přidává oprávnění, která by jinak chyběla,
+
+// odebírá oprávnění, která by jinak existovala,
+
+// přepisuje logiku z rolí.
+
+// Takto zajistíš maximální flexibilitu při řízení přístupových práv.
+
+// Řekl/a jsi:
+// Jak a kdy bych měl do táto tabulky přidávat data?
+
+// ChatGPT řekl:
+// Do tabulky UserPermissionOverride bys měl přidávat (nebo aktualizovat) záznamy pouze tehdy, když chceš ručně upravit oprávnění konkrétního uživatele – mimo to, co má z rolí. Níže ti rozepíšu kdy, proč a jak s touto tabulkou pracovat:
+
+// Kdy přidávat do UserPermissionOverride?
+// Přidání oprávnění mimo roli
+// Např. Uživatel má roli „Redaktor“, ale potřebuje i přístup k administraci.
+
+// IdPermission = "admin_access" → Allow = true
+
+// Odebrání oprávnění přiděleného rolí
+// Např. Uživatel má roli „Administrátor“, ale nesmí mazat uživatele.
+
+// IdPermission = "delete_users" → Allow = false
+
+// Změna existujícího override (např. přes administrační UI)
+// Např. správce systému ručně upraví oprávnění konkrétního uživatele.
+
+// 🛠 Jak to ukládat?
+// 1. Přidání záznamu
+// ts
+// Zkopírovat
+// Upravit
+// await prisma.userPermissionOverride.create({
+//   data: {
+//     IdUser: userId,
+//     IdPermission: permissionId,
+//     Allow: true, // nebo false podle potřeby
+//   },
+// });
+// 2. Aktualizace override (např. změna Allow)
+// ts
+// Zkopírovat
+// Upravit
+// await prisma.userPermissionOverride.upsert({
+//   where: {
+//     IdUser_IdPermission: {
+//       IdUser: userId,
+//       IdPermission: permissionId,
+//     },
+//   },
+//   update: {
+//     Allow: true, // nebo false
+//   },
+//   create: {
+//     IdUser: userId,
+//     IdPermission: permissionId,
+//     Allow: true, // nebo false
+//   },
+// });
+// Díky tomu, že máš @@id([IdUser, IdPermission]), můžeš použít upsert.
+
+// Kdy nepřidávat záznamy?
+// Pokud se uživatel řadí do správných rolí a vše funguje podle očekávání, není potřeba mít záznamy v této tabulce.
+
+// Je dobré udržovat UserPermissionOverride co nejmenší, protože slouží jen jako výjimka, ne jako primární zdroj oprávnění.
+
+// Typický případ použití v administraci
+// Admin v UI označí checkboxem, že chce uživateli přidat/odebrat určité oprávnění.
+
+// Backend zavolá upsert pro každý override (true/false).
+
+// Když chceš zrušit override, jednoduše záznam smaž:
+
+// ts
+// Zkopírovat
+// Upravit
+// await prisma.userPermissionOverride.delete({
+//   where: {
+//     IdUser_IdPermission: {
+//       IdUser: userId,
+//       IdPermission: permissionId,
+//     },
+//   },
+// });
+//  Shrnutí
+// Akce	Co uděláš v tabulce UserPermissionOverride?
+// Přidat oprávnění mimo roli	Allow: true
+// Zakázat oprávnění z role	Allow: false
+// Vrátit stav do původního (z role)	Záznam smazat
+
+// Tímto způsobem zůstane tabulka čistá a bude přesně plnit roli výjimek, které přepisují běžná pravidla z rolí.

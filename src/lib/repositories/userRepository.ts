@@ -68,9 +68,7 @@ export async function createUser(
 
     const userRoleTypes = await tx.userRoleType.findMany({
       where: {
-        Value: {
-          in: [UserRoleTypeEnum.USER, UserRoleTypeEnum.EDITOR],
-        },
+        Value: UserRoleTypeEnum.EDITOR,
       },
     });
 

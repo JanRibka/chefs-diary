@@ -42,6 +42,7 @@ const errorTexts: ErrorLibraryType = {
   passwordResetTokenExpired:
     "Nelze obnovit heslo - Platnost odkazu pro obnovení hesla vypršela",
   adminRequired: "Pro přihlášení nemáte dostatečná oprávnění",
+  editorRequired: "Pro přihlášení nemáte dostatečná oprávnění",
 };
 
 const getErrorTextByKey = (key: keyof ErrorLibraryType, ...args: string[]) => {

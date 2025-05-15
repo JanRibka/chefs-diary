@@ -7,10 +7,8 @@ model User {
   TwoFactor                 Boolean?                 @default(false)
   UserInfo                  UserInfo?
   UserLoginHistory          UserLoginHistory[]
-  UserRoles                 UserRole[]
-  Sessions                  Session[]
+  UserRole                  UserRole[]
+  Session                   Session[]
   SessionAdmin              SessionAdmin[]
   UserPermissionOverride    UserPermissionOverride[]
-
-  //@@index([Email])  I can define an Index. Pokud hled8m 4asto t5eba by email, tak na něj dám index
 }

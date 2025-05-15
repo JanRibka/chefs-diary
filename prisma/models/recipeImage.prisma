@@ -1,0 +1,13 @@
+model RecipeImage {
+    IdRecipeImage Int      @id @default(autoincrement())
+    IdRecipe      Int
+    IdUser        String   @db.VarChar(25)
+    Url           String   @db.VarChar(255)
+    UploadedAt    DateTime @default(now())
+
+    Recipe Recipe @relation(fields: [IdRecipe], references: [IdRecipe])
+    User   User   @relation(fields: [IdUser], references: [IdUser])
+
+    @@index([IdRecipe])
+    @@index([IdUser])
+}

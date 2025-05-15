@@ -1,14 +1,22 @@
 model User {
-  IdUser                    String                   @id @default(cuid()) @db.VarChar(25)
-  Password                  String                   @db.VarChar(255)
-  IsDisabled                Boolean?                 @default(false)
-  WebLoginRestrictedUntil   DateTime?                @db.Timestamp(0)
-  AdminLoginRestrictedUntil DateTime?                @db.Timestamp(0)
-  TwoFactor                 Boolean?                 @default(false)
-  UserInfo                  UserInfo?
-  UserLoginHistory          UserLoginHistory[]
-  UserRole                  UserRole[]
-  Session                   Session[]
-  SessionAdmin              SessionAdmin[]
-  UserPermissionOverride    UserPermissionOverride[]
+  IdUser                    String    @id @default(cuid()) @db.VarChar(25)
+  Password                  String    @db.VarChar(255)
+  IsDisabled                Boolean?  @default(false)
+  WebLoginRestrictedUntil   DateTime? @db.Timestamp(0)
+  AdminLoginRestrictedUntil DateTime? @db.Timestamp(0)
+  TwoFactor                 Boolean?  @default(false)
+
+  UserInfo               UserInfo?
+  UserLoginHistory       UserLoginHistory[]
+  UserRole               UserRole[]
+  Session                Session[]
+  SessionAdmin           SessionAdmin[]
+  UserPermissionOverride UserPermissionOverride[]
+  Recipe                 Recipe[]
+  Favorite               FavoriteRecipe[]
+  Rating                 RecipeRating[]
+  Note                   RecipeNote[]
+  FavoriteRecipeGroup    FavoriteRecipeGroup[]
+  RecipeImage            RecipeImage[]
+  UserActionLog          UserActionLog[]
 }

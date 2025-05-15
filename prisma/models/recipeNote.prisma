@@ -1,0 +1,10 @@
+model RecipeNote {
+    IdNote    Int      @id @default(autoincrement())
+    IdUser    String   @db.VarChar(25)
+    IdRecipe  Int
+    Note      String   @db.Text
+    CreatedAt DateTime @default(now())
+
+    User   User   @relation(fields: [IdUser], references: [IdUser])
+    Recipe Recipe @relation(fields: [IdRecipe], references: [IdRecipe])
+}

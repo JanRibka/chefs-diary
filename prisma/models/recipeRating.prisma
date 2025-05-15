@@ -1,0 +1,11 @@
+model RecipeRating {
+    IdRating Int    @id @default(autoincrement())
+    IdUser   String @db.VarChar(25)
+    IdRecipe Int
+    Rating   Int    @db.SmallInt // např. 1–5
+
+    User   User   @relation(fields: [IdUser], references: [IdUser])
+    Recipe Recipe @relation(fields: [IdRecipe], references: [IdRecipe])
+
+    @@unique([IdUser, IdRecipe]) // Uživatel může ohodnotit recept jen jednou
+}

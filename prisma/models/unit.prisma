@@ -1,0 +1,7 @@
+model Unit {
+    IdUnit      Int    @id @default(autoincrement())
+    Name        String @unique @db.VarChar(10) // např. "g"
+    DisplayName String @db.VarChar(10) // např. "gramy"
+
+    Recipes RecipeIngredient[]
+}

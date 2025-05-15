@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants";
+import { tv } from "@heroui/theme";
 
 export const sideBarVariants = tv({
   base: "w-64 md:w-24 bg-white fixed top-16 bottom-0 md:left-0 transition-all duration-700 cubic-bezier(0.9, 0, 0.33, 1) z-10",

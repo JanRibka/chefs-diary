@@ -1,0 +1,8 @@
+model RecipeIngredientGroup {
+    IdIngredientGroup Int    @id @default(autoincrement())
+    IdRecipe          Int
+    Name              String @db.VarChar(50) // Např. "Omáčka", "Příloha"
+
+    Recipe           Recipe             @relation(fields: [IdRecipe], references: [IdRecipe])
+    RecipeIngredient RecipeIngredient[]
+}

@@ -1,0 +1,524 @@
+model Recipe {
+    IdRecipe  Int      @id @default(autoincrement())
+    Title     String   @db.VarChar(255)
+    CreatedAt DateTime @default(now())
+    UpdatedAt DateTime @updatedAt
+    IdUser    String   @db.VarChar(25)
+
+    User                  User                    @relation(fields: [IdUser], references: [IdUser])
+    RecipeIngredientGroup RecipeIngredientGroup[]
+    RecipeRating          RecipeRating[]
+    RecipeNote            RecipeNote[]
+    FavoriteRecipe        FavoriteRecipe[]
+    RecipeStep            RecipeStep[]
+    RecipeImage           RecipeImage[]
+}
+
+//TODO: Otypovat vsechny sloupce
+//TODO: Zv86it, zda do nějakých tabulek s recepty nevložit indexy
+
+// Navrhni mi prisma model pro tabulky, které budou sloužit k ukládání receptů. Každý recept se bude skládat z ingrediencí a jednotek, které budou v zvláštní tabulce
+
+// ChatGPT řekl:
+// Zde je návrh základního Prisma modelu pro správu receptů, které obsahují ingredience a jednotky. Cílem je navrhnout to tak, aby bylo snadné přidávat a spravovat recepty, včetně množství ingrediencí a jejich jednotek.
+
+// 1. Modely
+// prisma
+// Zkopírovat
+// Upravit
+// model Recipe {
+//   IdRecipe     Int               @id @default(autoincrement())
+//   Title        String            @db.VarChar(255)
+//   Description  String?           @db.Text
+//   CreatedAt    DateTime          @default(now())
+//   UpdatedAt    DateTime          @updatedAt
+//   Ingredients  RecipeIngredient[]
+// }
+
+// model Ingredient {
+//   IdIngredient Int               @id @default(autoincrement())
+//   Name         String            @unique @db.VarChar(100)
+//   CreatedAt    DateTime          @default(now())
+//   UpdatedAt    DateTime          @updatedAt
+//   Recipes      RecipeIngredient[]
+// }
+
+// model Unit {
+//   IdUnit       Int               @id @default(autoincrement())
+//   Name         String            @unique @db.VarChar(50) // např. "g", "ml", "ks"
+//   DisplayName  String            @db.VarChar(50)         // např. "gramy", "mililitry", "kusy"
+//   Recipes      RecipeIngredient[]
+// }
+
+// model RecipeIngredient {
+//   IdRecipeIngredient Int         @id @default(autoincrement())
+//   IdRecipe           Int
+//   IdIngredient       Int
+//   IdUnit             Int
+//   Amount             Float       // množství (např. 250.0)
+
+//   Recipe             Recipe      @relation(fields: [IdRecipe], references: [IdRecipe])
+//   Ingredient         Ingredient  @relation(fields: [IdIngredient], references: [IdIngredient])
+//   Unit               Unit        @relation(fields: [IdUnit], references: [IdUnit])
+
+//   @@unique([IdRecipe, IdIngredient]) // Každá ingredience jen jednou v daném receptu
+// }
+// Vysvětlení:
+// Recipe: obsahuje základní informace o receptu.
+
+// Ingredient: seznam všech dostupných ingrediencí.
+
+// Unit: jednotky jako „g“, „ml“, „ks“ atd.
+
+// RecipeIngredient: relační tabulka propojující recepty, ingredience a jednotky s množstvím.
+
+// Příklad vložení dat (přes Prisma):
+// ts
+// Zkopírovat
+// Upravit
+// await prisma.recipe.create({
+//   data: {
+//     Title: "Palačinky",
+//     Description: "Jednoduchý recept na palačinky",
+//     Ingredients: {
+//       create: [
+//         {
+//           Amount: 250,
+//           Ingredient: { connectOrCreate: {
+//             where: { Name: "Hladká mouka" },
+//             create: { Name: "Hladká mouka" }
+//           }},
+//           Unit: { connect: { IdUnit: 1 } } // například "g"
+//         },
+//         {
+//           Amount: 500,
+//           Ingredient: { connectOrCreate: {
+//             where: { Name: "Mléko" },
+//             create: { Name: "Mléko" }
+//           }},
+//           Unit: { connect: { IdUnit: 2 } } // například "ml"
+//         }
+//       ]
+//     }
+//   }
+// });
+// Chceš k tomu i rozšíření např. o kategorie receptů, uživatele, tagy, nebo obrázky?
+
+// Řekl/a jsi:
+// Ještě mi zde přidej něco, co bude přiřazovat recept danému uživateli, hodnocení, poznámky a přidání receptu do oblíbených
+
+// ChatGPT řekl:
+// Tady je rozšířený návrh Prisma modelu pro správu receptů, kde:
+
+// Každý recept patří nějakému uživateli
+
+// Lze recept ohodnotit, přidat k němu poznámky
+
+// Uživatelé si mohou recepty uložit do oblíbených
+
+// Rozšířený model:
+// prisma
+// Zkopírovat
+// Upravit
+// model User {
+//   IdUser        String              @id @default(cuid()) @db.VarChar(25)
+//   Email         String              @unique
+//   Recipes       Recipe[]            // Vlastní recepty
+//   Favorites     FavoriteRecipe[]    // Oblíbené recepty
+//   Ratings       RecipeRating[]      // Hodnocení
+//   Notes         RecipeNote[]        // Poznámky
+// }
+
+// model Recipe {
+//   IdRecipe      Int                 @id @default(autoincrement())
+//   Title         String              @db.VarChar(255)
+//   Description   String?             @db.Text
+//   CreatedAt     DateTime            @default(now())
+//   UpdatedAt     DateTime            @updatedAt
+//   IdUser        String              @db.VarChar(25)
+//   User          User                @relation(fields: [IdUser], references: [IdUser])
+//   Ingredients   RecipeIngredient[]
+//   Ratings       RecipeRating[]
+//   Notes         RecipeNote[]
+//   FavoritedBy   FavoriteRecipe[]
+// }
+
+// model Ingredient {
+//   IdIngredient  Int                 @id @default(autoincrement())
+//   Name          String              @unique @db.VarChar(100)
+//   CreatedAt     DateTime            @default(now())
+//   UpdatedAt     DateTime            @updatedAt
+//   Recipes       RecipeIngredient[]
+// }
+
+// model Unit {
+//   IdUnit        Int                 @id @default(autoincrement())
+//   Name          String              @unique @db.VarChar(50)   // např. "g"
+//   DisplayName   String              @db.VarChar(50)           // např. "gramy"
+//   Recipes       RecipeIngredient[]
+// }
+
+// model RecipeIngredient {
+//   IdRecipeIngredient Int           @id @default(autoincrement())
+//   IdRecipe           Int
+//   IdIngredient       Int
+//   IdUnit             Int
+//   Amount             Float
+
+//   Recipe             Recipe        @relation(fields: [IdRecipe], references: [IdRecipe])
+//   Ingredient         Ingredient    @relation(fields: [IdIngredient], references: [IdIngredient])
+//   Unit               Unit          @relation(fields: [IdUnit], references: [IdUnit])
+
+//   @@unique([IdRecipe, IdIngredient])
+// }
+
+// model RecipeRating {
+//   IdRating      Int                @id @default(autoincrement())
+//   IdUser        String             @db.VarChar(25)
+//   IdRecipe      Int
+//   Rating        Int                @db.SmallInt // např. 1–5
+
+//   User          User               @relation(fields: [IdUser], references: [IdUser])
+//   Recipe        Recipe             @relation(fields: [IdRecipe], references: [IdRecipe])
+
+//   @@unique([IdUser, IdRecipe]) // Uživatel může ohodnotit recept jen jednou
+// }
+
+// model RecipeNote {
+//   IdNote        Int                @id @default(autoincrement())
+//   IdUser        String             @db.VarChar(25)
+//   IdRecipe      Int
+//   Note          String             @db.Text
+//   CreatedAt     DateTime           @default(now())
+
+//   User          User               @relation(fields: [IdUser], references: [IdUser])
+//   Recipe        Recipe             @relation(fields: [IdRecipe], references: [IdRecipe])
+// }
+
+// model FavoriteRecipe {
+//   IdUser        String             @db.VarChar(25)
+//   IdRecipe      Int
+
+//   User          User               @relation(fields: [IdUser], references: [IdUser])
+//   Recipe        Recipe             @relation(fields: [IdRecipe], references: [IdRecipe])
+
+//   @@id([IdUser, IdRecipe]) // Jedinečná kombinace, tj. uživatel může recept označit jako oblíbený jen jednou
+// }
+// Poznámky:
+// RecipeRating: Umožňuje hodnotit recepty. Hodnoty např. 1–5.
+
+// RecipeNote: Uživatel si může napsat osobní poznámku k receptu (např. "přidat víc česneku").
+
+// FavoriteRecipe: propojuje recept a uživatele jako "oblíbený".
+
+// Každý recept má autora (IdUser ve Recipe), tedy víme, kdo ho vytvořil.
+
+// Chceš k tomu i kategorie, tagy, nebo třeba veřejnost/soukromí receptů?
+
+// Řekl/a jsi:
+// Ještě bych chtěl jednu úpravu. Oblíbené recepty se bude moc dávat do skupin. Jakoje například cukroví a tak
+
+// ChatGPT řekl:
+// Skvělý nápad! Přidáme podporu skupin oblíbených receptů (např. „Cukroví“, „Obědy“, „Zdravé recepty“). To znamená:
+
+// Každý uživatel si může vytvořit vlastní skupiny.
+
+// Do každé skupiny může přidat více receptů.
+
+// Jeden recept může být i ve více skupinách (např. „Cukroví“ i „Oblíbené“).
+
+// Úprava modelu
+// Zde je aktualizovaný model s podporou skupin:
+
+// prisma
+// Zkopírovat
+// Upravit
+// model FavoriteGroup {
+//   IdFavoriteGroup Int              @id @default(autoincrement())
+//   IdUser          String           @db.VarChar(25)
+//   Name            String           @db.VarChar(50)  // Např. "Cukroví"
+//   CreatedAt       DateTime         @default(now())
+
+//   User            User             @relation(fields: [IdUser], references: [IdUser])
+//   Recipes         FavoriteRecipe[] // Napojené recepty
+// }
+
+// model FavoriteRecipe {
+//   IdUser           String           @db.VarChar(25)
+//   IdRecipe         Int
+//   IdFavoriteGroup  Int
+
+//   User             User             @relation(fields: [IdUser], references: [IdUser])
+//   Recipe           Recipe           @relation(fields: [IdRecipe], references: [IdRecipe])
+//   FavoriteGroup    FavoriteGroup    @relation(fields: [IdFavoriteGroup], references: [IdFavoriteGroup])
+
+//   @@id([IdUser, IdRecipe, IdFavoriteGroup]) // Recept může být ve více skupinách daného uživatele
+// }
+// Co to umožňuje:
+// Každý uživatel si může vytvořit libovolné skupiny.
+
+// Uživatel může dát jeden recept do více skupin.
+
+// Skupiny jsou oddělené mezi uživateli — každý má své vlastní.
+
+//  Příklad použití:
+// Uživatel si vytvoří 3 skupiny:
+
+// Cukroví
+
+// Zdravé večeře
+
+// Favoriti
+
+// Recept „Medové perníčky“ může být v Cukroví i Favoriti.
+
+// Pokud chceš přidat i řazení receptů ve skupině nebo třeba popis skupiny, můžu to snadno doplnit. Chceš?
+
+// Řekl/a jsi:
+// Ještě bych chtěl jednu úpravu k receptům. Každý recept bude mít pro ingredience skupuny, jako je například umáčka, maso, příloha, atd...
+
+// ChatGPT řekl:
+// Skvělá myšlenka! Tím, že rozdělíš ingredience do skupin (např. „Omáčka“, „Maso“, „Příloha“), bude recept přehlednější a lépe strukturovaný – obzvlášť u složitějších jídel. Přidáme tedy:
+
+//  Úprava modelu:
+// Zavádíme novou entitu IngredientGroup, která:
+
+// Je navázaná na konkrétní recept.
+
+// Má svůj název (např. „Omáčka“).
+
+// Obsahuje ingredience.
+
+// prisma
+// Zkopírovat
+// Upravit
+// model Recipe {
+//   IdRecipe     Int               @id @default(autoincrement())
+//   IdUser       String            @db.VarChar(25)
+//   Title        String            @db.VarChar(100)
+//   Instructions String
+//   CreatedAt    DateTime          @default(now())
+
+//   User               User               @relation(fields: [IdUser], references: [IdUser])
+//   IngredientGroups   IngredientGroup[]
+//   Ratings            RecipeRating[]
+//   Notes              RecipeNote[]
+//   FavoriteRecipes    FavoriteRecipe[]
+// }
+
+// model IngredientGroup {
+//   IdIngredientGroup Int         @id @default(autoincrement())
+//   IdRecipe          Int
+//   Name              String      @db.VarChar(50) // Např. "Omáčka", "Příloha"
+
+//   Recipe            Recipe      @relation(fields: [IdRecipe], references: [IdRecipe])
+//   Ingredients       RecipeIngredient[]
+// }
+
+// model RecipeIngredient {
+//   IdRecipeIngredient Int       @id @default(autoincrement())
+//   IdIngredientGroup  Int
+//   IdIngredient       Int
+//   IdUnit             Int
+//   Quantity           Float
+
+//   IngredientGroup    IngredientGroup @relation(fields: [IdIngredientGroup], references: [IdIngredientGroup])
+//   Ingredient         Ingredient      @relation(fields: [IdIngredient], references: [IdIngredient])
+//   Unit               Unit            @relation(fields: [IdUnit], references: [IdUnit])
+// }
+
+// model Ingredient {
+//   IdIngredient Int    @id @default(autoincrement())
+//   Name         String @unique
+// }
+
+// model Unit {
+//   IdUnit Int    @id @default(autoincrement())
+//   Name   String @unique
+// }
+//  Výhody tohoto přístupu:
+// Každý recept má své vlastní skupiny ingrediencí.
+
+// Skupiny můžeš zobrazovat jako oddělené bloky (např. jako nadpis + seznam).
+
+// Snadná rozšiřitelnost (např. později přidat pořadí skupin, poznámky ke skupině atd.).
+
+// Příklad datového modelu:
+// Recept	Skupina	Ingredience
+// Guláš	Maso	Hovězí, Sůl
+// Guláš	Omáčka	Cibule, Paprika
+// Guláš	Příloha	Knedlík
+
+// Pokud chceš, můžu ti navrhnout i order (pořadí) pro skupiny a ingredience nebo další možnosti. Chceš doplnit i to?
+
+// Řekl/a jsi:
+// Ještě bcyh chtěl ke každému receptu postup přípravy. Podtup bude rozdělen do bodů 1 - x
+
+// ChatGPT řekl:
+// Perfektní doplněk! Strukturování postupu přípravy do jednotlivých kroků zlepší čitelnost a uživatelský zážitek – místo jednoho dlouhého textu budou mít uživatelé jasně dané body (např. „1. Nakrájej cibuli…“).
+
+// Úprava modelu:
+// Přidáme tabulku RecipeStep, která:
+
+// Je navázaná na Recipe.
+
+// Obsahuje pořadí (StepNumber).
+
+// Obsahuje text postupu.
+
+// Upravený model s kroky:
+// prisma
+// Zkopírovat
+// Upravit
+// model Recipe {
+//   IdRecipe     Int               @id @default(autoincrement())
+//   IdUser       String            @db.VarChar(25)
+//   Title        String            @db.VarChar(100)
+//   CreatedAt    DateTime          @default(now())
+
+//   User               User               @relation(fields: [IdUser], references: [IdUser])
+//   IngredientGroups   IngredientGroup[]
+//   RecipeSteps        RecipeStep[]
+//   Ratings            RecipeRating[]
+//   Notes              RecipeNote[]
+//   FavoriteRecipes    FavoriteRecipe[]
+// }
+
+// model RecipeStep {
+//   IdRecipeStep Int    @id @default(autoincrement())
+//   IdRecipe     Int
+//   StepNumber   Int    // Např. 1, 2, 3...
+//   Description  String // Text jednotlivého kroku
+
+//   Recipe       Recipe @relation(fields: [IdRecipe], references: [IdRecipe])
+
+//   @@unique([IdRecipe, StepNumber]) // Každý krok má jedinečné pořadí v rámci receptu
+// }
+//  Příklad použití:
+// Pro recept "Rajská omáčka":
+
+// StepNumber	Description
+// 1	Nakrájej cibuli najemno.
+// 2	Osmaž cibuli na oleji dozlatova.
+// 3	Přidej rajčatový protlak…
+
+// Výhody:
+// Lepší UX (možno zobrazit jako číslovaný seznam).
+
+// Umožňuje později přidat další metadata – např. fotku ke kroku, odhadovaný čas, tip apod.
+
+// Chceš do kroků přidat třeba i volitelný obrázek (foto postupu) nebo čas odhadu pro každý krok?
+
+// Řekl/a jsi:
+// Co jsou ty instructions?
+
+// model Recipe {
+//   IdRecipe     Int               @id @default(autoincrement())
+//   IdUser       String            @db.VarChar(25)
+//   Title        String            @db.VarChar(100)
+//   Instructions String
+//   CreatedAt    DateTime          @default(now())
+
+//   User               User               @relation(fields: [IdUser], references: [IdUser])
+//   IngredientGroups   IngredientGroup[]
+//   Ratings            RecipeRating[]
+//   Notes              RecipeNote[]
+//   FavoriteRecipes    FavoriteRecipe[]
+// }
+
+// ChatGPT řekl:
+// Pole Instructions v modelu Recipe obvykle slouží jako textový popis postupu přípravy receptu – celý postup se napíše jako jeden souvislý textový blok.
+
+// Příklad hodnoty v Instructions:
+// txt
+// Zkopírovat
+// Upravit
+// Nakrájej cibuli nadrobno. Osmaž ji na másle dozlatova. Přidej maso, osol a opepři. Dus 20 minut...
+// Ale POZOR:
+// Ve tvém případě jsi už navrhl lepší řešení – máš model RecipeStep, který rozděluje postup na jednotlivé body (kroky), tedy:
+
+// prisma
+// Zkopírovat
+// Upravit
+// model RecipeStep {
+//   IdRecipeStep Int    @id @default(autoincrement())
+//   IdRecipe     Int
+//   StepNumber   Int
+//   Description  String
+//   Recipe       Recipe @relation(fields: [IdRecipe], references: [IdRecipe])
+// }
+// Co z toho vyplývá:
+// Pokud používáš RecipeStep, pak pole Instructions už není potřeba – informace by se duplikovala.
+
+// Můžeš Instructions klidně odstranit, nebo ho přejmenovat a použít jinak (např. na poznámku, shrnutí nebo rychlý přehled).
+
+// Doporučení:
+// Pokud chceš strukturovaný a přehledný postup, používej pouze RecipeStep a smaž pole Instructions:
+
+// prisma
+// Zkopírovat
+// Upravit
+// model Recipe {
+//   IdRecipe     Int               @id @default(autoincrement())
+//   IdUser       String            @db.VarChar(25)
+//   Title        String            @db.VarChar(100)
+//   CreatedAt    DateTime          @default(now())
+
+//   User               User               @relation(fields: [IdUser], references: [IdUser])
+//   IngredientGroups   IngredientGroup[]
+//   RecipeSteps        RecipeStep[]
+//   Ratings            RecipeRating[]
+//   Notes              RecipeNote[]
+//   FavoriteRecipes    FavoriteRecipe[]
+// }
+// Chceš tam ale mít i volitelné krátké shrnutí receptu? Můžeme ho přidat jako např. Summary.
+
+// Řekl/a jsi:
+// Ještě mi přidej do receptu obrázky. Obrázek může vložit každý přihlášený uživatel, takže by tam mělo být idUžoivatele
+
+// ChatGPT řekl:
+// Tady je úprava, která přidává podporu pro více obrázků k jednomu receptu, přičemž každý obrázek je přiřazen konkrétnímu uživateli:
+
+// prisma
+// Zkopírovat
+// Upravit
+// model Recipe {
+//   IdRecipe          Int               @id @default(autoincrement())
+//   IdUser            String            @db.VarChar(25)
+//   Title             String            @db.VarChar(100)
+//   CreatedAt         DateTime          @default(now())
+
+//   User              User              @relation(fields: [IdUser], references: [IdUser])
+//   IngredientGroups  IngredientGroup[]
+//   RecipeSteps       RecipeStep[]
+//   RecipeImages      RecipeImage[]
+//   Ratings           RecipeRating[]
+//   Notes             RecipeNote[]
+//   FavoriteRecipes   FavoriteRecipe[]
+// }
+
+// model RecipeImage {
+//   IdRecipeImage Int      @id @default(autoincrement())
+//   IdRecipe      Int
+//   IdUser        String   @db.VarChar(25)
+//   Url           String   @db.VarChar(255)
+//   UploadedAt    DateTime @default(now())
+
+//   Recipe        Recipe   @relation(fields: [IdRecipe], references: [IdRecipe])
+//   User          User     @relation(fields: [IdUser], references: [IdUser])
+
+//   @@index([IdRecipe])
+//   @@index([IdUser])
+// }
+// Vysvětlení:
+// RecipeImage je nová tabulka pro obrázky.
+
+// Každý obrázek je napojen na recept i na uživatele, který ho nahrál.
+
+// Url bude obsahovat cestu nebo adresu k uloženému obrázku (např. na S3, nebo jako relativní cesta).
+
+// UploadedAt uchovává čas nahrání.
+
+// Přidané indexy zlepší vyhledávání podle receptu nebo uživatele.
+
+// Pokud chceš, mohu navrhnout i správu hlavního obrázku (např. pro zobrazení náhledu receptu). Chceš to?

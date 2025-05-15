@@ -1,0 +1,11 @@
+model RecipeIngredient {
+    IdRecipeIngredient Int   @id @default(autoincrement())
+    IdIngredientGroup  Int
+    IdIngredient       Int
+    IdUnit             Int
+    Quantity           Float
+
+    RecipeIngredientGroup RecipeIngredientGroup @relation(fields: [IdIngredientGroup], references: [IdIngredientGroup])
+    Ingredient            Ingredient            @relation(fields: [IdIngredient], references: [IdIngredient])
+    Unit                  Unit                  @relation(fields: [IdUnit], references: [IdUnit])
+}

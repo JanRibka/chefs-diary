@@ -1,0 +1,8 @@
+model Ingredient {
+    IdIngredient Int    @id @default(autoincrement())
+    Name         String @unique @db.VarChar(100)
+    // CreatedAt    DateTime @default(now())
+    // UpdatedAt    DateTime @updatedAt
+
+    Recipes RecipeIngredient[]
+}

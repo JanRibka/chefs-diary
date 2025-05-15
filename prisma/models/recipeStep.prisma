@@ -1,0 +1,10 @@
+model RecipeStep {
+    IdRecipeStep Int    @id @default(autoincrement())
+    IdRecipe     Int
+    StepNumber   Int // Např. 1, 2, 3...
+    Description  String // Text jednotlivého kroku
+
+    Recipe Recipe @relation(fields: [IdRecipe], references: [IdRecipe])
+
+    @@unique([IdRecipe, StepNumber]) // Každý krok má jedinečné pořadí v rámci receptu
+}

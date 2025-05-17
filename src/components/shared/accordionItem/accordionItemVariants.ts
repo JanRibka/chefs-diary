@@ -1,4 +1,4 @@
-import { tv } from '@heroui/theme';
+import { tv } from "@heroui/theme";
 
 const accordionItemVariants = tv({
   base: [

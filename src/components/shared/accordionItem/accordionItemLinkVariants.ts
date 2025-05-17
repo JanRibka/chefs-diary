@@ -1,11 +1,12 @@
-import { tv } from 'tailwind-variants';
+import { tv } from "tailwind-variants";
 
 export const accordionItemLinkVariants = tv({
   base: [
     "text-sideBarText hover:text-primary",
     "border-sideBarText hover:border-primary",
-    "hover:md:bg-primary/10",
-    "rounded-xl",
+    "hover:md:bg-primary/10 xl:hover:bg-transparent",
+    "xl:hover:bg-gradient-to-r from-gray-200 to-gray-900]",
+    "rounded-xl xl:rounded-none",
     "transition-all",
     "duration-500",
     "ease-linear",
@@ -51,17 +52,18 @@ export const accordionItemLinkVariants = tv({
         "after:rotate-[-135deg]",
         "text-primary",
         "border-primary",
-        "bg-primary/10",
+        "bg-primary/10 xl:bg-transparent",
+        "xl:bg-gradient-to-r from-gray-200 to-gray-900]",
+        "xl:before:w-2.5",
       ],
-      false: "",
-    },
-    sideBarOpened: {
-      true: [],
       false: "",
     },
     active: {
       true: "text-primary",
       false: "",
+    },
+    hideArrow: {
+      true: "after:hidden",
     },
   },
 });

@@ -1,16 +1,18 @@
-import Link from 'next/link';
-import { FiHome } from 'react-icons/fi';
+import Link from "next/link";
+import { HiMiniHome } from "react-icons/hi2";
 
-import Icon from '@/components/shared/icon/Icon';
-import adminRoutes from '@/lib/routes/adminRoutes';
+import Icon from "@/components/shared/icon/Icon";
+import adminRoutes from "@/lib/routes/adminRoutes";
 
 const HomeIcon = () => {
   return (
-    <Link href={adminRoutes.Dashboard}>
-      <Icon>
-        <FiHome fontSize="x-large" />
-      </Icon>
-    </Link>
+    <div className="flex justify-center md:-ml-9 md:w-24 xl:w-44">
+      <Link href={adminRoutes.Dashboard}>
+        <Icon>
+          <HiMiniHome className="text-3xl xl:text-4xl" />
+        </Icon>
+      </Link>
+    </div>
   );
 };
 

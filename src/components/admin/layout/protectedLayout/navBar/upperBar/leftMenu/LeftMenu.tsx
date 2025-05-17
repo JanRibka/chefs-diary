@@ -11,7 +11,7 @@ const LeftMenu = () => {
   return (
     <div className="flex flex-row items-center">
       <HomeIcon />
-      <div className="ml-7 md:hidden xl:block">
+      <div className="ml-7 md:hidden">
         <HamburgerIcon opened={opened} setOpen={setOpen} />
       </div>
     </div>

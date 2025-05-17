@@ -1,19 +1,19 @@
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { HTMLAttributes } from 'react';
-import { IconType } from 'react-icons';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { HTMLAttributes } from "react";
+import { IconType } from "react-icons";
 
-import { RouteValue as AdminRouteValue } from '@/lib/routes/adminRoutes';
-import { RouteValue as WebRouteValue } from '@/lib/routes/webRoutes';
-import { mergeStyles } from '@/lib/utils/styles';
-import { Tooltip } from '@heroui/tooltip';
+import { RouteValue as AdminRouteValue } from "@/lib/routes/adminRoutes";
+import { RouteValue as WebRouteValue } from "@/lib/routes/webRoutes";
+import { mergeStyles } from "@/lib/utils/styles";
+import { Tooltip } from "@heroui/tooltip";
 
-import { useAccordionContext } from '../accordion/AccordionContext';
-import SideBarMenuList from '../sideBarMenuList/SideBarMenuList';
-import { accordionItemLabelIconVariants } from './accordionItemLabelIconVariants';
-import { accordionItemLabelVariants } from './accordionItemLabelVariants';
-import { accordionItemLinkVariants } from './accordionItemLinkVariants';
-import accordionItemVariants from './accordionItemVariants';
+import { useAccordionContext } from "../accordion/AccordionContext";
+import SideBarMenuList from "../sideBarMenuList/SideBarMenuList";
+import { accordionItemLabelIconVariants } from "./accordionItemLabelIconVariants";
+import { accordionItemLabelVariants } from "./accordionItemLabelVariants";
+import { accordionItemLinkVariants } from "./accordionItemLinkVariants";
+import accordionItemVariants from "./accordionItemVariants";
 
 type Props = HTMLAttributes<HTMLLIElement> & {
   label: string;
@@ -56,14 +56,26 @@ export default function AccordionItem({
       )}
       {...restProps}
     >
-      <Tooltip delay={1000} isDisabled={sidebarOpened} content={children}>
+      <Tooltip
+        delay={500}
+        placement="right"
+        isDisabled={!children}
+        classNames={{
+          base: "hidden md:block xl:hidden",
+        }}
+        content={
+          <SideBarMenuList opened={true} bypassMdHidden>
+            {children}
+          </SideBarMenuList>
+        }
+      >
         <Link
           href={routeLink}
           onClick={handleClick}
           className={accordionItemLinkVariants({
             opened: isOpened,
-            sideBarOpened: sidebarOpened,
             active: isActive,
+            hideArrow: !children,
           })}
         >
           {LabelIcon && (
@@ -84,7 +96,9 @@ export default function AccordionItem({
       </Tooltip>
 
       {children && (
-        <SideBarMenuList opened={isOpened}>{children}</SideBarMenuList>
+        <SideBarMenuList opened={isOpened} bypassMdHidden={false}>
+          {children}
+        </SideBarMenuList>
       )}
     </li>
   );

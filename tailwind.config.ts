@@ -1,4 +1,4 @@
-import { heroui } from "@heroui/react";
+import { heroui } from '@heroui/react';
 
 import type { Config } from "tailwindcss";
 
@@ -35,6 +35,8 @@ const config: Config = {
           dark: "rgb(214, 214, 214)",
         },
         dialogBackground: "rgb(238, 238, 238)",
+        sideBarText: "rgb(127, 113, 132)",
+        initial: "initial",
       },
       lineHeight: {
         15: "3.75rem",

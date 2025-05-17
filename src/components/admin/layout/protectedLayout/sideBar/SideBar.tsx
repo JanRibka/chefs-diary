@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { FaRegUser } from "react-icons/fa";
-import { MdDashboard } from "react-icons/md";
+import { FaRegUser } from 'react-icons/fa';
+import { LuLayoutDashboard } from 'react-icons/lu';
 
-import { useSideBarContext } from "@/context/SideBarContext";
-import { Accordion, AccordionItem } from "@heroui/react";
+import Accordion from '@/components/shared/accordion/Accordion';
+import AccordionItem from '@/components/shared/accordionItem/AccordionItem';
+import SideBarMenuListItem from '@/components/shared/sideBarMenuListItem/SideBarMenuListItem';
+import { useSideBarContext } from '@/context/SideBarContext';
+import adminRoutes from '@/lib/routes/adminRoutes';
 
-import NavLinksUser from "./navLinks/user/NavLinksUser";
-import { sideBarVariants } from "./sideBarVariants";
+import { sideBarVariants } from './sideBarVariants';
 
 const SideBar = () => {
   // Sidebar context
@@ -16,24 +17,26 @@ const SideBar = () => {
 
   // Sidebar state
   // TODO: Toto by asi mohlo byt v contextu
-  const [selectedKeys, setSelectedKeys] = useState(new Set(["dashboard"]));
 
   return (
     <aside className={sideBarVariants({ opened })}>
       <div className="my-4 flex w-full h-full">
-        <Accordion
-          variant="bordered"
-          selectedKeys={selectedKeys}
-          onSelectionChange={setSelectedKeys}
-        >
+        <Accordion>
           <AccordionItem
             key="dashboard"
             aria-label="Dashboard"
-            title="Dashboard"
             value="dashboard"
-            startContent={<MdDashboard />}
+            label="Dashboard"
+            labelIcon={LuLayoutDashboard}
+            sidebarOpened={opened}
+            routeLink="#"
           >
-            asfdsdfsdf
+            <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>
+              Test
+            </SideBarMenuListItem>
+            <SideBarMenuListItem routeLink={adminRoutes.LogIn}>
+              Test2
+            </SideBarMenuListItem>
           </AccordionItem>
           {/* <AccordionItem
             actualValue={sideBar.actualValue}

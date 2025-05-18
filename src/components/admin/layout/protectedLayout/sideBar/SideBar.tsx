@@ -40,6 +40,9 @@ const SideBar = () => {
             <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>
               Všichni uživatelé
             </SideBarMenuListItem>
+            <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>
+              Profil uživatele
+            </SideBarMenuListItem>
             <SideBarMenuListItem routeLink={adminRoutes.LogIn}>
               Práva uživatelů
             </SideBarMenuListItem>
@@ -58,6 +61,22 @@ const SideBar = () => {
             </SideBarMenuListItem>
             <SideBarMenuListItem routeLink={adminRoutes.LogIn}>
               Ingredience
+            </SideBarMenuListItem>
+          </AccordionItem>
+          {/* Oprávnění */}
+          <AccordionItem
+            key="roles-permissions"
+            aria-label="Práva a oprávnění"
+            value="roles-permissions"
+            label="Práva a oprávnění"
+            labelIcon={FaDatabase}
+            routeLink="#"
+          >
+            <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>
+              Práva
+            </SideBarMenuListItem>
+            <SideBarMenuListItem routeLink={adminRoutes.LogIn}>
+              Oprávnění
             </SideBarMenuListItem>
           </AccordionItem>
         </Accordion>

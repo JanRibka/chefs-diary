@@ -1,6 +1,6 @@
 "use client";
 
-import { FaUserLarge } from "react-icons/fa6";
+import { FaDatabase, FaUserLarge } from "react-icons/fa6";
 import { RiDashboardFill } from "react-icons/ri";
 
 import Accordion from "@/components/shared/accordion/Accordion";
@@ -19,6 +19,7 @@ const SideBar = () => {
     <aside className={sideBarVariants({ opened })}>
       <div className="flex w-full h-full">
         <Accordion>
+          {/* Dashboard */}
           <AccordionItem
             key="dashboard"
             aria-label="Dashboard"
@@ -28,6 +29,7 @@ const SideBar = () => {
             sidebarOpened={opened}
             routeLink="#"
           />
+          {/* Uživatelé */}
           <AccordionItem
             key="users"
             aria-label="Uživatelé"
@@ -38,10 +40,27 @@ const SideBar = () => {
             routeLink="#"
           >
             <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>
-              Test
+              Všichni uživatelé
             </SideBarMenuListItem>
             <SideBarMenuListItem routeLink={adminRoutes.LogIn}>
-              Test2
+              Práva uživatelů
+            </SideBarMenuListItem>
+          </AccordionItem>
+          {/* Data webu */}
+          <AccordionItem
+            key="web-data"
+            aria-label="Data webu"
+            value="web-data"
+            label="Data webu"
+            labelIcon={FaDatabase}
+            sidebarOpened={opened}
+            routeLink="#"
+          >
+            <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>
+              Jednotky
+            </SideBarMenuListItem>
+            <SideBarMenuListItem routeLink={adminRoutes.LogIn}>
+              Ingredience
             </SideBarMenuListItem>
           </AccordionItem>
         </Accordion>

@@ -1,8 +1,8 @@
-import { tv } from 'tailwind-variants';
+import { tv } from "tailwind-variants";
 
 export const accordionItemLabelIconVariants = tv({
   base: [
-    "text-lg md:text-[1.375rem] xl:text-[1.87rem]",
+    "text-lg md:text-[1.375rem] xl:text-[1.87rem] 2xl:text-[2rem]",
     "leading-none",
     "inline-block xl:flex",
     "align-middle",
@@ -18,11 +18,4 @@ export const accordionItemLabelIconVariants = tv({
     "xl:mx-auto",
     "xl:items-center",
   ],
-  variants: {
-    sideBarOpened: {
-      true: [],
-      false: "",
-    },
-  },
-  defaultVariants: { sideBarOpened: false },
 });

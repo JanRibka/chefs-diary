@@ -26,7 +26,6 @@ const SideBar = () => {
             value="dashboard"
             label="Dashboard"
             labelIcon={RiDashboardFill}
-            sidebarOpened={opened}
             routeLink="#"
           />
           {/* Uživatelé */}
@@ -36,7 +35,6 @@ const SideBar = () => {
             value="users"
             label="Uživatelé"
             labelIcon={FaUserLarge}
-            sidebarOpened={opened}
             routeLink="#"
           >
             <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>
@@ -53,7 +51,6 @@ const SideBar = () => {
             value="web-data"
             label="Data webu"
             labelIcon={FaDatabase}
-            sidebarOpened={opened}
             routeLink="#"
           >
             <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>

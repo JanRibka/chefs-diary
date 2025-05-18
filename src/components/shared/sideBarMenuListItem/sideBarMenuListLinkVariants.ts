@@ -2,7 +2,7 @@ import { tv } from "tailwind-variants";
 
 const sideBarMenuListLinkVariants = tv({
   base: [
-    "text-sm",
+    "text-sm 2xl:text-base",
     "py-2",
     "pr-2 md:pr-0",
     "pl-14 md:pl-0",

@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants';
+import { tv } from "tailwind-variants";
 
 export const accordionItemLabelVariants = tv({
   base: [
@@ -8,10 +8,4 @@ export const accordionItemLabelVariants = tv({
     "md:hidden xl:inline-block",
     "xl:mt-[0.3125rem]",
   ],
-  variants: {
-    sideBarOpened: {
-      true: "",
-      false: "",
-    },
-  },
 });

@@ -6,7 +6,7 @@ import adminRoutes from "@/lib/routes/adminRoutes";
 
 const HomeIcon = () => {
   return (
-    <div className="flex justify-center md:-ml-9 md:w-24 xl:w-44 transition-all duration-200 ease-linear">
+    <div className="flex justify-center md:-ml-9 md:w-24 xl:w-40 2xl:w-44 transition-all duration-200 ease-linear">
       <Link href={adminRoutes.Dashboard}>
         <Icon>
           <HiMiniHome className="text-3xl xl:text-4xl" />

@@ -18,7 +18,6 @@ import accordionItemVariants from "./accordionItemVariants";
 type Props = HTMLAttributes<HTMLLIElement> & {
   label: string;
   labelIcon?: IconType;
-  sidebarOpened: boolean;
   value: string;
   routeLink: WebRouteValue | AdminRouteValue | "#";
 };
@@ -26,7 +25,6 @@ type Props = HTMLAttributes<HTMLLIElement> & {
 export default function AccordionItem({
   children,
   className,
-  sidebarOpened,
   label,
   labelIcon: LabelIcon,
   value,
@@ -50,10 +48,7 @@ export default function AccordionItem({
 
   return (
     <li
-      className={mergeStyles(
-        className,
-        accordionItemVariants({ opened: isOpened })
-      )}
+      className={mergeStyles(className, accordionItemVariants({}))}
       {...restProps}
     >
       <Tooltip
@@ -79,19 +74,9 @@ export default function AccordionItem({
           })}
         >
           {LabelIcon && (
-            <LabelIcon
-              className={accordionItemLabelIconVariants({
-                sideBarOpened: sidebarOpened,
-              })}
-            />
+            <LabelIcon className={accordionItemLabelIconVariants({})} />
           )}
-          <span
-            className={accordionItemLabelVariants({
-              sideBarOpened: sidebarOpened,
-            })}
-          >
-            {label}
-          </span>
+          <span className={accordionItemLabelVariants({})}>{label}</span>
         </Link>
       </Tooltip>
 

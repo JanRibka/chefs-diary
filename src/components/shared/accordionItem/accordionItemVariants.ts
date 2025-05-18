@@ -11,12 +11,6 @@ const accordionItemVariants = tv({
     "list-none",
     "list-image-[initial]",
   ],
-  variants: {
-    opened: {
-      true: [],
-      false: [],
-    },
-  },
 });
 
 export default accordionItemVariants;

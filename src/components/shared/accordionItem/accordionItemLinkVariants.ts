@@ -14,7 +14,7 @@ export const accordionItemLinkVariants = tv({
     "inline-block",
     "py-3.5 md:py-[1.125rem]",
     "px-6 md:px-3.5",
-    "text-[0.9375rem]",
+    "text-[0.9375rem] 2xl:text-base",
     "relative",
     "md:text-center",
     'xl:before:content-[""]',

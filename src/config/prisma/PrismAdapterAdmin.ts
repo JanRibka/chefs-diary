@@ -57,7 +57,13 @@ export default function PrismaAdapterAdmin(
       return;
     },
     async createSession(session) {
-      return await p.sessionAdmin.create({ data: session });
+      return await p.sessionAdmin.create({
+        data: {
+          ...session,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ipAddress: (session as any).ipAddress ?? "",
+        },
+      });
     },
     async getSessionAndUser(sessionToken) {
       const userAndSession = await p.sessionAdmin.findUnique({

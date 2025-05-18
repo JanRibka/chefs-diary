@@ -2,6 +2,10 @@ const adminRoutes = {
   LogIn: "/admin/prihlaseni",
   ForgottenPassword: "/admin/zapomenute-heslo",
   Dashboard: "/admin",
+  AllUsers: "/admin/vsichni-uzivatele",
+  UserProfile: "/admin/profil-uzivatele",
+  Units: "/admin/jednotky",
+  Ingredients: "/admin/ingredience",
 } as const;
 
 export default adminRoutes;

@@ -26,7 +26,7 @@ const SideBar = () => {
             value="dashboard"
             label="Dashboard"
             labelIcon={RiDashboardFill}
-            routeLink="#"
+            routeLink={adminRoutes.Dashboard}
           />
           {/* Uživatelé */}
           <AccordionItem
@@ -37,10 +37,10 @@ const SideBar = () => {
             labelIcon={FaUserLarge}
             routeLink="#"
           >
-            <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>
+            <SideBarMenuListItem routeLink={adminRoutes.AllUsers}>
               Všichni uživatelé
             </SideBarMenuListItem>
-            <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>
+            <SideBarMenuListItem routeLink={adminRoutes.UserProfile}>
               Profil uživatele
             </SideBarMenuListItem>
             <SideBarMenuListItem routeLink={adminRoutes.LogIn}>
@@ -56,10 +56,10 @@ const SideBar = () => {
             labelIcon={FaDatabase}
             routeLink="#"
           >
-            <SideBarMenuListItem routeLink={adminRoutes.Dashboard}>
+            <SideBarMenuListItem routeLink={adminRoutes.Units}>
               Jednotky
             </SideBarMenuListItem>
-            <SideBarMenuListItem routeLink={adminRoutes.LogIn}>
+            <SideBarMenuListItem routeLink={adminRoutes.Ingredients}>
               Ingredience
             </SideBarMenuListItem>
           </AccordionItem>

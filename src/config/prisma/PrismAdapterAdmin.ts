@@ -1,6 +1,6 @@
 import type { Adapter, AdapterSession, AdapterUser } from "next-auth/adapters";
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 export default function PrismaAdapterAdmin(
   prisma: PrismaClient | ReturnType<PrismaClient["$extends"]>
@@ -86,7 +86,7 @@ export default function PrismaAdapterAdmin(
         name: userInfo?.UserName,
         email: userInfo?.Email ?? "",
         emailVerified: userInfo?.EmailVerifiedAt ?? new Date(),
-        image: userInfo?.Image,
+        image: userInfo?.ImageUrl,
       };
 
       const session: AdapterSession = {

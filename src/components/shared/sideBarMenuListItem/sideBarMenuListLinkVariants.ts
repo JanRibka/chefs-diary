@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants";
+import { tv } from '@heroui/theme';
 
 const sideBarMenuListLinkVariants = tv({
   base: [

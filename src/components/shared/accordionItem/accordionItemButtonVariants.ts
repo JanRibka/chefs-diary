@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants";
+import { tv } from '@heroui/theme';
 
 export const accordionItemButtonVariants = tv({
   base: "flex flex-row items-center w-full text-md xl:text-lg px-2 py-3 rounded-lg transition-all duration-500 hover:text-primary",

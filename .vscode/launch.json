@@ -28,10 +28,11 @@
     },
     {
       "name": "Next.js: debug full stack",
-      "type": "node",
+      "type": "node-terminal",
       "request": "launch",
+      "command": "npm run dev",
       "program": "${workspaceFolder}/node_modules/.bin/next",
-      "runtimeArgs": ["--inspect"],
+      // "runtimeArgs": ["--inspect"],
       "skipFiles": ["<node_internals>/**"],
       "serverReadyAction": {
         "action": "debugWithEdge",

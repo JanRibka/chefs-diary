@@ -209,6 +209,57 @@ export async function updateUserByIdUser(
   });
 }
 
+/**
+ * Gets all user permissions
+ * @param idUser User Id
+ * @returns {Promise<number[]>}
+ */
+export async function getPermissionsByIdUser(
+  idUser: string
+): Promise<number[]> {
+  const userPermissions = await prisma.user.findMany({
+    where: { IdUser: idUser },
+    select: {
+      UserPermissionOverride: {
+        select: {
+          Permission: true,
+        },
+      },
+      UserRole: {
+        select: {
+          UserRoleType: {
+            select: {
+              RolePermission: {
+                select: {
+                  Permission: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const rolePermissions = userPermissions?.[0]?.UserRole.flatMap(
+    (r) => r.UserRoleType.RolePermission
+  ).map((rp) => rp.Permission);
+
+  const overridePermissions = userPermissions?.[0]?.UserPermissionOverride.map(
+    (up) => up.Permission
+  );
+
+  const allPermissions = [
+    ...(rolePermissions || []),
+    ...(overridePermissions || []),
+  ];
+
+  // Optionally filter out duplicates based on IdPermission
+  return Array.from(
+    new Map(allPermissions.map((p) => [p.IdPermission, p.Value])).values()
+  );
+}
+
 export async function getAllUsersPaged() {
   //Claude
   //   // Získání všech uživatelů stránkovaně s počtem úspěšných a neúspěšných přihlášení

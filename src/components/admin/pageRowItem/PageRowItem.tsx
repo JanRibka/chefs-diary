@@ -4,17 +4,14 @@ import { mergeStyles } from "@/lib/utils/styles";
 
 type Props = HTMLAttributes<HTMLDivElement> & {};
 
-export default function PageTitle({
+export default function PageRowItem({
   className,
   children,
   ...restProps
 }: Props) {
   return (
     <div
-      className={mergeStyles(
-        "px-[1.875rem] py-[0.9375rem] mb-[1.875rem] mt-0 mx-0 bg-white rounded-lg text-sm md:text-base xl:text-lg font-bold",
-        className
-      )}
+      className={mergeStyles("max-w-full mt-7 mx-7", className)}
       {...restProps}
     >
       {children}

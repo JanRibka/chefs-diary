@@ -6,6 +6,7 @@ import Credentials, {
 import Google from "next-auth/providers/google";
 
 import { prisma } from "@/lib/prisma";
+import { getPermissionsByIdUser } from "@/lib/repositories/userRepository";
 import { logInAdmin, verifyUser } from "@/lib/services/authService";
 
 import PrismaAdapterAdmin from "../prisma/PrismAdapterAdmin";
@@ -31,7 +32,7 @@ const credentials: CredentialsConfig = {
 
     return {
       ...user,
-      persistLogin: persistLogin,
+      persistLogin,
     };
   },
 };
@@ -46,9 +47,19 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.idUser = user.id;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         token.persistLogin = (user as any).persistLogin;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        token.permissions = (user as any).permissions;
       }
-
+      debugger;
       return token;
+    },
+
+    async session({ session }) {
+      const permissions = await getPermissionsByIdUser(session.user.id);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (session.user as any).permissions = permissions;
+      return session;
     },
   },
 

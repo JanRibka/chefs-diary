@@ -13,6 +13,7 @@ import { validateLogInForm } from "@/lib/validations/validations/shared/logIn/va
 import EmailNotVerified from "../../../shared/auth/logIn/EmailNotVerified";
 import LogInForm from "../../../shared/auth/logIn/LogInForm";
 
+//TODO: I když tam mam replace, tak bych to měl pro jistotu dát redirect na dashbord pokud jsem prihlaseny
 export default function LogIn() {
   const isFirstRender = useIsFirstRender();
 

@@ -1,5 +1,5 @@
 // import AllUsersTable from "@/components/admin/allUsersTable/AllUsersTable";
-import PageRowItem from "@/components/admin/pageRowItem/PageRowItem";
+import PageRowItem from "@/components/admin/pageContentSection/PageContentSection";
 
 // import getAllUsers from "@/lib/services/usersService";
 

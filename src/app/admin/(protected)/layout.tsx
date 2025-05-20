@@ -25,16 +25,16 @@ export default async function ProtectedLayout({ children }: Props) {
       </SetUser>
     );
   }
-  //TODO: Asi by tu někde mel byt main tag i section bych měl použávat. I nav bych měl použít na navigaci. Hlavni nadpisy H1 a tak
+
   return (
     <SetUser user={session.user as AdapterUser}>
       <div className="flex flex-col h-screen">
         <NavBar />
         <SideBar />
         <div className="flex-1 ml-0 md:ml-24 xl:ml-40 2xl:ml-44 transition-all duration-200 ease-linear overflow-auto">
-          <div className="pt-[0.938rem] md:pt-[1.875rem] 2xl:pt-10 px-[0.938rem] md:px-[1.875rem] 2xl:px-10 mx-auto bg-pageBackground h-full overflow-hidden">
+          <main className="pt-[0.938rem] md:pt-[1.875rem] 2xl:pt-10 px-[0.938rem] md:px-[1.875rem] 2xl:px-10 mx-auto bg-pageBackground h-full overflow-hidden">
             {children}
-          </div>
+          </main>
         </div>
       </div>
     </SetUser>

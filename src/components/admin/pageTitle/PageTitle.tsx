@@ -2,7 +2,7 @@ import { HTMLAttributes } from "react";
 
 import { mergeStyles } from "@/lib/utils/styles";
 
-type Props = HTMLAttributes<HTMLDivElement> & {};
+type Props = HTMLAttributes<HTMLHeadingElement> & {};
 
 export default function PageTitle({
   className,
@@ -10,7 +10,7 @@ export default function PageTitle({
   ...restProps
 }: Props) {
   return (
-    <div
+    <h1
       className={mergeStyles(
         "px-[1.875rem] py-[0.9375rem] mb-[1.875rem] mt-0 mx-0 bg-white rounded-lg text-sm md:text-base xl:text-lg font-bold",
         className
@@ -18,6 +18,6 @@ export default function PageTitle({
       {...restProps}
     >
       {children}
-    </div>
+    </h1>
   );
 }

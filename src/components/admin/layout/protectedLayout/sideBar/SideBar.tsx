@@ -17,7 +17,10 @@ const SideBar = () => {
 
   return (
     <aside className={sideBarVariants({ opened })}>
-      <div className="flex w-full h-full">
+      <nav
+        aria-label="Navigace v postranním panelu"
+        className="flex w-full h-full"
+      >
         <Accordion>
           {/* Dashboard */}
           <AccordionItem
@@ -80,7 +83,7 @@ const SideBar = () => {
             </SideBarMenuListItem>
           </AccordionItem>
         </Accordion>
-      </div>
+      </nav>
     </aside>
   );
 };

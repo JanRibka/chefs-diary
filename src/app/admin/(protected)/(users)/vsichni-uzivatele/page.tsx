@@ -1,3 +1,14 @@
+import AllUsersTable from "@/components/admin/allUsersTable/AllUsersTable";
+import PageRowItem from "@/components/admin/pageRowItem/PageRowItem";
+import getAllUsers from "@/lib/services/usersService";
+
 export default function AllUsersPage() {
-  return <>sdfdsf</>;
+  const usersPromise = getAllUsers();
+
+  return (
+    <PageRowItem>
+      {/* <AllUsersTable usersPromise={} /> */}
+      <div>dsf</div>
+    </PageRowItem>
+  );
 }

@@ -1,24 +1,33 @@
-import { compare } from 'bcrypt';
-import { AdapterUser } from 'next-auth/adapters';
-import { JWTEncodeParams } from 'next-auth/jwt';
+import { compare } from "bcrypt";
+import { AdapterUser } from "next-auth/adapters";
+import { JWTEncodeParams } from "next-auth/jwt";
 
-import { getCookieAsync } from '@/lib/services/cookieServerService';
-import { User } from '@prisma/client';
+import { getCookieAsync } from "@/lib/services/cookieServerService";
+import { User } from "@prisma/client";
 
-import AuthenticationModeEnum from '../enums/AuthenticationModeEnum';
-import UserRoleTypeEnum from '../enums/UserRoleTypeEnum';
-import AuthError from '../errors/AuthError';
-import { sendSignUpEmail } from '../mail/signUpEmail';
+import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";
+import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
+import AuthError from "../errors/AuthError";
+import { sendSignUpEmail } from "../mail/signUpEmail";
 import {
-    deleteSessionAdminByIdUser, deleteSessionByIdUser
-} from '../repositories/sessionRepository';
+  deleteSessionAdminByIdUser,
+  deleteSessionByIdUser,
+} from "../repositories/sessionRepository";
 import {
-    createUser, getFailedLoginAttemptsCountByIdUser, getUserByEmail, getUserInfoByIdUser,
-    getUserRoleValuesByIdUser, logLoginAttempt, updateUserByIdUser
-} from '../repositories/userRepository';
+  createUser,
+  getFailedLoginAttemptsCountByIdUser,
+  getUserByEmail,
+  getUserInfoByIdUser,
+  getUserRoleValuesByIdUser,
+  logLoginAttempt,
+  updateUserByIdUser,
+} from "../repositories/userRepository";
 import {
-    createSession, createSessionAdmin, getSessionAdminExists, getSessionExists
-} from './sessionService';
+  createSession,
+  createSessionAdmin,
+  getSessionAdminExists,
+  getSessionExists,
+} from "./sessionService";
 
 /**
  * Register user

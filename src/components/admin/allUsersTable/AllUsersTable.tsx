@@ -1,5 +1,6 @@
-import { use } from "react";
+"use client";
 
+import useGetAllUserPaginated from "@/lib/hooks/apiHooks/useGetAllUserPaginated";
 import {
   Table,
   TableBody,
@@ -11,12 +12,8 @@ import {
 
 import columns from "./columns";
 
-type Props = {
-  usersPromise: Promise<{ id: string; name: string }[]>;
-};
-
-export default function AllUsersTable({ usersPromise }: Props) {
-  const users = use(usersPromise);
+export default function AllUsersTable() {
+  const { data } = useGetAllUserPaginated(1, 50);
 
   return (
     <Table aria-label="Všichni uživatelé">
@@ -30,10 +27,10 @@ export default function AllUsersTable({ usersPromise }: Props) {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={users}>
+      <TableBody items={data.data}>
         {(item) => (
-          <TableRow key={item.id}>
-            {() => <TableCell>{item.name}</TableCell>}
+          <TableRow key={item.idUser}>
+            {() => <TableCell>{item.userInfo.userName}</TableCell>}
           </TableRow>
         )}
       </TableBody>

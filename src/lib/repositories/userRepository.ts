@@ -1,5 +1,7 @@
 import type { User, UserInfo, UserLoginHistory } from "@prisma/client";
 
+import { PaginatedDTO } from "../dTOs/admin/shared/PaginatedDTO";
+import UserWithStatsDTO from "../dTOs/admin/UserWithStatsDTO";
 import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";
 import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
 import { prisma } from "../prisma";
@@ -260,205 +262,89 @@ export async function getPermissionsByIdUser(
   );
 }
 
-export async function getAllUsersPaged() {
-  //Claude
-  //   // Získání všech uživatelů stránkovaně s počtem úspěšných a neúspěšných přihlášení
-  // // a vynecháním citlivých dat s použitím cache
-  // import { PrismaClient, Prisma } from '@prisma/client';
-  // export async function getUsers({
-  //   page = 1,
-  //   perPage = 10,
-  //   orderBy = 'createdAt',
-  //   orderDirection = 'desc',
-  // }: {
-  //   page?: number;
-  //   perPage?: number;
-  //   orderBy?: string;
-  //   orderDirection?: 'asc' | 'desc';
-  // }) {
-  //   const prisma = new PrismaClient();
-  //   // Výpočet offsetu pro stránkování
-  //   const skip = (page - 1) * perPage;
-  //   try {
-  //     // Získání uživatelů s jejich informacemi
-  //     const [users, totalCount] = await prisma.$transaction([
-  //       prisma.user.findMany({
-  //         skip,
-  //         take: perPage,
-  //         select: {
-  //           IdUser: true,
-  //           IsDisabled: true,
-  //           WebLoginRestrictedUntil: true,
-  //           AdminLoginRestrictedUntil: true,
-  //           TwoFactor: true,
-  //           UserInfo: {
-  //             select: {
-  //               UserName: true,
-  //               Email: true,
-  //               EmailVerifiedAt: true,
-  //               Phone: true,
-  //               Image: true,
-  //               FirstName: true,
-  //               LastName: true,
-  //               CreatedAt: true,
-  //               UpdatedAt: true,
-  //             },
-  //           },
-  //           // Agregace pro počet úspěšných přihlášení
-  //           _count: {
-  //             select: {
-  //               UserLoginHistory: true,
-  //             },
-  //           },
-  //         },
-  //         orderBy: {
-  //           UserInfo: {
-  //             [orderBy]: orderDirection,
-  //           },
-  //         },
-  //         // Použití cache pro zlepšení výkonu
-  //         // cache: {
-  //         //   ttl: 60, // 60 sekund TTL
-  //         // },
-  //       }),
-  //       prisma.user.count(),
-  //     ]);
-  //     // Získání počtu úspěšných a neúspěšných přihlášení pro každého uživatele
-  //     const usersWithLoginCounts = await Promise.all(
-  //       users.map(async (user) => {
-  //         const [successfulLogins, failedLogins] = await Promise.all([
-  //           prisma.userLoginHistory.count({
-  //             where: {
-  //               IdUser: user.IdUser,
-  //               LoginSuccessful: true,
-  //             },
-  //             // cache: {
-  //             //   ttl: 60, // 60 sekund TTL
-  //             // },
-  //           }),
-  //           prisma.userLoginHistory.count({
-  //             where: {
-  //               IdUser: user.IdUser,
-  //               LoginSuccessful: false,
-  //             },
-  //             // cache: {
-  //             //   ttl: 60, // 60 sekund TTL
-  //             // },
-  //           }),
-  //         ]);
-  //         return {
-  //           ...user,
-  //           successfulLogins,
-  //           failedLogins,
-  //         };
-  //       })
-  //     );
-  //     return {
-  //       users: usersWithLoginCounts,
-  //       pagination: {
-  //         total: totalCount,
-  //         page,
-  //         perPage,
-  //         totalPages: Math.ceil(totalCount / perPage),
-  //       },
-  //     };
-  //   } catch (error) {
-  //     console.error('Chyba při načítání uživatelů:', error);
-  //     throw error;
-  //   } finally {
-  //     await prisma.$disconnect();
-  //   }
-  // }
-  // // Použití (příklad)
-  // // const result = await getUsers({ page: 1, perPage: 10 });
-  // // console.log(result);
-  // // Poznámka: Odkomentujte řádky s "cache: { ttl: 60 }" po aktualizaci na Prisma verzi,
-  // // která podporuje cachování (např. s Accelerate nebo po implementaci cachování v Prisma 5+)
-  // Chat GPT
-  //   import { prisma } from '../lib/prisma'; // nebo odkud importuješ klienta
-  // import NodeCache from 'node-cache';
-  // const cache = new NodeCache({ stdTTL: 60 }); // cache na 60 sekund
-  // type PaginatedUsers = {
-  //   users: {
-  //     IdUser: string;
-  //     IsDisabled: boolean | null;
-  //     TwoFactor: boolean | null;
-  //     UserInfo: {
-  //       UserName: string | null;
-  //       Email: string;
-  //       FirstName: string | null;
-  //       LastName: string | null;
-  //     } | null;
-  //     loginStats: {
-  //       successful: number;
-  //       failed: number;
-  //     };
-  //   }[];
-  //   totalCount: number;
-  // };
-  // export async function getUsersPaginated(page = 1, pageSize = 10): Promise<PaginatedUsers> {
-  //   const cacheKey = `users-page-${page}-size-${pageSize}`;
-  //   const cached = cache.get<PaginatedUsers>(cacheKey);
-  //   if (cached) return cached;
-  //   const skip = (page - 1) * pageSize;
-  //   const [users, totalCount] = await Promise.all([
-  //     prisma.user.findMany({
-  //       skip,
-  //       take: pageSize,
-  //       select: {
-  //         IdUser: true,
-  //         IsDisabled: true,
-  //         TwoFactor: true,
-  //         UserInfo: {
-  //           select: {
-  //             UserName: true,
-  //             Email: true,
-  //             FirstName: true,
-  //             LastName: true
-  //           }
-  //         },
-  //         UserLoginHistory: {
-  //           select: {
-  //             LoginSuccessful: true
-  //           }
-  //         }
-  //       }
-  //     }).then((users) =>
-  //       users.map((user) => {
-  //         const successful = user.UserLoginHistory.filter(h => h.LoginSuccessful).length;
-  //         const failed = user.UserLoginHistory.filter(h => !h.LoginSuccessful).length;
-  //         return {
-  //           IdUser: user.IdUser,
-  //           IsDisabled: user.IsDisabled,
-  //           TwoFactor: user.TwoFactor,
-  //           UserInfo: user.UserInfo,
-  //           loginStats: {
-  //             successful,
-  //             failed
-  //           }
-  //         };
-  //       })
-  //     ),
-  //     prisma.user.count()
-  //   ]);
-  //   const result = { users, totalCount };
-  //   cache.set(cacheKey, result);
-  //   return result;
-  // }
-  //   await prisma.user.findMany({
-  //   cacheStrategy: {
-  //     ttl: 60, // Cache na 60 sekund
-  //     swr: 30   // Po 30 sekundách se může použít stale verze a revalidovat
-  //   },
-  //   select: {
-  //     IdUser: true,
-  //     IsDisabled: true,
-  //     UserInfo: {
-  //       select: {
-  //         Email: true,
-  //         FirstName: true
-  //       }
-  //     }
-  //   }
-  // });
+/**
+ * Get all users with statistics paginated
+ * @param page Page number
+ * @param pageSize Page size
+ * @returns {Promise<PaginatedDTO<UserWithStatsDTO>>}
+ */
+export async function getAllUsersPaginated(
+  page: number,
+  pageSize: number
+): Promise<PaginatedDTO<UserWithStatsDTO>> {
+  //TODO: Otestovat, jestli jdou data opravdu z cache
+  //TODO: Pridat order by, filtrov8n9 a podobne veci
+  const skip = (page - 1) * pageSize;
+
+  const [users, totalCount] = await Promise.all([
+    prisma.user
+      .findMany({
+        cacheStrategy: {
+          ttl: 900,
+          swr: 300,
+          tags: ["all_users"],
+        },
+        skip,
+        take: pageSize,
+        select: {
+          IdUser: true,
+          IsDisabled: true,
+          WebLoginRestrictedUntil: true,
+          AdminLoginRestrictedUntil: true,
+          TwoFactor: true,
+          UserInfo: {
+            select: {
+              UserName: true,
+              EmailVerifiedAt: true,
+              ImageUrl: true,
+              CreatedAt: true,
+            },
+          },
+          UserLoginHistory: {
+            select: {
+              LoginSuccessful: true,
+              LoginAttemptDate: true,
+            },
+          },
+        },
+      })
+      .then((users) =>
+        users.map((user) => {
+          const successful = user.UserLoginHistory.filter(
+            (h) => h.LoginSuccessful
+          ).length;
+          const failed = user.UserLoginHistory.filter(
+            (h) => !h.LoginSuccessful
+          ).length;
+          const lastSuccessfulLogIn = user.UserLoginHistory?.filter(
+            (h) => h.LoginSuccessful
+          )?.sort(
+            (a, b) =>
+              b.LoginAttemptDate.getTime() - a.LoginAttemptDate.getTime()
+          )[0]?.LoginAttemptDate;
+
+          return {
+            idUser: user.IdUser,
+            isDisabled: user.IsDisabled,
+            webLoginRestrictedUntil: user.WebLoginRestrictedUntil,
+            adminLoginRestrictedUntil: user.AdminLoginRestrictedUntil,
+            twoFactor: user.TwoFactor,
+            userInfo: {
+              userName: user.UserInfo?.UserName ?? "",
+              emailVerifiedAt: user.UserInfo?.EmailVerifiedAt ?? null,
+              imageUrl: user.UserInfo?.ImageUrl ?? null,
+              createdAt: user.UserInfo?.CreatedAt ?? null,
+            },
+            loginStats: {
+              successful,
+              failed,
+              lastSuccessfulLogIn,
+            },
+          } as UserWithStatsDTO;
+        })
+      ),
+    prisma.user.count(),
+  ]);
+
+  return { data: users, totalCount, page, pageSize };
 }

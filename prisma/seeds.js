@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+// import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
@@ -403,6 +404,29 @@ async function main() {
       });
     }
   }
+
+  // Naplní tabulku pro 1000 uživatelů
+  // for (let i = 0; i < 1000; i++) {
+  //   await prisma.user.create({
+  //     data: {
+  //       Password: faker.internet.password(12),
+  //       IsDisabled: faker.datatype.boolean(),
+  //       TwoFactor: faker.datatype.boolean(),
+
+  //       UserInfo: {
+  //         create: {
+  //           UserName: faker.internet.username(),
+  //           Email: faker.internet.email(),
+  //           Phone: faker.phone.number(),
+  //           FirstName: faker.firstName,
+  //           LastName: faker.lastName,
+  //           ImageUrl: faker.image.avatar(),
+  //           EmailVerifiedAt: faker.date.past(),
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 }
 
 main()

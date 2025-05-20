@@ -57,6 +57,7 @@ export const resendVerificationLinkAction = async (
       },
     };
   } catch (error) {
+    //TODO: Pouzit funkci pro nacitani erroru
     if (error instanceof ValidationError) {
       const errorMessage = error.message as keyof ErrorLibraryType;
 
@@ -69,7 +70,7 @@ export const resendVerificationLinkAction = async (
         },
       };
     }
-
+    //TODO: Pouzit funkci pro nacitani erroru
     const errorMessage =
       error instanceof Error ? error.stack || error.message : String(error);
 

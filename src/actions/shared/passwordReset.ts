@@ -55,6 +55,7 @@ export const passwordResetAction = async (
       },
     };
   } catch (error) {
+    //TODO: Pouzit funkci pro nacitani erroru
     const errorMessage =
       error instanceof Error ? error.stack || error.message : String(error);
 

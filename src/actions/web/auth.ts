@@ -63,6 +63,7 @@ export const signUpAction = async (
       },
     };
   } catch (error) {
+    //TODO: Pouzit funkci pro nacitani erroru
     const errorMessage =
       error instanceof Error ? error.stack || error.message : String(error);
 
@@ -122,6 +123,7 @@ export const logInAction = async (
       },
     };
   } catch (error) {
+    //TODO: Pouzit funkci pro nacitani erroru
     if (error instanceof AuthError) {
       const errorMessage = error.message as keyof ErrorLibraryType;
       let generalState = LogInStatusEnum.UNDEFINED;
@@ -141,7 +143,7 @@ export const logInAction = async (
         },
       };
     }
-
+    //TODO: Pouzit funkci pro nacitani erroru
     const errorMessage =
       error instanceof Error ? error.stack || error.message : String(error);
 

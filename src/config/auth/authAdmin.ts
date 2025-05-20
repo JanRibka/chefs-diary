@@ -50,7 +50,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         token.permissions = (user as any).permissions;
       }
-      debugger;
+
       return token;
     },
 

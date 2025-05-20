@@ -4,10 +4,12 @@ import { signIn, signOut } from "@/config/auth/authAdmin";
 import logInActionValidator from "@/lib/actionValidators/auth/logInActionValidator";
 import LogInStatusEnum from "@/lib/enums/LogInStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
-import AuthError from "@/lib/errors/AuthError";
-import logger from "@/lib/services/loggerService";
 import FormActionState from "@/lib/types/actions/FormActionState";
 import ErrorLibraryType from "@/lib/types/errorLibrary/ErrorLibraryType";
+import {
+  getAuthErrorFromError,
+  getErrorMessageFromError,
+} from "@/lib/utils/error";
 import {
   LogInFormErrorType,
   LogInFormType,
@@ -57,8 +59,10 @@ export const logInAction = async (
       },
     };
   } catch (error) {
-    if (error instanceof AuthError) {
-      const errorMessage = error.message as keyof ErrorLibraryType;
+    const { errorMessage, isAuthError } =
+      getAuthErrorFromError<ErrorLibraryType>(error);
+
+    if (isAuthError) {
       let generalState = LogInStatusEnum.UNDEFINED;
       let generalErrorMessage = getErrorTextByKey(errorMessage);
 
@@ -77,10 +81,7 @@ export const logInAction = async (
       };
     }
 
-    const errorMessage =
-      error instanceof Error ? error.stack || error.message : String(error);
-
-    logger.error(errorMessage);
+    getErrorMessageFromError(error, true);
 
     return {
       generalState: LogInStatusEnum.UNDEFINED,

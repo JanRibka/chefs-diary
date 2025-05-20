@@ -18,7 +18,7 @@ export default async function ProtectedLayout({ children }: Props) {
     const returnTo = headersList.get("x-pathname") ?? adminRoutes.Dashboard;
 
     return (
-      <SetUser user={undefined}>
+      <SetUser user={null}>
         <ClientReplace
           path={`${adminRoutes.LogIn}?returnTo=${encodeURIComponent(returnTo)}`}
         />

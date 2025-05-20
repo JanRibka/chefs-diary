@@ -6,7 +6,7 @@ import { ReactNode, useEffect } from "react";
 import { useUserContext } from "@/context/UserContext";
 
 type Props = {
-  user: AdapterUser | undefined;
+  user: AdapterUser | null;
   children: ReactNode;
 };
 
@@ -14,7 +14,7 @@ export default function SetUser({ user, children }: Props) {
   const { setUser } = useUserContext();
 
   useEffect(() => {
-    setUser(user ?? null);
+    setUser(user);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 

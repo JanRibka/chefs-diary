@@ -8,8 +8,9 @@ import webRoutes from '../routes/webRoutes';
 
 export async function getProtectedSessionAdmin(returnPathName: boolean = true) {
   const session = await authAdmin();
+  const isSession = !!session?.user?.id;
 
-  if (!session?.user?.id) {
+  if (!isSession) {
     let pathname = "";
 
     if (returnPathName) {
@@ -18,14 +19,16 @@ export async function getProtectedSessionAdmin(returnPathName: boolean = true) {
     }
 
     return {
-      session: session,
+      session,
+      isSession,
       redirectPath: `${adminRoutes.LogIn}?returnTo=${encodeURIComponent(
         pathname
       )}`,
     };
   } else {
     return {
-      session: session,
+      session,
+      isSession,
       redirectPath: "",
     };
   }
@@ -33,8 +36,9 @@ export async function getProtectedSessionAdmin(returnPathName: boolean = true) {
 
 export async function getProtectedSessionWeb(returnPathName: boolean = true) {
   const session = await authWeb();
+  const isSession = !!session?.user?.id;
 
-  if (!session?.user?.id) {
+  if (!isSession) {
     let pathname = "";
 
     if (returnPathName) {
@@ -43,7 +47,8 @@ export async function getProtectedSessionWeb(returnPathName: boolean = true) {
     }
 
     return {
-      session: session,
+      session,
+      isSession,
       redirectPath: `${webRoutes.LogIn}?returnTo=${encodeURIComponent(
         pathname
       )}`,
@@ -51,6 +56,7 @@ export async function getProtectedSessionWeb(returnPathName: boolean = true) {
   } else {
     return {
       session: session,
+      isSession,
       redirectPath: "",
     };
   }

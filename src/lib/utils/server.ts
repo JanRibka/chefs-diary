@@ -1,9 +1,9 @@
-import { auth as authWeb } from "@/config/auth/auth";
-import { auth as authAdmin } from "@/config/auth/authAdmin";
+import { auth as authWeb } from '@/config/auth/auth';
+import { auth as authAdmin } from '@/config/auth/authAdmin';
 
-import PermissionTypeEnum from "../enums/PermissionTypeEnum";
-import ForbiddenError from "../errors/ForbiddenError";
-import UnauthorizedError from "../errors/UnauthorizedError";
+import PermissionTypeEnum from '../enums/PermissionTypeEnum';
+import ForbiddenError from '../errors/ForbiddenError';
+import UnauthorizedError from '../errors/UnauthorizedError';
 
 /**
  * Verifies that the currently authenticated web user is authorized and has the required permissions.
@@ -14,6 +14,7 @@ import UnauthorizedError from "../errors/UnauthorizedError";
 export async function getRequireWebPermissions(
   permissions: PermissionTypeEnum[]
 ) {
+  //TODO: Pou6it funcki ze session
   const session = await authWeb();
 
   if (!session?.user?.id) {
@@ -39,6 +40,7 @@ export async function getRequireWebPermissions(
 export async function getRequireAdminPermissions(
   permissions: PermissionTypeEnum[]
 ) {
+  //TODO: Pou6it funcki ze session
   const session = await authAdmin();
 
   if (!session?.user?.id) {

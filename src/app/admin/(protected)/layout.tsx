@@ -9,9 +9,9 @@ import { getProtectedSessionAdmin } from '@/lib/utils/session';
 type Props = { children: React.ReactNode };
 
 export default async function ProtectedLayout({ children }: Props) {
-  const { session, redirectPath } = await getProtectedSessionAdmin();
+  const { session, isSession, redirectPath } = await getProtectedSessionAdmin();
 
-  if (!session?.user?.id) {
+  if (!isSession) {
     return (
       <SetUser user={null}>
         <ClientReplace path={redirectPath} />

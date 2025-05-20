@@ -9,11 +9,11 @@ import { getRequireAdminPermissions } from "../utils/server";
 export default async function getAllUsers() {
   await getRequireAdminPermissions([PermissionTypeEnum.USER_VIEW]);
 
-  try {
-    return await getAllUsersPaged();
-  } catch (error) {
-    //TODO: Ud2lat funkci, kter8 z erroru bude na49ta message
-  }
+  // try {
+  return await getAllUsersPaged();
+  // } catch (error) {
+  //   //TODO: Ud2lat funkci, kter8 z erroru bude na49ta message
+  // }
 
   debugger;
 }

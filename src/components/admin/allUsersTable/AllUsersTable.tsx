@@ -33,7 +33,7 @@ export default function AllUsersTable({ usersPromise }: Props) {
       <TableBody items={users}>
         {(item) => (
           <TableRow key={item.id}>
-            {(columnKey) => <TableCell>{item.name}</TableCell>}
+            {() => <TableCell>{item.name}</TableCell>}
           </TableRow>
         )}
       </TableBody>

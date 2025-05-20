@@ -25,7 +25,7 @@ export default async function ProtectedLayout({ children }: Props) {
       </SetUser>
     );
   }
-
+  //TODO: Asi by tu někde mel byt main tag i section bych měl použávat. I nav bych měl použít na navigaci. Hlavni nadpisy H1 a tak
   return (
     <SetUser user={session.user as AdapterUser}>
       <div className="flex flex-col h-screen">

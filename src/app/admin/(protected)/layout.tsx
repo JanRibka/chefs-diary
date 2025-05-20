@@ -1,27 +1,20 @@
-import { AdapterUser } from "next-auth/adapters";
-import { headers } from "next/headers";
+import { AdapterUser } from 'next-auth/adapters';
 
-import NavBar from "@/components/admin/layout/protectedLayout/navBar/NabBar";
-import SideBar from "@/components/admin/layout/protectedLayout/sideBar/SideBar";
-import ClientReplace from "@/components/shared/clientReplace/ClientReplace";
-import SetUser from "@/components/shared/layout/setUser/SetUser";
-import { auth } from "@/config/auth/authAdmin";
-import adminRoutes from "@/lib/routes/adminRoutes";
+import NavBar from '@/components/admin/layout/protectedLayout/navBar/NabBar';
+import SideBar from '@/components/admin/layout/protectedLayout/sideBar/SideBar';
+import ClientReplace from '@/components/shared/clientReplace/ClientReplace';
+import SetUser from '@/components/shared/layout/setUser/SetUser';
+import { getProtectedSessionAdmin } from '@/lib/utils/session';
 
 type Props = { children: React.ReactNode };
 
 export default async function ProtectedLayout({ children }: Props) {
-  const session = await auth();
+  const { session, redirectPath } = await getProtectedSessionAdmin();
 
   if (!session?.user?.id) {
-    const headersList = await headers();
-    const returnTo = headersList.get("x-pathname") ?? adminRoutes.Dashboard;
-
     return (
       <SetUser user={null}>
-        <ClientReplace
-          path={`${adminRoutes.LogIn}?returnTo=${encodeURIComponent(returnTo)}`}
-        />
+        <ClientReplace path={redirectPath} />
       </SetUser>
     );
   }

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 
+import ToastProvider from "@/components/shared/toastProvider/ToastProvider";
 import { fontSans } from "@/config/app/fonts";
 import { mergeStyles } from "@/lib/utils/styles";
 
@@ -33,6 +34,11 @@ export default function RootLayout({
         className={mergeStyles("min-h-screen font-sans", fontSans.variable)}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
+          <ToastProvider
+            placement="top-center"
+            toastOffset={60}
+            toastProps={{ timeout: 5000, shouldShowTimeoutProgress: true }}
+          />
           {children}
         </Providers>
       </body>

@@ -81,7 +81,7 @@ export const logInAction = async (
       };
     }
 
-    getErrorMessageFromError(error, true);
+    getErrorMessageFromError(error, { consoleErrorTitle: "Login action" });
 
     return {
       generalState: LogInStatusEnum.UNDEFINED,

@@ -53,7 +53,7 @@ export default function AccordionItem({
     >
       <Tooltip
         delay={500}
-        placement="right"
+        placement="right-start"
         isDisabled={!children}
         classNames={{
           base: "hidden md:block xl:hidden",

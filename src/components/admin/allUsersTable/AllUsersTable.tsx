@@ -1,19 +1,18 @@
 "use client";
 
-import useGetAllUserPaginated from "@/lib/hooks/apiHooks/useGetAllUserPaginated";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@heroui/react";
+import { use } from 'react';
 
-import columns from "./columns";
+import UserWithStatsDTO from '@/lib/dTOs/admin/UserWithStatsDTO';
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
 
-export default function AllUsersTable() {
-  const { data } = useGetAllUserPaginated(1, 50);
+import columns from './columns';
+
+type Props = {
+  usersPromise: Promise<UserWithStatsDTO[]>;
+};
+
+export default function AllUsersTable({ usersPromise }: Props) {
+  const users = use(usersPromise);
 
   return (
     <Table aria-label="Všichni uživatelé">
@@ -27,7 +26,7 @@ export default function AllUsersTable() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={data.data}>
+      <TableBody items={users}>
         {(item) => (
           <TableRow key={item.idUser}>
             {() => <TableCell>{item.userInfo.userName}</TableCell>}

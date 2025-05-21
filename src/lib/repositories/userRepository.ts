@@ -1,11 +1,10 @@
 import type { User, UserInfo, UserLoginHistory } from "@prisma/client";
 
-import { PaginatedDTO } from "../dTOs/admin/shared/PaginatedDTO";
-import UserWithStatsDTO from "../dTOs/admin/UserWithStatsDTO";
-import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";
-import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
-import { prisma } from "../prisma";
-import { hashPassword } from "../services/hashService";
+import UserWithStatsDTO from '../dTOs/admin/UserWithStatsDTO';
+import AuthenticationModeEnum from '../enums/AuthenticationModeEnum';
+import UserRoleTypeEnum from '../enums/UserRoleTypeEnum';
+import { prisma } from '../prisma';
+import { hashPassword } from '../services/hashService';
 
 /**
  * Gets user by user name
@@ -263,88 +262,75 @@ export async function getPermissionsByIdUser(
 }
 
 /**
- * Get all users with statistics paginated
- * @param page Page number
- * @param pageSize Page size
- * @returns {Promise<PaginatedDTO<UserWithStatsDTO>>}
+ * Get all users with statistics
+ * @returns {Promise<UserWithStatsDTO[]>}
  */
-export async function getAllUsersPaginated(
-  page: number,
-  pageSize: number
-): Promise<PaginatedDTO<UserWithStatsDTO>> {
+export async function getAllUsers(): Promise<UserWithStatsDTO[]> {
   //TODO: Otestovat, jestli jdou data opravdu z cache
   //TODO: Pridat order by, filtrov8n9 a podobne veci
-  const skip = (page - 1) * pageSize;
+  //TODO: Pokud to bude pomale, odjebat mapovani
 
-  const [users, totalCount] = await Promise.all([
-    prisma.user
-      .findMany({
-        cacheStrategy: {
-          ttl: 900,
-          swr: 300,
-          tags: ["all_users"],
-        },
-        skip,
-        take: pageSize,
-        select: {
-          IdUser: true,
-          IsDisabled: true,
-          WebLoginRestrictedUntil: true,
-          AdminLoginRestrictedUntil: true,
-          TwoFactor: true,
-          UserInfo: {
-            select: {
-              UserName: true,
-              EmailVerifiedAt: true,
-              ImageUrl: true,
-              CreatedAt: true,
-            },
-          },
-          UserLoginHistory: {
-            select: {
-              LoginSuccessful: true,
-              LoginAttemptDate: true,
-            },
+  return await prisma.user
+    .findMany({
+      cacheStrategy: {
+        ttl: 900,
+        swr: 300,
+        tags: ["all_users"],
+      },
+      select: {
+        IdUser: true,
+        IsDisabled: true,
+        WebLoginRestrictedUntil: true,
+        AdminLoginRestrictedUntil: true,
+        TwoFactor: true,
+        UserInfo: {
+          select: {
+            UserName: true,
+            EmailVerifiedAt: true,
+            ImageUrl: true,
+            CreatedAt: true,
           },
         },
+        UserLoginHistory: {
+          select: {
+            LoginSuccessful: true,
+            LoginAttemptDate: true,
+          },
+        },
+      },
+    })
+    .then((users) =>
+      users.map((user) => {
+        const successful = user.UserLoginHistory.filter(
+          (h) => h.LoginSuccessful
+        ).length;
+        const failed = user.UserLoginHistory.filter(
+          (h) => !h.LoginSuccessful
+        ).length;
+        const lastSuccessfulLogIn = user.UserLoginHistory?.filter(
+          (h) => h.LoginSuccessful
+        )?.sort(
+          (a, b) => b.LoginAttemptDate.getTime() - a.LoginAttemptDate.getTime()
+        )[0]?.LoginAttemptDate;
+
+        return {
+          idUser: user.IdUser,
+          isDisabled: user.IsDisabled,
+          webLoginRestrictedUntil: user.WebLoginRestrictedUntil,
+          adminLoginRestrictedUntil: user.AdminLoginRestrictedUntil,
+          twoFactor: user.TwoFactor,
+          userInfo: {
+            userName: user.UserInfo?.UserName ?? "",
+            emailVerifiedAt: user.UserInfo?.EmailVerifiedAt ?? null,
+            imageUrl: user.UserInfo?.ImageUrl ?? null,
+            createdAt: user.UserInfo?.CreatedAt ?? null,
+          },
+          loginStats: {
+            successful,
+            failed,
+            lastSuccessfulLogIn,
+          },
+        } as UserWithStatsDTO;
       })
-      .then((users) =>
-        users.map((user) => {
-          const successful = user.UserLoginHistory.filter(
-            (h) => h.LoginSuccessful
-          ).length;
-          const failed = user.UserLoginHistory.filter(
-            (h) => !h.LoginSuccessful
-          ).length;
-          const lastSuccessfulLogIn = user.UserLoginHistory?.filter(
-            (h) => h.LoginSuccessful
-          )?.sort(
-            (a, b) =>
-              b.LoginAttemptDate.getTime() - a.LoginAttemptDate.getTime()
-          )[0]?.LoginAttemptDate;
-
-          return {
-            idUser: user.IdUser,
-            isDisabled: user.IsDisabled,
-            webLoginRestrictedUntil: user.WebLoginRestrictedUntil,
-            adminLoginRestrictedUntil: user.AdminLoginRestrictedUntil,
-            twoFactor: user.TwoFactor,
-            userInfo: {
-              userName: user.UserInfo?.UserName ?? "",
-              emailVerifiedAt: user.UserInfo?.EmailVerifiedAt ?? null,
-              imageUrl: user.UserInfo?.ImageUrl ?? null,
-              createdAt: user.UserInfo?.CreatedAt ?? null,
-            },
-            loginStats: {
-              successful,
-              failed,
-              lastSuccessfulLogIn,
-            },
-          } as UserWithStatsDTO;
-        })
-      ),
-    prisma.user.count(),
-  ]);
-
-  return { data: users, totalCount, page, pageSize };
+    );
 }

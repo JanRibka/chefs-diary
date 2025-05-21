@@ -1,5 +1,5 @@
-import ErrorLibraryType from "@/lib/types/errorLibrary/ErrorLibraryType";
-import { stringFormat } from "@/lib/utils/string";
+import ErrorLibraryType from '@/lib/types/errorLibrary/ErrorLibraryType';
+import { stringFormat } from '@/lib/utils/string';
 
 const errorTexts: ErrorLibraryType = {
   registerUserMainError: "Registrace skončila chybou, zkuste to prosím znovu",
@@ -17,6 +17,7 @@ const errorTexts: ErrorLibraryType = {
   emailInvalid: "Email není platná emailová adresa",
   emailExists: "Nelze vytvořit účet. Zkuste se přihlásit nebo si obnovit heslo",
   emailNotVerified: "Email není ověřený",
+  emailMaxLength: "Email může obsahovat maximálně {0} znak",
   passwordRequired: "Heslo je povinné",
   passwordMinLength: "Heslo musí obsahovat alespoň {0} znak",
   passwordMaxLength: "Heslo může obsahovat maximálně {0} znak",

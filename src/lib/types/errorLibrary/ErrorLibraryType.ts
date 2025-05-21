@@ -12,6 +12,7 @@ type LibraryTypeProperty =
   | "emailInvalid"
   | "emailExists"
   | "emailNotVerified"
+  | "emailMaxLength"
   | "passwordRequired"
   | "passwordMinLength"
   | "passwordMaxLength"

@@ -1,13 +1,11 @@
-import { bool, InferType, string } from "yup";
+import { bool, InferType, string } from 'yup';
 
-import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
+import getErrorTextByKey from '@/lib/errorLibrary/auth/authErrorLibrary';
 import {
-  EMAIL_END_REGEX,
-  LOWER_UPPERCASE_REGEX,
-  loweUpperCaseNumberSpecialCharRegex,
-} from "@/lib/errorLibrary/auth/regexes/common/commonRegexes";
+    EMAIL_END_REGEX, LOWER_UPPERCASE_REGEX, loweUpperCaseNumberSpecialCharRegex
+} from '@/lib/errorLibrary/auth/regexes/common/commonRegexes';
 
-import confirmPasswordValidationSchema from "../../shared/confirmPassword/confirmPasswordValidationSchema";
+import confirmPasswordValidationSchema from '../../shared/confirmPassword/confirmPasswordValidationSchema';
 
 const signUpFormValidationSchema = confirmPasswordValidationSchema.shape({
   userName: string()
@@ -25,6 +23,7 @@ const signUpFormValidationSchema = confirmPasswordValidationSchema.shape({
   email: string()
     .required(getErrorTextByKey("emailRequired"))
     .email(getErrorTextByKey("emailInvalid"))
+    .max(50, getErrorTextByKey("emailMaxLength", "50"))
     .matches(new RegExp(EMAIL_END_REGEX), getErrorTextByKey("emailInvalid")),
 
   termsAgreement: bool().required(getErrorTextByKey("termsAgreementRequired")),

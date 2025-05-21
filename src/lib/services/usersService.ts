@@ -5,8 +5,8 @@ import { getErrorMessageFromError } from '../utils/error';
 import { getRequireAdminPermissions } from '../utils/server';
 
 /**
- *
- * @returns
+ * Gets all users
+ * @returns {Promise<UserWithStatsDTO[]>}
  */
 export async function getAllUsers(): Promise<UserWithStatsDTO[]> {
   await getRequireAdminPermissions([PermissionTypeEnum.USER_VIEW]);

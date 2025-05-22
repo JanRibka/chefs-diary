@@ -32,6 +32,7 @@ const SideBar = () => {
             routeLink={adminRoutes.Dashboard}
           />
           {/* Uživatelé */}
+          {/* TODO: Item bude v souboru a podle oprávnění se budou podle oprávnění se bd vrátí null nebo daná záložka */}
           <AccordionItem
             key="users"
             aria-label="Uživatelé"

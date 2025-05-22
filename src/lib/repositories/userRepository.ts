@@ -272,9 +272,7 @@ export async function getAllUsersPaginated(
   page: number,
   pageSize: number
 ): Promise<PaginatedDTO<UserWithStatsDTO>> {
-  //TODO: Otestovat, jestli jdou data opravdu z cache
   //TODO: Pridat order by, filtrov8n9 a podobne veci
-  //TODO: Pokud to bude pomale, odjebat mapovani
   const skip = (page - 1) * pageSize;
 
   const [data, totalCount] = await Promise.all([
@@ -287,7 +285,7 @@ export async function getAllUsersPaginated(
         },
         skip,
         take: pageSize,
-        // Fulltext search I kdy6 nezobrazuju email muzu podle n2ho hledat
+        // Fulltext search
         // where: {
         //   UserInfo: {
         //     OR: [
@@ -316,6 +314,7 @@ export async function getAllUsersPaginated(
               EmailVerifiedAt: true,
               ImageUrl: true,
               CreatedAt: true,
+              Email: true,
             },
           },
           UserLoginHistory: {
@@ -349,6 +348,7 @@ export async function getAllUsersPaginated(
             twoFactor: user.TwoFactor,
             userInfo: {
               userName: user.UserInfo?.UserName ?? "",
+              email: user.UserInfo?.Email ?? "",
               emailVerifiedAt: user.UserInfo?.EmailVerifiedAt ?? null,
               imageUrl: user.UserInfo?.ImageUrl ?? null,
               createdAt: user.UserInfo?.CreatedAt ?? null,

@@ -8,6 +8,7 @@ type UserWithStatsDTO = {
   twoFactor: boolean | null;
   userInfo: {
     userName: string;
+    email: string;
     emailVerifiedAt: Date | null;
     imageUrl: string | null;
     createdAt: Date | null;

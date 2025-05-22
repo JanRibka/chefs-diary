@@ -48,6 +48,7 @@ export default function useGetAllUserPaginated(page: number, pageSize: number) {
     }
 
     fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pageSize]);
 
   return { data, isLoading };

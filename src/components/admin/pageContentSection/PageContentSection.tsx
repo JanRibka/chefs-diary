@@ -11,7 +11,10 @@ export default function PageContentSection({
 }: Props) {
   return (
     <section
-      className={mergeStyles("max-w-full mt-7 mx-7", className)}
+      className={mergeStyles(
+        "max-w-full w-full mt-7 mx-7 overflow-hidden",
+        className
+      )}
       {...restProps}
     >
       {children}

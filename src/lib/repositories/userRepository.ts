@@ -220,6 +220,7 @@ export async function getPermissionsByIdUser(
   idUser: string
 ): Promise<number[]> {
   const userPermissions = await prisma.user.findMany({
+    relationLoadStrategy: "join",
     where: { IdUser: idUser },
     select: {
       UserPermissionOverride: {
@@ -275,90 +276,97 @@ export async function getAllUsersPaginated(
   //TODO: Pridat order by, filtrov8n9 a podobne veci
   const skip = (page - 1) * pageSize;
 
-  const users = await prisma.user
-    .findMany({
-      cacheStrategy: {
-        ttl: 1800,
-        swr: 600,
-        tags: ["all_users"],
-      },
-      skip,
-      take: pageSize,
-      // Fulltext search
-      // where: {
-      //   UserInfo: {
-      //     OR: [
-      //       {
-      //         Email: {
-      //           search: "rib | def",
-      //         },
-      //       },
-      //       {
-      //         UserName: {
-      //           search: "",
-      //         },
-      //       },
-      //     ],
-      //   },
-      // },
-      select: {
-        IdUser: true,
-        IsDisabled: true,
-        WebLoginRestrictedUntil: true,
-        AdminLoginRestrictedUntil: true,
-        TwoFactor: true,
-        UserInfo: {
-          select: {
-            UserName: true,
-            EmailVerifiedAt: true,
-            ImageUrl: true,
-            CreatedAt: true,
-            Email: true,
+  const [users, totalCount] = await Promise.all([
+    prisma.user
+      .findMany({
+        cacheStrategy: {
+          ttl: 1800,
+          swr: 600,
+          tags: ["all_users"],
+        },
+        relationLoadStrategy: "join",
+        skip,
+        take: pageSize,
+        // Fulltext search
+        // where: {
+        //   UserInfo: {
+        //     OR: [
+        //       {
+        //         Email: {
+        //           search: "rib | def",
+        //         },
+        //       },
+        //       {
+        //         UserName: {
+        //           search: "",
+        //         },
+        //       },
+        //     ],
+        //   },
+        // },
+        select: {
+          IdUser: true,
+          IsDisabled: true,
+          WebLoginRestrictedUntil: true,
+          AdminLoginRestrictedUntil: true,
+          TwoFactor: true,
+          UserInfo: {
+            select: {
+              UserName: true,
+              EmailVerifiedAt: true,
+              ImageUrl: true,
+              CreatedAt: true,
+              Email: true,
+            },
+          },
+          UserLoginHistory: {
+            select: {
+              LoginSuccessful: true,
+              LoginAttemptDate: true,
+            },
           },
         },
-        UserLoginHistory: {
-          select: {
-            LoginSuccessful: true,
-            LoginAttemptDate: true,
-          },
-        },
-      },
-    })
-    .then((users) =>
-      users.map((user) => {
-        const successful = user.UserLoginHistory.filter(
-          (h) => h.LoginSuccessful
-        ).length;
-        const failed = user.UserLoginHistory.filter(
-          (h) => !h.LoginSuccessful
-        ).length;
-        const lastSuccessfulLogIn = user.UserLoginHistory?.filter(
-          (h) => h.LoginSuccessful
-        )?.sort(
-          (a, b) => b.LoginAttemptDate.getTime() - a.LoginAttemptDate.getTime()
-        )[0]?.LoginAttemptDate;
+      })
+      .then((users) =>
+        users.map((user) => {
+          const successfulLoginNumber = user.UserLoginHistory.filter(
+            (h) => h.LoginSuccessful
+          ).length;
+          const failedLoginNumber = user.UserLoginHistory.filter(
+            (h) => !h.LoginSuccessful
+          ).length;
+          const lastSuccessfulLogIn = user.UserLoginHistory?.filter(
+            (h) => h.LoginSuccessful
+          )?.sort(
+            (a, b) =>
+              b.LoginAttemptDate.getTime() - a.LoginAttemptDate.getTime()
+          )[0]?.LoginAttemptDate;
 
-        return {
-          idUser: user.IdUser,
-          isDisabled: user.IsDisabled,
-          webLoginRestrictedUntil: user.WebLoginRestrictedUntil,
-          adminLoginRestrictedUntil: user.AdminLoginRestrictedUntil,
-          twoFactor: user.TwoFactor,
-          userInfo: {
+          return {
+            idUser: user.IdUser,
+            isDisabled: user.IsDisabled,
+            webLoginRestrictedUntil: user.WebLoginRestrictedUntil,
+            adminLoginRestrictedUntil: user.AdminLoginRestrictedUntil,
+            twoFactor: user.TwoFactor,
             userName: user.UserInfo?.UserName ?? "",
             email: user.UserInfo?.Email ?? "",
             emailVerifiedAt: user.UserInfo?.EmailVerifiedAt ?? null,
             imageUrl: user.UserInfo?.ImageUrl ?? null,
             createdAt: user.UserInfo?.CreatedAt ?? null,
-          },
-          loginStats: {
-            successful,
-            failed,
+            successfulLoginNumber,
+            failedLoginNumber,
             lastSuccessfulLogIn,
-          },
-        } as UserWithStatsDTO;
-      })
-    );
+          } as UserWithStatsDTO;
+        })
+      ),
+    prisma.user.count({
+      cacheStrategy: {
+        swr: 1800,
+        ttl: 600,
+        tags: ["all_users_count"],
+      },
+    }),
+  ]);
 
-  return { data: users, totalCount: users.length, page, pageSize };
+  return { data: users, totalCount, page, pageSize };
 }

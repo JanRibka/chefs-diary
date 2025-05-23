@@ -3,7 +3,7 @@
 import { useCallback, useMemo } from "react";
 
 import Spinner from "@/components/shared/spinner/Spinner";
-import useGetAllUserPaginated from "@/lib/hooks/apiHooks/admin/useGetAllUsersPaginated";
+import useAllUsersTableData from "@/lib/hooks/apiHooks/admin/useAllUsersTableData";
 import { getVisibleColumns } from "@/lib/utils/table";
 import {
   Table,
@@ -25,13 +25,7 @@ export default function AllUsersTable() {
   const { page, pageSize, visibleColumns } = useAllUsersTableContext();
 
   // Data
-  const { data, isLoading } = useGetAllUserPaginated(page, pageSize);
-
-  // Constants
-  const pages = useMemo(
-    () => Math.ceil((data.totalCount || 0) / pageSize),
-    [data.totalCount, pageSize]
-  );
+  const { data, pages, isLoading } = useAllUsersTableData(page, pageSize);
 
   // Render cell
   const renderCell = useCallback(allUsersRenderUserCell, []);

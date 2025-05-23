@@ -43,7 +43,7 @@ export default function AllUsersTable() {
   );
 
   return (
-    <div suppressHydrationWarning>
+    <div>
       <Table
         isHeaderSticky
         aria-label="Všichni uživatelé"
@@ -52,8 +52,6 @@ export default function AllUsersTable() {
         bottomContent={<AllUsersBottomContent pages={pages} />}
         bottomContentPlacement="outside"
         fullWidth
-        onChange={(e) => console.log(e)}
-        onClick={(e) => console.log(e)}
         // classNames={{
         //   table: "overflow-x-auto",
         // }}

@@ -16,6 +16,7 @@ export async function getUserByUserName(
   userName: string
 ): Promise<User | null> {
   return await prisma.user.findFirst({
+    relationLoadStrategy: "join",
     where: {
       UserInfo: {
         UserName: userName,
@@ -31,6 +32,7 @@ export async function getUserByUserName(
  */
 export async function getUserByEmail(email: string): Promise<User | null> {
   return await prisma.user.findFirst({
+    relationLoadStrategy: "join",
     where: {
       UserInfo: {
         Email: email,

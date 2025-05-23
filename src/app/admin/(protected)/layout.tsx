@@ -21,11 +21,11 @@ export default async function ProtectedLayout({ children }: Props) {
 
   return (
     <SetUser user={session.user as AdapterUser}>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col min-h-screen h-screen">
         <NavBar />
         <SideBar />
-        <div className="flex-1 ml-0 md:ml-24 xl:ml-40 2xl:ml-44 transition-all duration-200 ease-linear overflow-auto">
-          <main className="pt-[0.938rem] md:pt-[1.875rem] 2xl:pt-10 px-[0.938rem] md:px-[1.875rem] 2xl:px-10 mx-auto bg-pageBackground h-full overflow-hidden">
+        <div className="flex flex-1 ml-0 md:ml-24 xl:ml-40 2xl:ml-44 transition-all duration-200 ease-linear min-h-0">
+          <main className="flex-1 py-[0.938rem] md:py-[1.875rem] 2xl:py-10 px-[0.938rem] md:px-[1.875rem] 2xl:px-10 mx-auto bg-pageBackground overflow-x-hidden overflow-y-auto">
             {children}
           </main>
         </div>

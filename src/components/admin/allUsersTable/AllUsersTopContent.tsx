@@ -1,21 +1,16 @@
 "use client";
 
-import { memo, useCallback } from "react";
-import { FiChevronDown } from "react-icons/fi";
-import { IoSearch } from "react-icons/io5";
+import { memo, useCallback, useEffect, useState } from 'react';
+import { FiChevronDown } from 'react-icons/fi';
+import { IoSearch } from 'react-icons/io5';
+import { useDebounce } from 'use-debounce';
 
-import Button from "@/components/shared/button/Button";
-import { capitalize } from "@/lib/utils/string";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Input,
-} from "@heroui/react";
+import Button from '@/components/shared/button/Button';
+import { capitalize } from '@/lib/utils/string';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input } from '@heroui/react';
 
-import columns from "./allUsersColumns";
-import { useAllUsersTableContext } from "./AllUsersTableContext";
+import columns from './allUsersColumns';
+import { useAllUsersTableContext } from './AllUsersTableContext';
 
 const AllUsersTopContent = memo(() => {
   const {
@@ -26,16 +21,27 @@ const AllUsersTopContent = memo(() => {
     setVisibleColumns,
   } = useAllUsersTableContext();
 
-  const onSearchChange = useCallback((value?: string) => {
-    if (value) {
-      setFilterValue(value);
+  // Local filter value debouncing
+  const [localFilterValue, setLocalFilterValue] = useState<string>(filterValue);
+  const [localFilterDebouncedValue] = useDebounce(localFilterValue, 500);
+  useEffect(() => {
+    if (localFilterDebouncedValue) {
+      setFilterValue(localFilterDebouncedValue);
       setPage(1);
     } else {
       setFilterValue("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [localFilterDebouncedValue]);
 
+  useEffect(() => {
+    if (filterValue === localFilterValue) return;
+
+    setLocalFilterValue(filterValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterValue]);
+
+  // Clear filter value
   const onClear = useCallback(() => {
     setFilterValue("");
     setPage(1);
@@ -44,15 +50,16 @@ const AllUsersTopContent = memo(() => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-between gap-3 items-end">
+      <div className="flex justify-between gap-0 sm:gap-3 items-end">
         <Input
           isClearable
           className="w-full sm:max-w-[44%]"
           placeholder="Hledat podle jména, nebo emailu..."
+          autoComplete="off"
           startContent={<IoSearch />}
-          value={filterValue}
+          value={localFilterValue}
           onClear={() => onClear()}
-          onValueChange={onSearchChange}
+          onValueChange={setLocalFilterValue}
         />
         <div className="flex gap-3">
           <Dropdown>

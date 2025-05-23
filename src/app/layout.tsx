@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import "@/styles/globals.css";
+import '@/styles/globals.css';
 
-import ToastProvider from "@/components/shared/toastProvider/ToastProvider";
-import { fontSans } from "@/config/app/fonts";
-import { mergeStyles } from "@/lib/utils/styles";
+import ToastProvider from '@/components/shared/toastProvider/ToastProvider';
+import { fontSans } from '@/config/app/fonts';
+import { mergeStyles } from '@/lib/utils/styles';
 
-import { Providers } from "../config/heroUI/providers";
+import { Providers } from '../config/heroUI/providers';
 
 export const metadata: Metadata = {
   title: "Kuchařův deník",
@@ -31,7 +31,10 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <body
-        className={mergeStyles("min-h-screen font-sans", fontSans.variable)}
+        className={mergeStyles(
+          "min-h-screen font-sans overflow-hidden",
+          fontSans.variable
+        )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           <ToastProvider

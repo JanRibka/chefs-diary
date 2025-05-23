@@ -1,4 +1,4 @@
-import TableSettingsType from "../types/common/TableSettingsType";
+import TableSettingsType from '../types/common/TableSettingsType';
 
 export function loadTableSettings(
   gridName: string,

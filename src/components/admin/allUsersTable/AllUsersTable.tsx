@@ -1,31 +1,29 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from 'react';
 
-import Spinner from "@/components/shared/spinner/Spinner";
-import useAllUsersTableData from "@/lib/hooks/apiHooks/admin/useAllUsersTableData";
-import { getVisibleColumns } from "@/lib/utils/table";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@heroui/react";
+import Spinner from '@/components/shared/spinner/Spinner';
+import useAllUsersTableData from '@/lib/hooks/apiHooks/admin/useAllUsersTableData';
+import { getVisibleColumns } from '@/lib/utils/table';
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
 
-import AllUsersBottomContent from "./AllUsersBottomContent";
-import allUsersColumns from "./allUsersColumns";
-import { allUsersRenderUserCell } from "./allUsersRenderCell";
-import { useAllUsersTableContext } from "./AllUsersTableContext";
-import AllUsersTopContent from "./AllUsersTopContent";
+import AllUsersBottomContent from './AllUsersBottomContent';
+import allUsersColumns from './allUsersColumns';
+import { allUsersRenderUserCell } from './allUsersRenderCell';
+import { useAllUsersTableContext } from './AllUsersTableContext';
+import AllUsersTopContent from './AllUsersTopContent';
 
 export default function AllUsersTable() {
   // Context
-  const { page, pageSize, visibleColumns } = useAllUsersTableContext();
+  const { page, pageSize, visibleColumns, filterValue } =
+    useAllUsersTableContext();
 
   // Data
-  const { data, pages, isLoading } = useAllUsersTableData(page, pageSize);
+  const { data, pages, isLoading } = useAllUsersTableData(
+    page,
+    pageSize,
+    filterValue
+  );
 
   // Render cell
   const renderCell = useCallback(allUsersRenderUserCell, []);
@@ -37,18 +35,21 @@ export default function AllUsersTable() {
   );
 
   return (
-    <div>
+    <div className="h-full">
       <Table
         isHeaderSticky
         aria-label="Všichni uživatelé"
         topContent={<AllUsersTopContent />}
         topContentPlacement="outside"
-        bottomContent={<AllUsersBottomContent pages={pages} />}
+        bottomContent={
+          <AllUsersBottomContent pages={pages} totalUsers={data.totalCount} />
+        }
         bottomContentPlacement="outside"
         fullWidth
-        // classNames={{
-        //   table: "overflow-x-auto",
-        // }}
+        className="h-full"
+        classNames={{
+          wrapper: "rounded-none shadow-none p-0 flex-1",
+        }}
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
@@ -66,7 +67,7 @@ export default function AllUsersTable() {
           items={data.data}
           loadingContent={<Spinner />}
           loadingState={isLoading ? "loading" : "idle"}
-          emptyContent="Žádní uživatele nebyli nalezeni"
+          emptyContent="Žádný uživatel nebyl nalezen"
         >
           {(item) => (
             <TableRow key={item.idUser}>

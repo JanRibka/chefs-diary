@@ -1,9 +1,10 @@
-import { tv } from "@heroui/theme";
+import { tv } from '@heroui/theme';
 
 export const sideBarVariants = tv({
   base: [
     "w-64 md:w-24 xl:w-40 2xl:w-44",
     "bg-white",
+    "shadow-md",
     "fixed",
     "top-16",
     "bottom-0",

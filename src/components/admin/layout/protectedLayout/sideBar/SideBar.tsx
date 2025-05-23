@@ -1,15 +1,15 @@
 "use client";
 
-import { FaDatabase, FaUserLarge } from "react-icons/fa6";
-import { RiDashboardFill } from "react-icons/ri";
+import { FaDatabase, FaUserLarge } from 'react-icons/fa6';
+import { RiDashboardFill } from 'react-icons/ri';
 
-import Accordion from "@/components/shared/accordion/Accordion";
-import AccordionItem from "@/components/shared/accordionItem/AccordionItem";
-import SideBarMenuListItem from "@/components/shared/sideBarMenuListItem/SideBarMenuListItem";
-import { useSideBarContext } from "@/context/SideBarContext";
-import adminRoutes from "@/lib/routes/adminRoutes";
+import Accordion from '@/components/shared/accordion/Accordion';
+import AccordionItem from '@/components/shared/accordionItem/AccordionItem';
+import SideBarMenuListItem from '@/components/shared/sideBarMenuListItem/SideBarMenuListItem';
+import { useSideBarContext } from '@/context/SideBarContext';
+import adminRoutes from '@/lib/routes/adminRoutes';
 
-import { sideBarVariants } from "./sideBarVariants";
+import { sideBarVariants } from './sideBarVariants';
 
 const SideBar = () => {
   // Sidebar context

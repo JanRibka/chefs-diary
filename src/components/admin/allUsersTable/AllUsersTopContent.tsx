@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { IoSearch } from 'react-icons/io5';
 import { useDebounce } from 'use-debounce';
@@ -13,6 +13,8 @@ import columns from './allUsersColumns';
 import { useAllUsersTableContext } from './AllUsersTableContext';
 
 const AllUsersTopContent = memo(() => {
+  const isMounted = useRef(false);
+
   const {
     filterValue,
     setFilterValue,
@@ -26,6 +28,11 @@ const AllUsersTopContent = memo(() => {
   const [localFilterDebouncedValue] = useDebounce(localFilterValue, 500);
   useEffect(() => {
     if (localFilterDebouncedValue) {
+      if (!isMounted.current) {
+        isMounted.current = true;
+        return;
+      }
+
       setFilterValue(localFilterDebouncedValue);
       setPage(1);
     } else {

@@ -12,13 +12,13 @@ const allUsersColumns: TableColumnType[] = [
     allowsSorting: true,
   },
   {
-    label: "Email ověřen",
-    key: "emailVerifiedAt",
+    label: "Účet vytvořen",
+    key: "createdAt",
     allowsSorting: true,
   },
   {
-    label: "Účet vytvořen",
-    key: "createdAt",
+    label: "Email ověřen",
+    key: "emailVerifiedAt",
     allowsSorting: true,
   },
   {
@@ -28,17 +28,19 @@ const allUsersColumns: TableColumnType[] = [
   {
     label: "Poslední úspěšné přihlášení",
     key: "lastSuccessfulLogIn",
-    allowsSorting: true,
   },
   {
     label: "Úspěšná přihlášení",
     key: "successfulLoginNumber",
-    allowsSorting: true,
   },
   {
     label: "Neúspěšná přihlášení",
     key: "failedLoginNumber",
-    allowsSorting: true,
+  },
+  {
+    label: "Akce",
+    key: "actions",
+    align: "center",
   },
 ];
 

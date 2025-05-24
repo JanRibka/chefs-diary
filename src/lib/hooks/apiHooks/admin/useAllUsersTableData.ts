@@ -1,16 +1,20 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import useGetAllUserPaginated from './useGetAllUsersPaginated';
+import { SortDescriptor } from "@heroui/react";
+
+import useGetAllUserPaginated from "./useGetAllUsersPaginated";
 
 export default function useAllUsersTableData(
   page: number,
   pageSize: number,
-  filterValue: string
+  filterValue: string,
+  sortDescriptor: SortDescriptor
 ) {
   const { data, isLoading } = useGetAllUserPaginated(
     page,
     pageSize,
-    filterValue
+    filterValue,
+    sortDescriptor
   );
 
   const pages = useMemo(

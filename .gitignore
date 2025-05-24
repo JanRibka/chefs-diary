@@ -48,3 +48,5 @@ next-env.d.ts
 prisma/generated-client
 # migration.sql
 # migration_lock.toml
+
+certificates

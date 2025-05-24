@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { PaginatedDTO } from '@/lib/dTOs/admin/shared/PaginatedDTO';
-import UserWithStatsDTO from '@/lib/dTOs/admin/UserWithStatsDTO';
-import { logConsoleError } from '@/lib/utils/console';
-import { addToast } from '@heroui/react';
+import { PaginatedDTO } from "@/lib/dTOs/admin/shared/PaginatedDTO";
+import UserWithStatsDTO from "@/lib/dTOs/admin/UserWithStatsDTO";
+import { logConsoleError } from "@/lib/utils/console";
+import { addToast, SortDescriptor } from "@heroui/react";
 
 export default function useGetAllUserPaginated(
   page: number,
   pageSize: number,
-  filterValue: string
+  filterValue: string,
+  sortDescriptor: SortDescriptor
 ) {
   const [data, setData] = useState<PaginatedDTO<UserWithStatsDTO>>({
     data: [],
@@ -30,6 +31,17 @@ export default function useGetAllUserPaginated(
           pageSize: pageSize.toString(),
           filterValue: filterValue,
         });
+
+        if (sortDescriptor.column) {
+          params.append("orderByField", sortDescriptor.column.toString());
+
+          if (sortDescriptor.direction === "ascending") {
+            params.append("orderDirection", "asc");
+          } else if (sortDescriptor.direction === "descending") {
+            params.append("orderDirection", "desc");
+          }
+        }
+
         const response = await fetch(`/admin/vsichni-uzivatele/api?${params}`);
 
         if (!response.ok) {
@@ -53,7 +65,13 @@ export default function useGetAllUserPaginated(
 
     fetchUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, pageSize, filterValue]);
+  }, [
+    page,
+    pageSize,
+    filterValue,
+    sortDescriptor.column,
+    sortDescriptor.direction,
+  ]);
 
   return { data, isLoading };
 }

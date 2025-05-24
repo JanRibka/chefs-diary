@@ -15,19 +15,21 @@ import {
   loadTableSettings,
   saveTableSettings,
 } from "@/lib/utils/tableSettings";
-import { Selection } from "@heroui/react";
+import { Selection, SortDescriptor } from "@heroui/react";
 
 import columns from "./allUsersColumns";
 
 type AllUsersTableContext = {
   page: number;
-  setPage: (page: number) => void;
+  setPage: (value: number) => void;
   pageSize: number;
-  setPageSize: (page: number) => void;
+  setPageSize: (value: number) => void;
   filterValue: string;
   setFilterValue: (value: string) => void;
   visibleColumns: Selection;
   setVisibleColumns: (value: Selection) => void;
+  sortDescriptor: SortDescriptor;
+  setSortDescriptor: (value: SortDescriptor) => void;
 };
 
 export const AllUsersTableContext = createContext<AllUsersTableContext | null>(
@@ -46,6 +48,7 @@ export function AllUsersTableContextProvider({ children }: Props) {
     pageSize: 10,
     filterValue: "",
     visibleColumns: new Set(columns.map((item) => item.key)),
+    sortDescriptor: { column: "", direction: "ascending" },
   };
 
   const [page, setPage] = useState<number>(defaultSettings.page);
@@ -55,6 +58,9 @@ export function AllUsersTableContextProvider({ children }: Props) {
   );
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     defaultSettings.visibleColumns
+  );
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>(
+    defaultSettings.sortDescriptor
   );
 
   useEffect(() => {
@@ -67,6 +73,7 @@ export function AllUsersTableContextProvider({ children }: Props) {
     setPageSize(settings.pageSize);
     setFilterValue(settings.filterValue);
     setVisibleColumns(settings.visibleColumns);
+    setSortDescriptor(settings.sortDescriptor);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -78,9 +85,10 @@ export function AllUsersTableContextProvider({ children }: Props) {
       pageSize,
       filterValue,
       visibleColumns,
+      sortDescriptor,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, pageSize, filterValue, visibleColumns]);
+  }, [page, pageSize, filterValue, visibleColumns, sortDescriptor]);
 
   return (
     <AllUsersTableContext.Provider
@@ -93,6 +101,8 @@ export function AllUsersTableContextProvider({ children }: Props) {
         setFilterValue,
         visibleColumns,
         setVisibleColumns,
+        sortDescriptor,
+        setSortDescriptor,
       }}
     >
       {children}

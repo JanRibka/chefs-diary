@@ -1,4 +1,4 @@
-import TableSettingsType from '../types/common/TableSettingsType';
+import TableSettingsType from "../types/common/TableSettingsType";
 
 export function loadTableSettings(
   gridName: string,
@@ -7,6 +7,7 @@ export function loadTableSettings(
     pageSize: 10,
     filterValue: "",
     visibleColumns: new Set([]),
+    sortDescriptor: { column: "", direction: "ascending" },
   }
 ): TableSettingsType {
   if (typeof window === "undefined") return defaultValue;

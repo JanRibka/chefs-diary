@@ -1,11 +1,11 @@
 import type { User, UserInfo, UserLoginHistory } from "@prisma/client";
 
-import { PaginatedDTO } from '../dTOs/admin/shared/PaginatedDTO';
-import UserWithStatsDTO from '../dTOs/admin/UserWithStatsDTO';
-import AuthenticationModeEnum from '../enums/AuthenticationModeEnum';
-import UserRoleTypeEnum from '../enums/UserRoleTypeEnum';
-import { prisma } from '../prisma';
-import { hashPassword } from '../services/hashService';
+import { PaginatedDTO } from "../dTOs/admin/shared/PaginatedDTO";
+import UserWithStatsDTO from "../dTOs/admin/UserWithStatsDTO";
+import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";
+import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
+import { prisma } from "../prisma";
+import { hashPassword } from "../services/hashService";
 
 /**
  * Gets user by user name
@@ -270,16 +270,28 @@ export async function getPermissionsByIdUser(
  * @param page Page number
  * @param pageSize Page size
  * @param filterValue Search filter value
+ * @param orderByField Order by field
+ * @param orderDirection Order by direction
  * @returns {Promise<PaginatedDTO<UserWithStatsDTO>>}
  */
 export async function getAllUsersPaginated(
   page: number,
   pageSize: number,
-  filterValue?: string
+  filterValue?: string,
+  orderByField?: string,
+  orderDirection?: string
 ): Promise<PaginatedDTO<UserWithStatsDTO>> {
-  //TODO: Pridat order by, filtrov8n9 a podobne veci
   const skip = (page - 1) * pageSize;
   const isFilterValue = filterValue && filterValue.length >= 3;
+
+  const orderBy =
+    orderByField && orderDirection
+      ? {
+          UserInfo: {
+            [orderByField]: orderDirection,
+          },
+        }
+      : undefined;
 
   const [users, totalCount] = await Promise.all([
     prisma.user
@@ -292,6 +304,7 @@ export async function getAllUsersPaginated(
         relationLoadStrategy: "join",
         skip,
         take: pageSize,
+        orderBy,
         where: isFilterValue
           ? {
               UserInfo: {

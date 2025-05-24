@@ -1,12 +1,11 @@
-import { Selection } from "@heroui/react";
+import { Selection, SortDescriptor } from "@heroui/react";
 
 type TableSettingsType = {
   page: number;
   pageSize: number;
   filterValue: string;
   visibleColumns: Selection;
-  //   "sortBy": "createdAt",
-  // "sortOrder": "desc",
+  sortDescriptor: SortDescriptor;
 };
 
 export default TableSettingsType;

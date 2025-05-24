@@ -1,14 +1,17 @@
 import { Key } from "react";
 
+import TableCellActions from "@/components/shared/tableCellActions/TableCellActions";
 import TableCellBoolean from "@/components/shared/tableCellBoolean/TableCellBoolean";
 import TableCellDate from "@/components/shared/tableCellDate/TableCellDate";
 import TableCellUser from "@/components/shared/tableCellUser/TableCellUser";
 import UserWithStatsDTO from "@/lib/dTOs/admin/UserWithStatsDTO";
 
+type UserWithStatsActions = UserWithStatsDTO | "actions";
+
 export function allUsersRenderUserCell(user: UserWithStatsDTO, columnKey: Key) {
   const cellValue = user[columnKey as keyof UserWithStatsDTO];
 
-  switch (columnKey as keyof UserWithStatsDTO) {
+  switch (columnKey as keyof UserWithStatsActions) {
     case "userName":
       return <TableCellUser user={user} />;
     case "createdAt":
@@ -25,6 +28,14 @@ export function allUsersRenderUserCell(user: UserWithStatsDTO, columnKey: Key) {
           trueColor="danger"
           falseLabel="Povolen"
           falseColor="success"
+        />
+      );
+    case "actions":
+      return (
+        <TableCellActions
+          detailsLabel="Profil uživatele"
+          editLabel="Editovat uživatele"
+          deleteLabel="Smazat uživatele"
         />
       );
     default:

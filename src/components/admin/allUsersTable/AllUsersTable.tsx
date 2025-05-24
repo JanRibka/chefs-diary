@@ -1,28 +1,42 @@
 "use client";
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from "react";
 
-import Spinner from '@/components/shared/spinner/Spinner';
-import useAllUsersTableData from '@/lib/hooks/apiHooks/admin/useAllUsersTableData';
-import { getVisibleColumns } from '@/lib/utils/table';
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
+import Spinner from "@/components/shared/spinner/Spinner";
+import useAllUsersTableData from "@/lib/hooks/apiHooks/admin/useAllUsersTableData";
+import { getVisibleColumns } from "@/lib/utils/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@heroui/react";
 
-import AllUsersBottomContent from './AllUsersBottomContent';
-import allUsersColumns from './allUsersColumns';
-import { allUsersRenderUserCell } from './allUsersRenderCell';
-import { useAllUsersTableContext } from './AllUsersTableContext';
-import AllUsersTopContent from './AllUsersTopContent';
+import AllUsersBottomContent from "./AllUsersBottomContent";
+import allUsersColumns from "./allUsersColumns";
+import { allUsersRenderUserCell } from "./allUsersRenderCell";
+import { useAllUsersTableContext } from "./AllUsersTableContext";
+import AllUsersTopContent from "./AllUsersTopContent";
 
 export default function AllUsersTable() {
   // Context
-  const { page, pageSize, visibleColumns, filterValue } =
-    useAllUsersTableContext();
+  const {
+    page,
+    pageSize,
+    visibleColumns,
+    filterValue,
+    sortDescriptor,
+    setSortDescriptor,
+  } = useAllUsersTableContext();
 
   // Data
   const { data, pages, isLoading } = useAllUsersTableData(
     page,
     pageSize,
-    filterValue
+    filterValue,
+    sortDescriptor
   );
 
   // Render cell
@@ -50,6 +64,8 @@ export default function AllUsersTable() {
         classNames={{
           wrapper: "rounded-none shadow-none p-0 flex-1",
         }}
+        onSortChange={setSortDescriptor}
+        sortDescriptor={sortDescriptor}
       >
         <TableHeader columns={headerColumns}>
           {(column) => (

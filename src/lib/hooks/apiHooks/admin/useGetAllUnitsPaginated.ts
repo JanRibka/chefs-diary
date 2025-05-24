@@ -2,18 +2,17 @@
 
 import { useEffect, useState } from "react";
 
-import UserWithStatsDTO from "@/lib/dTOs/admin/UserWithStatsDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
 import { logConsoleError } from "@/lib/utils/console";
 import { addToast, SortDescriptor } from "@heroui/react";
+import { Unit } from "@prisma/client";
 
-export default function useGetAllUserPaginated(
+export default function useGeAllUnitsPaginated(
   page: number,
   pageSize: number,
-  filterValue: string,
   sortDescriptor: SortDescriptor
 ) {
-  const [data, setData] = useState<PaginatedDTO<UserWithStatsDTO>>({
+  const [data, setData] = useState<PaginatedDTO<Unit>>({
     data: [],
     totalCount: 0,
     page,
@@ -22,14 +21,13 @@ export default function useGetAllUserPaginated(
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchUsers() {
+    async function fetchUnits() {
       if (!isLoading) setIsLoading(true);
 
       try {
         const params = new URLSearchParams({
           page: page.toString(),
           pageSize: pageSize.toString(),
-          filterValue: filterValue,
         });
 
         if (sortDescriptor.column) {
@@ -42,7 +40,7 @@ export default function useGetAllUserPaginated(
           }
         }
 
-        const response = await fetch(`/admin/vsichni-uzivatele/api?${params}`);
+        const response = await fetch(`/admin/jednotky/api?${params}`);
 
         if (!response.ok) {
           //TODO: Toast bude v komponente
@@ -57,21 +55,15 @@ export default function useGetAllUserPaginated(
         const data = await response.json();
         setData(data);
       } catch (error) {
-        logConsoleError(error, { consoleErrorTitle: "GetAllUsers" });
+        logConsoleError(error, { consoleErrorTitle: "GetAllUnits" });
       } finally {
         setIsLoading(false);
       }
     }
 
-    fetchUsers();
+    fetchUnits();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    page,
-    pageSize,
-    filterValue,
-    sortDescriptor.column,
-    sortDescriptor.direction,
-  ]);
+  }, [page, pageSize, sortDescriptor.column, sortDescriptor.direction]);
 
   return { data, isLoading };
 }

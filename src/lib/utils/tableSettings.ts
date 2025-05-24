@@ -33,7 +33,7 @@ export function saveTableSettings(
   if (typeof window === "undefined") return;
 
   try {
-    const plainArray = Array.from(settings.visibleColumns);
+    const plainArray = Array.from(settings.visibleColumns ?? new Set([]));
     const serializableSettings = {
       ...settings,
       visibleColumns: plainArray,

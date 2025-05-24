@@ -302,6 +302,31 @@ async function main() {
       Description: "Spravovat nastavení systému",
     },
   });
+  const unitView = await prisma.permission.upsert({
+    where: { Code: "UNIT_VIEW" },
+    update: {
+      Value: 110,
+      Description: "Zobrazit jednotky",
+    },
+    create: {
+      Code: "UNIT_VIEW",
+      Value: 110,
+      Description: "Zobrazit jednotky",
+    },
+  });
+  const unitEdit = await prisma.permission.upsert({
+    where: { Code: "UNIT_EDIT" },
+    update: {
+      Value: 111,
+      Description: "Spravovat jednotky",
+    },
+    create: {
+      Code: "UNIT_EDIT",
+      Value: 111,
+      Description: "Spravovat jednotky",
+    },
+  });
+
   console.log({
     userView,
     userEdit,
@@ -321,6 +346,8 @@ async function main() {
     ticketView,
     ticketManage,
     settingsEdit,
+    unitView,
+    unitEdit,
   });
 
   // Vytváření RolePermission a přiřazení pro každou roli
@@ -346,6 +373,8 @@ async function main() {
       ticketView.Code,
       ticketManage.Code,
       settingsEdit.Code,
+      unitView.Code,
+      unitEdit.Code,
     ],
     ADMIN: [
       userView.Code,
@@ -355,14 +384,17 @@ async function main() {
       logView.Code,
       ticketView.Code,
       ticketManage.Code,
+      unitView.Code,
+      unitEdit.Code,
     ],
     MODERATOR: [
       postApprove.Code,
       ticketView.Code,
       commentDelete.Code,
       recipeDelete.Code,
+      unitView.Code,
     ],
-    SUPPORT: [ticketView.Code, ticketManage.Code],
+    SUPPORT: [ticketView.Code, ticketManage.Code, unitView.Code],
     EDITOR: [
       recipePublish.Code,
       recipeEdit.Code,
@@ -372,7 +404,7 @@ async function main() {
       commentPublish.Code,
       ratingPublish.Code,
     ],
-    AUDITOR: [userView.Code, logView.Code],
+    AUDITOR: [userView.Code, logView.Code, unitView.Code],
   };
 
   for (const [roleCode, permissionCodes] of Object.entries(rolePermissionMap)) {

@@ -1,7 +1,7 @@
 import type { User, UserInfo, UserLoginHistory } from "@prisma/client";
 
-import { PaginatedDTO } from "../dTOs/admin/shared/PaginatedDTO";
 import UserWithStatsDTO from "../dTOs/admin/UserWithStatsDTO";
+import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";
 import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
 import { prisma } from "../prisma";

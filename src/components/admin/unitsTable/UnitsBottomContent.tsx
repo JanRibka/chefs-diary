@@ -2,15 +2,15 @@ import { memo, useCallback } from "react";
 
 import { Pagination } from "@heroui/react";
 
-import { useAllUsersTableContext } from "./AllUsersTableContext";
+import { useUnitsTableContext } from "./UnitsTableContext";
 
 type Props = {
   pages: number;
   totalUsers: number;
 };
 
-const AllUsersBottomContent = memo(({ pages, totalUsers }: Props) => {
-  const { page, setPage, pageSize, setPageSize } = useAllUsersTableContext();
+const UnitsBottomContent = memo(({ pages, totalUsers }: Props) => {
+  const { page, setPage, pageSize, setPageSize } = useUnitsTableContext();
 
   const onPageSizeChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -21,16 +21,16 @@ const AllUsersBottomContent = memo(({ pages, totalUsers }: Props) => {
     []
   );
 
-  function getUserCountLabel(): string {
-    if (totalUsers === 1) return "uživatel";
-    if (totalUsers < 5) return "uživatelé";
-    return "uživatelů";
+  function getUnitsCountLabel(): string {
+    if (totalUsers === 1) return "jednotka";
+    if (totalUsers < 4) return "jednotky";
+    return "jednotek";
   }
 
   return (
     <div className="p-2 flex justify-center md:justify-between items-center">
       <span className="hidden md:block text-default-400 text-small">
-        Celkem {totalUsers} {getUserCountLabel()}
+        Celkem {totalUsers} {getUnitsCountLabel()}
       </span>
 
       {pages > 1 && page <= pages && (
@@ -65,6 +65,6 @@ const AllUsersBottomContent = memo(({ pages, totalUsers }: Props) => {
   );
 });
 
-AllUsersBottomContent.displayName = "AllUsersBottomContent";
+UnitsBottomContent.displayName = "UnitsBottomContent";
 
-export default AllUsersBottomContent;
+export default UnitsBottomContent;

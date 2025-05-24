@@ -8,7 +8,7 @@ import UserWithStatsDTO from "@/lib/dTOs/admin/UserWithStatsDTO";
 
 type UserWithStatsActions = UserWithStatsDTO | "actions";
 
-export function allUsersRenderUserCell(user: UserWithStatsDTO, columnKey: Key) {
+export function allUsersRenderCell(user: UserWithStatsDTO, columnKey: Key) {
   const cellValue = user[columnKey as keyof UserWithStatsDTO];
 
   switch (columnKey as keyof UserWithStatsActions) {

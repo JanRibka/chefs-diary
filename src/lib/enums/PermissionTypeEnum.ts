@@ -17,6 +17,8 @@ enum PermissionTypeEnum {
   TICKET_VIEW = 90,
   TICKET_MANAGE = 91,
   SETTINGS_EDIT = 100,
+  UNIT_VIEW = 110,
+  UNIT_EDIT = 111,
 }
 
 export default PermissionTypeEnum;

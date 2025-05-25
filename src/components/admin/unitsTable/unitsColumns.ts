@@ -3,12 +3,12 @@ import TableColumnType from "@/lib/types/common/TableColumnType";
 const unitsColumns: TableColumnType[] = [
   {
     label: "Název jednotky",
-    key: "name",
+    key: "Name",
     allowsSorting: true,
   },
   {
     label: "Zobrazované jméno",
-    key: "displayName",
+    key: "DisplayName",
   },
   {
     label: "Akce",

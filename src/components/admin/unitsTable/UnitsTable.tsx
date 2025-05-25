@@ -1,10 +1,17 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useOptimistic, useState } from "react";
 
+import { insertUnitAction } from "@/actions/admin/webData";
 import ConfirmModal from "@/components/shared/actionModal/ConfirmModal";
 import Spinner from "@/components/shared/spinner/Spinner";
 import useUnitsTableData from "@/lib/hooks/apiHooks/admin/useUnitsTableData";
+import { nameof } from "@/lib/utils/nameof";
+import {
+  InsertUnitFormErrorType,
+  InsertUnitFormType,
+} from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
+import { validateInsertUnitForm } from "@/lib/validations/validations/admin/insertUnit/validateInsertUnitForm";
 import {
   Table,
   TableBody,
@@ -14,7 +21,9 @@ import {
   TableRow,
   useDisclosure,
 } from "@heroui/react";
+import { Unit } from "@prisma/client";
 
+import InsertUnitDialogContent from "./InsertUnitDialogContent";
 import UnitsBottomContent from "./UnitsBottomContent";
 import unitsColumns from "./unitsColumns";
 import { unitsRenderCell } from "./unitsRenderCell";
@@ -22,8 +31,11 @@ import { useUnitsTableContext } from "./UnitsTableContext";
 import UnitsTopContent from "./UnitsTopContent";
 
 export default function UnitsTable() {
-  // Add unit modal state
+  // Insert unit modal state
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  // State
+  const [errors, setErrors] = useState<InsertUnitFormErrorType>({});
 
   // Context
   const { page, pageSize, sortDescriptor, setSortDescriptor } =
@@ -36,15 +48,53 @@ export default function UnitsTable() {
     sortDescriptor
   );
 
+  // Optimistic update
+  const [optimisticUnits, addOptimisticUnit] = useOptimistic(
+    data.data,
+    (state, newData: Unit) => {
+      return [...state, newData];
+    }
+  );
+
   // Render cell
   const renderCell = useCallback(unitsRenderCell, []);
+
+  // Insert unit optimistic
+  const handleInsertUnitAction = async (formData: FormData) => {
+    debugger;
+    addOptimisticUnit({
+      IdUnit: Math.random(),
+      Name: formData.get(nameof<InsertUnitFormType>("name")) as string,
+      DisplayName: formData.get(
+        nameof<InsertUnitFormType>("displayName")
+      ) as string,
+    });
+    //TODO: Budu mít funkci, která budecaitat error z akšny a vyhazovar Toat
+    //TODO: Pro Indert unit neudu potřebovat ENum pro vrácení hodnoty
+    // https://www.youtube.com/watch?v=PPOw-sDeoNw&ab_channel=ByteGrad
+    await insertUnitAction(formData);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData);
+    const validationResult = validateInsertUnitForm(data);
+
+    if (!validationResult.success) {
+      event.preventDefault();
+      setErrors({
+        ...validationResult.errors,
+        timestamp: new Date().getTime().toString(),
+      });
+    }
+  };
 
   return (
     <div className="h-full">
       <Table
         isHeaderSticky
         aria-label="Jednotky"
-        topContent={<UnitsTopContent onPressAddUnit={onOpen} />}
+        topContent={<UnitsTopContent onPressInsertUnit={onOpen} />}
         topContentPlacement="outside"
         bottomContent={
           <UnitsBottomContent pages={pages} totalUsers={data.totalCount} />
@@ -71,7 +121,7 @@ export default function UnitsTable() {
         </TableHeader>
 
         <TableBody
-          items={data.data}
+          items={optimisticUnits}
           loadingContent={<Spinner />}
           loadingState={isLoading ? "loading" : "idle"}
           emptyContent="Žádný jednotka nebyla nalezena"
@@ -91,8 +141,15 @@ export default function UnitsTable() {
         placement="center"
         onOpenChange={onOpenChange}
         headerLabel="Přidat jednotku"
+        hideFooter
+        isDismissable={false}
       >
-        <div>dsf</div>
+        <InsertUnitDialogContent
+          onCancel={onOpenChange}
+          action={handleInsertUnitAction}
+          onSubmit={handleSubmit}
+          errors={errors}
+        />
       </ConfirmModal>
     </div>
   );

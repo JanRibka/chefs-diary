@@ -4,6 +4,20 @@ import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 import { prisma } from "../prisma";
 
 /**
+ * Get all units
+ * @returns {Promise<Unit[]>}
+ */
+export async function getAllUnits(): Promise<Unit[]> {
+  return await prisma.unit.findMany({
+    cacheStrategy: {
+      ttl: 3600,
+      swr: 1200,
+      tags: ["all_units"],
+    },
+  });
+}
+
+/**
  * Get all units paginated
  * @param page Page number
  * @param pageSize Page size
@@ -28,11 +42,6 @@ export async function getAllUnitsPaginated(
 
   const [units, totalCount] = await Promise.all([
     prisma.unit.findMany({
-      cacheStrategy: {
-        ttl: 3600,
-        swr: 1200,
-        tags: ["all_units"],
-      },
       skip,
       take: pageSize,
       orderBy,
@@ -42,4 +51,22 @@ export async function getAllUnitsPaginated(
   ]);
 
   return { data: units, totalCount, page, pageSize };
+}
+
+/**
+ * Inserts unit
+ * @param name Unit name
+ * @param displayName Unit display name
+ * @returns {Promise<Unit>}
+ */
+export async function insertUnit(
+  name: string,
+  displayName: string
+): Promise<Unit> {
+  return await prisma.unit.create({
+    data: {
+      Name: name,
+      DisplayName: displayName,
+    },
+  });
 }

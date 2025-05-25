@@ -1,5 +1,5 @@
-import ErrorLibraryType from '@/lib/types/errorLibrary/ErrorLibraryType';
-import { stringFormat } from '@/lib/utils/string';
+import ErrorLibraryType from "@/lib/types/errorLibrary/ErrorLibraryType";
+import { stringFormat } from "@/lib/utils/string";
 
 const errorTexts: ErrorLibraryType = {
   registerUserMainError: "Registrace skončila chybou, zkuste to prosím znovu",
@@ -44,6 +44,11 @@ const errorTexts: ErrorLibraryType = {
     "Nelze obnovit heslo - Platnost odkazu pro obnovení hesla vypršela",
   adminRequired: "Pro přihlášení nemáte dostatečná oprávnění",
   editorRequired: "Pro přihlášení nemáte dostatečná oprávnění",
+  unitNameRequired: "Název jednotky je povinný",
+  unitNameMaxLength: "Název jednotky může obsahovat maximálně {0} znak",
+  unitDisplayNameRequired: "Zobrazované jméno jednotky je povinné",
+  unitDisplayNameMaxLength:
+    "Zobrazované jméno jednotky může obsahovat maximálně {0} znak",
 };
 
 const getErrorTextByKey = (key: keyof ErrorLibraryType, ...args: string[]) => {

@@ -33,7 +33,11 @@ type LibraryTypeProperty =
   | "passwordResetTokenNotFound"
   | "passwordResetTokenExpired"
   | "adminRequired"
-  | "editorRequired";
+  | "editorRequired"
+  | "unitNameRequired"
+  | "unitNameMaxLength"
+  | "unitDisplayNameRequired"
+  | "unitDisplayNameMaxLength";
 
 type ErrorLibraryType = Record<LibraryTypeProperty, string>;
 

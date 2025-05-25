@@ -1,15 +1,15 @@
 "use client";
 
-import { FaDatabase, FaUserLarge } from 'react-icons/fa6';
-import { RiDashboardFill } from 'react-icons/ri';
+import { FaDatabase, FaUserLarge } from "react-icons/fa6";
+import { RiDashboardFill } from "react-icons/ri";
 
-import Accordion from '@/components/shared/accordion/Accordion';
-import AccordionItem from '@/components/shared/accordionItem/AccordionItem';
-import SideBarMenuListItem from '@/components/shared/sideBarMenuListItem/SideBarMenuListItem';
-import { useSideBarContext } from '@/context/SideBarContext';
-import adminRoutes from '@/lib/routes/adminRoutes';
+import Accordion from "@/components/shared/accordion/Accordion";
+import AccordionItem from "@/components/shared/accordionItem/AccordionItem";
+import SideBarMenuListItem from "@/components/shared/sideBarMenuListItem/SideBarMenuListItem";
+import { useSideBarContext } from "@/context/SideBarContext";
+import adminRoutes from "@/lib/routes/adminRoutes";
 
-import { sideBarVariants } from './sideBarVariants';
+import { sideBarVariants } from "./sideBarVariants";
 
 const SideBar = () => {
   // Sidebar context
@@ -33,6 +33,7 @@ const SideBar = () => {
           />
           {/* Uživatelé */}
           {/* TODO: Item bude v souboru a podle oprávnění se budou podle oprávnění se bd vrátí null nebo daná záložka */}
+          {/* TODO: Mel bych i n2jak osetri, ze kdyz do prohlizece zadam url na stranku kde nemam opravneni musi mi to vyhodit stranku s textem, ze nemam opraveni. ASi bych to mohl dat do layout dane stranky. BUdu m9t komponentu, ktera bude vyhodnocovat opravn2ni v reactu */}
           <AccordionItem
             key="users"
             aria-label="Uživatelé"

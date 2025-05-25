@@ -6,17 +6,17 @@ import { FaPlus } from "react-icons/fa6";
 import Button from "@/components/shared/button/Button";
 
 type Props = {
-  onPressAddUnit: () => void;
+  onPressInsertUnit: () => void;
 };
 
-const UnitsTopContent = memo(({ onPressAddUnit }: Props) => {
+const UnitsTopContent = memo(({ onPressInsertUnit }: Props) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-end">
         <Button
           color="primary"
           endContent={<FaPlus />}
-          onPress={onPressAddUnit}
+          onPress={onPressInsertUnit}
         >
           Přidat jednotku
         </Button>

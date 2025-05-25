@@ -33,7 +33,7 @@ export async function insertUnitAction(formData: FormData) {
   } finally {
     console.log("revalidate");
     //TODO: M9sto revalidate path budu muset na klientovi volat refatch z hooku
-    revalidatePath(adminRoutes.Units);
+    //revalidatePath(adminRoutes.Units);
   }
 
   //   return {

@@ -45,7 +45,6 @@ export default function useGetAllUserPaginated(
         const response = await fetch(`/admin/vsichni-uzivatele/api?${params}`);
 
         if (!response.ok) {
-          //TODO: Toast bude v komponente
           //TODO: Pokud bude statusText Unathorized, nebo forbidden, tak z knihovny pres getErrorText nacty hl83ky
           addToast({
             title: "Chyba",

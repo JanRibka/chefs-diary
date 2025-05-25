@@ -55,7 +55,7 @@ export default function UnitsTable() {
       return [...state, newData];
     }
   );
-
+  console.log(optimisticUnits);
   // Render cell
   const renderCell = useCallback(unitsRenderCell, []);
 
@@ -69,7 +69,7 @@ export default function UnitsTable() {
         nameof<InsertUnitFormType>("displayName")
       ) as string,
     });
-    //TODO: Nejdruive zjistit, proc mi jednotka zmizne, kdyz nevolam revalidate path
+    //TODO: Nejdruive zjistit, proc mi jednotka zmizne, kdyz nevolam revalidate path asi mus9m vol8n9 zabalit do jin0 komponenty. Tady budu na49tat data a zbytek bbude jinde
     //TODO: Budu mít funkci, která budecaitat error z akšny a vyhazovar Toat
     //TODO: Pro Indert unit neudu potřebovat ENum pro vrácení hodnoty
     // https://www.youtube.com/watch?v=PPOw-sDeoNw&ab_channel=ByteGrad

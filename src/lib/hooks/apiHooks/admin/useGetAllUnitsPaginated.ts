@@ -43,8 +43,7 @@ export default function useGeAllUnitsPaginated(
         const response = await fetch(`/admin/jednotky/api?${params}`);
 
         if (!response.ok) {
-          //TODO: Toast bude v komponente
-          //TODO: Pokud bude statusText Unathorized, nebo forbidden, tak z knihovny pres getErrorText nacty hl83ky
+          //TODO: Pokud bude statusText Unathorized, nebo forbidden, tak z knihovny pres getErrorText nacty hl83ky Bude to v n2jakem error helperu
           addToast({
             title: "Chyba",
             description: response.statusText,

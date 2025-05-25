@@ -31,7 +31,7 @@ export async function insertUnitAction(formData: FormData) {
     await insertUnit(name, displayName);
   } catch (error) {
   } finally {
-    console.log("revalidate");
+    //console.log("revalidate");
     //TODO: M9sto revalidate path budu muset na klientovi volat refatch z hooku
     //revalidatePath(adminRoutes.Units);
   }

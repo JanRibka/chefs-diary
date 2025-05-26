@@ -12,3 +12,43 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// TODO: Zálohy databáze
+// Import your data
+// Your Prisma Postgres database is ready! Let’s configure your database access and import the scema and data from your current project.
+
+// Export your existing data
+// Run the following command, replacing __DATABASE_URL__ with your actual PostgreSQL connection string:
+
+// $ pg_dump \
+//      -Fc \
+//      -v \
+//      -d __DATABASE_URL__ \
+//      -n public \
+//      -f db_dump.bak
+
+// This creates a backup file named db_dump.bak from your source database.
+
+// Set up a TCP tunnel to Prisma Postgres
+// In a new terminal window, set your Prisma Postgres connection URL as an environment variable:
+
+// Generate database credentials
+// Then start the tunnel:
+
+// $ npx @prisma/ppg-tunnel --host 127.0.0.1 --port 5433
+
+// Import your data
+// With the tunnel running, restore your backup into Prisma Postgres:
+
+// $ PGSSLMODE=disable \
+//    pg_restore \
+//      -h 127.0.0.1 \
+//      -p 5433 \
+//      -v \
+//      -d postgres \
+//      ./db_dump.bak \
+//    && echo "-complete-"
+
+// This will import your data into the Prisma Postgres database. You can verify the import using Prisma Studio:
+
+// $ npx prisma studio

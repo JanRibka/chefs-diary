@@ -3,7 +3,7 @@ import UnitsTable from "@/components/admin/unitsTable/UnitsTable";
 import { UnitsTableContextProvider } from "@/components/admin/unitsTable/UnitsTableContext";
 
 export default function UnitsPage() {
-  const unitsPromise = GetAll;
+  // const unitsPromise = GetAll;
   return (
     <PageContentSection className="flex-1">
       <UnitsTableContextProvider>

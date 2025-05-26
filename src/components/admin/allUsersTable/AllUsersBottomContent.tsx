@@ -34,33 +34,31 @@ const AllUsersBottomContent = memo(({ pages, totalUsers }: Props) => {
       </span>
 
       {pages > 1 && page <= pages && (
-        <>
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={setPage}
-          />
-
-          <label className="hidden md:flex items-center text-default-400 text-small">
-            Záznamů na stránku:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              value={pageSize}
-              onChange={onPageSizeChange}
-            >
-              <option value="10">10</option>
-              <option value="15">15</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
-          </label>
-        </>
+        <Pagination
+          isCompact
+          showControls
+          showShadow
+          color="primary"
+          page={page}
+          total={pages}
+          onChange={setPage}
+        />
       )}
+
+      <label className="hidden md:flex items-center text-default-400 text-small">
+        Záznamů na stránku:
+        <select
+          className="bg-transparent outline-none text-default-400 text-small"
+          value={pageSize}
+          onChange={onPageSizeChange}
+        >
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </label>
     </div>
   );
 });

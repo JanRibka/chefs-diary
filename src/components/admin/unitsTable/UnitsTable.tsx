@@ -40,7 +40,7 @@ export default function UnitsTable() {
   // Context
   const { page, pageSize, sortDescriptor, setSortDescriptor } =
     useUnitsTableContext();
-  //TODO: Data budu tahat přes use a strankovani a podobne věci budu dělat na UI. MOhl bych na strankovani sortovani a podobne blbosti vytvoprřit funkci
+  //TODO: Data budu tahat přes use a strankovani a podobne věci budu dělat na UI. MOhl bych na strankovani sortovani a podobne blbosti vytvoprřit funkci. To co dam bokem asu budu muset obalit do mem, a+t se mi to nerenderuje
   // Data
   const { data, pages, isLoading } = useUnitsTableData(
     page,

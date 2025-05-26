@@ -1,10 +1,9 @@
-import { AdapterUser } from 'next-auth/adapters';
-
-import NavBar from '@/components/admin/layout/protectedLayout/navBar/NabBar';
-import SideBar from '@/components/admin/layout/protectedLayout/sideBar/SideBar';
-import ClientReplace from '@/components/shared/clientReplace/ClientReplace';
-import SetUser from '@/components/shared/layout/setUser/SetUser';
-import { getProtectedSessionAdmin } from '@/lib/utils/session';
+import NavBar from "@/components/admin/layout/protectedLayout/navBar/NabBar";
+import SideBar from "@/components/admin/layout/protectedLayout/sideBar/SideBar";
+import ClientReplace from "@/components/shared/clientReplace/ClientReplace";
+import SetUser from "@/components/shared/layout/setUser/SetUser";
+import SessionUserType from "@/lib/types/common/SessionUserType";
+import { getProtectedSessionAdmin } from "@/lib/utils/session";
 
 type Props = { children: React.ReactNode };
 
@@ -20,7 +19,7 @@ export default async function ProtectedLayout({ children }: Props) {
   }
 
   return (
-    <SetUser user={session.user as AdapterUser}>
+    <SetUser user={session.user as SessionUserType}>
       <div className="flex flex-col min-h-screen h-screen">
         <NavBar />
         <SideBar />

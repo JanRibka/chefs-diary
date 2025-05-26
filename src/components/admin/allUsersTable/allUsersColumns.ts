@@ -40,7 +40,6 @@ const allUsersColumns: TableColumnType[] = [
   {
     label: "Akce",
     key: "actions",
-    align: "center",
   },
 ];
 

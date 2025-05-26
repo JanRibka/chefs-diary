@@ -1,11 +1,12 @@
 "use client";
 
-import { AdapterUser } from "next-auth/adapters";
 import { createContext, ReactNode, useContext, useState } from "react";
 
+import SessionUserType from "@/lib/types/common/SessionUserType";
+
 type UserContext = {
-  user: AdapterUser | null;
-  setUser: (user: AdapterUser | null) => void;
+  user: SessionUserType | null;
+  setUser: (user: SessionUserType | null) => void;
 };
 
 export const UserContext = createContext<UserContext | null>(null);
@@ -15,7 +16,7 @@ type Props = {
 };
 
 export function UserContextProvider({ children }: Props) {
-  const [user, setUser] = useState<AdapterUser | null>(null);
+  const [user, setUser] = useState<SessionUserType | null>(null);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

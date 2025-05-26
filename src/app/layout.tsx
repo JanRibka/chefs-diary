@@ -1,20 +1,21 @@
-import type { Metadata, Viewport } from "next";
-import '@/styles/globals.css';
+import type { Viewport } from "next";
+import "@/styles/globals.css";
 
-import ToastProvider from '@/components/shared/toastProvider/ToastProvider';
-import { fontSans } from '@/config/app/fonts';
-import { mergeStyles } from '@/lib/utils/styles';
+import ToastProvider from "@/components/shared/toastProvider/ToastProvider";
+import { fontSans } from "@/config/app/fonts";
+import { mergeStyles } from "@/lib/utils/styles";
 
-import { Providers } from '../config/heroUI/providers';
+import { Providers } from "../config/heroUI/providers";
 
-export const metadata: Metadata = {
-  title: "Kuchařův deník",
-  description:
-    "Kuchařův deník je místo, kde si můžete ukládat své recepty, vytvářet jídelní plán a mít vaření vždy pod kontrolou",
-  icons: {
-    icon: "/favicon.ico",
-  },
-};
+// TODO: Bude se to načítat z ENV
+// export const metadata: Metadata = {
+//   title: "Kuchařův deník",
+//   description:
+//     "Kuchařův deník je místo, kde si můžete ukládat své recepty, vytvářet jídelní plán a mít vaření vždy pod kontrolou",
+//   icons: {
+//     icon: "/favicon.ico",
+//   },
+// };
 
 export const viewport: Viewport = {
   themeColor: [

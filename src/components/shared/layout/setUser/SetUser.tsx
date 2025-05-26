@@ -1,12 +1,12 @@
 "use client";
 
-import { AdapterUser } from "next-auth/adapters";
 import { ReactNode, useEffect } from "react";
 
 import { useUserContext } from "@/context/UserContext";
+import SessionUserType from "@/lib/types/common/SessionUserType";
 
 type Props = {
-  user: AdapterUser | null;
+  user: SessionUserType | null;
   children: ReactNode;
 };
 

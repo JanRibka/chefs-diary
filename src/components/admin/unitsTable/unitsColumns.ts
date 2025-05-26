@@ -13,7 +13,6 @@ const unitsColumns: TableColumnType[] = [
   {
     label: "Akce",
     key: "actions",
-    align: "center",
   },
 ];
 

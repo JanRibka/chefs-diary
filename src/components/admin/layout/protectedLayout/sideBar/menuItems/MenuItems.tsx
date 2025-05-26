@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import AccordionItem from "@/components/shared/accordionItem/AccordionItem";
 import HideContentNoPermission from "@/components/shared/layout/hideContentNoPermission/HideContentNoPermission";
 import SideBarMenuListItem from "@/components/shared/sideBarMenuListItem/SideBarMenuListItem";
@@ -5,7 +7,7 @@ import { RouteValue } from "@/lib/routes/adminRoutes";
 
 import adminMenuItems from "../adminMenuItems";
 
-export default function MenuItems() {
+const MenuItems = () => {
   return (
     <>
       {adminMenuItems.map((item) => (
@@ -38,4 +40,6 @@ export default function MenuItems() {
       ))}
     </>
   );
-}
+};
+
+export default memo(MenuItems);

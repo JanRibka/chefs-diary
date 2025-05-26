@@ -2,7 +2,8 @@ import PageContentSection from "@/components/admin/pageContentSection/PageConten
 import UnitsTable from "@/components/admin/unitsTable/UnitsTable";
 import { UnitsTableContextProvider } from "@/components/admin/unitsTable/UnitsTableContext";
 
-export default function AllUsersPage() {
+export default function UnitsPage() {
+  const unitsPromise = GetAll;
   return (
     <PageContentSection className="flex-1">
       <UnitsTableContextProvider>

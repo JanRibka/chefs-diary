@@ -3,7 +3,7 @@ import PageTitle from "@/components/admin/pageTitle/PageTitle";
 
 type Props = { children: React.ReactNode };
 
-export default function AllUsersLayout({ children }: Props) {
+export default function UnitsLayout({ children }: Props) {
   return (
     <div className="min-h-full flex flex-col">
       <PageTitle>Jednotky</PageTitle>

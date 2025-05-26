@@ -4,10 +4,10 @@ import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 import { prisma } from "../prisma";
 
 /**
- * Get all units
+ * Get all units cached
  * @returns {Promise<Unit[]>}
  */
-export async function getAllUnits(): Promise<Unit[]> {
+export async function getAllUnitsCached(): Promise<Unit[]> {
   return await prisma.unit.findMany({
     cacheStrategy: {
       ttl: 3600,

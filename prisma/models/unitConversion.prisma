@@ -1,0 +1,11 @@
+model UnitConversion {
+    IdUnitConversion Int   @id @default(autoincrement()) @db.Integer
+    IdFromUnit       Int   @db.Integer
+    IdToUnit         Int   @db.Integer
+    Factor           Float @db.Real() // Převodní koeficient (např. 1 kg = 1000 g -> factor = 1000)
+
+    FromUnit Unit @relation("FromUnitConversion", fields: [IdFromUnit], references: [IdUnit])
+    ToUnit   Unit @relation("ToUnitConversion", fields: [IdToUnit], references: [IdUnit])
+
+    @@unique([IdFromUnit, IdToUnit]) // Ensure unique conversion pairs  
+}

@@ -1,85 +1,85 @@
 import { PrismaClient } from "@prisma/client";
-// import { faker } from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
 async function main() {
   // Vytváření rolí
   const auditor = await prisma.userRoleType.upsert({
-    where: { Code: "AUDITOR" },
+    where: { code: "AUDITOR" },
     update: {
-      Value: 7625,
-      Description: "Auditor",
+      value: 7625,
+      description: "Auditor",
     },
     create: {
-      Code: "AUDITOR",
-      Value: 7625,
-      Description: "Auditor",
+      code: "AUDITOR",
+      value: 7625,
+      description: "Auditor",
     },
   });
 
   const support = await prisma.userRoleType.upsert({
-    where: { Code: "SUPPORT" },
+    where: { code: "SUPPORT" },
     update: {
-      Value: 4468,
-      Description: "Podpora",
+      value: 4468,
+      description: "Podpora",
     },
     create: {
-      Code: "SUPPORT",
-      Value: 4468,
-      Description: "Podpora",
+      code: "SUPPORT",
+      value: 4468,
+      description: "Podpora",
     },
   });
 
   const editor = await prisma.userRoleType.upsert({
-    where: { Code: "EDITOR" },
+    where: { code: "EDITOR" },
     update: {
-      Value: 1984,
-      Description: "Editor",
+      value: 1984,
+      description: "Editor",
     },
     create: {
-      Code: "EDITOR",
-      Value: 1984,
-      Description: "Editor",
+      code: "EDITOR",
+      value: 1984,
+      description: "Editor",
     },
   });
 
   const moderator = await prisma.userRoleType.upsert({
-    where: { Code: "MODERATOR" },
+    where: { code: "MODERATOR" },
     update: {
-      Value: 3128,
-      Description: "Moderátor",
+      value: 3128,
+      description: "Moderátor",
     },
     create: {
-      Code: "MODERATOR",
-      Value: 3128,
-      Description: "Moderátor",
+      code: "MODERATOR",
+      value: 3128,
+      description: "Moderátor",
     },
   });
 
   const admin = await prisma.userRoleType.upsert({
-    where: { Code: "ADMIN" },
+    where: { code: "ADMIN" },
     update: {
-      Value: 5150,
-      Description: "Administrátor",
+      value: 5150,
+      description: "Administrátor",
     },
     create: {
-      Code: "ADMIN",
-      Value: 5150,
-      Description: "Administrátor",
+      code: "ADMIN",
+      value: 5150,
+      description: "Administrátor",
     },
   });
 
   const superAdmin = await prisma.userRoleType.upsert({
-    where: { Code: "SUPER_ADMIN" },
+    where: { code: "SUPER_ADMIN" },
     update: {
-      Value: 2821,
-      Description: "Super administrátor",
+      value: 2821,
+      description: "Super administrátor",
     },
     create: {
-      Code: "SUPER_ADMIN",
-      Value: 2821,
-      Description: "Super administrátor",
+      code: "SUPER_ADMIN",
+      value: 2821,
+      description: "Super administrátor",
     },
   });
 
@@ -87,243 +87,243 @@ async function main() {
 
   // Vytváření oprávnění
   const userView = await prisma.permission.upsert({
-    where: { Code: "USER_VIEW" },
+    where: { code: "USER_VIEW" },
     update: {
-      Value: 1,
-      Description: "Zobrazit uživatele",
+      value: 1,
+      description: "Zobrazit uživatele",
     },
     create: {
-      Code: "USER_VIEW",
-      Value: 1,
-      Description: "Zobrazit uživatele",
+      code: "USER_VIEW",
+      value: 1,
+      description: "Zobrazit uživatele",
     },
   });
   const userEdit = await prisma.permission.upsert({
-    where: { Code: "USER_EDIT" },
+    where: { code: "USER_EDIT" },
     update: {
-      Value: 2,
-      Description: "Upravit uživatele",
+      value: 2,
+      description: "Upravit uživatele",
     },
     create: {
-      Code: "USER_EDIT",
-      Value: 2,
-      Description: "Upravit uživatele",
+      code: "USER_EDIT",
+      value: 2,
+      description: "Upravit uživatele",
     },
   });
   const userDelete = await prisma.permission.upsert({
-    where: { Code: "USER_DELETE" },
+    where: { code: "USER_DELETE" },
     update: {
-      Value: 3,
-      Description: "Smazat uživatele",
+      value: 3,
+      description: "Smazat uživatele",
     },
     create: {
-      Code: "USER_DELETE",
-      Value: 3,
-      Description: "Smazat uživatele",
+      code: "USER_DELETE",
+      value: 3,
+      description: "Smazat uživatele",
     },
   });
   const roleAssign = await prisma.permission.upsert({
-    where: { Code: "ROLE_ASSIGN" },
+    where: { code: "ROLE_ASSIGN" },
     update: {
-      Value: 10,
-      Description: "Přiřazovat role",
+      value: 10,
+      description: "Přiřazovat role",
     },
     create: {
-      Code: "ROLE_ASSIGN",
-      Value: 10,
-      Description: "Přiřazovat role",
+      code: "ROLE_ASSIGN",
+      value: 10,
+      description: "Přiřazovat role",
     },
   });
   const permissionEdit = await prisma.permission.upsert({
-    where: { Code: "PERMISSION_EDIT" },
+    where: { code: "PERMISSION_EDIT" },
     update: {
-      Value: 20,
-      Description: "Správa oprávnění",
+      value: 20,
+      description: "Správa oprávnění",
     },
     create: {
-      Code: "PERMISSION_EDIT",
-      Value: 20,
-      Description: "Správa oprávnění",
+      code: "PERMISSION_EDIT",
+      value: 20,
+      description: "Správa oprávnění",
     },
   });
   const logView = await prisma.permission.upsert({
-    where: { Code: "LOG_VIEW" },
+    where: { code: "LOG_VIEW" },
     update: {
-      Value: 30,
-      Description: "Zobrazit systémové logy",
+      value: 30,
+      description: "Zobrazit systémové logy",
     },
     create: {
-      Code: "LOG_VIEW",
-      Value: 30,
-      Description: "Zobrazit systémové logy",
+      code: "LOG_VIEW",
+      value: 30,
+      description: "Zobrazit systémové logy",
     },
   });
   const postApprove = await prisma.permission.upsert({
-    where: { Code: "POST_APPROVE" },
+    where: { code: "POST_APPROVE" },
     update: {
-      Value: 40,
-      Description: "Schválit příspěvek",
+      value: 40,
+      description: "Schválit příspěvek",
     },
     create: {
-      Code: "POST_APPROVE",
-      Value: 40,
-      Description: "Schválit příspěvek",
+      code: "POST_APPROVE",
+      value: 40,
+      description: "Schválit příspěvek",
     },
   });
   const recipePublish = await prisma.permission.upsert({
-    where: { Code: "RECIPE_PUBLISH" },
+    where: { code: "RECIPE_PUBLISH" },
     update: {
-      Value: 50,
-      Description: "Publikovat recept",
+      value: 50,
+      description: "Publikovat recept",
     },
     create: {
-      Code: "RECIPE_PUBLISH",
-      Value: 50,
-      Description: "Publikovat recept",
+      code: "RECIPE_PUBLISH",
+      value: 50,
+      description: "Publikovat recept",
     },
   });
   const recipeEdit = await prisma.permission.upsert({
-    where: { Code: "RECIPE_EDIT" },
+    where: { code: "RECIPE_EDIT" },
     update: {
-      Value: 51,
-      Description: "Upravovat recept",
+      value: 51,
+      description: "Upravovat recept",
     },
     create: {
-      Code: "RECIPE_EDIT",
-      Value: 51,
-      Description: "Upravovat recept",
+      code: "RECIPE_EDIT",
+      value: 51,
+      description: "Upravovat recept",
     },
   });
   const recipeDelete = await prisma.permission.upsert({
-    where: { Code: "RECIPE_DELETE" },
+    where: { code: "RECIPE_DELETE" },
     update: {
-      Value: 52,
-      Description: "Mazat recept recept",
+      value: 52,
+      description: "Mazat recept recept",
     },
     create: {
-      Code: "RECIPE_DELETE",
-      Value: 52,
-      Description: "Publikovat recept",
+      code: "RECIPE_DELETE",
+      value: 52,
+      description: "Publikovat recept",
     },
   });
   const imagePublish = await prisma.permission.upsert({
-    where: { Code: "IMAGE_PUBLISH" },
+    where: { code: "IMAGE_PUBLISH" },
     update: {
-      Value: 60,
-      Description: "Publikovat obrázky",
+      value: 60,
+      description: "Publikovat obrázky",
     },
     create: {
-      Code: "IMAGE_PUBLISH",
-      Value: 60,
-      Description: "Publikovat obrázky",
+      code: "IMAGE_PUBLISH",
+      value: 60,
+      description: "Publikovat obrázky",
     },
   });
   const imageDelete = await prisma.permission.upsert({
-    where: { Code: "IMAGE_DELETE" },
+    where: { code: "IMAGE_DELETE" },
     update: {
-      Value: 61,
-      Description: "Mazat obrázky",
+      value: 61,
+      description: "Mazat obrázky",
     },
     create: {
-      Code: "IMAGE_DELETE",
-      Value: 61,
-      Description: "Mazat obrázky",
+      code: "IMAGE_DELETE",
+      value: 61,
+      description: "Mazat obrázky",
     },
   });
   const commentPublish = await prisma.permission.upsert({
-    where: { Code: "COMMENT_PUBLISH" },
+    where: { code: "COMMENT_PUBLISH" },
     update: {
-      Value: 70,
-      Description: "Publikovat komentáře",
+      value: 70,
+      description: "Publikovat komentáře",
     },
     create: {
-      Code: "COMMENT_PUBLISH",
-      Value: 70,
-      Description: "Publikovat komentáře",
+      code: "COMMENT_PUBLISH",
+      value: 70,
+      description: "Publikovat komentáře",
     },
   });
   const commentDelete = await prisma.permission.upsert({
-    where: { Code: "COMMENT_DELETE" },
+    where: { code: "COMMENT_DELETE" },
     update: {
-      Value: 71,
-      Description: "Mazat komentáře",
+      value: 71,
+      description: "Mazat komentáře",
     },
     create: {
-      Code: "COMMENT_DELETE",
-      Value: 71,
-      Description: "Mazat komentáře",
+      code: "COMMENT_DELETE",
+      value: 71,
+      description: "Mazat komentáře",
     },
   });
   const ratingPublish = await prisma.permission.upsert({
-    where: { Code: "RATING_PUBLISH" },
+    where: { code: "RATING_PUBLISH" },
     update: {
-      Value: 80,
-      Description: "Publikovat hodnocení",
+      value: 80,
+      description: "Publikovat hodnocení",
     },
     create: {
-      Code: "RATING_PUBLISH",
-      Value: 80,
-      Description: "Publikovat hodnocení",
+      code: "RATING_PUBLISH",
+      value: 80,
+      description: "Publikovat hodnocení",
     },
   });
   const ticketView = await prisma.permission.upsert({
-    where: { Code: "TICKET_VIEW" },
+    where: { code: "TICKET_VIEW" },
     update: {
-      Value: 90,
-      Description: "Zobrazit tikety podpory",
+      value: 90,
+      description: "Zobrazit tikety podpory",
     },
     create: {
-      Code: "TICKET_VIEW",
-      Value: 90,
-      Description: "Zobrazit tikety podpory",
+      code: "TICKET_VIEW",
+      value: 90,
+      description: "Zobrazit tikety podpory",
     },
   });
   const ticketManage = await prisma.permission.upsert({
-    where: { Code: "TICKET_MANAGE" },
+    where: { code: "TICKET_MANAGE" },
     update: {
-      Value: 91,
-      Description: "Spravovat tikety",
+      value: 91,
+      description: "Spravovat tikety",
     },
     create: {
-      Code: "TICKET_MANAGE",
-      Value: 91,
-      Description: "Spravovat tikety",
+      code: "TICKET_MANAGE",
+      value: 91,
+      description: "Spravovat tikety",
     },
   });
   const settingsEdit = await prisma.permission.upsert({
-    where: { Code: "SETTINGS_EDIT" },
+    where: { code: "SETTINGS_EDIT" },
     update: {
-      Value: 100,
-      Description: "Spravovat nastavení systému",
+      value: 100,
+      description: "Spravovat nastavení systému",
     },
     create: {
-      Code: "SETTINGS_EDIT",
-      Value: 100,
-      Description: "Spravovat nastavení systému",
+      code: "SETTINGS_EDIT",
+      value: 100,
+      description: "Spravovat nastavení systému",
     },
   });
   const unitView = await prisma.permission.upsert({
-    where: { Code: "UNIT_VIEW" },
+    where: { code: "UNIT_VIEW" },
     update: {
-      Value: 110,
-      Description: "Zobrazit jednotky",
+      value: 110,
+      description: "Zobrazit jednotky",
     },
     create: {
-      Code: "UNIT_VIEW",
-      Value: 110,
-      Description: "Zobrazit jednotky",
+      code: "UNIT_VIEW",
+      value: 110,
+      description: "Zobrazit jednotky",
     },
   });
   const unitEdit = await prisma.permission.upsert({
-    where: { Code: "UNIT_EDIT" },
+    where: { code: "UNIT_EDIT" },
     update: {
-      Value: 111,
-      Description: "Spravovat jednotky",
+      value: 111,
+      description: "Spravovat jednotky",
     },
     create: {
-      Code: "UNIT_EDIT",
-      Value: 111,
-      Description: "Spravovat jednotky",
+      code: "UNIT_EDIT",
+      value: 111,
+      description: "Spravovat jednotky",
     },
   });
 
@@ -355,56 +355,56 @@ async function main() {
   const allPermissions = await prisma.permission.findMany();
 
   const getRoleId = (code) =>
-    allRoles.find((r) => r.Code === code)?.IdUserRoleType;
+    allRoles.find((r) => r.code === code)?.idUserRoleType;
 
   const getPermissionId = (code) =>
-    allPermissions.find((p) => p.Code === code)?.IdPermission;
+    allPermissions.find((p) => p.code === code)?.idPermission;
 
   // Mapování rolí na oprávnění
   const rolePermissionMap = {
     SUPER_ADMIN: [
-      userView.Code,
-      userEdit.Code,
-      userDelete.Code,
-      roleAssign.Code,
-      permissionEdit.Code,
-      logView.Code,
-      postApprove.Code,
-      ticketView.Code,
-      ticketManage.Code,
-      settingsEdit.Code,
-      unitView.Code,
-      unitEdit.Code,
+      userView.code,
+      userEdit.code,
+      userDelete.code,
+      roleAssign.code,
+      permissionEdit.code,
+      logView.code,
+      postApprove.code,
+      ticketView.code,
+      ticketManage.code,
+      settingsEdit.code,
+      unitView.code,
+      unitEdit.code,
     ],
     ADMIN: [
-      userView.Code,
-      userEdit.Code,
-      roleAssign.Code,
-      permissionEdit.Code,
-      logView.Code,
-      ticketView.Code,
-      ticketManage.Code,
-      unitView.Code,
-      unitEdit.Code,
+      userView.code,
+      userEdit.code,
+      roleAssign.code,
+      permissionEdit.code,
+      logView.code,
+      ticketView.code,
+      ticketManage.code,
+      unitView.code,
+      unitEdit.code,
     ],
     MODERATOR: [
-      postApprove.Code,
-      ticketView.Code,
-      commentDelete.Code,
-      recipeDelete.Code,
-      unitView.Code,
+      postApprove.code,
+      ticketView.code,
+      commentDelete.code,
+      recipeDelete.code,
+      unitView.code,
     ],
-    SUPPORT: [ticketView.Code, ticketManage.Code, unitView.Code],
+    SUPPORT: [ticketView.code, ticketManage.code, unitView.code],
     EDITOR: [
-      recipePublish.Code,
-      recipeEdit.Code,
-      recipeDelete.Code,
-      imagePublish.Code,
-      imageDelete.Code,
-      commentPublish.Code,
-      ratingPublish.Code,
+      recipePublish.code,
+      recipeEdit.code,
+      recipeDelete.code,
+      imagePublish.code,
+      imageDelete.code,
+      commentPublish.code,
+      ratingPublish.code,
     ],
-    AUDITOR: [userView.Code, logView.Code, unitView.Code],
+    AUDITOR: [userView.code, logView.code, unitView.code],
   };
 
   for (const [roleCode, permissionCodes] of Object.entries(rolePermissionMap)) {
@@ -423,42 +423,42 @@ async function main() {
 
       await prisma.rolePermission.upsert({
         where: {
-          IdUserRoleType_IdPermission: {
-            IdUserRoleType: roleId,
-            IdPermission: permissionId,
+          idUserRoleType_idPermission: {
+            idUserRoleType: roleId,
+            idPermission: permissionId,
           },
         },
         update: {},
         create: {
-          IdUserRoleType: roleId,
-          IdPermission: permissionId,
+          idUserRoleType: roleId,
+          idPermission: permissionId,
         },
       });
     }
   }
 
   // Naplní tabulku pro 1000 uživatelů
-  //   for (let i = 0; i < 1000; i++) {
-  //     await prisma.user.create({
-  //       data: {
-  //         Password: faker.internet.password(12),
-  //         IsDisabled: faker.datatype.boolean(),
-  //         TwoFactor: faker.datatype.boolean(),
+  for (let i = 0; i < 1000; i++) {
+    await prisma.user.create({
+      data: {
+        password: faker.internet.password(12),
+        isDisabled: faker.datatype.boolean(),
+        twoFactor: faker.datatype.boolean(),
 
-  //         UserInfo: {
-  //           create: {
-  //             UserName: faker.internet.username(),
-  //             Email: faker.internet.email(),
-  //             Phone: faker.phone.number(),
-  //             FirstName: faker.firstName,
-  //             LastName: faker.lastName,
-  //             ImageUrl: faker.image.avatar(),
-  //             EmailVerifiedAt: faker.date.past(),
-  //           },
-  //         },
-  //       },
-  //     });
-  //   }
+        userInfo: {
+          create: {
+            userName: faker.internet.username(),
+            email: faker.internet.email(),
+            phone: faker.phone.number(),
+            firstName: faker.firstName,
+            lastName: faker.lastName,
+            imageUrl: faker.image.avatar(),
+            emailVerifiedAt: faker.date.past(),
+          },
+        },
+      },
+    });
+  }
 }
 
 main()

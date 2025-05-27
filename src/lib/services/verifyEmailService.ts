@@ -19,18 +19,18 @@ export async function verifyEmail(
 
   if (!verificationToken) {
     return VerifyEmailStatusEnum.TOKEN_NOT_FOUND;
-  } else if (verificationToken.Expires < new Date()) {
+  } else if (verificationToken.expires < new Date()) {
     return VerifyEmailStatusEnum.TOKEN_EXPIRED;
   }
 
   try {
     await deleteVerificationTokenByTokenAndIdentifier(
-      verificationToken?.Identifier,
-      verificationToken?.Token
+      verificationToken?.identifier,
+      verificationToken?.token
     );
 
-    await updateUserInfoByEmail(verificationToken.Identifier, {
-      EmailVerifiedAt: new Date(),
+    await updateUserInfoByEmail(verificationToken.identifier, {
+      emailVerifiedAt: new Date(),
     });
 
     return VerifyEmailStatusEnum.SUCCESS;

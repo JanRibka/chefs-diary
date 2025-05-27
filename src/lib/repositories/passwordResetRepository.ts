@@ -16,9 +16,9 @@ export async function createPasswordResetToken(
 ): Promise<PasswordResetToken | null | undefined> {
   return await prisma.passwordResetToken.create({
     data: {
-      Identifier: identifier,
-      Token: token,
-      Expires: expires,
+      identifier: identifier,
+      token: token,
+      expires: expires,
     },
   });
 }
@@ -30,10 +30,10 @@ export async function createPasswordResetToken(
 export async function invalidateAllPasswordResetTokensByEmail(email: string) {
   await prisma.passwordResetToken.updateMany({
     where: {
-      Identifier: email,
+      identifier: email,
     },
     data: {
-      Expires: new Date(0),
+      expires: new Date(0),
     },
   });
 }
@@ -48,7 +48,7 @@ export async function getPasswordResetTokenByToken(
 ): Promise<PasswordResetToken | null | undefined> {
   return await prisma.passwordResetToken.findFirst({
     where: {
-      Token: token,
+      token: token,
     },
   });
 }
@@ -60,7 +60,7 @@ export async function getPasswordResetTokenByToken(
 export async function deleteAllPasswordResetTokensByEmail(email: string) {
   await prisma.passwordResetToken.deleteMany({
     where: {
-      Identifier: email,
+      identifier: email,
     },
   });
 }

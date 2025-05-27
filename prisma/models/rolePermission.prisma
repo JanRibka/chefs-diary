@@ -1,9 +1,9 @@
 model RolePermission {
-  IdUserRoleType Int @db.Integer
-  IdPermission   Int @db.Integer
+  idUserRoleType Int @db.Integer
+  idPermission   Int @db.Integer
 
-  UserRoleType UserRoleType @relation(fields: [IdUserRoleType], references: [IdUserRoleType])
-  Permission   Permission   @relation(fields: [IdPermission], references: [IdPermission])
+  userRoleType UserRoleType @relation(fields: [idUserRoleType], references: [idUserRoleType])
+  permission   Permission   @relation(fields: [idPermission], references: [idPermission])
 
-  @@id([IdUserRoleType, IdPermission])
+  @@id([idUserRoleType, idPermission])
 }

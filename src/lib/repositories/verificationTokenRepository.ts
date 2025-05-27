@@ -16,9 +16,9 @@ export async function createVerificationToken(
 ): Promise<VerificationToken | null | undefined> {
   return await prisma.verificationToken.create({
     data: {
-      Identifier: identifier,
-      Token: token,
-      Expires: expires,
+      identifier: identifier,
+      token: token,
+      expires: expires,
     },
   });
 }
@@ -33,7 +33,7 @@ export async function getVerificationTokenByToken(
 ): Promise<VerificationToken | null | undefined> {
   return await prisma.verificationToken.findFirst({
     where: {
-      Token: token,
+      token: token,
     },
   });
 }
@@ -48,7 +48,7 @@ export async function getVerificationTokenByEmail(
 ): Promise<VerificationToken | null | undefined> {
   return await prisma.verificationToken.findFirst({
     where: {
-      Identifier: email,
+      identifier: email,
     },
   });
 }
@@ -64,8 +64,8 @@ export async function deleteVerificationTokenByTokenAndIdentifier(
 ): Promise<void> {
   await prisma.verificationToken.delete({
     where: {
-      Identifier: identifier,
-      Token: token,
+      identifier: identifier,
+      token: token,
     },
   });
 }
@@ -82,7 +82,7 @@ export async function updateVerificationTokenByEmail(
 ): Promise<VerificationToken> {
   return await prisma.verificationToken.update({
     where: {
-      Identifier: email,
+      identifier: email,
     },
     data: {
       ...verificationToken,

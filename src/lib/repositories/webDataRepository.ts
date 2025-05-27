@@ -65,8 +65,9 @@ export async function insertUnit(
 ): Promise<Unit> {
   return await prisma.unit.create({
     data: {
-      Name: name,
-      DisplayName: displayName,
+      name: name,
+      displayName: displayName,
+      idUnitGroup: 1, //TODO: Nacitat z parametru
     },
   });
 }

@@ -42,9 +42,9 @@ export async function registerUser(
   password: string
 ): Promise<User> {
   const user = await createUser(userName, email, password);
-  const userInfo = await getUserInfoByIdUser(user.IdUser);
+  const userInfo = await getUserInfoByIdUser(user.idUser);
 
-  await sendSignUpEmail(userInfo?.Email ?? "", userInfo?.Email ?? "");
+  await sendSignUpEmail(userInfo?.email ?? "", userInfo?.email ?? "");
 
   return user;
 }
@@ -69,21 +69,21 @@ export async function verifyUser(
 
   if (
     !verifyAdmin &&
-    user.WebLoginRestrictedUntil &&
-    user.WebLoginRestrictedUntil >= new Date()
+    user.webLoginRestrictedUntil &&
+    user.webLoginRestrictedUntil >= new Date()
   ) {
     throw new AuthError("userNameRestricted");
   }
 
   if (
     verifyAdmin &&
-    user.AdminLoginRestrictedUntil &&
-    user.AdminLoginRestrictedUntil >= new Date()
+    user.adminLoginRestrictedUntil &&
+    user.adminLoginRestrictedUntil >= new Date()
   ) {
     throw new AuthError("userNameRestricted");
   }
 
-  if (user.IsDisabled) {
+  if (user.isDisabled) {
     throw new AuthError("accessDenied");
   }
 
@@ -92,12 +92,12 @@ export async function verifyUser(
     : AuthenticationModeEnum.WEB;
 
   if (!(await checkCredentials(user, password))) {
-    await logLoginAttempt(user.IdUser, false, authenticationMode);
+    await logLoginAttempt(user.idUser, false, authenticationMode);
 
     if (
       await getIpFailedLoginCountReachedLimitLast15Minutes(
         10,
-        user.IdUser,
+        user.idUser,
         authenticationMode
       )
     ) {
@@ -107,33 +107,33 @@ export async function verifyUser(
     throw new AuthError("incorrectLoginPassword");
   }
 
-  const userInfo = await getUserInfoByIdUser(user.IdUser);
+  const userInfo = await getUserInfoByIdUser(user.idUser);
 
-  if (!userInfo?.EmailVerifiedAt) {
+  if (!userInfo?.emailVerifiedAt) {
     throw new AuthError("emailNotVerified");
   }
 
-  if (user.TwoFactor) {
+  if (user.twoFactor) {
     //TODO: Toto by asi m2lo b7t n2kde jinde, ale to tu stejn2 nebudu pouzivat
     await login2FA(user);
   }
 
-  const userRoles = await getUserRoleValuesByIdUser(user.IdUser);
+  const userRoles = await getUserRoleValuesByIdUser(user.idUser);
 
   if (verifyAdmin && !getIisAdminRole(userRoles)) {
-    await logLoginAttempt(user.IdUser, false, authenticationMode);
+    await logLoginAttempt(user.idUser, false, authenticationMode);
     throw new AuthError("adminRequired");
   } else if (!getIisEditorRole) {
-    await logLoginAttempt(user.IdUser, false, authenticationMode);
+    await logLoginAttempt(user.idUser, false, authenticationMode);
     throw new AuthError("editorRequired");
   }
 
   return {
-    id: user.IdUser,
-    name: userInfo.UserName,
-    email: userInfo.Email,
-    emailVerified: userInfo.EmailVerifiedAt,
-    image: userInfo.ImageUrl,
+    id: user.idUser,
+    name: userInfo.userName,
+    email: userInfo.email,
+    emailVerified: userInfo.emailVerifiedAt,
+    image: userInfo.imageUrl,
   };
 }
 
@@ -147,7 +147,7 @@ export async function checkCredentials(
   user: User,
   password: string
 ): Promise<boolean> {
-  return await compare(password, user.Password);
+  return await compare(password, user.password);
 }
 
 /**

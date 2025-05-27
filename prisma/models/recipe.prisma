@@ -1,17 +1,17 @@
 model Recipe {
-    IdRecipe  Int      @id @default(autoincrement()) @db.Integer
-    Title     String   @db.VarChar(100)
-    CreatedAt DateTime @default(now()) @db.Timestamp(0)
-    UpdatedAt DateTime @updatedAt @db.Timestamp(0)
-    IdUser    String   @db.VarChar(25)
+    idRecipe  Int      @id @default(autoincrement()) @db.Integer
+    title     String   @db.VarChar(100)
+    createdAt DateTime @default(now()) @db.Timestamp(0)
+    updatedAt DateTime @updatedAt @db.Timestamp(0)
+    idUser    String   @db.VarChar(25)
 
-    User                  User                    @relation(fields: [IdUser], references: [IdUser])
-    RecipeIngredientGroup RecipeIngredientGroup[]
-    RecipeRating          RecipeRating[]
-    RecipeNote            RecipeNote[]
-    FavoriteRecipe        FavoriteRecipe[]
-    RecipeStep            RecipeStep[]
-    RecipeImage           RecipeImage[]
+    user                  User                    @relation(fields: [idUser], references: [idUser])
+    recipeIngredientGroup RecipeIngredientGroup[]
+    recipeRating          RecipeRating[]
+    recipeNote            RecipeNote[]
+    favoriteRecipe        FavoriteRecipe[]
+    recipeStep            RecipeStep[]
+    recipeImage           RecipeImage[]
 }
 
 //TODO: Otypovat vsechny sloupce

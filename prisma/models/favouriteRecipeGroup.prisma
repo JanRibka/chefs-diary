@@ -1,9 +1,9 @@
 model FavoriteRecipeGroup {
-    IdFavoriteGroup Int      @id @default(autoincrement()) @db.Integer
-    IdUser          String   @db.VarChar(25)
-    Name            String   @db.VarChar(50)
-    CreatedAt       DateTime @default(now()) @db.Timestamp(0)
+    idFavoriteGroup Int      @id @default(autoincrement()) @db.Integer
+    idUser          String   @db.VarChar(25)
+    name            String   @db.VarChar(50)
+    createdAt       DateTime @default(now()) @db.Timestamp(0)
 
-    User           User             @relation(fields: [IdUser], references: [IdUser])
-    FavoriteRecipe FavoriteRecipe[]
+    user           User             @relation(fields: [idUser], references: [idUser])
+    favoriteRecipe FavoriteRecipe[]
 }

@@ -1,6 +1,6 @@
 enum AuthenticationModeEnum {
-  WEB = "Web",
-  ADMIN = "Admin",
+  WEB = "web",
+  ADMIN = "admin",
 }
 
 export default AuthenticationModeEnum;

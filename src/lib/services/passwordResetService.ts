@@ -36,7 +36,7 @@ export async function verifyPasswordResetToken(
 
   if (!passwordResetToken) {
     return PasswordResetStatusEnum.TOKEN_NOT_FOUND;
-  } else if (passwordResetToken.Expires < new Date()) {
+  } else if (passwordResetToken.expires < new Date()) {
     return PasswordResetStatusEnum.TOKEN_EXPIRED;
   }
 
@@ -61,12 +61,12 @@ export async function passwordResetRequest(
 
   const hashedPassword = await hashPassword(password);
   const passwordResetToken = await getPasswordResetTokenByToken(token);
-  const user = await getUserByEmail(passwordResetToken?.Identifier ?? "");
+  const user = await getUserByEmail(passwordResetToken?.identifier ?? "");
 
   if (user) {
-    await updateUserByIdUser(user?.IdUser, { Password: hashedPassword });
+    await updateUserByIdUser(user?.idUser, { password: hashedPassword });
     await deleteAllPasswordResetTokensByEmail(
-      passwordResetToken?.Identifier ?? ""
+      passwordResetToken?.identifier ?? ""
     );
   }
 

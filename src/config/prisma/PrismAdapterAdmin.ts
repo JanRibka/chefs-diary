@@ -1,6 +1,6 @@
 import type { Adapter, AdapterSession, AdapterUser } from "next-auth/adapters";
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 export default function PrismaAdapterAdmin(
   prisma: PrismaClient | ReturnType<PrismaClient["$extends"]>
@@ -77,16 +77,16 @@ export default function PrismaAdapterAdmin(
 
       const userInfo = await p.userInfo.findUnique({
         where: {
-          IdUser: sessionUser.IdUser,
+          idUser: sessionUser.idUser,
         },
       });
 
       const user: AdapterUser = {
-        id: sessionUser.IdUser,
-        name: userInfo?.UserName,
-        email: userInfo?.Email ?? "",
-        emailVerified: userInfo?.EmailVerifiedAt ?? new Date(),
-        image: userInfo?.ImageUrl,
+        id: sessionUser.idUser,
+        name: userInfo?.userName,
+        email: userInfo?.email ?? "",
+        emailVerified: userInfo?.emailVerifiedAt ?? new Date(),
+        image: userInfo?.imageUrl,
       };
 
       const session: AdapterSession = {

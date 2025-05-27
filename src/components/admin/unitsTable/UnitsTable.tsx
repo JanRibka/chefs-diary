@@ -63,11 +63,12 @@ export default function UnitsTable() {
   const handleInsertUnitAction = async (formData: FormData) => {
     debugger;
     addOptimisticUnit({
-      IdUnit: Math.random(),
-      Name: formData.get(nameof<InsertUnitFormType>("name")) as string,
-      DisplayName: formData.get(
+      idUnit: Math.random(),
+      name: formData.get(nameof<InsertUnitFormType>("name")) as string,
+      displayName: formData.get(
         nameof<InsertUnitFormType>("displayName")
       ) as string,
+      idUnitGroup: 1, // TODO: nacitat z formu
     });
     //TODO: Nejdruive zjistit, proc mi jednotka zmizne, kdyz nevolam revalidate path asi mus9m vol8n9 zabalit do jin0 komponenty. Tady budu na49tat data a zbytek bbude jinde
     //TODO: Budu mít funkci, která budecaitat error z akšny a vyhazovar Toat
@@ -129,7 +130,7 @@ export default function UnitsTable() {
           emptyContent="Žádný jednotka nebyla nalezena"
         >
           {(item) => (
-            <TableRow key={item.IdUnit}>
+            <TableRow key={item.idUnit}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}

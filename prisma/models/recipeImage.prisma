@@ -1,12 +1,12 @@
 model RecipeImage {
-    IdRecipeImage Int    @id @default(autoincrement()) @db.Integer
-    IdRecipe      Int    @db.Integer
-    IdUser        String @db.VarChar(25)
-    Url           String @db.VarChar(255)
+    idRecipeImage Int    @id @default(autoincrement()) @db.Integer
+    idRecipe      Int    @db.Integer
+    idUser        String @db.VarChar(25)
+    url           String @db.VarChar(255)
 
-    Recipe Recipe @relation(fields: [IdRecipe], references: [IdRecipe])
-    User   User   @relation(fields: [IdUser], references: [IdUser])
+    recipe Recipe @relation(fields: [idRecipe], references: [idRecipe])
+    user   User   @relation(fields: [idUser], references: [idUser])
 
-    @@index([IdRecipe])
-    @@index([IdUser])
+    @@index([idRecipe])
+    @@index([idUser])
 }

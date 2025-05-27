@@ -28,8 +28,8 @@ export async function createUpdateEmailConfirmationUrl(
 
   if (verificationToken) {
     verificationToken = await updateVerificationTokenByEmail(email, {
-      Token: token,
-      Expires: expires,
+      token: token,
+      expires: expires,
     });
   } else {
     verificationToken = await createVerificationToken(email, token, expires);
@@ -38,7 +38,7 @@ export async function createUpdateEmailConfirmationUrl(
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "";
 
   return new URL(
-    `/overeni-emailu/${verificationToken?.Token}`,
+    `/overeni-emailu/${verificationToken?.token}`,
     baseUrl
   ).toString();
 }
@@ -69,7 +69,7 @@ export async function createPasswordResetUrl(
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "";
 
   return new URL(
-    `/obnova-hesla/${passwordResetToken?.Token}`,
+    `/obnova-hesla/${passwordResetToken?.token}`,
     baseUrl
   ).toString();
 }

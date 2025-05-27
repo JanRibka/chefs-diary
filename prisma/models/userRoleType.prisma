@@ -1,9 +1,9 @@
 model UserRoleType {
-  IdUserRoleType Int    @id @default(autoincrement()) @db.Integer
-  Code           String @unique @db.VarChar(20)
-  Value          Int    @unique @db.SmallInt
-  Description    String @db.VarChar(20)
+  idUserRoleType Int    @id @default(autoincrement()) @db.Integer
+  code           String @unique @db.VarChar(20)
+  value          Int    @unique @db.SmallInt
+  description    String @db.VarChar(20)
 
-  UserRole       UserRole[]
-  RolePermission RolePermission[]
+  userRole       UserRole[]
+  rolePermission RolePermission[]
 }

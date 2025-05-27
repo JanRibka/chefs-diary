@@ -1,8 +1,8 @@
 model Ingredient {
-    IdIngredient Int    @id @default(autoincrement()) @db.Integer
-    Name         String @unique @db.VarChar(50)
+    idIngredient Int    @id @default(autoincrement()) @db.Integer
+    name         String @unique @db.VarChar(50)
 
-    RecipeIngredient RecipeIngredient[]
+    recipeIngredient RecipeIngredient[]
 }
 
 // Má smysl dělat i nějaké skupiny u ingrediencí? Jako je například maso, koření nebo nějaké jiné skupiny které tě nenápadnou?

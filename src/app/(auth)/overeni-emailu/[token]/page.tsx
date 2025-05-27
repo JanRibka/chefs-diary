@@ -1,13 +1,13 @@
-import FormAlert from '@/components/shared/form/FormAlert';
-import PasswordResetAlert from '@/components/shared/passwordResetAlert/PasswordResetAlert';
-import VerifyEmailStatusEnum from '@/lib/enums/VerifyEmailStatusEnum';
-import getErrorTextByKey from '@/lib/errorLibrary/auth/authErrorLibrary';
-import { getVerificationTokenByToken } from '@/lib/repositories/verificationTokenRepository';
-import webRoutes from '@/lib/routes/webRoutes';
-import { verifyEmail } from '@/lib/services/verifyEmailService';
+import FormAlert from "@/components/shared/form/FormAlert";
+import PasswordResetAlert from "@/components/shared/passwordResetAlert/PasswordResetAlert";
+import VerifyEmailStatusEnum from "@/lib/enums/VerifyEmailStatusEnum";
+import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
+import { getVerificationTokenByToken } from "@/lib/repositories/verificationTokenRepository";
+import webRoutes from "@/lib/routes/webRoutes";
+import { verifyEmail } from "@/lib/services/verifyEmailService";
 
-import EmailNotVerified from '../../../../components/shared/auth/emailNotVerified/EmailNotVerified';
-import VerifyEmailSuccessful from '../../../../components/shared/auth/verifyEmailSuccess/VerifyEmailSuccess';
+import EmailNotVerified from "../../../../components/shared/auth/emailNotVerified/EmailNotVerified";
+import VerifyEmailSuccessful from "../../../../components/shared/auth/verifyEmailSuccess/VerifyEmailSuccess";
 
 type Props = {
   params: Promise<{ token: string }>;
@@ -32,7 +32,7 @@ export default async function VerifyEmailTokenPage({ params }: Props) {
     );
   } else if (verificationResult === VerifyEmailStatusEnum.TOKEN_EXPIRED) {
     const verificationToken = await getVerificationTokenByToken(token);
-    return <EmailNotVerified email={verificationToken?.Identifier ?? ""} />;
+    return <EmailNotVerified email={verificationToken?.identifier ?? ""} />;
   }
 
   return <VerifyEmailSuccessful />;

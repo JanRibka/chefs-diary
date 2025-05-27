@@ -1,14 +1,14 @@
 model Unit {
-    IdUnit      Int    @id @default(autoincrement()) @db.Integer
-    Name        String @unique @db.VarChar(10) // např. "g"
-    DisplayName String @db.VarChar(10) // např. "gramy"
-    IdUnitGroup Int
+    idUnit      Int    @id @default(autoincrement()) @db.Integer
+    name        String @unique @db.VarChar(10) // např. "g"
+    displayName String @db.VarChar(10) // např. "gramy"
+    idUnitGroup Int
 
-    BaseUnit         UnitGroup[]        @relation("BaseUnitRelation")
-    UnitGroup        UnitGroup          @relation("UnitGroupRelation", fields: [IdUnitGroup], references: [IdUnitGroup])
-    FromConversion   UnitConversion[]   @relation("FromUnitConversion")
-    ToConversion     UnitConversion[]   @relation("ToUnitConversion")
-    RecipeIngredient RecipeIngredient[]
+    baseUnit         UnitGroup[]        @relation("BaseUnitRelation")
+    unitGroup        UnitGroup          @relation("UnitGroupRelation", fields: [idUnitGroup], references: [idUnitGroup])
+    fromConversion   UnitConversion[]   @relation("FromUnitConversion")
+    toConversion     UnitConversion[]   @relation("ToUnitConversion")
+    recipeIngredient RecipeIngredient[]
 }
 
 // Jak by se daly do tabulky vložit nutriční hodnoty potravin které by se pak prepocetly pro dané množství v receptu?

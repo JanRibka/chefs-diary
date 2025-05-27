@@ -18,8 +18,8 @@ export async function getUserByUserName(
   return await prisma.user.findFirst({
     relationLoadStrategy: "join",
     where: {
-      UserInfo: {
-        UserName: userName,
+      userInfo: {
+        userName: userName,
       },
     },
   });
@@ -34,8 +34,8 @@ export async function getUserByEmail(email: string): Promise<User | null> {
   return await prisma.user.findFirst({
     relationLoadStrategy: "join",
     where: {
-      UserInfo: {
-        Email: email,
+      userInfo: {
+        email: email,
       },
     },
   });
@@ -58,21 +58,21 @@ export async function createUser(
   return await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({
       data: {
-        Password: hashedPassword,
+        password: hashedPassword,
       },
     });
 
     await tx.userInfo.create({
       data: {
-        IdUser: user.IdUser,
-        UserName: userName,
-        Email: email,
+        idUser: user.idUser,
+        userName: userName,
+        email: email,
       },
     });
 
     const userRoleTypes = await tx.userRoleType.findMany({
       where: {
-        Value: UserRoleTypeEnum.EDITOR,
+        value: UserRoleTypeEnum.EDITOR,
       },
     });
 
@@ -80,8 +80,8 @@ export async function createUser(
       userRoleTypes.map((item) =>
         tx.userRole.create({
           data: {
-            IdUser: user.IdUser,
-            IdUserRoleType: item.IdUserRoleType,
+            idUser: user.idUser,
+            idUserRoleType: item.idUserRoleType,
           },
         })
       )
@@ -102,15 +102,15 @@ export async function getUserRoleValuesByIdUser(
   const userRoles = await prisma.userRole.findMany({
     relationLoadStrategy: "join",
     include: {
-      UserRoleType: true,
-      User: true,
+      userRoleType: true,
+      user: true,
     },
     where: {
-      IdUser: idUser,
+      idUser: idUser,
     },
   });
 
-  return userRoles.map((item) => item.UserRoleType.Value);
+  return userRoles.map((item) => item.userRoleType.value);
 }
 
 /**
@@ -127,9 +127,9 @@ export async function logLoginAttempt(
 ): Promise<UserLoginHistory> {
   return await prisma.userLoginHistory.create({
     data: {
-      IdUser: idUser,
-      LoginSuccessful: loginSuccessful,
-      AuthMode: authMode,
+      idUser: idUser,
+      loginSuccessful: loginSuccessful,
+      authMode: authMode,
     },
   });
 }
@@ -144,7 +144,7 @@ export async function getUserInfoByIdUser(
 ): Promise<UserInfo | null> {
   return await prisma.userInfo.findFirst({
     where: {
-      IdUser: idUser,
+      idUser: idUser,
     },
   });
 }
@@ -161,7 +161,7 @@ export async function updateUserInfoByEmail(
 ): Promise<UserInfo> {
   return await prisma.userInfo.update({
     where: {
-      Email: email,
+      email: email,
     },
     data: {
       ...userInfo,
@@ -183,12 +183,12 @@ export async function getFailedLoginAttemptsCountByIdUser(
 ): Promise<number> {
   return await prisma.userLoginHistory.count({
     where: {
-      IdUser: idUser,
-      LoginSuccessful: false,
-      LoginAttemptDate: {
+      idUser: idUser,
+      loginSuccessful: false,
+      loginAttemptDate: {
         gte: loginAttemptDateLimit,
       },
-      AuthMode: authMode,
+      authMode: authMode,
     },
   });
 }
@@ -205,7 +205,7 @@ export async function updateUserByIdUser(
 ): Promise<User> {
   return await prisma.user.update({
     where: {
-      IdUser: idUser,
+      idUser: idUser,
     },
     data: {
       ...user,
@@ -223,20 +223,20 @@ export async function getPermissionsByIdUser(
 ): Promise<number[]> {
   const userPermissions = await prisma.user.findMany({
     relationLoadStrategy: "join",
-    where: { IdUser: idUser },
+    where: { idUser: idUser },
     select: {
-      UserPermissionOverride: {
+      userPermissionOverride: {
         select: {
-          Permission: true,
+          permission: true,
         },
       },
-      UserRole: {
+      userRole: {
         select: {
-          UserRoleType: {
+          userRoleType: {
             select: {
-              RolePermission: {
+              rolePermission: {
                 select: {
-                  Permission: true,
+                  permission: true,
                 },
               },
             },
@@ -246,12 +246,12 @@ export async function getPermissionsByIdUser(
     },
   });
 
-  const rolePermissions = userPermissions?.[0]?.UserRole.flatMap(
-    (r) => r.UserRoleType.RolePermission
-  ).map((rp) => rp.Permission);
+  const rolePermissions = userPermissions?.[0]?.userRole
+    .flatMap((r) => r.userRoleType.rolePermission)
+    .map((rp) => rp.permission);
 
-  const overridePermissions = userPermissions?.[0]?.UserPermissionOverride.map(
-    (up) => up.Permission
+  const overridePermissions = userPermissions?.[0]?.userPermissionOverride.map(
+    (up) => up.permission
   );
 
   const allPermissions = [
@@ -261,7 +261,7 @@ export async function getPermissionsByIdUser(
 
   // Optionally filter out duplicates based on IdPermission
   return Array.from(
-    new Map(allPermissions.map((p) => [p.IdPermission, p.Value])).values()
+    new Map(allPermissions.map((p) => [p.idPermission, p.value])).values()
   );
 }
 
@@ -287,7 +287,7 @@ export async function getAllUsersPaginated(
   const orderBy =
     orderByField && orderDirection
       ? {
-          UserInfo: {
+          userInfo: {
             [orderByField]: orderDirection,
           },
         }
@@ -307,16 +307,16 @@ export async function getAllUsersPaginated(
         orderBy,
         where: isFilterValue
           ? {
-              UserInfo: {
+              userInfo: {
                 OR: [
                   {
-                    Email: {
+                    email: {
                       contains: filterValue,
                       mode: "insensitive",
                     },
                   },
                   {
-                    UserName: {
+                    userName: {
                       contains: filterValue,
                       mode: "insensitive",
                     },
@@ -326,54 +326,54 @@ export async function getAllUsersPaginated(
             }
           : undefined,
         select: {
-          IdUser: true,
-          IsDisabled: true,
-          WebLoginRestrictedUntil: true,
-          AdminLoginRestrictedUntil: true,
-          TwoFactor: true,
-          UserInfo: {
+          idUser: true,
+          isDisabled: true,
+          webLoginRestrictedUntil: true,
+          adminLoginRestrictedUntil: true,
+          twoFactor: true,
+          userInfo: {
             select: {
-              UserName: true,
-              EmailVerifiedAt: true,
-              ImageUrl: true,
-              CreatedAt: true,
-              Email: true,
+              userName: true,
+              emailVerifiedAt: true,
+              imageUrl: true,
+              createdAt: true,
+              email: true,
             },
           },
-          UserLoginHistory: {
+          userLoginHistory: {
             select: {
-              LoginSuccessful: true,
-              LoginAttemptDate: true,
+              loginSuccessful: true,
+              loginAttemptDate: true,
             },
           },
         },
       })
       .then((users) =>
         users.map((user) => {
-          const successfulLoginNumber = user.UserLoginHistory.filter(
-            (h) => h.LoginSuccessful
+          const successfulLoginNumber = user.userLoginHistory.filter(
+            (h) => h.loginSuccessful
           ).length;
-          const failedLoginNumber = user.UserLoginHistory.filter(
-            (h) => !h.LoginSuccessful
+          const failedLoginNumber = user.userLoginHistory.filter(
+            (h) => !h.loginSuccessful
           ).length;
-          const lastSuccessfulLogIn = user.UserLoginHistory?.filter(
-            (h) => h.LoginSuccessful
-          )?.sort(
-            (a, b) =>
-              b.LoginAttemptDate.getTime() - a.LoginAttemptDate.getTime()
-          )[0]?.LoginAttemptDate;
+          const lastSuccessfulLogIn = user.userLoginHistory
+            ?.filter((h) => h.loginSuccessful)
+            ?.sort(
+              (a, b) =>
+                b.loginAttemptDate.getTime() - a.loginAttemptDate.getTime()
+            )[0]?.loginAttemptDate;
 
           return {
-            idUser: user.IdUser,
-            isDisabled: user.IsDisabled,
-            webLoginRestrictedUntil: user.WebLoginRestrictedUntil,
-            adminLoginRestrictedUntil: user.AdminLoginRestrictedUntil,
-            twoFactor: user.TwoFactor,
-            userName: user.UserInfo?.UserName ?? "",
-            email: user.UserInfo?.Email ?? "",
-            emailVerifiedAt: user.UserInfo?.EmailVerifiedAt ?? null,
-            imageUrl: user.UserInfo?.ImageUrl ?? null,
-            createdAt: user.UserInfo?.CreatedAt ?? null,
+            idUser: user.idUser,
+            isDisabled: user.isDisabled,
+            webLoginRestrictedUntil: user.webLoginRestrictedUntil,
+            adminLoginRestrictedUntil: user.adminLoginRestrictedUntil,
+            twoFactor: user.twoFactor,
+            userName: user.userInfo?.userName ?? "",
+            email: user.userInfo?.email ?? "",
+            emailVerifiedAt: user.userInfo?.emailVerifiedAt ?? null,
+            imageUrl: user.userInfo?.imageUrl ?? null,
+            createdAt: user.userInfo?.createdAt ?? null,
             successfulLoginNumber,
             failedLoginNumber,
             lastSuccessfulLogIn,
@@ -388,16 +388,16 @@ export async function getAllUsersPaginated(
       },
       where: isFilterValue
         ? {
-            UserInfo: {
+            userInfo: {
               OR: [
                 {
-                  Email: {
+                  email: {
                     contains: filterValue,
                     mode: "insensitive",
                   },
                 },
                 {
-                  UserName: {
+                  userName: {
                     contains: filterValue,
                     mode: "insensitive",
                   },

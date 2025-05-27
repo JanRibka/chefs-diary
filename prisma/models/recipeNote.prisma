@@ -1,12 +1,12 @@
 model RecipeNote {
-    IdNote    Int      @id @default(autoincrement()) @db.Integer
-    IdUser    String   @db.VarChar(25)
-    IdRecipe  Int      @db.Integer
-    Note      String   @db.Text
-    CreatedAt DateTime @default(now()) @db.Timestamp(0)
+    idNote    Int      @id @default(autoincrement()) @db.Integer
+    idUser    String   @db.VarChar(25)
+    idRecipe  Int      @db.Integer
+    note      String   @db.Text
+    createdAt DateTime @default(now()) @db.Timestamp(0)
 
-    User   User   @relation(fields: [IdUser], references: [IdUser])
-    Recipe Recipe @relation(fields: [IdRecipe], references: [IdRecipe])
+    user   User   @relation(fields: [idUser], references: [idUser])
+    recipe Recipe @relation(fields: [idRecipe], references: [idRecipe])
 }
 
 // Vlastní poznámky k receptu

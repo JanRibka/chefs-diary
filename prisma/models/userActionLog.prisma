@@ -1,15 +1,15 @@
 model UserActionLog {
-    IdUserActionLog Int      @id @default(autoincrement()) @db.Integer
-    IdUser          String   @db.VarChar(25)
-    Action          String   @db.VarChar(20) // např. "RECIPE_ADD", "RECIPE_EDIT", "NOTE_ADD" apod.
-    TargetId        String?  @db.VarChar(25) // např. Id receptu nebo poznámky
-    TargetType      String   @db.VarChar(30) // např. "RECIPE", "NOTE"
-    Timestamp       DateTime @default(now()) @db.Timestamp(0)
-    Metadata        String?  @db.Text // volitelné JSON pole nebo popis
+    idUserActionLog Int      @id @default(autoincrement()) @db.Integer
+    idUser          String   @db.VarChar(25)
+    action          String   @db.VarChar(20) // např. "RECIPE_ADD", "RECIPE_EDIT", "NOTE_ADD" apod.
+    targetId        String?  @db.VarChar(25) // např. Id receptu nebo poznámky
+    targetType      String   @db.VarChar(30) // např. "RECIPE", "NOTE"
+    timestamp       DateTime @default(now()) @db.Timestamp(0)
+    metadata        String?  @db.Text // volitelné JSON pole nebo popis
 
-    User User @relation(fields: [IdUser], references: [IdUser])
+    user User @relation(fields: [idUser], references: [idUser])
 
-    @@index([IdUser])
-    @@index([Action])
-    @@index([TargetType, TargetId])
+    @@index([idUser])
+    @@index([action])
+    @@index([targetType, targetId])
 }

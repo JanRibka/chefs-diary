@@ -5,3 +5,300 @@ model Unit {
 
     Recipes RecipeIngredient[]
 }
+
+// Mám si nějak upravit tabulku pro jednotky, když chci mít možnost zadat například stržek, stroužků a abych věděl, že jednotky patří k sobě? Do budoucna chci udělat týdenní plánoavač a když budu vědět, že tuto jednotky patří k sobě, tak to můžu převěst na jednu společnou jednotku. ALe zase musím vědět, kdy pak určitpou jednotku použít. Musím vědět, pro jaký počet určitou jednotku použít
+
+// model Unit {
+//     IdUnit      Int    @id @default(autoincrement()) @db.Integer
+//     Name        String @unique @db.VarChar(10) // např. "g"
+//     DisplayName String @db.VarChar(10) // např. "gramy"
+
+//     Recipes RecipeIngredient[]
+// }
+
+// ChatGPT řekl:
+// Ano, pokud plánuješ funkce jako převody mezi jednotkami, plánování jídel na týden, škálování receptů atd., bude potřeba tvůj model Unit upravit. Mít jen Name a DisplayName nestačí, pokud chceš:
+
+// vědět, které jednotky spolu souvisí (např. stroužek vs. stroužků),
+
+// provádět převody mezi nimi (např. 3 stroužky = 15 g),
+
+// automaticky zvolit správnou jednotku podle množství (např. „1 stroužek“ vs. „3 stroužky“ vs. „15 g“).
+
+// 🔧 Doporučená úprava modelu Unit
+// Zde je návrh rozšířeného modelu:
+
+// prisma
+// Zkopírovat
+// Upravit
+// model Unit {
+//   IdUnit        Int       @id @default(autoincrement())
+//   Name          String    @unique              // např. "g"
+//   DisplayName   String                         // např. "gramy"
+//   Group         String?                        // např. "česnek", "hmotnost", "objem"
+//   IsBase        Boolean   @default(false)      // např. true pro "g" ve skupině hmotnosti
+//   ConversionToBase Float?                      // např. 5 pro "stroužek" => 1 stroužek = 5g
+
+//   Recipes       RecipeIngredient[]
+// }
+// 🧠 Jak to funguje
+// Group: Určuje, které jednotky spolu souvisejí. Např. "česnek" může mít "stroužek" a "g".
+
+// IsBase: Označíš jednu jednotku jako základní v rámci skupiny (např. „g“ pro hmotnost, „ml“ pro objem).
+
+// ConversionToBase: Číselný převod na základní jednotku, pokud je to možné (např. 1 stroužek = 5g).
+
+// ✅ Příklad:
+// Name	DisplayName	Group	IsBase	ConversionToBase
+// g	gramy	hmotnost	true	null
+// kg	kilogramy	hmotnost	false	1000
+// stroužek	stroužků	česnek	false	5
+// ml	mililitry	objem	true	null
+
+// 🗓️ Výhody pro týdenní plánovač:
+// Můžeš počítat celkové množství surovin ve společné jednotce.
+
+// Při výpisu nákupního seznamu můžeš automaticky převádět např. 15 stroužků česneku na 75 g.
+
+// Můžeš rozhodovat, kdy zobrazit "stroužky" a kdy "g" podle množství – např. pokud je pod 4, použiješ stroužky, jinak g.
+
+// 🧩 Možné rozšíření do budoucna:
+// Pokud chceš být extrémně přesný, můžeš mít i zvláštní tabulku UnitConversion, která definuje převody mezi jednotkami nejen číselně, ale i kontextově (např. typ suroviny).
+
+// Chceš, abych ti přidal i typ UnitGroup jako samostatný model? Nebo ti stačí Group: String jako výše?
+
+// Řekl/a jsi:
+// Nebylo by vhodné mát group ve zláštní tabulce a nějakou převodní tabulkou to spojit?
+
+// ChatGPT řekl:
+// Ano, rozdělit jednotky do skupin přes zvláštní tabulku a vytvořit převodní tabulku je architektonicky čistější, flexibilnější a připravené na budoucí růst.
+
+// 🧱 Návrh struktury s tabulkami UnitGroup, Unit, a UnitConversion
+// ### UnitGroup – např. „hmotnost“, „objem“, „česnek“:
+// prisma
+// Zkopírovat
+// Upravit
+// model UnitGroup {
+//   id        Int     @id @default(autoincrement())
+//   name      String  @unique    // např. "hmotnost", "objem", "česnek"
+//   units     Unit[]
+// }
+// ### Unit – jednotky jako „g“, „ml“, „stroužek“:
+// prisma
+// Zkopírovat
+// Upravit
+// model Unit {
+//   id           Int         @id @default(autoincrement())
+//   name         String      @unique       // např. "g", "ml", "stroužek"
+//   displayName  String                     // např. "gramy", "mililitry"
+//   groupId      Int
+//   group        UnitGroup   @relation(fields: [groupId], references: [id])
+
+//   fromConversions UnitConversion[] @relation("FromUnit")
+//   toConversions   UnitConversion[] @relation("ToUnit")
+
+//   recipes      RecipeIngredient[]
+// }
+// ### UnitConversion – převody mezi jednotkami ve skupině:
+// prisma
+// Zkopírovat
+// Upravit
+// model UnitConversion {
+//   id         Int    @id @default(autoincrement())
+//   fromUnit   Unit   @relation("FromUnit", fields: [fromUnitId], references: [id])
+//   fromUnitId Int
+
+//   toUnit     Unit   @relation("ToUnit", fields: [toUnitId], references: [id])
+//   toUnitId   Int
+
+//   multiplier Float  // např. 1 kg = 1000 g => multiplier = 1000
+// }
+// ✅ Výhody tohoto řešení
+// Výhoda	Vysvětlení
+// ✅ Flexibilita	Můžeš přidat libovolné konverze, např. 1 stroužek česneku = 5 g, bez zásahu do Unit.
+// ✅ Čistá data	Jednotky jsou navázány na logické skupiny. Víš, co patří k čemu.
+// ✅ Nezávislost	Můžeš mít víc převodů (např. pro různé suroviny), např. 1 hrnek mouky = 120g, ale 1 hrnek rýže = 200g.
+// ✅ Možnost rozšíření	Do UnitConversion můžeš přidat i ingredientId, pokud chceš konverze závislé na surovině.
+
+// 🧠 Příklad záznamu v UnitConversion
+// fromUnit	toUnit	multiplier
+// "kg"	"g"	1000
+// "stroužek"	"g"	5
+// "lžíce"	"ml"	15
+
+// ❓Chceš více: přidat např. směrovost (obousměrný převod), poznámku, nebo konverzi závislou na surovině?
+// Rád ti s tím pomůžu, jen dej vědět, jak detailní to chceš.
+
+// Řekl/a jsi:
+// Můžu mít třeba jen skupinu stroužek a tam to spojit pod stroužek a stroužky. Nemo napřiklad skupinu hmotnost a tam mít g, kg, dkg, atd?
+
+// ChatGPT řekl:
+// Ano, přesně tak – takové rozdělení do skupin jako „stroužek“ nebo „hmotnost“ dává smysl a je to správně. Zde je vysvětlení obou případů:
+
+// 🧄 1. Skupina „stroužek“ (pro nečíselné jednotky typu kusů)
+// Používá se např. pro česnek:
+
+// Group: stroužek
+
+// Jednotky:
+
+// stroužek
+
+// stroužky
+
+// ks
+
+// případně hlavička, pokud chceš i tuto granularitu
+
+// Proč to dává smysl?
+
+// Můžeš si nastavit převody (např. 1 hlavička = 10 stroužků).
+
+// Můžeš sjednotit výpočty pro nákupní seznamy nebo týdenní plánovač.
+
+// Uživatelsky je výstup čitelnější (např. „3 stroužky“ místo „3 ks česneku“).
+
+// ⚖️ 2. Skupina „hmotnost“
+// Zde budou jednotky jako:
+
+// g
+
+// kg
+
+// dkg
+
+// mg
+
+// Výhody:
+
+// Možnost přesných převodů pomocí UnitConversion.
+
+// Můžeš převádět např. 2 kg + 300 g na 2.3 kg nebo 2300 g.
+
+// 🎯 Jak to pak použít?
+// Například při výpočtu:
+
+// Najdeš všechny jednotky ve stejné skupině (např. „hmotnost“).
+
+// Pomocí UnitConversion převedeš vše na jednu základní jednotku (např. g).
+
+// Počítáš, sčítáš, třídíš podle toho.
+
+// 💡 Shrnutí
+// Příklad skupiny	Jednotky ve skupině	Dává smysl?
+// hmotnost	g, kg, dkg, mg	✅ Ano
+// objem	ml, l, čajová lžička	✅ Ano
+// kusy (česnek)	stroužek, stroužky, ks	✅ Ano
+// jednotky vejce	vejce, ks	✅ Ano (s konverzí)
+
+// Pokud chceš, můžu ti na základě toho připravit konkrétní modely nebo ukázku seed dat s převody.
+
+// Řekl/a jsi:
+// Ano, chci
+
+// ChatGPT řekl:
+// Unit Group Model
+
+// Odpovědět místo plochy v chatu
+// Super, přepsal jsem ti modely tak, aby podporovaly skupiny jednotek a převody mezi nimi:
+
+// UnitGroup definuje skupiny (např. hmotnost, kusy, stroužky).
+
+// Unit patří do skupiny a může být v převodní relaci.
+
+// UnitConversion definuje převod mezi jednotkami pomocí koeficientu.
+
+// Zachoval jsem vztah s RecipeIngredient.
+
+// Pokud chceš, můžeme doplnit i pravidla použití (např. kdy použít "stroužky" místo "stroužek") pomocí dalšího pole, nebo logiky. Chceš přidat i takové upřesnění?
+
+// Prisma schema - modely pro jednotky, skupiny a převody
+
+// model UnitGroup {
+//   id            Int     @id @default(autoincrement())
+//   name          String  @unique @db.VarChar(50) // např. "hmotnost", "stroužek"
+//   baseUnitId    Int?    // odkaz na základní jednotku ve skupině (např. "g" pro hmotnost)
+
+//   units         Unit[]
+//   baseUnit      Unit?   @relation("BaseUnit", fields: [baseUnitId], references: [id])
+// }
+
+// model Unit {
+//   id            Int     @id @default(autoincrement())
+//   name          String  @unique @db.VarChar(10)   // např. "g"
+//   displayName   String  @db.VarChar(20)           // např. "gramy"
+//   groupId       Int
+
+//   group         UnitGroup @relation(fields: [groupId], references: [id])
+//   conversionsFrom UnitConversion[] @relation("FromUnit")
+//   conversionsTo   UnitConversion[] @relation("ToUnit")
+
+//   recipes       RecipeIngredient[]
+// }
+
+// model UnitConversion {
+//   id         Int  @id @default(autoincrement())
+//   fromUnitId Int
+//   toUnitId   Int
+//   factor     Float   // Převodní koeficient (např. 1 kg = 1000 g -> factor = 1000)
+
+//   fromUnit   Unit @relation("FromUnit", fields: [fromUnitId], references: [id])
+//   toUnit     Unit @relation("ToUnit", fields: [toUnitId], references: [id])
+// }
+
+// model RecipeIngredient {
+//   id        Int    @id @default(autoincrement())
+//   quantity  Float
+//   unitId    Int
+
+//   unit      Unit   @relation(fields: [unitId], references: [id])
+// }
+
+// Co když nějaké jednotky nejsou zařadit do žádné skupiny? Napadají mě například kusy
+
+// ChatGPT řekl:
+// Skvělá otázka – přesně tohle je potřeba dopředu promyslet. U jednotek jako „kus“, „balení“, „plechovka“ apod. může být skupinová struktura méně zřejmá. Tady jsou možnosti, jak to ošetřit:
+
+// ✅ Varianta 1: Nepovinná skupina (groupId může být null)
+// Upravíš Unit model takto:
+
+// prisma
+// Zkopírovat
+// Upravit
+// model Unit {
+//   id               Int         @id @default(autoincrement())
+//   name             String      @unique
+//   displayName      String
+//   pluralName       String?
+//   conversionToBase Float?
+//   isBase           Boolean     @default(false)
+//   groupId          Int?
+//   group            UnitGroup?  @relation(fields: [groupId], references: [id])
+// }
+// Díky tomu:
+
+// Jednotka může, ale nemusí patřit do skupiny.
+
+// Např. kus, balení, krabička budou mít groupId = null.
+
+// ✅ Varianta 2: Speciální skupina „Bez skupiny“
+// Vytvoříš v UnitGroup jednu speciální skupinu s názvem např. "Ostatní" nebo "Bez skupiny".
+
+// Všechny nezařaditelné jednotky dáš sem.
+
+// Výhody:
+
+// Můžeš všechny jednotky filtrovat/řadit dle skupiny, aniž bys řešil null.
+
+// Nevýhody:
+
+// Je to trochu umělé – technicky sice nejsou ve skupině, ale databáze si to bude myslet.
+
+// 🔄 Kdy zvolit kterou?
+// Kritérium	groupId: null	Skupina „Ostatní“
+// Chceš mít databázově čistý model	✅ Ano	❌ Ne
+// Chceš jednodušší dotazy a třídění	❌ Ne	✅ Ano
+// Máš hodně nezařaditelných jednotek	✅ Ano	✅ Ano
+
+// ✍️ Doporučení
+// Pokud budeš skupiny hodně používat v UI a filtrovat podle nich (např. výběr převoditelné jednotky), doporučuji mít groupId nepovinné (null) a v UI si jednotky bez skupiny zobrazit pod „Ostatní“. Tak získáš flexibilitu i čitelnost.

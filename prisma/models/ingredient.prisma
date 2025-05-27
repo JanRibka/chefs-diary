@@ -4,3 +4,5 @@ model Ingredient {
 
     RecipeIngredient RecipeIngredient[]
 }
+
+// TODO: Ingredience a jednotky bych mohl dšlat podle igourmet. Mají to podobně, jak byhch to chtěl já  https://www.igurmet.cz/recepty/salaty/salat-s-jahodami-6704/

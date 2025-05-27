@@ -2,9 +2,603 @@ model Unit {
     IdUnit      Int    @id @default(autoincrement()) @db.Integer
     Name        String @unique @db.VarChar(10) // např. "g"
     DisplayName String @db.VarChar(10) // např. "gramy"
+    IdUnitGroup Int
 
-    Recipes RecipeIngredient[]
+    BaseUnit         UnitGroup[]        @relation("BaseUnitRelation")
+    UnitGroup        UnitGroup          @relation("UnitGroupRelation", fields: [IdUnitGroup], references: [IdUnitGroup])
+    FromConversion   UnitConversion[]   @relation("FromUnitConversion")
+    ToConversion     UnitConversion[]   @relation("ToUnitConversion")
+    RecipeIngredient RecipeIngredient[]
 }
+
+// Jak by se daly do tabulky vložit nutriční hodnoty potravin které by se pak prepocetly pro dané množství v receptu?
+
+// ChatGPT řekl:
+// Skvělá otázka! Nutriční hodnoty potravin se běžně ukládají na 100 g nebo 100 ml, a při výpočtu hodnoty v receptu se pak jednoduše přepočítají podle konkrétního množství a jednotky použití.
+
+// Níže najdeš návrh tabulky a princip výpočtu.
+
+// Návrh tabulky pro nutriční hodnoty
+// prisma
+// Zkopírovat
+// Upravit
+// model Ingredient {
+//   IdIngredient Int @id @default(autoincrement())
+//   Name         String
+//   // ... další pole
+
+//   NutritionalValues NutritionalValue?
+// }
+
+// model NutritionalValue {
+//   Id                  Int @id @default(autoincrement())
+//   IngredientId        Int @unique
+//   CaloriesPer100g     Float // kcal
+//   ProteinPer100g      Float // g
+//   CarbsPer100g        Float // g
+//   FatPer100g          Float // g
+//   FiberPer100g        Float // g
+
+//   Ingredient Ingredient @relation(fields: [IngredientId], references: [IdIngredient])
+// }
+// Výpočet pro konkrétní množství v receptu
+// Předpoklad: hodnoty jsou na 100 g nebo 100 ml. V receptech máš množství např. 250 g.
+
+// Příklad výpočtu v kódu:
+// ts
+// Zkopírovat
+// Upravit
+// function calculateNutrition(valuePer100: number, amount: number) {
+//   return (valuePer100 * amount) / 100;
+// }
+
+// // Pokud máš například 250g kuřete:
+// const calories = calculateNutrition(165, 250); // např. 165 kcal / 100g → výstup: 412.5 kcal
+// Co je potřeba zajistit:
+// Jednotky receptu by měly být konvertibilní na hmotnost nebo objem – ideálně mít převodní tabulku např.:
+
+// 1 lžíce oleje = 13 g
+
+// 1 stroužek česneku ≈ 5 g
+
+// Pokud to nejde jednoduše, můžeš:
+
+// u každé ingredience uchovávat průměrnou váhu kusu nebo váhu na 1 jednotku,
+
+// např. gramsPerUnit: 5 (pro „stroužek“ česneku).
+
+// Chceš pomoci i s návrhem převodní logiky jednotek na gramy/ml?
+// Například aby se automaticky přepočítala jednotka „stroužek“ na gramy pro výpočet nutričních hodnot?
+
+// Řekl/a jsi:
+// Ano
+// ChatGPT řekl:
+// Super! Tady je návrh, jak vytvořit převodní logiku jednotek na hmotnost nebo objem pro správný výpočet nutričních hodnot:
+
+// 1. Datový model – převod jednotek na gramy/ml
+// prisma
+// Zkopírovat
+// Upravit
+// model UnitConversion {
+//   IdConversion Int @id @default(autoincrement())
+//   UnitId       Int
+//   IngredientId Int? // volitelné – některé převody závisí na konkrétní ingredienci
+//   GramsPerUnit Float? // např. 1 stroužek česneku = 5 g
+//   MlPerUnit    Float? // např. 1 lžíce oleje = 13 ml
+
+//   Unit       Unit       @relation(fields: [UnitId], references: [IdUnit])
+//   Ingredient Ingredient? @relation(fields: [IngredientId], references: [IdIngredient])
+// }
+// 2. Logika převodu v kódu (pseudo-TS)
+// ts
+// Zkopírovat
+// Upravit
+// function convertToGrams(amount: number, unit: string, ingredientId?: number): number | null {
+//   const conversion = findConversion(unit, ingredientId); // z DB
+
+//   if (!conversion) return null;
+
+//   if (conversion.gramsPerUnit) {
+//     return amount * conversion.gramsPerUnit;
+//   }
+
+//   // Případně pokud máš ml a daná ingredience má hustotu, můžeš převést ml → g
+//   return null;
+// }
+// 3. Příklady v databázi:
+// Jednotka	Ingredience	GramsPerUnit
+// stroužek	česnek	5
+// lžíce	olivový olej	13
+// ks	vejce (M)	60
+
+// 4. Volitelné zlepšení:
+// Přidej pole Density (g/ml) pro přepočet ml → g.
+
+// Umožni zadat DefaultConversion pro danou jednotku, pokud není specifická pro ingredienci.
+
+// 5. Výpočet nutričních hodnot pro recept
+// Po přepočtu množství do gramů (např. 37 g česneku) použiješ:
+
+// ts
+// Zkopírovat
+// Upravit
+// const calories = (ingredient.CaloriesPer100g * 37) / 100;
+// Chceš, abych ti to pomohl rovnou zakomponovat do Prisma schématu a třeba i seed dat?
+
+// Řekl/a jsi:
+// Ano
+// ChatGPT řekl:
+// Jasně, tady máš kompletní návrh Prisma modelů a základní seed data, aby ses mohl rovnou pustit do práce.
+
+// 1. Upravené Prisma modely
+// prisma
+// Zkopírovat
+// Upravit
+// model Unit {
+//   IdUnit      Int     @id @default(autoincrement()) @db.Integer
+//   Name        String  @unique @db.VarChar(10) // např. "g"
+//   DisplayName String  @db.VarChar(50)         // např. "gramy"
+//   GroupId     Int?    // FK na skupinu jednotek, může být null (např. kusy)
+
+//   Group       UnitGroup? @relation(fields: [GroupId], references: [IdGroup])
+//   Conversions UnitConversion[]
+//   Recipes     RecipeIngredient[]
+// }
+
+// model UnitGroup {
+//   IdGroup   Int    @id @default(autoincrement())
+//   Name      String @unique @db.VarChar(50)  // např. "Hmotnost", "Objem", "Počet kusů"
+//   Units     Unit[]
+// }
+
+// model Ingredient {
+//   IdIngredient   Int     @id @default(autoincrement())
+//   Name           String  @unique
+//   CaloriesPer100 Float?  // kcal na 100g
+//   ProteinPer100  Float?  // g na 100g
+//   FatPer100      Float?
+//   CarbPer100     Float?
+
+//   Conversions    UnitConversion[]
+// }
+
+// model UnitConversion {
+//   IdConversion Int     @id @default(autoincrement())
+//   UnitId       Int
+//   IngredientId Int?    // volitelné, pokud závisí na ingredienci
+//   GramsPerUnit Float?  // např. 1 stroužek česneku = 5g
+//   MlPerUnit    Float?  // pro objemové jednotky, pokud je třeba
+
+//   Unit       Unit       @relation(fields: [UnitId], references: [IdUnit])
+//   Ingredient Ingredient? @relation(fields: [IngredientId], references: [IdIngredient])
+// }
+// 2. Ukázková seed data (JS/TS)
+// ts
+// Zkopírovat
+// Upravit
+// import { PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient();
+
+// async function main() {
+//   // Skupiny jednotek
+//   const weightGroup = await prisma.unitGroup.upsert({
+//     where: { Name: "Hmotnost" },
+//     update: {},
+//     create: { Name: "Hmotnost" },
+//   });
+
+//   const pieceGroup = await prisma.unitGroup.upsert({
+//     where: { Name: "Počet kusů" },
+//     update: {},
+//     create: { Name: "Počet kusů" },
+//   });
+
+//   // Jednotky
+//   const gram = await prisma.unit.upsert({
+//     where: { Name: "g" },
+//     update: {},
+//     create: { Name: "g", DisplayName: "gramy", GroupId: weightGroup.IdGroup },
+//   });
+
+//   const piece = await prisma.unit.upsert({
+//     where: { Name: "ks" },
+//     update: {},
+//     create: { Name: "ks", DisplayName: "kusy", GroupId: pieceGroup.IdGroup },
+//   });
+
+//   const clove = await prisma.unit.upsert({
+//     where: { Name: "stroužek" },
+//     update: {},
+//     create: { Name: "stroužek", DisplayName: "stroužek", GroupId: pieceGroup.IdGroup },
+//   });
+
+//   // Ingredience
+//   const garlic = await prisma.ingredient.upsert({
+//     where: { Name: "Česnek" },
+//     update: {},
+//     create: {
+//       Name: "Česnek",
+//       CaloriesPer100: 149,
+//       ProteinPer100: 6.36,
+//       FatPer100: 0.5,
+//       CarbPer100: 33.06,
+//     },
+//   });
+
+//   // Převody jednotek
+//   await prisma.unitConversion.upsert({
+//     where: {
+//       UnitId_IngredientId: {
+//         UnitId: clove.IdUnit,
+//         IngredientId: garlic.IdIngredient,
+//       },
+//     },
+//     update: {},
+//     create: {
+//       UnitId: clove.IdUnit,
+//       IngredientId: garlic.IdIngredient,
+//       GramsPerUnit: 5,
+//     },
+//   });
+// }
+
+// main()
+//   .catch((e) => {
+//     console.error(e);
+//   })
+//   .finally(async () => {
+//     await prisma.$disconnect();
+//   });
+// 3. Jak to funguje
+// UnitGroup drží logické seskupení jednotek (hmotnost, kusy, objem)
+
+// Unit může patřit do skupiny, ale nemusí (GroupId nullable)
+
+// Ingredient má nutriční info na 100g
+
+// UnitConversion ukládá, kolik gramů (nebo ml) je jedna jednotka pro danou ingredienci (nebo obecně, pokud IngredientId je null)
+
+// Díky tomu můžeš snadno přepočítat množství z libovolné jednotky na gramy a spočítat nutriční hodnoty
+
+// Pokud chceš, můžu ti pomoct i s funkcemi na přepočet v kódu a integraci do receptů. Chceš?
+
+// Řekl/a jsi:
+// To vypadá, že to bude spousta výpočtu pro všechny  ingredience3
+// ChatGPT řekl:
+// Jo, může to být docela náročné, pokud budeš počítat nutriční hodnoty a převody pro hodně ingrediencí a receptů v reálném čase.
+
+// Ale je pár možností, jak to optimalizovat:
+
+// Předpočítat agregované hodnoty
+// Při vytvoření nebo úpravě receptu si spočítat nutriční hodnoty dopředu (např. celková energie, bílkoviny, tuky, sacharidy na celý recept nebo na jednu porci) a uložit je do databáze.
+// Pak jen při zobrazování receptu čteš tyto předpočítané hodnoty místo složitých realtime výpočtů.
+
+// Cache / memoizace
+// Pokud výpočet musí být dynamický (např. když uživatel mění množství ingrediencí), tak můžeš výpočty cacheovat v paměti, aby se při rychlém opakování nemusel počítat znovu.
+
+// Optimalizace výpočtů
+// Výpočty děláš jen pro položky, které se změnily. Nebo si můžeš rozdělit výpočty do menších kroků a
+
+// Řekl/a jsi:
+// Jak mám v plánovači převést jednotky,.když v jednom receptu někdo záda brambory například v musel a v jiném v gramech nebo miligramech? Budou má to nejen tabulky dostačující?
+// ChatGPT řekl:
+// Téma převodu jednotek v plánovači (když např. v jednom receptu jsou brambory v kusech, v jiném v gramech) je trochu složitější a opravdu tabulky s jednotkami a skupinami jsou základ, ale nestačí to úplně samo o sobě.
+
+// Co bys měl mít a řešit:
+// Standardní základní jednotka v každé skupině
+
+// Pro každou skupinu jednotek (např. "hmotnost") zvolíš jednu základní jednotku (např. gramy).
+
+// Všechny ostatní jednotky ve skupině budeš převádět na tuto základní jednotku pomocí koeficientu (např. 1 kg = 1000 g).
+
+// Takže když máš recept s bramborami v kusech, musíš mít možnost vědět, že 1 kus bramboru = kolik gramů.
+
+// Převod kusů na hmotnost
+
+// Tohle je klíčové a zároveň největší výzva. Kusy nejsou univerzální – 1 brambor může vážit různě.
+
+// Musíš mít data o průměrné hmotnosti jedné "kuse" dané ingredience (např. jedna brambora váží 150 g).
+
+// Můžeš mít tabulku např. IngredientUnitConversion která spojuje ingredienci s jednotkou kusů a udává konverzní faktor (průměrnou váhu kusu).
+
+// Tabulky v databázi, které ti pomohou:
+
+// Unit — jednotky s konverzními faktory k základní jednotce ve skupině
+
+// Ingredient — suroviny, například brambory
+
+// IngredientUnitConversion — pro konkrétní ingredienci konverze kusů na hmotnost (nebo jiné specifické jednotky)
+
+// případně i IngredientGroup (pro seskupování podobných ingrediencí)
+
+// Výpočet v plánovači:
+
+// Když chceš agregovat nebo přepočítat ingredience z různých receptů, převedeš všechno na základní jednotku (např. gramy).
+
+// U kusů použiješ konverzní faktor z tabulky IngredientUnitConversion.
+
+// Tak můžeš sčítat a plánovat i když byly původní jednotky různé.
+
+// Zjednodušení a doporučení:
+// Bez těchto konverzí mezi kusy a hmotností bude plánovač nepřesný nebo složitý.
+
+// Data o průměrné váze kusů můžeš zadávat při správě ingrediencí v administraci.
+
+// Pokud někdo zadá v receptu "brambory 2 kusy", plánovač přepočítá na gramy (2 × průměrná hmotnost kusu) a spojí to s jiným receptem, kde jsou brambory zadány v gramech.
+
+// Shrnutí:
+
+// Ano, tabulky pro jednotky a skupiny jsou základ, ale je potřeba také mít konverzní faktory specifické pro dané ingredience (kusy → hmotnost).
+
+// Bez toho se jednotky jen těžko správně sjednotí v plánovači.
+
+// Pokud chceš, můžu ti navrhnout konkrétní modely tabulek pro tento scénář.
+
+// Řekl/a jsi:
+// Ano
+// ChatGPT řekl:
+// Dobře, tady je příklad, jak bys mohl v Prisma (nebo obecně v databázi) strukturovat tabulky, aby šlo řešit převody jednotek i kusů na hmotnost (nebo jinou základní jednotku):
+
+// prisma
+// Zkopírovat
+// Upravit
+// model UnitGroup {
+//   id          Int      @id @default(autoincrement())
+//   name        String   @unique          // např. "Hmotnost", "Objem", "Kusy"
+//   baseUnitId  Int?                 
+//   baseUnit    Unit?    @relation(fields: [baseUnitId], references: [id])
+
+//   units       Unit[]
+// }
+
+// model Unit {
+//   id          Int      @id @default(autoincrement())
+//   name        String   @unique          // např. "g", "kg", "ks"
+//   displayName String               // např. "gramy", "kilogramy", "kusy"
+//   groupId     Int
+//   group       UnitGroup @relation(fields: [groupId], references: [id])
+//   toBaseRatio Float     // např. 1 pro g, 1000 pro kg, u kusů 1 (ale bude použit konverzní faktor u ingredience)
+
+//   ingredientConversions IngredientUnitConversion[]
+// }
+
+// model Ingredient {
+//   id          Int      @id @default(autoincrement())
+//   name        String   @unique
+//   // další vlastnosti suroviny
+
+//   unitConversions IngredientUnitConversion[]
+// }
+
+// model IngredientUnitConversion {
+//   id            Int      @id @default(autoincrement())
+//   ingredientId  Int
+//   ingredient    Ingredient @relation(fields: [ingredientId], references: [id])
+//   unitId        Int
+//   unit          Unit       @relation(fields: [unitId], references: [id])
+//   conversionToBase Float    // např. průměrná hmotnost jednoho kusu v základní jednotce dané skupiny
+//                               // např. u bramboru: pokud unit = "ks" a základní jednotka je g, může být 150
+
+//   @@unique([ingredientId, unitId])
+// }
+// Jak to funguje:
+// UnitGroup je skupina jednotek, třeba „Hmotnost“ (základní jednotka g), „Objem“ (základní jednotka ml) nebo „Kusy“ (základní jednotka kus).
+
+// Unit je konkrétní jednotka, která patří do skupiny a má převodní koeficient vůči základní jednotce (např. kg = 1000 g).
+
+// IngredientUnitConversion ti umožní pro konkrétní ingredienci (např. brambor) definovat, kolik váží jeden kus v základní jednotce (např. 1 kus bramboru = 150 g).
+
+// Pro jednotky, které nejsou kusy (např. g, kg), může být conversionToBase rovno 1 (nebo to ignoruješ a používáš toBaseRatio z jednotky).
+
+// Pro kusy je důležitý právě ten conversionToBase na úrovni ingredience.
+
+// V aplikaci:
+// Při plánování převedeš všechna množství na základní jednotku skupiny.
+
+// Pokud je ingredience zadána v kusech, použiješ IngredientUnitConversion.conversionToBase × počet kusů.
+
+// Pokud je v jiné jednotce, použiješ Unit.toBaseRatio.
+
+// Pokud chceš, můžu ti pomoci s další implementací, třeba s výpočtem v kódu nebo návrhem admin rozhraní pro zadávání těchto konverzí.
+
+// Řekl/a jsi:
+// Ano
+// ChatGPT řekl:
+// Skvěle, tady je postup, jak to můžeš v praxi implementovat:
+
+// 1) Admin rozhraní pro zadávání konverzí
+// U ingredience zobrazíš seznam jednotek dostupných v její skupině (např. kusy, gramy, kilogramy).
+
+// U každé jednotky umožníš zadat konverzní faktor k základní jednotce skupiny (např. u kusů bramboru: „1 kus = 150 g“).
+
+// Pro jednotky typu „hmotnost“ jako g nebo kg použiješ převod z Unit.toBaseRatio (nastavený v adminu jen jednou).
+
+// 2) Výpočet v plánovači (pseudo kód)
+// ts
+// Zkopírovat
+// Upravit
+// function convertToBaseUnit(
+//   ingredientId: number,
+//   amount: number,
+//   unitId: number
+// ): number {
+//   // načti jednotku a její skupinu
+//   const unit = getUnitById(unitId);
+//   const ingredientConversion = getIngredientUnitConversion(ingredientId, unitId);
+
+//   if (unit.group.name === "Kusy" && ingredientConversion) {
+//     // pokud je to kusová jednotka, použij přepočet podle ingredience
+//     return amount * ingredientConversion.conversionToBase;
+//   } else {
+//     // jinak použij převod z jednotky k základní (např. kg -> g)
+//     return amount * unit.toBaseRatio;
+//   }
+// }
+// 3) Při zadávání receptu i při výpočtu týdenního plánu
+// Všechny množství převedeš na základní jednotku dané skupiny (např. hmotnost v gramech).
+
+// Pak můžeš všechny ingredience snadno sčítat, porovnávat a agregovat.
+
+// 4) Tipy:
+// Udělej validace v adminu, aby měl každá ingredience pro kusy definovaný převod, pokud chceš kusy používat.
+
+// Zvaž defaultní hodnoty, pokud převod není definovaný, třeba zobraz varování.
+
+// Při ukládání receptu se může převod udělat hned, nebo až při plánování.
+
+// Pokud chceš, mohu ti pomoci i s konkrétní ukázkou kódu (v Prisma, TypeScriptu nebo Reactu). Stačí říct!
+
+// Řekl/a jsi:
+// Ano
+// ChatGPT řekl:
+// Paráda! Tady je konkrétní příklad, jak to můžeš udělat v back-endu (Prisma + TypeScript) a v jednoduché funkci pro převod jednotek u ingredience:
+
+// 1) Modely v Prisma (připomenutí)
+// prisma
+// Zkopírovat
+// Upravit
+// model UnitGroup {
+//   id          Int     @id @default(autoincrement())
+//   name        String  @unique
+//   baseUnitId  Int
+//   baseUnit    Unit    @relation(fields: [baseUnitId], references: [id])
+
+//   units       Unit[]
+// }
+
+// model Unit {
+//   id          Int       @id @default(autoincrement())
+//   name        String    @unique
+//   displayName String
+//   groupId     Int?
+//   group       UnitGroup? @relation(fields: [groupId], references: [id])
+//   toBaseRatio Float     // poměr k baseUnit, např. 0.001 pro gram pokud base je kilogram
+
+//   ingredientConversions IngredientUnitConversion[]
+// }
+
+// model Ingredient {
+//   id   Int    @id @default(autoincrement())
+//   name String
+
+//   unitConversions IngredientUnitConversion[]
+// }
+
+// model IngredientUnitConversion {
+//   id              Int       @id @default(autoincrement())
+//   ingredientId    Int
+//   unitId          Int
+//   conversionToBase Float     // např. kolik gramů je 1 kus této ingredience
+
+//   ingredient      Ingredient @relation(fields: [ingredientId], references: [id])
+//   unit            Unit       @relation(fields: [unitId], references: [id])
+
+//   @@unique([ingredientId, unitId])
+// }
+// 2) Funkce pro převod množství na základní jednotku skupiny
+// ts
+// Zkopírovat
+// Upravit
+// async function convertToBaseUnit(
+//   ingredientId: number,
+//   amount: number,
+//   unitId: number,
+//   prisma: PrismaClient
+// ): Promise<number> {
+//   // Načti jednotku + skupinu + převod pro ingredienci
+//   const unit = await prisma.unit.findUnique({
+//     where: { id: unitId },
+//     include: { group: true }
+//   });
+//   if (!unit) throw new Error("Unit not found");
+
+//   const ingredientConversion = await prisma.ingredientUnitConversion.findUnique({
+//     where: {
+//       ingredientId_unitId: {
+//         ingredientId,
+//         unitId,
+//       }
+//     }
+//   });
+
+//   if (unit.group) {
+//     // Pokud existuje skupina, zkontroluj jestli je u ingredience definován převod
+//     if (ingredientConversion) {
+//       // Použij převod na základní jednotku skupiny
+//       return amount * ingredientConversion.conversionToBase;
+//     } else {
+//       // Pokud není definovaný převod na ingredienci, použij poměr z jednotky k base unit
+//       return amount * unit.toBaseRatio;
+//     }
+//   } else {
+//     // Jednotka není ve skupině, vrať původní množství
+//     return amount;
+//   }
+// }
+// 3) Jak to použít při plánování
+// Při načítání receptu a plánování si pro každou ingredienci zavoláš convertToBaseUnit() a získáš množství v jednotkách základní skupiny (např. gramy).
+
+// Pak můžeš sčítat, agregovat nebo přepočítávat podle potřeby.
+
+// Kdybys chtěl, můžu ti pomoct i s návrhem UI pro správu těch převodů v administraci. Stačí říct!
+
+// Řekl/a jsi:
+// Ano
+
+// ChatGPT řekl:
+// Skvěle! Tady je návod a pár tipů, jak udělat uživatelsky přívětivou administraci pro správu těch jednotek, skupin a převodů:
+
+// 1) Základní koncept UI pro správu jednotek a skupin
+// a) Správa skupin jednotek (Unit Groups)
+// Seznam skupin: Zobrazit všechny skupiny (např. „Hmotnost“, „Objem“, „Počet“).
+
+// Přidat / upravit skupinu: Jméno skupiny, výběr základní jednotky (base unit) z existujících jednotek.
+
+// b) Správa jednotek v rámci skupiny
+// V detailu skupiny zobrazit tabulku všech jednotek, které do ní patří.
+
+// Pro každou jednotku zadat:
+
+// Název (např. „g“, „kg“)
+
+// Zobrazovaný název („gramy“, „kilogramy“)
+
+// Poměr k základní jednotce (např. pro „g“ je to 0.001 pokud je baseUnit „kg“)
+
+// c) Správa převodů pro ingredience
+// Ve správě ingredience mít záložku „Převody jednotek“
+
+// Vypsat tabulku jednotek, kde pro každou jednotku lze zadat „konverzi na základní jednotku“ (např. 1 kus = 150 gramů brambory)
+
+// Můžeš umožnit i „výchozí jednotku“ ingredience (pro rychlejší zadávání)
+
+// 2) Návrh komponent a workflow
+// scss
+// Zkopírovat
+// Upravit
+// AdminDashboard
+//  ├── UnitGroupsList      (přehled skupin jednotek)
+//  │     └── UnitGroupForm (editace / přidání skupiny, včetně base unit)
+//  │     └── UnitsList     (jednotky v dané skupině)
+//  │           └── UnitForm (editace / přidání jednotky, poměr k base unit)
+//  └── IngredientsList
+//        └── IngredientForm
+//              └── UnitConversionsTab (převody jednotek pro danou ingredienci)
+// 3) Uživatelské tipy
+// Použij select / dropdown pro volbu základní jednotky a skupiny.
+
+// Přidej validace, aby například:
+
+// Jednotky měly unikátní název.
+
+// Poměr k základní jednotce byl vždy kladné číslo.
+
+// V převodech pro ingredience umožni uložit i prázdné hodnoty (když převod neznáš), ale počítej s tím v aplikaci.
+
+// Zvaž přidání tooltipů nebo help textů, aby uživatelé věděli, proč převody zadávají.
+
+// Chceš, abych ti pomohl i s konkrétním kódem třeba v Reactu/Next.js pro jednu z těch komponent?
+// Nebo s návrhem API (endpointů) pro CRUD operace?
 
 // Mám si nějak upravit tabulku pro jednotky, když chci mít možnost zadat například stržek, stroužků a abych věděl, že jednotky patří k sobě? Do budoucna chci udělat týdenní plánoavač a když budu vědět, že tuto jednotky patří k sobě, tak to můžu převěst na jednu společnou jednotku. ALe zase musím vědět, kdy pak určitpou jednotku použít. Musím vědět, pro jaký počet určitou jednotku použít
 

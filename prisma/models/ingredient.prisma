@@ -4,3 +4,295 @@ model Ingredient {
 
     RecipeIngredient RecipeIngredient[]
 }
+
+// Má smysl dělat i nějaké skupiny u ingrediencí? Jako je například maso, koření nebo nějaké jiné skupiny které tě nenápadnou?
+
+// ChatGPT řekl:
+// Ano, dává to velký smysl – rozdělit ingredience do skupin může výrazně zjednodušit práci s recepty, plánovačem i filtrováním v administraci nebo na webu.
+
+// ✅ Výhody ingredienčních skupin:
+// Filtrování a třídění:
+
+// Uživatel může rychle najít např. jen „koření“, „zeleninu“, „maso“, atd.
+
+// Výživové souhrny:
+
+// Můžeš dopočítat např. celkové kalorie jen pro maso, mléčné výrobky apod.
+
+// Seznamy na nákup:
+
+// Seskupíš položky podle sekcí v obchodě (např. „ovoce/zelenina“, „maso“, „pečivo“...).
+
+// Sezónnost nebo dostupnost:
+
+// U skupiny „čerstvá zelenina“ můžeš třeba filtrovat podle sezóny.
+
+// 🔖 Příklady skupin:
+// Skupina	Příklady ingrediencí
+// Maso	kuřecí prsa, vepřová krkovice
+// Zelenina	mrkev, okurka, paprika
+// Ovoce	jablka, banány, jahody
+// Koření	pepř, sůl, paprika mletá
+// Mléčné výrobky	mléko, máslo, sýr
+// Pečivo	houska, chléb
+// Luštěniny	čočka, fazole
+// Těstoviny / obiloviny	rýže, těstoviny, bulgur
+// Sladidla	cukr, med
+// Olej / tuky	olej, sádlo
+// Konzervy	tuňák v konzervě, rajčata v plechovce
+
+// 🧩 Databázově:
+// prisma
+// Zkopírovat
+// Upravit
+// model Ingredient {
+//   id         Int               @id @default(autoincrement())
+//   name       String
+//   groupId    Int?
+//   group      IngredientGroup?  @relation(fields: [groupId], references: [id])
+//   // další pole...
+// }
+
+// model IngredientGroup {
+//   id        Int           @id @default(autoincrement())
+//   name      String        @unique
+//   ingredients Ingredient[]
+// }
+// ✍️ Doporučení:
+// Určitě začni s několika základními skupinami (5–10), které dávají smysl pro filtrování nebo nákup.
+
+// Můžeš později přidat možnost „bez skupiny“ nebo speciální skupinu „Ostatní“.
+
+// Chceš, abych ti navrhl Prisma modely, případně seeding několika základních skupin a ingrediencí?
+
+// Řekl/a jsi:
+// Ano
+// ChatGPT řekl:
+// Skvěle! Tady máš návrh na Prisma modely pro ingredience a jejich skupiny + základní seeding skript s několika typickými skupinami a ingrediencemi:
+
+// Prisma modely
+// prisma
+// Zkopírovat
+// Upravit
+// model IngredientGroup {
+//   id           Int           @id @default(autoincrement())
+//   name         String        @unique
+//   ingredients  Ingredient[]
+// }
+
+// model Ingredient {
+//   id           Int           @id @default(autoincrement())
+//   name         String        @unique
+//   groupId      Int?
+//   group        IngredientGroup? @relation(fields: [groupId], references: [id])
+// }
+// Seeding skript (prisma/seed.ts)
+// ts
+// Zkopírovat
+// Upravit
+// import { PrismaClient } from '@prisma/client';
+
+// const prisma = new PrismaClient();
+
+// async function main() {
+//   const groups = [
+//     { name: 'Maso' },
+//     { name: 'Zelenina' },
+//     { name: 'Ovoce' },
+//     { name: 'Koření' },
+//     { name: 'Mléčné výrobky' },
+//     { name: 'Pečivo' },
+//     { name: 'Těstoviny / obiloviny' },
+//     { name: 'Olej / tuky' },
+//     { name: 'Luštěniny' },
+//     { name: 'Sladidla' },
+//     { name: 'Konzervy' },
+//   ];
+
+//   const createdGroups = await Promise.all(
+//     groups.map((group) => prisma.ingredientGroup.create({ data: group }))
+//   );
+
+//   const groupMap = Object.fromEntries(createdGroups.map(g => [g.name, g.id]));
+
+//   await prisma.ingredient.createMany({
+//     data: [
+//       { name: 'Kuřecí prsa', groupId: groupMap['Maso'] },
+//       { name: 'Hovězí maso', groupId: groupMap['Maso'] },
+//       { name: 'Mrkev', groupId: groupMap['Zelenina'] },
+//       { name: 'Paprika', groupId: groupMap['Zelenina'] },
+//       { name: 'Jablko', groupId: groupMap['Ovoce'] },
+//       { name: 'Sůl', groupId: groupMap['Koření'] },
+//       { name: 'Pepř', groupId: groupMap['Koření'] },
+//       { name: 'Mléko', groupId: groupMap['Mléčné výrobky'] },
+//       { name: 'Chléb', groupId: groupMap['Pečivo'] },
+//       { name: 'Rýže', groupId: groupMap['Těstoviny / obiloviny'] },
+//       { name: 'Slunečnicový olej', groupId: groupMap['Olej / tuky'] },
+//       { name: 'Čočka', groupId: groupMap['Luštěniny'] },
+//       { name: 'Cukr', groupId: groupMap['Sladidla'] },
+//       { name: 'Tuňák v konzervě', groupId: groupMap['Konzervy'] },
+//       { name: 'Vajíčko' }, // bez skupiny
+//     ],
+//   });
+// }
+
+// main()
+//   .then(() => {
+//     console.log('Seed hotov');
+//   })
+//   .catch((e) => {
+//     console.error(e);
+//     process.exit(1);
+//   })
+//   .finally(async () => {
+//     await prisma.$disconnect();
+//   });
+// ✅ Tipy
+// Ve formuláři pro správu ingrediencí můžeš nabídnout výběr skupiny jako select, ale zároveň umožnit „bez skupiny“ (null).
+
+// Přidáním order nebo color do skupin můžeš v budoucnu ladit i vzhled nebo pořadí.
+
+// Chceš ještě k tomu i typy pro frontend nebo administrační UI návrh?
+
+// Řekl/a jsi:
+// Má smysl i seskupovat ingredience například podle toho, když zadám cibule, malá cibule , velká cibule a podobně? Abych věděl, že to patří k sobě?
+
+// ChatGPT řekl:
+// Ano, to dává velký smysl – jde o takzvané variace (varianty) ingrediencí, které se mohou lišit velikostí, druhem nebo přesností pojmenování, ale logicky patří k sobě. Pomůže ti to zejména v těchto případech:
+
+// Důvody, proč to zavést:
+// Sjednocení při plánování nebo nákupech:
+
+// „malá cibule“ a „velká cibule“ spadají pod „cibule“ → můžeš je seskupit, sečíst množství, převést na gramy apod.
+
+// Flexibilita při zadávání receptu:
+
+// Uživatel může napsat „1 malá cibule“ a systém bude vědět, že to je varianta „cibule“.
+
+// Lepší filtrování, řazení a reporty:
+
+// Například v nákupním seznamu bude jen „cibule“ s celkovým množstvím (bez duplikací typu „malá cibule“, „cibule“).
+
+// Jak to modelovat v databázi
+// Můžeš zavést nový model IngredientGrouping nebo propojit ingredience mezi sebou pomocí ParentIngredientId:
+
+// Varianta A: Self-reference
+// prisma
+// Zkopírovat
+// Upravit
+// model Ingredient {
+//   id           Int           @id @default(autoincrement())
+//   name         String        @unique
+//   groupId      Int?
+//   group        IngredientGroup? @relation(fields: [groupId], references: [id])
+
+//   parentId     Int?
+//   parent       Ingredient? @relation("IngredientVariants", fields: [parentId], references: [id])
+//   variants     Ingredient[] @relation("IngredientVariants")
+// }
+// parentId říká, že třeba „malá cibule“ má jako rodiče „cibuli“.
+
+// Pokud parentId je null, jedná se o hlavní ingredienci.
+
+// Varianta B: Zvláštní tabulka pro vazby
+// Pokud bys chtěl více vztahů (např. že jedna ingredience může být součástí více skupin), můžeš místo parentId použít novou tabulku:
+
+// prisma
+// Zkopírovat
+// Upravit
+// model IngredientGroupMapping {
+//   id           Int           @id @default(autoincrement())
+//   parentId     Int
+//   childId      Int
+//   parent       Ingredient     @relation("ParentIngredient", fields: [parentId], references: [id])
+//   child        Ingredient     @relation("ChildIngredient", fields: [childId], references: [id])
+// }
+// Ale ve většině případů ti stačí první varianta (self-reference).
+
+// Příklad struktury
+// id	name	parentId
+// 1	cibule	null
+// 2	malá cibule	1
+// 3	velká cibule	1
+// 4	červená cibule	1
+// 5	rajče	null
+// 6	cherry rajče	5
+
+// Chceš, abych ti k tomu rovnou napsal i Prisma model a seed dat?
+
+// Řekl/a jsi:
+// Ano
+// ChatGPT řekl:
+// Ingredient Variants Model
+
+// 1
+// 2
+// 3
+// 4
+// 5
+// 6
+// 7
+// 8
+// 9
+// model Ingredient {
+//   id        Int          @id @default(autoincrement())
+//   name      String       @unique
+
+//   parentId  Int?         // Odkazuje na hlavní ingredienci (např. "cibule")
+//   parent    Ingredient?  @relation("IngredientVariants", fields: [parentId], references: [id])
+//   variants  Ingredient[] @relation("IngredientVariants")
+// }
+
+// Pro seskupování podobných ingrediencí jako „cibule“, „malá cibule“, „velká cibule“ má smysl použít relační vazbu na „hlavní“ ingredienci. To ti umožní jednoduše určit, že všechny varianty patří k sobě. Tento model pak můžeš použít pro konsolidaci dat, plánování nebo náhrady při vaření.
+
+// Můžeme případně přidat typ varianty (např. velikost, druh), pokud chceš varianty rozlišovat podrobněji. Chceš i to?
+
+// Řekl/a jsi:
+// Mám v plánu mít i tabulku, kde budu mít náhrady potravin, ale jen při plánovač 
+
+// ChatGPT řekl:
+// To dává velký smysl – oddělit náhrady potravin do samostatné tabulky, která se použije specificky pro plánovač. Díky tomu:
+
+// nezatížíš model ingrediencí zbytečnými daty, která se používají jen při plánování,
+
+// můžeš mít různé typy náhrad – např. nutričně podobné, cenově dostupnější, nebo jen preferované uživatelem,
+
+// můžeš náhrady filtrovat kontextově – např. podle alergií, preferencí, dostupnosti.
+
+// Příklad návrhu:
+// prisma
+// Zkopírovat
+// Upravit
+// model Ingredient {
+//   IdIngredient Int @id @default(autoincrement())
+//   Name         String
+//   GroupId      Int?
+//   Group        IngredientGroup? @relation(fields: [GroupId], references: [IdIngredientGroup])
+
+//   // Varianty
+//   BaseIngredientId Int?
+//   BaseIngredient   Ingredient? @relation("VariantOf", fields: [BaseIngredientId], references: [IdIngredient])
+//   Variants         Ingredient[] @relation("VariantOf")
+
+//   // Náhrady
+//   SubstitutesFor   IngredientSubstitute[] @relation("SubstituteTarget")
+//   SubstituteWith   IngredientSubstitute[] @relation("SubstituteSource")
+// }
+
+// model IngredientGroup {
+//   IdIngredientGroup Int @id @default(autoincrement())
+//   Name              String
+//   Ingredients       Ingredient[]
+// }
+
+// model IngredientSubstitute {
+//   Id                 Int @id @default(autoincrement())
+//   TargetIngredientId Int
+//   SourceIngredientId Int
+//   Note               String? // např. "vhodná náhrada při vaření", "cenově výhodnější"
+//   OnlyForPlanner     Boolean @default(true) // náhrada pouze při plánování
+
+//   TargetIngredient Ingredient @relation("SubstituteTarget", fields: [TargetIngredientId], references: [IdIngredient])
+//   SourceIngredient Ingredient @relation("SubstituteSource", fields: [SourceIngredientId], references: [IdIngredient])
+// }
+// Chceš to upravit pro nějaké specifické potřeby (např. typ náhrady, prioritu, uživatelské preference apod.)?

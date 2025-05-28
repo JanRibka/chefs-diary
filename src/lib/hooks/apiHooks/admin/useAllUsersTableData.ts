@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import { calculatePages } from "@/lib/utils/table";
 import { SortDescriptor } from "@heroui/react";
 
 import useGetAllUserPaginated from "./useGetAllUsersPaginated";
@@ -18,7 +19,7 @@ export default function useAllUsersTableData(
   );
 
   const pages = useMemo(
-    () => Math.ceil((data.totalCount || 0) / pageSize),
+    () => calculatePages(data.totalCount, pageSize),
     [data.totalCount, pageSize]
   );
 

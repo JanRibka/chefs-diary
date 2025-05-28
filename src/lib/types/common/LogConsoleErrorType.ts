@@ -1,5 +1,5 @@
 type GetErrorMessageOptionsType = {
-  logConsoleError?: boolean;
+  logConsoleErrorEnable?: boolean;
   consoleErrorTitle?: string;
 };
 

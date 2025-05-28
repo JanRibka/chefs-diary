@@ -45,6 +45,12 @@ const adminMenuItems: AdminMenuItemType[] = [
     icon: FaDatabase,
     subitems: [
       {
+        key: "units-groups",
+        label: "Skupiny jednotek",
+        link: adminRoutes.UnitGroups,
+        permissions: [PermissionTypeEnum.UNIT_VIEW],
+      },
+      {
         key: "units",
         label: "Jednotky",
         link: adminRoutes.Units,

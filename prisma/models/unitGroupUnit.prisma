@@ -1,10 +1,12 @@
 model UnitGroupUnit {
-    idGroup    Int     @db.Integer
-    idUnit     Int     @db.Integer
-    isBaseUnit Boolean @default(false) // označení výchozí jednotky ve skupině
+    idUnitGroupUnit Int     @id @default(autoincrement()) @db.Integer
+    isBaseUnit      Boolean @default(false) // označení výchozí jednotky ve skupině
+    idUnitGroup     Int     @db.Integer
+    idUnit          Int     @db.Integer
 
-    unitGroup UnitGroup @relation(fields: [idGroup], references: [idUnitGroup])
+    unitGroup UnitGroup @relation(fields: [idUnitGroup], references: [idUnitGroup])
     unit      Unit      @relation(fields: [idUnit], references: [idUnit])
 
-    @@id([idGroup, idUnit])
+    @@unique([idUnitGroup, idUnit])
+    @@unique([idUnitGroup, isBaseUnit]) // zabrání dvěma base jednotkám ve stejné skupině
 }

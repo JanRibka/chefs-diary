@@ -35,6 +35,7 @@ export async function verifyEmail(
 
     return VerifyEmailStatusEnum.SUCCESS;
   } catch (error) {
+    //TODO: Metoda pro nascteni a logovani erroru
     const errorMessage =
       error instanceof Error ? error.stack || error.message : String(error);
 

@@ -4,6 +4,7 @@ const adminRoutes = {
   Dashboard: "/admin",
   AllUsers: "/admin/vsichni-uzivatele",
   UserProfile: "/admin/profil-uzivatele",
+  UnitGroups: "/admin/skupiny-jednotek",
   Units: "/admin/jednotky",
   Ingredients: "/admin/ingredience",
 } as const;

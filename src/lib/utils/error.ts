@@ -4,6 +4,7 @@ import AuthError from "../errors/AuthError";
 import ForbiddenError from "../errors/ForbiddenError";
 import UnauthorizedError from "../errors/UnauthorizedError";
 import GetErrorMessageOptionsType from "../types/common/GetErrorMessageOptionsType";
+import { logConsoleError } from "./console";
 
 /**
  * Gets error message from error object and log error message
@@ -17,19 +18,21 @@ export function getErrorMessageFromError(
   options: GetErrorMessageOptionsType = {}
 ): string {
   const {
-    logErrorMessage = true,
-    logConsoleError = true,
+    logErrorMessageEnable = true,
+    logConsoleErrorEnable = true,
     consoleErrorTitle = "Chyba:",
   } = options;
 
   const errorMessage =
     error instanceof Error ? error.stack || error.message : String(error);
 
-  if (logConsoleError) {
-    console.error(consoleErrorTitle, error);
-  }
+  logConsoleError(error, {
+    logConsoleErrorEnable: logConsoleErrorEnable,
+    consoleErrorTitle: consoleErrorTitle,
+  });
 
-  if (logErrorMessage) {
+  //TODO: Toto bude taky ve funcki a budou tam podminky jako v logCOnsoleError
+  if (logErrorMessageEnable) {
     logger.error(errorMessage);
   }
 

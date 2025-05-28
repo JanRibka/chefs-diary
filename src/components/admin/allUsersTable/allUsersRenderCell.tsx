@@ -6,12 +6,12 @@ import TableCellDate from "@/components/shared/tableCellDate/TableCellDate";
 import TableCellUser from "@/components/shared/tableCellUser/TableCellUser";
 import UserWithStatsDTO from "@/lib/dTOs/admin/UserWithStatsDTO";
 
-type UserWithStatsActions = UserWithStatsDTO | "actions";
+type UserWithStatsActions = keyof UserWithStatsDTO | "actions";
 
 export function allUsersRenderCell(user: UserWithStatsDTO, columnKey: Key) {
   const cellValue = user[columnKey as keyof UserWithStatsDTO];
 
-  switch (columnKey as keyof UserWithStatsActions) {
+  switch (columnKey as UserWithStatsActions) {
     case "userName":
       return <TableCellUser user={user} />;
     case "createdAt":

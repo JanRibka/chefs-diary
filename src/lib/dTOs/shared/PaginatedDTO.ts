@@ -1,6 +1,4 @@
 export type PaginatedDTO<T> = {
-  data: T[];
+  items: T[];
   totalCount: number;
-  page: number;
-  pageSize: number;
 };

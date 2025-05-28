@@ -1,8 +1,6 @@
 model UnitGroup {
     idUnitGroup Int    @id @default(autoincrement()) @db.Integer
-    name        String @unique @db.VarChar(20) // např. "hmotnost", "objem", "česnek"    
-    idBaseUnit  Int?   @db.Integer // odkaz na základní jednotku ve skupině (např. "g" pro hmotnost)
+    name        String @unique @db.VarChar(20) // např. "hmotnost", "objem", "česnek"
 
-    baseUnit Unit?  @relation("BaseUnitRelation", fields: [idBaseUnit], references: [idUnit])
-    unit     Unit[] @relation("UnitGroupRelation")
+    unitGroupUnit UnitGroupUnit[]
 }

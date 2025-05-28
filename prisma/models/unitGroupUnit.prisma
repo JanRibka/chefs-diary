@@ -1,0 +1,10 @@
+model UnitGroupUnit {
+    idGroup    Int     @db.Integer
+    idUnit     Int     @db.Integer
+    isBaseUnit Boolean @default(false) // označení výchozí jednotky ve skupině
+
+    unitGroup UnitGroup @relation(fields: [idGroup], references: [idUnitGroup])
+    unit      Unit      @relation(fields: [idUnit], references: [idUnit])
+
+    @@id([idGroup, idUnit])
+}

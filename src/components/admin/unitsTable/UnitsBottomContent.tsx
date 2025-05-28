@@ -12,6 +12,7 @@ type Props = {
 const UnitsBottomContent = memo(({ pages, totalUsers }: Props) => {
   const { page, setPage, pageSize, setPageSize } = useUnitsTableContext();
 
+  //TODO: Toto by mohlo b7t v utils spole4n0 pro v3echny gridy
   const onPageSizeChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setPageSize(Number(e.target.value));

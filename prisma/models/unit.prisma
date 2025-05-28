@@ -4,6 +4,7 @@ model Unit {
     displayName String @db.VarChar(10) // např. "gramy"
     idUnitGroup Int
 
+    unitGroupUnit    UnitGroupUnit[]
     baseUnit         UnitGroup[]        @relation("BaseUnitRelation")
     unitGroup        UnitGroup          @relation("UnitGroupRelation", fields: [idUnitGroup], references: [idUnitGroup])
     fromConversion   UnitConversion[]   @relation("FromUnitConversion")

@@ -1,6 +1,6 @@
 export type ServiceResponseDTO<T> = {
   data: T;
   success: boolean;
-  errorMessage?: string;
+  error?: string;
   timeStamp: Date;
 };

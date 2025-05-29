@@ -1,7 +1,7 @@
-import { Key } from "react";
+import { Key } from 'react';
 
-import TableCellActions from "@/components/shared/tableCellActions/TableCellActions";
-import { UnitGroup } from "@prisma/client";
+import TableCellActions from '@/components/shared/tableCellActions/TableCellActions';
+import { UnitGroup } from '@prisma/client';
 
 type UnitGroupActions = keyof UnitGroup | "actions";
 

@@ -1,10 +1,14 @@
-import TableColumnType from "@/lib/types/common/TableColumnType";
+import TableColumnType from '@/lib/types/common/TableColumnType';
 
 const unitGroupsColumns: TableColumnType[] = [
   {
     label: "Název skupiny",
-    key: "Name",
+    key: "name",
     allowsSorting: true,
+  },
+  {
+    label: "Akce",
+    key: "actions",
   },
 ];
 

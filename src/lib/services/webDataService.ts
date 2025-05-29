@@ -1,11 +1,11 @@
-import { UnitGroup } from "@prisma/client";
+import { UnitGroup } from '@prisma/client';
 
-import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
-import { ServiceResponseDTO } from "../dTOs/shared/ServiceResponseDTO";
-import PermissionTypeEnum from "../enums/PermissionTypeEnum";
-import { getAllUnitGroups as GetAllUnitGroupsRepository } from "../repositories/webDataRepository";
-import { getErrorMessageFromError } from "../utils/error";
-import { getRequireAdminPermissions } from "../utils/server";
+import { PaginatedDTO } from '../dTOs/shared/PaginatedDTO';
+import { ServiceResponseDTO } from '../dTOs/shared/ServiceResponseDTO';
+import PermissionTypeEnum from '../enums/PermissionTypeEnum';
+import { getAllUnitGroups as GetAllUnitGroupsRepository } from '../repositories/webDataRepository';
+import { getErrorMessageFromError } from '../utils/error';
+import { getRequireAdminPermissions } from '../utils/server';
 
 /**
  * Gets all unit groups
@@ -30,7 +30,7 @@ export async function getAllUnitGroups(): Promise<
     return {
       data: { items: [], totalCount: 0 },
       success: false,
-      errorMessage,
+      error: errorMessage,
       timeStamp: new Date(),
     };
   }

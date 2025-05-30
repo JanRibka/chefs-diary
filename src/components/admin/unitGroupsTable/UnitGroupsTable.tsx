@@ -1,35 +1,51 @@
 "use client";
 
 import {
-    use, useCallback, useEffect, useMemo, useOptimistic, useRef, useState, useTransition
-} from 'react';
+  use,
+  useCallback,
+  useEffect,
+  useMemo,
+  useOptimistic,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 
-import { insertUnitAction, insertUnitGroupAction } from '@/actions/admin/webData';
-import ConfirmModal from '@/components/shared/actionModal/ConfirmModal';
-import Button from '@/components/shared/button/Button';
-import EvaluateServiceResponseError from '@/components/shared/evaluateServiceResponseError/EvaluateServiceResponseError';
-import Spinner from '@/components/shared/spinner/Spinner';
-import { PaginatedDTO } from '@/lib/dTOs/shared/PaginatedDTO';
-import { ServiceResponseDTO } from '@/lib/dTOs/shared/ServiceResponseDTO';
-import { nameof } from '@/lib/utils/nameof';
-import { calculatePages } from '@/lib/utils/table';
 import {
-    InsertUnitFormErrorType, InsertUnitFormType
-} from '@/lib/validations/schemas/admin/insertUnitFormValidationSchema';
+  insertUnitAction,
+  insertUnitGroupAction,
+} from "@/actions/admin/webData";
+import ConfirmModal from "@/components/shared/actionModal/ConfirmModal";
+import Button from "@/components/shared/button/Button";
+import EvaluateServiceResponseError from "@/components/shared/evaluateServiceResponseError/EvaluateServiceResponseError";
+import Spinner from "@/components/shared/spinner/Spinner";
+import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
+import { ServiceResponseDTO } from "@/lib/dTOs/shared/ServiceResponseDTO";
+import { nameof } from "@/lib/utils/nameof";
+import { calculatePages } from "@/lib/utils/table";
 import {
-    validateInsertUnitForm
-} from '@/lib/validations/validations/admin/insertUnit/validateInsertUnitForm';
+  InsertUnitFormErrorType,
+  InsertUnitFormType,
+} from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
+import { validateInsertUnitForm } from "@/lib/validations/validations/admin/insertUnit/validateInsertUnitForm";
 import {
-    Input, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure
-} from '@heroui/react';
-import { UnitGroup } from '@prisma/client';
+  Input,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  useDisclosure,
+} from "@heroui/react";
+import { UnitGroup } from "@prisma/client";
 
-import InsertUnitDialogContent from './InsertUnitDialogContent';
-import UnitGroupsBottomContent from './UnitGroupsBottomContent';
-import unitGroupsColumns from './unitGroupsColumns';
-import { unitGroupsRenderCell } from './unitGroupsRenderCell';
-import { useUnitGroupsTableContext } from './UnitGroupsTableContext';
-import UnitGroupsTopContent from './UnitGroupsTopContent';
+import InsertUnitDialogContent from "./InsertUnitDialogContent";
+import UnitGroupsBottomContent from "./UnitGroupsBottomContent";
+import unitGroupsColumns from "./unitGroupsColumns";
+import { unitGroupsRenderCell } from "./unitGroupsRenderCell";
+import { useUnitGroupsTableContext } from "./UnitGroupsTableContext";
+import UnitGroupsTopContent from "./UnitGroupsTopContent";
 
 type Props = {
   dataPromise: Promise<ServiceResponseDTO<PaginatedDTO<UnitGroup>>>;
@@ -58,25 +74,6 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
       return [...state, newGroup];
     }
   );
-
-  useEffect(() => {
-    let mounted = true;
-    setIsLoading(true);
-
-    (async () => {
-      try {
-        await dataPromise;
-      } catch (e) {
-        // Optional error handling
-      } finally {
-        if (mounted) setIsLoading(false);
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
-  }, [dataPromise]);
 
   // Render cell
   const renderCell = useCallback(unitGroupsRenderCell, []);

@@ -2,16 +2,19 @@
 
 // import { revalidatePath } from "next/cache";
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath } from "next/cache";
 
 // import insertUnitActionValidator from "@/lib/actionValidators/auth/insertUnitActionValidator";
-import PermissionTypeEnum from '@/lib/enums/PermissionTypeEnum';
-import { insertUnit, insertUnitGroup } from '@/lib/repositories/webDataRepository';
-import adminRoutes from '@/lib/routes/adminRoutes';
+import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
+import {
+  insertUnit,
+  insertUnitGroup,
+} from "@/lib/repositories/webDataRepository";
+import adminRoutes from "@/lib/routes/adminRoutes";
 // import adminRoutes from "@/lib/routes/adminRoutes";
-import { nameof } from '@/lib/utils/nameof';
-import { getRequireAdminPermissions } from '@/lib/utils/server';
-import { InsertUnitFormType } from '@/lib/validations/schemas/admin/insertUnitFormValidationSchema';
+import { nameof } from "@/lib/utils/nameof";
+import { getRequireAdminPermissions } from "@/lib/utils/server";
+import { InsertUnitFormType } from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
 
 export async function insertUnitGroupAction(formData: FormData) {
   // ): Promise<
@@ -29,8 +32,10 @@ export async function insertUnitGroupAction(formData: FormData) {
   const name = formData.get(nameof<InsertUnitFormType>("name")) as string; // TODO: Vym2nit model
 
   try {
+    throw new Error();
     await insertUnitGroup(name);
   } catch (error) {
+    //TODO: Pokud se n2co posere, mus9m výhodit toast s chybovou hlaskou. Toas bude v komponentě. Spatně se to vyplnukje
   } finally {
     revalidatePath(adminRoutes.UnitGroups);
   }

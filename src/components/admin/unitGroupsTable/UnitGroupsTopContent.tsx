@@ -20,7 +20,7 @@ const UnitGroupsTopContent = memo(({ onPressInsertUnit }: Props) => {
         >
           <Button
             color="primary"
-            endContent={<FaPlus />}
+            startContent={<FaPlus />}
             onPress={onPressInsertUnit}
           >
             Přidat skupinu

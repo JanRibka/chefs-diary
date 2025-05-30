@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["relationJoins", "multiSchema", "fullTextSearchPostgres"]
+  previewFeatures = ["relationJoins", "fullTextSearchPostgres"]
   // output          = "./node_modules/@prisma/client"
   // output          = "generated-client"
 }

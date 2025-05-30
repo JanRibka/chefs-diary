@@ -18,7 +18,7 @@ type Props = ModalProps & {
   hideFooter?: boolean;
 };
 
-export default function ConfirmModal({
+export default function CancelConfirmModal({
   className,
   headerLabel,
   children,

@@ -64,6 +64,12 @@ export async function verifyUser(
   const user = await getUserByEmail(email);
 
   if (!user) {
+    //TODO: Tady by měl být not found error. I všude, kde už něco existuje
+    //     !user nebo špatné heslo	AuthError	401
+    // user.isDisabled	AccessDeniedError	403
+    // loginRestrictedUntil nebo adminRestricted	AccessDeniedError	403
+    // !emailVerifiedAt	AccessDeniedError	403
+    // verifyAdmin ale chybí admin role	AccessDeniedError	403
     throw new AuthError("incorrectLoginPassword");
   }
 

@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 
 import UserWithStatsDTO from "@/lib/dTOs/admin/UserWithStatsDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
+import addToast from "@/lib/utils/addToast";
 import { logConsoleError } from "@/lib/utils/console";
-import { addToast, SortDescriptor } from "@heroui/react";
+import { SortDescriptor } from "@heroui/react";
 
 export default function useGetAllUserPaginated(
   page: number,
@@ -46,11 +47,7 @@ export default function useGetAllUserPaginated(
 
         if (!response.ok) {
           //TODO: Pokud bude statusText Unathorized, nebo forbidden, tak z knihovny pres getErrorText nacty hl83ky
-          addToast({
-            title: "Chyba",
-            description: response.statusText,
-            color: "danger",
-          });
+          addToast("Chyba", response.statusText, "danger");
         }
 
         const data = await response.json();

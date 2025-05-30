@@ -1,6 +1,6 @@
 type ValidationResultType<T> = {
   success: boolean;
-  errors: T;
+  error: T;
 };
 
 export default ValidationResultType;

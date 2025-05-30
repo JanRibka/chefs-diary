@@ -1,6 +1,7 @@
 import logger from "@/lib/services/loggerService";
 
 import AuthError from "../errors/AuthError";
+import ConflictError from "../errors/ConflictError";
 import ForbiddenError from "../errors/ForbiddenError";
 import UnauthorizedError from "../errors/UnauthorizedError";
 import GetErrorMessageOptionsType from "../types/common/GetErrorMessageOptionsType";
@@ -22,9 +23,10 @@ export function getErrorMessageFromError(
     logConsoleErrorEnable = true,
     consoleErrorTitle = "Chyba:",
   } = options;
-
   const errorMessage =
     error instanceof Error ? error.stack || error.message : String(error);
+  const resultErrorMessage =
+    error instanceof Error ? error.message : String(error);
 
   logConsoleError(error, {
     logConsoleErrorEnable: logConsoleErrorEnable,
@@ -36,7 +38,7 @@ export function getErrorMessageFromError(
     logger.error(errorMessage);
   }
 
-  return errorMessage;
+  return resultErrorMessage;
 }
 
 /**
@@ -60,6 +62,34 @@ export function getAuthErrorFromError<T>(error: unknown): {
   return {
     errorMessage,
     isAuthError,
+  };
+}
+
+/**
+ * Gets Conflict error message from error object
+ * @param error Error object
+ * @param overrideMessage Fallback error message
+ * @returns {errorMessage, isAuthError}
+ */
+export function getConflictErrorFromError(
+  error: unknown,
+  overrideMessage?: string
+): {
+  isConflictError: boolean;
+  errorMessage: string;
+} {
+  const isConflictError = error instanceof ConflictError;
+  let errorMessage: string;
+
+  if (isConflictError) {
+    errorMessage = overrideMessage ?? error.message;
+  } else {
+    errorMessage = "";
+  }
+
+  return {
+    errorMessage,
+    isConflictError,
   };
 }
 

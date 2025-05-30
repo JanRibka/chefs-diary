@@ -1,7 +1,7 @@
-import { Unit, UnitGroup } from '@prisma/client';
+import { Unit, UnitGroup } from "@prisma/client";
 
-import { PaginatedDTO } from '../dTOs/shared/PaginatedDTO';
-import { prisma } from '../prisma';
+import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
+import { prisma } from "../prisma";
 
 /**
  * Get all units cached
@@ -73,7 +73,7 @@ export async function insertUnit(
 
 /**
  * Get all unit groups
- * @returns {ServiceResponseDTO<PaginatedDTO<UnitGroup>>}
+ * @returns {ActionResponseDTO<PaginatedDTO<UnitGroup>>}
  */
 export async function getAllUnitGroups(): Promise<PaginatedDTO<UnitGroup>> {
   const [unitGroups, totalCount] = await Promise.all([
@@ -92,6 +92,21 @@ export async function getAllUnitGroups(): Promise<PaginatedDTO<UnitGroup>> {
 export async function insertUnitGroup(name: string): Promise<UnitGroup> {
   return await prisma.unitGroup.create({
     data: {
+      name: name,
+    },
+  });
+}
+
+/**
+ * Get unit group by name
+ * @param name Unit group name
+ * @returns {Promise<UnitGroup | null>}
+ */
+export async function getUnitGroupByName(
+  name: string
+): Promise<UnitGroup | null> {
+  return await prisma.unitGroup.findUnique({
+    where: {
       name: name,
     },
   });

@@ -3,33 +3,22 @@
 import {
   use,
   useCallback,
-  useEffect,
   useMemo,
   useOptimistic,
   useRef,
-  useState,
   useTransition,
 } from "react";
 
-import {
-  insertUnitAction,
-  insertUnitGroupAction,
-} from "@/actions/admin/webData";
-import ConfirmModal from "@/components/shared/actionModal/ConfirmModal";
-import Button from "@/components/shared/button/Button";
-import EvaluateServiceResponseError from "@/components/shared/evaluateServiceResponseError/EvaluateServiceResponseError";
-import Spinner from "@/components/shared/spinner/Spinner";
+import { insertUnitGroupAction } from "@/actions/admin/webData";
+import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import EvaluateActionResponseError from "@/components/shared/evaluateActionResponseError/EvaluateActionResponseError";
+import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
-import { ServiceResponseDTO } from "@/lib/dTOs/shared/ServiceResponseDTO";
+import addToast from "@/lib/utils/addToast";
 import { nameof } from "@/lib/utils/nameof";
 import { calculatePages } from "@/lib/utils/table";
+import { InsertUnitGroupFormType } from "@/lib/validations/schemas/admin/insertUnitGroupFormValidationSchema";
 import {
-  InsertUnitFormErrorType,
-  InsertUnitFormType,
-} from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
-import { validateInsertUnitForm } from "@/lib/validations/validations/admin/insertUnit/validateInsertUnitForm";
-import {
-  Input,
   Table,
   TableBody,
   TableCell,
@@ -40,36 +29,41 @@ import {
 } from "@heroui/react";
 import { UnitGroup } from "@prisma/client";
 
-import InsertUnitDialogContent from "./InsertUnitDialogContent";
+import InsertUnitGroupDialogContent from "./InsertUnitGroupDialogContent";
 import UnitGroupsBottomContent from "./UnitGroupsBottomContent";
 import unitGroupsColumns from "./unitGroupsColumns";
 import { unitGroupsRenderCell } from "./unitGroupsRenderCell";
 import { useUnitGroupsTableContext } from "./UnitGroupsTableContext";
 import UnitGroupsTopContent from "./UnitGroupsTopContent";
+import useInsertUnitGroupValidation from "./useInsertUnitGroupValidation";
 
 type Props = {
-  dataPromise: Promise<ServiceResponseDTO<PaginatedDTO<UnitGroup>>>;
+  dataPromise: Promise<ActionResponseDTO<PaginatedDTO<UnitGroup>>>;
 };
-//TODO: Nejprve udělám optimistic update a poté budu přidávat jednotlivé funkce jako načítání dat atd. Po optimistic update se mi nesmí hodnota z tabulky smazat
-export default function UnitGroupsTable({ dataPromise }: Props) {
-  const data = use(dataPromise);
 
+export default function UnitGroupsTable({ dataPromise }: Props) {
+  // References
   const formRef = useRef<HTMLFormElement>(null);
-  // Insert unit modal state
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [isLoading, setIsLoading] = useState(true);
-  // const { onOpen } = useDisclosure();
-  const [isPending, startTransition] = useTransition();
+
   // State
-  // const [errors, setErrors] = useState<InsertUnitFormErrorType>({});
+  const { error, setError, validate } = useInsertUnitGroupValidation();
+
+  // Get data
+  // TODO: todo bude v tabulce
+  const dataWithError = use(dataPromise);
+  const data = dataWithError.data!;
+
+  // Insert unit group modal state
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // Context
   const { pageSize, sortDescriptor, setSortDescriptor } =
     useUnitGroupsTableContext();
 
   // Optimistic update
+  const [isPending, startTransition] = useTransition();
   const [optimisticUnitGroups, addOptimisticUnitGroup] = useOptimistic(
-    data.data.items,
+    data.items,
     (state, newGroup: UnitGroup) => {
       return [...state, newGroup];
     }
@@ -80,80 +74,50 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
 
   // Constants
   const pages = useMemo(
-    () => calculatePages(data.data.totalCount, pageSize),
+    () => calculatePages(data.totalCount, pageSize),
 
-    [data.data.totalCount, pageSize]
+    [data.totalCount, pageSize]
   );
 
-  // Insert unit optimistic
-  // const handleInsertUnitGroupAction = async (formData: FormData) => {
-  //   addOptimisticUnitGroup({
-  //     idUnitGroup: Math.random(),
-  //     name: formData.get("name") as string,
+  // Handlers
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(event.currentTarget);
 
-  //     // name: formData.get(nameof<InsertUnitFormType>("name")) as string,
-  //   });
-  //   //TODO: Nejdruive zjistit, proc mi jednotka zmizne, kdyz nevolam revalidate path asi mus9m vol8n9 zabalit do jin0 komponenty. Tady budu na49tat data a zbytek bbude jinde
-  //   //TODO: Budu mít funkci, která budecaitat error z akšny a vyhazovar Toat
-  //   //TODO: Pro Indert unit neudu potřebovat ENum pro vrácení hodnoty
+    validate(formData);
+  };
 
-  //   // https://www.youtube.com/watch?v=PPOw-sDeoNw&ab_channel=ByteGrad
-  //   // await insertUnitAction(formData);
-  // };
+  const handleInsertUnitGroupAction = async (formData: FormData) => {
+    addOptimisticUnitGroup({
+      idUnitGroup: Math.random(),
+      name: formData.get(nameof<InsertUnitGroupFormType>("name")) as string,
+    });
 
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   const formData = new FormData(event.currentTarget);
-  //   const data = Object.fromEntries(formData);
-  //   const validationResult = validateInsertUnitForm(data);
+    formRef.current?.reset();
 
-  //   if (!validationResult.success) {
-  //     event.preventDefault();
-  //     setErrors({
-  //       ...validationResult.errors,
-  //       timestamp: new Date().getTime().toString(),
-  //     });
-  //   }
-  // };
+    startTransition(async () => {
+      const unitGroup = await insertUnitGroupAction(formData);
 
-  // <EvaluateServiceResponseError data={data} />;
+      if (!unitGroup.success) {
+        if (typeof unitGroup.error === "object") {
+          setError(unitGroup.error);
+          return;
+        }
 
+        addToast("Chyba", unitGroup.error as string, "danger");
+      } else {
+        onOpenChange();
+      }
+    });
+  };
+
+  const handleOnClose = () => {
+    setError({});
+    onOpenChange();
+  };
+  // TODO: DOd2lat pagination a podobné věci
   return (
     <>
-      <form
-        ref={formRef}
-        action={
-          async (formData: FormData) => {
-            addOptimisticUnitGroup({
-              idUnitGroup: Math.random(),
-              name: formData.get("name") as string,
-              // name: formData.get(nameof<InsertUnitFormType>("name")) as string,
-            });
-
-            formRef.current?.reset();
-
-            startTransition(async () => {
-              await insertUnitGroupAction(formData);
-            });
-          }
-          //TODO: Nejdruive zjistit, proc mi jednotka zmizne, kdyz nevolam revalidate path asi mus9m vol8n9 zabalit do jin0 komponenty. Tady budu na49tat data a zbytek bbude jinde
-          //TODO: Budu mít funkci, která budecaitat error z akšny a vyhazovar Toat
-          //TODO: Pro Indert unit neudu potřebovat ENum pro vrácení hodnoty
-        }
-      >
-        <Input
-          name="name"
-          label="Název skupiny"
-          className="mb-4"
-          required
-          autoComplete="off"
-          fullWidth
-          variant="faded"
-          color="primary"
-        />
-        <Button type="submit" disabled={isPending}>
-          Přidat skupinu
-        </Button>
-      </form>
+      <EvaluateActionResponseError data={dataWithError} />
 
       <div className="h-full">
         <Table
@@ -164,7 +128,7 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
           bottomContent={
             <UnitGroupsBottomContent
               pages={pages}
-              totalGroups={data.data.totalCount}
+              totalGroups={data.totalCount}
             />
           }
           bottomContentPlacement="outside"
@@ -188,12 +152,7 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
             )}
           </TableHeader>
 
-          <TableBody
-            items={optimisticUnitGroups}
-            loadingContent={<Spinner />}
-            loadingState={isLoading ? "loading" : "idle"}
-            emptyContent="Žádný jednotka nebyla nalezena"
-          >
+          <TableBody items={optimisticUnitGroups}>
             {(item) => (
               <TableRow key={item.idUnitGroup}>
                 {(columnKey) => (
@@ -204,21 +163,22 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
           </TableBody>
         </Table>
 
-        {/* <ConfirmModal
-        isOpen={isOpen}
-        placement="center"
-        onOpenChange={onOpenChange}
-        headerLabel="Přidat jednotku"
-        hideFooter
-        isDismissable={false}
+        <CancelConfirmModal
+          isOpen={isOpen}
+          placement="center"
+          onOpenChange={handleOnClose}
+          headerLabel="Přidat skupinu jednotek"
+          hideFooter
+          isDismissable={false}
         >
-        <InsertUnitDialogContent
-        onCancel={onOpenChange}
-        action={handleInsertUnitAction}
-        onSubmit={handleSubmit}
-        errors={errors}
-        />
-        </ConfirmModal> */}
+          <InsertUnitGroupDialogContent
+            onCancel={handleOnClose}
+            action={handleInsertUnitGroupAction}
+            onSubmit={handleSubmit}
+            errors={error}
+            isPending={isPending}
+          />
+        </CancelConfirmModal>
       </div>
     </>
   );

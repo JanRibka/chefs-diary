@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
+import addToast from "@/lib/utils/addToast";
 import { logConsoleError } from "@/lib/utils/console";
-import { addToast, SortDescriptor } from "@heroui/react";
+import { SortDescriptor } from "@heroui/react";
 import { Unit } from "@prisma/client";
 
 export default function useGeAllUnitsPaginated(
@@ -13,10 +14,8 @@ export default function useGeAllUnitsPaginated(
   sortDescriptor: SortDescriptor
 ) {
   const [data, setData] = useState<PaginatedDTO<Unit>>({
-    data: [],
+    items: [],
     totalCount: 0,
-    page,
-    pageSize,
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,11 +43,7 @@ export default function useGeAllUnitsPaginated(
 
         if (!response.ok) {
           //TODO: Pokud bude statusText Unathorized, nebo forbidden, tak z knihovny pres getErrorText nacty hl83ky Bude to v n2jakem error helperu
-          addToast({
-            title: "Chyba",
-            description: response.statusText,
-            color: "danger",
-          });
+          addToast("Chyba", response.statusText, "danger");
         }
 
         const data = await response.json();

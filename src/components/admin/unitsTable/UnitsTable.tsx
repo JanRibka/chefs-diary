@@ -1,34 +1,29 @@
 "use client";
 
-import { useCallback, useOptimistic, useState } from "react";
+import { useCallback, useOptimistic, useState } from 'react';
 
-import { insertUnitAction } from "@/actions/admin/webData";
-import ConfirmModal from "@/components/shared/actionModal/ConfirmModal";
-import Spinner from "@/components/shared/spinner/Spinner";
-import useUnitsTableData from "@/lib/hooks/apiHooks/admin/useUnitsTableData";
-import { nameof } from "@/lib/utils/nameof";
+import { insertUnitAction } from '@/actions/admin/webData';
+import ConfirmModal from '@/components/shared/actionModal/ConfirmModal';
+import Spinner from '@/components/shared/spinner/Spinner';
+import useUnitsTableData from '@/lib/hooks/apiHooks/admin/useUnitsTableData';
+import { nameof } from '@/lib/utils/nameof';
 import {
-  InsertUnitFormErrorType,
-  InsertUnitFormType,
-} from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
-import { validateInsertUnitForm } from "@/lib/validations/validations/admin/insertUnit/validateInsertUnitForm";
+    InsertUnitFormErrorType, InsertUnitFormType
+} from '@/lib/validations/schemas/admin/insertUnitFormValidationSchema';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-  useDisclosure,
-} from "@heroui/react";
-import { Unit } from "@prisma/client";
+    validateInsertUnitForm
+} from '@/lib/validations/validations/admin/insertUnit/validateInsertUnitForm';
+import {
+    Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure
+} from '@heroui/react';
+import { Unit } from '@prisma/client';
 
-import InsertUnitDialogContent from "./InsertUnitDialogContent";
-import UnitsBottomContent from "./UnitsBottomContent";
-import unitsColumns from "./unitsColumns";
-import { unitsRenderCell } from "./unitsRenderCell";
-import { useUnitsTableContext } from "./UnitsTableContext";
-import UnitsTopContent from "./UnitsTopContent";
+import InsertUnitDialogContent from './InsertUnitDialogContent';
+import UnitsBottomContent from './UnitsBottomContent';
+import unitsColumns from './unitsColumns';
+import { unitsRenderCell } from './unitsRenderCell';
+import { useUnitsTableContext } from './UnitsTableContext';
+import UnitsTopContent from './UnitsTopContent';
 
 export default function UnitsTable() {
   // Insert unit modal state
@@ -76,6 +71,7 @@ export default function UnitsTable() {
 
     // https://www.youtube.com/watch?v=PPOw-sDeoNw&ab_channel=ByteGrad
     await insertUnitAction(formData);
+    //TODO: Tady bych měl nějak zavolat i refetch s await a oak by to mohlo fungovat
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

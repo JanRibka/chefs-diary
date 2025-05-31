@@ -8,5 +8,4 @@ model UnitConversion {
     toUnit   Unit @relation("ToUnitConversion", fields: [idToUnit], references: [idUnit])
 
     @@unique([idFromUnit, idToUnit]) // Ensure unique conversion pairs  
-    @@schema("unit")
 }

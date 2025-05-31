@@ -3,8 +3,6 @@ model Ingredient {
     name         String @unique @db.VarChar(50)
 
     recipeIngredient RecipeIngredient[]
-
-    @@schema("recipe")
 }
 
 // Má smysl dělat i nějaké skupiny u ingrediencí? Jako je například maso, koření nebo nějaké jiné skupiny které tě nenápadnou?

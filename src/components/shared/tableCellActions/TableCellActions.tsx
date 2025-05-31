@@ -9,20 +9,28 @@ import { Tooltip } from "@heroui/react";
 type Props = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
   hideDetails?: boolean;
   detailsLabel?: string;
+  onDetails?: () => void;
+
   hideEdit?: boolean;
   editLabel?: string;
+  onEdit?: () => void;
+
   hideDelete?: boolean;
   deleteLabel?: string;
+  onDelete?: () => void;
 };
 // TODO: Uživatele bude možno i skrýt, nepujde o d něho nic vidět na webu
 export default function TableCellActions({
   className,
   hideDetails,
   detailsLabel,
+  onDetails,
   hideEdit,
   editLabel,
+  onEdit,
   hideDelete,
   deleteLabel,
+  onDelete,
   ...restProps
 }: Props) {
   return (
@@ -32,25 +40,34 @@ export default function TableCellActions({
     >
       {!hideDetails && (
         <Tooltip content={detailsLabel ?? "Detail"}>
-          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+          <button
+            className="text-lg text-default-400 cursor-pointer active:opacity-50"
+            onClick={onDetails}
+          >
             <IoEyeOutline />
-          </span>
+          </button>
         </Tooltip>
       )}
 
       {!hideEdit && (
         <Tooltip content={editLabel ?? "Editovat"}>
-          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+          <button
+            className="text-lg text-default-400 cursor-pointer active:opacity-50"
+            onClick={onEdit}
+          >
             <CiEdit />
-          </span>
+          </button>
         </Tooltip>
       )}
 
       {!hideDelete && (
         <Tooltip color="danger" content={deleteLabel ?? "Smazat"}>
-          <span className="text-lg text-danger cursor-pointer active:opacity-50">
+          <button
+            className="text-lg text-danger cursor-pointer active:opacity-50"
+            onClick={onDelete}
+          >
             <MdDeleteOutline />
-          </span>
+          </button>
         </Tooltip>
       )}
     </div>

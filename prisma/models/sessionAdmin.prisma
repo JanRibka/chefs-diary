@@ -7,6 +7,4 @@ model SessionAdmin {
   ipAddress    String   @db.VarChar(15)
 
   user User @relation(fields: [userId], references: [idUser], onDelete: Cascade)
-
-  @@schema("auth")
 }

@@ -73,7 +73,7 @@ export async function insertUnit(
 
 /**
  * Get all unit groups
- * @returns {ActionResponseDTO<PaginatedDTO<UnitGroup>>}
+ * @returns {Promise<PaginatedDTO<UnitGroup>>}
  */
 export async function getAllUnitGroups(): Promise<PaginatedDTO<UnitGroup>> {
   const [unitGroups, totalCount] = await Promise.all([
@@ -108,6 +108,53 @@ export async function getUnitGroupByName(
   return await prisma.unitGroup.findUnique({
     where: {
       name: name,
+    },
+  });
+}
+
+/**
+ * Get unit group by idUnitGroup
+ * @returns {Promise<UnitGroup | null>}
+ */
+export async function getUnitGroupById(
+  idUnitGroup: number
+): Promise<UnitGroup | null> {
+  return await prisma.unitGroup.findUnique({
+    where: {
+      idUnitGroup: idUnitGroup,
+    },
+  });
+}
+
+/**
+ * Updates unit group
+ * @param idUnitGroup Unit group id
+ * @param name Unit group name
+ * @returns {Promise<UnitGroup>}
+ */
+export async function updateUnitGroup(
+  idUnitGroup: number,
+  name: string
+): Promise<UnitGroup> {
+  return await prisma.unitGroup.update({
+    where: {
+      idUnitGroup: idUnitGroup,
+    },
+    data: {
+      name: name,
+    },
+  });
+}
+
+/**
+ * Deletes unit group
+ * @param idUnitGroup Unit group id
+ * @returns {Promise<UnitGroup>}
+ */
+export async function deleteUnitGroup(idUnitGroup: number): Promise<UnitGroup> {
+  return await prisma.unitGroup.delete({
+    where: {
+      idUnitGroup: idUnitGroup,
     },
   });
 }

@@ -7,7 +7,6 @@ model UserPermissionOverride {
   permission Permission @relation(fields: [idPermission], references: [idPermission])
 
   @@id([idUser, idPermission])
-  @@schema("user")
 }
 
 // | IdUser (uživatel) | IdPermission    | Allow |

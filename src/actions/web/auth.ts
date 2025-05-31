@@ -39,7 +39,7 @@ export const signUpAction = async (
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
   const termsAgreement = JSON.parse(formData.get("termsAgreement") as string);
-  debugger;
+
   const form: SignUpFormType = {
     userName,
     email,
@@ -49,7 +49,7 @@ export const signUpAction = async (
   };
 
   if (!validationResult.success) {
-    return { form, errors: validationResult.errors };
+    return { form, errors: validationResult.error };
   }
 
   try {
@@ -104,7 +104,7 @@ export const logInAction = async (
   };
 
   if (!validationResult.success) {
-    return { form, errors: validationResult.errors };
+    return { form, errors: validationResult.error };
   }
 
   try {

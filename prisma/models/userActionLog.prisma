@@ -12,5 +12,4 @@ model UserActionLog {
     @@index([idUser])
     @@index([action])
     @@index([targetType, targetId])
-    @@schema("user")
 }

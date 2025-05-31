@@ -19,6 +19,4 @@ model User {
   favoriteRecipeGroup    FavoriteRecipeGroup[]
   recipeImage            RecipeImage[]
   userActionLog          UserActionLog[]
-
-  @@schema("user")
 }

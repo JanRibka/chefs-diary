@@ -12,8 +12,6 @@ model Recipe {
     favoriteRecipe        FavoriteRecipe[]
     recipeStep            RecipeStep[]
     recipeImage           RecipeImage[]
-
-    @@schema("recipe")
 }
 
 //TODO: Otypovat vsechny sloupce

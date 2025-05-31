@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["relationJoins", "fullTextSearchPostgres", "multiSchema"]
+  previewFeatures = ["relationJoins", "fullTextSearchPostgres"]
   // output          = "./node_modules/@prisma/client"
   // output          = "generated-client"
 }
@@ -11,7 +11,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["favorite", "unit", "user", "auth", "recipe", "note", "rating"]
 }
 
 // TODO: Zálohy databáze

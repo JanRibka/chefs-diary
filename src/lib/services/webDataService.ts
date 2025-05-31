@@ -6,6 +6,7 @@ import PermissionTypeEnum from "../enums/PermissionTypeEnum";
 import ConflictError from "../errors/ConflictError";
 import {
   getAllUnitGroups as GetAllUnitGroupsRepository,
+  getUnitGroupById as getUnitGroupByIdRepository,
   getUnitGroupByName,
   insertUnitGroup,
 } from "../repositories/webDataRepository";
@@ -19,10 +20,9 @@ import { getRequireAdminPermissions } from "../utils/server";
 export async function getAllUnitGroups(): Promise<
   ActionResponseDTO<PaginatedDTO<UnitGroup>>
 > {
-  debugger;
   try {
-    await getRequireAdminPermissions([PermissionTypeEnum.USER_VIEW]);
-    debugger;
+    await getRequireAdminPermissions([PermissionTypeEnum.UNIT_VIEW]);
+
     const unitGroups = await GetAllUnitGroupsRepository();
 
     return {
@@ -58,4 +58,33 @@ export async function attemptInsertUnitGroup(name: string): Promise<UnitGroup> {
   }
 
   return await insertUnitGroup(name);
+}
+
+/**
+ * Gets unit group by idUnitGroup
+ * @returns {Promise<ActionResponseDTO<UnitGroup>>}
+ */
+export async function getUnitGroupById(
+  idUnitGroup: number
+): Promise<ActionResponseDTO<UnitGroup>> {
+  try {
+    await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
+
+    const unitGroup = await getUnitGroupByIdRepository(idUnitGroup);
+
+    return {
+      data: unitGroup,
+      success: true,
+      timeStamp: new Date(),
+    };
+  } catch (error) {
+    const errorMessage = getErrorMessageFromError(error);
+
+    return {
+      data: null,
+      success: false,
+      error: errorMessage,
+      timeStamp: new Date(),
+    };
+  }
 }

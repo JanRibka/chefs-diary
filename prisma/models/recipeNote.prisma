@@ -7,8 +7,6 @@ model RecipeNote {
 
     user   User   @relation(fields: [idUser], references: [idUser])
     recipe Recipe @relation(fields: [idRecipe], references: [idRecipe])
-
-    @@schema("note")
 }
 
 // Vlastní poznámky k receptu

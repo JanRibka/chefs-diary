@@ -5,6 +5,4 @@ model RecipeIngredientGroup {
 
     recipe           Recipe             @relation(fields: [idRecipe], references: [idRecipe])
     recipeIngredient RecipeIngredient[]
-
-    @@schema("recipe")
 }

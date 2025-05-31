@@ -7,6 +7,5 @@ model FavoriteRecipe {
     recipe              Recipe              @relation(fields: [idRecipe], references: [idRecipe])
     favoriteRecipeGroup FavoriteRecipeGroup @relation(fields: [idFavoriteGroup], references: [idFavoriteGroup])
 
-    @@id([idUser, idRecipe, idFavoriteGroup]) // Recept může být ve více skupinách daného uživatele
-    @@schema("favorite")
+    @@id([idUser, idRecipe, idFavoriteGroup]) // Recept může být ve více skupinách daného uživatele    
 }

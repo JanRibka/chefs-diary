@@ -7,5 +7,4 @@ model RecipeStep {
     recipe Recipe @relation(fields: [idRecipe], references: [idRecipe])
 
     @@unique([idRecipe, stepNumber]) // Každý krok má jedinečné pořadí v rámci receptu
-    @@schema("recipe")
 }

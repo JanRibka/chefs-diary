@@ -8,5 +8,4 @@ model UserLoginHistory {
   user User @relation(fields: [idUser], references: [idUser])
 
   @@index([idUser, loginSuccessful, loginAttemptDate, authMode])
-  @@schema("user")
 }

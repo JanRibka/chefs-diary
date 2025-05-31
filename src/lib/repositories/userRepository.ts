@@ -409,5 +409,5 @@ export async function getAllUsersPaginated(
     }),
   ]);
 
-  return { data: users, totalCount, page, pageSize };
+  return { items: users, totalCount };
 }

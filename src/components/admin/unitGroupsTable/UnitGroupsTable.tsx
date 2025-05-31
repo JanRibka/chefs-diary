@@ -12,11 +12,13 @@ import {
 import { insertUnitGroupAction } from "@/actions/admin/webData";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
 import EvaluateActionResponseError from "@/components/shared/evaluateActionResponseError/EvaluateActionResponseError";
+import { useUserContext } from "@/context/UserContext";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
+import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 import addToast from "@/lib/utils/addToast";
 import { nameof } from "@/lib/utils/nameof";
-import { calculatePages } from "@/lib/utils/table";
+import { getPageItems, getPages, getSortedItems } from "@/lib/utils/table";
 import { InsertUnitGroupFormType } from "@/lib/validations/schemas/admin/insertUnitGroupFormValidationSchema";
 import {
   Table,
@@ -31,7 +33,7 @@ import { UnitGroup } from "@prisma/client";
 
 import InsertUnitGroupDialogContent from "./InsertUnitGroupDialogContent";
 import UnitGroupsBottomContent from "./UnitGroupsBottomContent";
-import unitGroupsColumns from "./unitGroupsColumns";
+import getUnitGroupsColumns from "./unitGroupsColumns";
 import { unitGroupsRenderCell } from "./unitGroupsRenderCell";
 import { useUnitGroupsTableContext } from "./UnitGroupsTableContext";
 import UnitGroupsTopContent from "./UnitGroupsTopContent";
@@ -49,7 +51,6 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
   const { error, setError, validate } = useInsertUnitGroupValidation();
 
   // Get data
-  // TODO: todo bude v tabulce
   const dataWithError = use(dataPromise);
   const data = dataWithError.data!;
 
@@ -57,26 +58,36 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // Context
-  const { pageSize, sortDescriptor, setSortDescriptor } =
+  const { user } = useUserContext();
+  const { page, pageSize, sortDescriptor, setSortDescriptor } =
     useUnitGroupsTableContext();
-
-  // Optimistic update
-  const [isPending, startTransition] = useTransition();
-  const [optimisticUnitGroups, addOptimisticUnitGroup] = useOptimistic(
-    data.items,
-    (state, newGroup: UnitGroup) => {
-      return [...state, newGroup];
-    }
-  );
 
   // Render cell
   const renderCell = useCallback(unitGroupsRenderCell, []);
 
   // Constants
+  const canEdit =
+    user?.permissions.some((item) => item === PermissionTypeEnum.USER_EDIT) ??
+    false;
   const pages = useMemo(
-    () => calculatePages(data.totalCount, pageSize),
+    () => getPages(data.totalCount, pageSize),
 
     [data.totalCount, pageSize]
+  );
+  const sortedItems = useMemo(() => {
+    return getSortedItems<UnitGroup>(data.items, sortDescriptor);
+  }, [sortDescriptor, data.items]);
+  const pageItems = useMemo(() => {
+    return getPageItems(sortedItems, page, pageSize);
+  }, [sortedItems, page, pageSize]);
+
+  // Optimistic update
+  const [isPending, startTransition] = useTransition();
+  const [optimisticUnitGroups, addOptimisticUnitGroup] = useOptimistic(
+    pageItems,
+    (state, newGroup: UnitGroup) => {
+      return [...state, newGroup];
+    }
   );
 
   // Handlers
@@ -114,7 +125,11 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
     setError({});
     onOpenChange();
   };
-  // TODO: DOd2lat pagination a podobné věci
+
+  const handleEditGroup = (idUnitGroup: number) => {};
+
+  const handleDeleteGroup = (idUnitGroup: number) => {};
+
   return (
     <>
       <EvaluateActionResponseError data={dataWithError} />
@@ -140,12 +155,13 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
           onSortChange={setSortDescriptor}
           sortDescriptor={sortDescriptor}
         >
-          <TableHeader columns={unitGroupsColumns}>
+          <TableHeader columns={getUnitGroupsColumns(canEdit)}>
             {(column) => (
               <TableColumn
                 key={column.key}
                 align={column.align}
                 allowsSorting={column.allowsSorting}
+                width={column.width}
               >
                 {column.label}
               </TableColumn>
@@ -156,7 +172,16 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
             {(item) => (
               <TableRow key={item.idUnitGroup}>
                 {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                  <TableCell>
+                    {renderCell(
+                      item,
+                      columnKey,
+                      canEdit,
+                      item.idUnitGroup,
+                      handleEditGroup,
+                      handleDeleteGroup
+                    )}
+                  </TableCell>
                 )}
               </TableRow>
             )}

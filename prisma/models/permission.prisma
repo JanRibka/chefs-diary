@@ -6,6 +6,4 @@ model Permission {
 
   rolePermission          RolePermission[]
   userPermissionsOverride UserPermissionOverride[]
-
-  @@schema("auth")
 }

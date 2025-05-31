@@ -16,7 +16,8 @@
     "prisma:studio_devel": "npx dotenv-cli -e .env.development prisma studio",
     "prisma:seed_devel": "npx dotenv-cli -e .env.development prisma db seed",
     "prisma:seed_prod": "npx dotenv-cli -e .env.prod prisma db seed",
-    "prisma:reset": "npx dotenv-cli -e .env.migrate prisma migrate reset"
+    "prisma:reset": "npx dotenv-cli -e .env.migrate prisma migrate reset",
+    "prisma:reset_dev": "npx dotenv-cli -e .env.development prisma migrate reset"
   },
   "prisma": {
     "schema": "./prisma",

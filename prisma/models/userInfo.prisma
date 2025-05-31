@@ -12,8 +12,6 @@ model UserInfo {
   updatedAt       DateTime? @db.Timestamp(0)
 
   user User @relation(fields: [idUser], references: [idUser])
-
-  @@schema("user")
 }
 
 // Email už by měl mít index, protože je unique

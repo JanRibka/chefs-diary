@@ -9,5 +9,4 @@ model RecipeImage {
 
     @@index([idRecipe])
     @@index([idUser])
-    @@schema("recipe")
 }

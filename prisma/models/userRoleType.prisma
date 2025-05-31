@@ -6,4 +6,6 @@ model UserRoleType {
 
   userRole       UserRole[]
   rolePermission RolePermission[]
+
+  @@schema("auth")
 }

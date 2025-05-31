@@ -1,12 +1,15 @@
 model Unit {
-    idUnit      Int    @id @default(autoincrement()) @db.Integer
-    name        String @unique @db.VarChar(10) // např. "g"
-    displayName String @db.VarChar(10) // např. "gramy"    
+    idUnit      Int     @id @default(autoincrement()) @db.Integer
+    name        String  @unique @db.VarChar(10) // např. "g"
+    displayName String  @db.VarChar(10) // např. "gramy"  
+    test        Boolean
 
     unitGroupUnit    UnitGroupUnit[]
     fromConversion   UnitConversion[]   @relation("FromUnitConversion")
     toConversion     UnitConversion[]   @relation("ToUnitConversion")
     recipeIngredient RecipeIngredient[]
+
+    @@schema("unit")
 }
 
 // Jak by se daly do tabulky vložit nutriční hodnoty potravin které by se pak prepocetly pro dané množství v receptu?

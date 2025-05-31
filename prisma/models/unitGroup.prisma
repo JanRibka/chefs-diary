@@ -3,4 +3,6 @@ model UnitGroup {
     name        String @unique @db.VarChar(20) // např. "hmotnost", "objem", "česnek"
 
     unitGroupUnit UnitGroupUnit[]
+
+    @@schema("unit")
 }

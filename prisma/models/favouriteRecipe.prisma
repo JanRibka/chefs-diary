@@ -8,4 +8,5 @@ model FavoriteRecipe {
     favoriteRecipeGroup FavoriteRecipeGroup @relation(fields: [idFavoriteGroup], references: [idFavoriteGroup])
 
     @@id([idUser, idRecipe, idFavoriteGroup]) // Recept může být ve více skupinách daného uživatele
+    @@schema("favorite")
 }

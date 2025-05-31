@@ -7,4 +7,5 @@ model UserRole {
 
   @@id([idUser, idUserRoleType])
   @@index([idUser])
+  @@schema("auth")
 }

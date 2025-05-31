@@ -8,4 +8,5 @@ model RecipeRating {
     recipe Recipe @relation(fields: [idRecipe], references: [idRecipe])
 
     @@unique([idUser, idRecipe]) // Uživatel může ohodnotit recept jen jednou
+    @@schema("rating")
 }

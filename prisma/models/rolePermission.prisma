@@ -6,4 +6,5 @@ model RolePermission {
   permission   Permission   @relation(fields: [idPermission], references: [idPermission])
 
   @@id([idUserRoleType, idPermission])
+  @@schema("auth")
 }

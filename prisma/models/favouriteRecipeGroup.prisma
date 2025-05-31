@@ -6,4 +6,6 @@ model FavoriteRecipeGroup {
 
     user           User             @relation(fields: [idUser], references: [idUser])
     favoriteRecipe FavoriteRecipe[]
+
+    @@schema("favorite")
 }

@@ -3,6 +3,8 @@ model VerificationToken {
   identifier          String   @unique @db.VarChar(25)
   token               String   @unique @db.VarChar(36)
   expires             DateTime @db.Timestamp(0)
+
+  @@schema("auth")
 }
 
 //Doporučuji index na Expires

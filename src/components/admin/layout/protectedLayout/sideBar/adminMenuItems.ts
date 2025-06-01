@@ -1,4 +1,4 @@
-import { FaDatabase, FaUserLarge } from "react-icons/fa6";
+import { FaDatabase, FaUnity, FaUserLarge } from "react-icons/fa6";
 import { RiDashboardFill } from "react-icons/ri";
 
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
@@ -39,10 +39,10 @@ const adminMenuItems: AdminMenuItemType[] = [
     ],
   },
   {
-    key: "web-data",
-    label: "Data webu",
+    key: "units",
+    label: "Jednotky",
     permissions: [PermissionTypeEnum.UNIT_VIEW],
-    icon: FaDatabase,
+    icon: FaUnity,
     subitems: [
       {
         key: "units-groups",
@@ -56,6 +56,14 @@ const adminMenuItems: AdminMenuItemType[] = [
         link: adminRoutes.Units,
         permissions: [PermissionTypeEnum.UNIT_VIEW],
       },
+    ],
+  },
+  {
+    key: "ingredients",
+    label: "Ingredience",
+    permissions: [PermissionTypeEnum.UNIT_VIEW],
+    icon: FaDatabase,
+    subitems: [
       {
         key: "ingredients",
         label: "Ingredience",

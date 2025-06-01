@@ -1,0 +1,13 @@
+model Announcement {
+    idAnnouncement Int      @id @default(autoincrement()) @db.Integer
+    title          String   @db.VarChar(100)
+    content        String   @db.Text
+    isPublic       Boolean  @default(false)
+    createdAt      DateTime @default(now()) @db.Timestamp(0)
+    updatedAt      DateTime @updatedAt @db.Timestamp(0)
+
+    visibleFrom DateTime? @db.Timestamp(0)
+    visibleTo   DateTime? @db.Timestamp(0)
+
+    announcementReadBy AnnouncementRead[]
+}

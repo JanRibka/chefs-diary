@@ -1,0 +1,13 @@
+model Rejection {
+    idRejection   Int      @id @default(autoincrement()) @db.Integer
+    reason        String   @db.VarChar(255)
+    createdAt     DateTime @default(now()) @db.Timestamp(0)
+    idRecipe      Int?     @db.Integer
+    idRecipeImage Int?     @db.Integer
+
+    recipe      Recipe?      @relation(fields: [idRecipe], references: [idRecipe])
+    recipeImage RecipeImage? @relation(fields: [idRecipeImage], references: [idRecipeImage])
+
+    @@index([idRecipe])
+    @@index([idRecipeImage])
+}

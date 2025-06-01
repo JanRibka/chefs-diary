@@ -1,0 +1,22 @@
+model RecipeComment {
+    idRecipeComment Int      @id @default(autoincrement()) @db.Integer
+    content         String   @db.VarChar(255)
+    createdAt       DateTime @default(now()) @db.Timestamp(0)
+    updatedAt       DateTime @updatedAt @db.Timestamp(0)
+    isVisible       Boolean  @default(true) @db.Boolean
+    isReported      Boolean  @default(false) @db.Boolean
+
+    idRecipe Int    @db.Integer
+    idUser   String @db.VarChar(25)
+
+    recipe Recipe @relation(fields: [idRecipe], references: [idRecipe])
+    user   User   @relation(fields: [idUser], references: [idUser])
+
+    recipeCommentReport RecipeCommentReport[]
+
+    @@index([idRecipe])
+    @@index([idUser])
+    @@index([isReported])
+    @@index([isVisible])
+    @@index([idRecipe, isVisible])
+}

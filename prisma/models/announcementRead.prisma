@@ -1,0 +1,12 @@
+model AnnouncementRead {
+    idAnnouncementRead Int      @id @default(autoincrement()) @db.Integer
+    idUser             String   @db.VarChar(25)
+    idAnnouncement     Int      @db.Integer
+    readAt             DateTime @default(now()) @db.Timestamp(0)
+
+    user         User         @relation(fields: [idUser], references: [idUser])
+    announcement Announcement @relation(fields: [idAnnouncement], references: [idAnnouncement])
+
+    @@unique([idUser, idAnnouncement])
+    @@index([idUser])
+}

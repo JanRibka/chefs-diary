@@ -1,0 +1,12 @@
+model UserNotification {
+  idUserNotification Int       @id @default(autoincrement()) @db.Integer
+  idUser             String    @db.VarChar(25)
+  message            String    @db.VarChar(255)
+  createdAt          DateTime  @default(now()) @db.Timestamp(0)
+  readAt             DateTime? @db.Timestamp(0)
+
+  user User @relation(fields: [idUser], references: [idUser])
+
+  @@index([idUser, readAt])
+  @@index([createdAt])
+}

@@ -1,8 +1,7 @@
 model Unit {
-    idUnit      Int     @id @default(autoincrement()) @db.Integer
-    name        String  @unique @db.VarChar(10) // např. "g"
-    displayName String  @db.VarChar(10) // např. "gramy"  
-    test        Boolean
+    idUnit      Int    @id @default(autoincrement()) @db.Integer
+    name        String @unique @db.VarChar(10) // např. "g"
+    displayName String @db.VarChar(10) // např. "gramy"  
 
     unitGroupUnit    UnitGroupUnit[]
     fromConversion   UnitConversion[]   @relation("FromUnitConversion")

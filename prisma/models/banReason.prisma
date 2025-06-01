@@ -1,0 +1,7 @@
+model BanReason {
+    idBanReason Int    @id @default(autoincrement()) @db.Integer
+    reason      String @db.VarChar(255)
+
+    Recipe      Recipe[]
+    RecipeImage RecipeImage[]
+}

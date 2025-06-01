@@ -5,6 +5,7 @@ model User {
   webLoginRestrictedUntil   DateTime? @db.Timestamp(0)
   adminLoginRestrictedUntil DateTime? @db.Timestamp(0)
   twoFactor                 Boolean?  @default(false) @db.Boolean
+  isTrustedAuthor           Boolean   @default(false) @db.Boolean
 
   userInfo               UserInfo?
   userLoginHistory       UserLoginHistory[]
@@ -20,4 +21,10 @@ model User {
   recipeImage            RecipeImage[]
   userActionLog          UserActionLog[]
   adminLog               AdminLog[]
+  userNotification       UserNotification[]
+  recipeComment          RecipeComment[]
+  RecipeCommentReport    RecipeCommentReport[]
+  AnnouncementRead       AnnouncementRead[]
 }
+
+//TODO: IsTrustedAUthor bidi posílat pro prihlaseni v session a nebudu zobrazovat oznamení, že se musí něco schválit. Uživatel to bude mít v profilu a příjde mu zpráva, že je důveryhodný autor

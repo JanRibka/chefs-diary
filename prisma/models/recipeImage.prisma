@@ -5,10 +5,17 @@ model RecipeImage {
     url           String    @db.VarChar(255)
     isApproved    Boolean   @default(false) @db.Boolean
     approvedAt    DateTime? @db.Timestamp(0)
+    isBanned      Boolean   @default(false) @db.Boolean
+    bannedAt      DateTime? @db.Timestamp(0)
+    idBanReason   Int?      @db.Integer
 
-    recipe Recipe @relation(fields: [idRecipe], references: [idRecipe])
-    user   User   @relation(fields: [idUser], references: [idUser])
+    recipe    Recipe      @relation(fields: [idRecipe], references: [idRecipe])
+    user      User        @relation(fields: [idUser], references: [idUser])
+    rejection Rejection[]
+    banReason BanReason?  @relation(fields: [idBanReason], references: [idBanReason])
 
     @@index([idRecipe])
     @@index([idUser])
+    @@index([idUser, isApproved])
+    @@index([idUser, isBanned])
 }

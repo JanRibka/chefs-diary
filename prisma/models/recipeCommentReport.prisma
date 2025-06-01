@@ -1,0 +1,15 @@
+model RecipeCommentReport {
+    idRecipeCommentReport Int      @id @default(autoincrement()) @db.Integer
+    reason                String   @db.VarChar(255)
+    createdAt             DateTime @default(now()) @db.Timestamp()
+
+    idRecipeComment Int    @db.Integer
+    idUser          String @db.VarChar(25)
+
+    recipeComment RecipeComment @relation(fields: [idRecipeComment], references: [idRecipeComment])
+    user          User          @relation(fields: [idUser], references: [idUser])
+
+    @@unique([idRecipeComment, idUser])
+    @@index([idRecipeComment])
+    @@index([idUser])
+}

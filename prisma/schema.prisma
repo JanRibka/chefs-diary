@@ -20,6 +20,8 @@ datasource db {
 // Export your existing data
 // Run the following command, replacing __DATABASE_URL__ with your actual PostgreSQL connection string:
 
+//npx pg_dump -Fc -v -d prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiYjIzMTVhNWQtMjkzZS00MmRkLWJkNjktODAxZjYzZjNlZTUwIiwidGVuYW50X2lkIjoiMWNkNzA2YmE1MWFiODA4NjMzY2Q2MDk5N2E3OTExNDNjYTBlNDQ0ZGY5MzA1YWMzMDQzMmQxOWNiYzAwZGE4NyIsImludGVybmFsX3NlY3JldCI6ImRjNjViYjU4LTc1MDAtNGM4MS1iYzhjLTNjM2VlMWZjNWRlNCJ9.qNPkXpJz77u_SuCsWV6ZhiNKuAM903fd2o0j4SCLcs8 -n public -f db_dump.bak
+
 // $ pg_dump \
 //      -Fc \
 //      -v \

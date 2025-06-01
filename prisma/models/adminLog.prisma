@@ -1,0 +1,243 @@
+model AdminLog {
+    idAdminLog Int      @id @default(autoincrement()) @db.Integer
+    idUser     String   @db.VarChar(25)
+    action     String   @db.VarChar(20) // Vytvořit enum pro toto
+    entity     String   @db.VarChar(50)
+    idEntity   Int?     @db.Integer
+    changes    Json?    @db.JsonB
+    createdAt  DateTime @default(now()) @db.Timestamp(0)
+
+    user User @relation(fields: [idUser], references: [idUser])
+}
+
+// Pole	Popis
+// userId	ID uživatele, který změnu provedl (odkaz na tabulku User)
+// action	Typ akce (např. CREATE_UNIT, DELETE_UNIT, UPDATE_INGREDIENT)
+// entity	Název entity, které se akce týká
+// entityId	ID entity, pokud je známé (např. ID jednotky nebo ingredience)
+// changes	JSON s detailními změnami, např.:
+// { "before": {...}, "after": {...} }
+// createdAt	Datum a čas akce
+
+// Příklady akcí:
+// json
+// Zkopírovat
+// Upravit
+// {
+//   "action": "UPDATE_UNIT",
+//   "entity": "Unit",
+//   "entityId": 12,
+//   "changes": {
+//     "before": { "name": "gram", "displayName": "gramy" },
+//     "after": { "name": "g", "displayName": "gramy" }
+//   }
+// }
+// Doporučení:
+// Ujisti se, že logování probíhá na serverové straně.
+
+// Loguj změny v:
+
+// jednotkách (Unit)
+
+// ingrediencích
+
+// uživatelích / oprávněních
+
+// skupinách
+
+// převodech
+
+// Můžeš si vytvořit helper funkci např. logAdminAction(userId, action, entity, entityId, changes).
+
+// Chceš i helper funkci v TypeScriptu/Prisma pro ukládání logu?
+
+// Řekl/a jsi:
+// ano
+
+// ChatGPT řekl:
+// Tady máš jednoduchou helper funkci pro logování admin akcí v TypeScriptu s použitím Prisma:
+
+// Helper funkce: logAdminAction.ts
+// ts
+// Zkopírovat
+// Upravit
+// import { PrismaClient } from "@prisma/client";
+
+// const prisma = new PrismaClient();
+
+// /**
+//  * Uloží administrativní akci do logu
+//  * 
+//  * @param userId - ID uživatele, který akci provedl
+//  * @param action - typ akce, např. "UPDATE_UNIT"
+//  * @param entity - název entity, např. "Unit"
+//  * @param entityId - ID entity, pokud existuje
+//  * @param changes - objekt se změnami { before, after }
+//  */
+// export async function logAdminAction({
+//   userId,
+//   action,
+//   entity,
+//   entityId,
+//   changes,
+// }: {
+//   userId: number;
+//   action: string;
+//   entity: string;
+//   entityId?: number;
+//   changes?: object;
+// }) {
+//   try {
+//     await prisma.adminLog.create({
+//       data: {
+//         userId,
+//         action,
+//         entity,
+//         entityId,
+//         changes: changes ? changes : undefined,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Chyba při logování admin akce:", error);
+//   }
+// }
+// Použití příkladu:
+// ts
+// Zkopírovat
+// Upravit
+// await logAdminAction({
+//   userId: 1,
+//   action: "UPDATE_UNIT",
+//   entity: "Unit",
+//   entityId: 42,
+//   changes: {
+//     before: { name: "gram", displayName: "gramy" },
+//     after: { name: "g", displayName: "gramy" },
+//   },
+// });
+// Chceš také middleware, který automaticky sleduje změny na určitých modelech, nebo ti stačí ruční volání této funkce?
+
+// Řekl/a jsi:
+// chci middleware
+
+// ChatGPT řekl:
+// Super, tady je návrh jednoduchého Prisma middleware, který loguje akce (create, update, delete) pro vybrané modely a zapisuje je do tabulky AdminLog. Budeš potřebovat mít ve contextu aktuálního admina (např. z requestu nebo session).
+
+// 1. Prisma Middleware (adminLoggerMiddleware.ts)
+// ts
+// Zkopírovat
+// Upravit
+// import { Prisma, PrismaClient } from "@prisma/client";
+
+// const prisma = new PrismaClient();
+
+// // Zde si nastav, které modely tě zajímají
+// const LOGGED_MODELS = ["Unit", "UnitGroup", "Ingredient", "User"];
+
+// export function adminLoggerMiddleware(currentUserId: number): Prisma.Middleware {
+//   return async (params, next) => {
+//     const { model, action, args } = params;
+
+//     if (!LOGGED_MODELS.includes(model!)) {
+//       return next(params);
+//     }
+
+//     const beforeData = (action === "update" || action === "delete") && args.where?.id
+//       ? await (prisma as any)[model!.charAt(0).toLowerCase() + model!.slice(1)].findUnique({
+//           where: { id: args.where.id },
+//         })
+//       : null;
+
+//     const result = await next(params);
+
+//     const afterData = action === "create" || action === "update" ? result : null;
+
+//     await prisma.adminLog.create({
+//       data: {
+//         userId: currentUserId,
+//         action: action.toUpperCase(),
+//         entity: model!,
+//         entityId: result?.id ?? args?.where?.id ?? null,
+//         changes:
+//           action === "update"
+//             ? { before: beforeData, after: afterData }
+//             : action === "create"
+//             ? { after: afterData }
+//             : action === "delete"
+//             ? { before: beforeData }
+//             : null,
+//       },
+//     });
+
+//     return result;
+//   };
+// }
+// 2. Použití middleware v aplikaci (např. při inicializaci serveru)
+// ts
+// Zkopírovat
+// Upravit
+// import { PrismaClient } from "@prisma/client";
+// import { adminLoggerMiddleware } from "./middlewares/adminLoggerMiddleware";
+
+// const prisma = new PrismaClient();
+
+// // Například ve serverové funkci (musíš mít userId z autentizace)
+// prisma.$use(adminLoggerMiddleware(currentUserId));
+// Poznámky:
+// Middleware musíš registrovat pro každou instanci PrismaClient, jinak nebude fungovat.
+
+// Pro komplexní řešení se zvažuje použití clsx (Context-local storage) nebo custom request contextu pro získání userId.
+
+// Pro audit log doporučuji zakázat logování modelu AdminLog, jinak se bude logovat sám sebe
+
+// Máš naprostou pravdu — pole action a entity nejsou úplně redundantní, ale ve většině případů by šly sloučit nebo lépe definovat.
+
+// Vysvětlení:
+// entity říká, s jakým modelem pracujeme (např. Unit, Ingredient).
+
+// action říká, co se s tím modelem dělo (CREATE, UPDATE, DELETE).
+
+// Takže sice nejsou úplně duplicitní, ale jejich kombinace tvoří jeden záznam typu:
+// → "Někdo aktualizoval jednotku."
+
+// Možnosti zjednodušení
+// Varianta 1 – ponechat obě (lepší filtrování, více flexibility):
+// ts
+// Zkopírovat
+// Upravit
+// {
+//   entity: "Unit",
+//   action: "UPDATE",
+//   entityId: 123,
+//   ...
+// }
+// Výhoda: můžeš snadno filtrovat např. všechny UPDATE akce nebo vše na Unit.
+
+// Varianta 2 – sloučit do jednoho sloupce event:
+// ts
+// Zkopírovat
+// Upravit
+// {
+//   event: "Unit.UPDATE",
+//   entityId: 123,
+//   ...
+// }
+// Nebo:
+
+// ts
+// Zkopírovat
+// Upravit
+// {
+//   event: "UPDATE_UNIT",
+// }
+// Pak to ale vyžaduje víc logiky na parsování či filtrování v UI.
+
+// Doporučení
+// Pokud máš v plánu:
+
+// dělat jednoduché tabulky nebo grafy v admin UI,
+
+// filtrovat podle typu modelu i akce,
+
+// ponechal bych entity a action jako dvě pole.
+// Není to velká ztráta a výhody v přehlednosti a filtraci převáží.

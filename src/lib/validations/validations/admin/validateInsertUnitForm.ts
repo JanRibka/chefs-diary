@@ -10,7 +10,7 @@ type ErrorType = Omit<InsertUnitFormErrorType, "timestamp" | "general">;
 export const validateInsertUnitForm = (
   formData: Record<string, FormDataEntryValue>
 ) => {
-  const result: ValidationResultType<ErrorType> = { success: true, errors: {} };
+  const result: ValidationResultType<ErrorType> = { success: true, error: {} };
 
   try {
     insertUnitFormValidationSchema.validateSync(formData, {

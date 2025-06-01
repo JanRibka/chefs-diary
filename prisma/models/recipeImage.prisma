@@ -1,8 +1,10 @@
 model RecipeImage {
-    idRecipeImage Int    @id @default(autoincrement()) @db.Integer
-    idRecipe      Int    @db.Integer
-    idUser        String @db.VarChar(25)
-    url           String @db.VarChar(255)
+    idRecipeImage Int       @id @default(autoincrement()) @db.Integer
+    idRecipe      Int       @db.Integer
+    idUser        String    @db.VarChar(25)
+    url           String    @db.VarChar(255)
+    isApproved    Boolean   @default(false) @db.Boolean
+    approvedAt    DateTime? @db.Timestamp(0)
 
     recipe Recipe @relation(fields: [idRecipe], references: [idRecipe])
     user   User   @relation(fields: [idUser], references: [idUser])

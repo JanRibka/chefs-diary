@@ -1,9 +1,11 @@
 model Recipe {
-    idRecipe  Int      @id @default(autoincrement()) @db.Integer
-    title     String   @db.VarChar(100)
-    createdAt DateTime @default(now()) @db.Timestamp(0)
-    updatedAt DateTime @updatedAt @db.Timestamp(0)
-    idUser    String   @db.VarChar(25)
+    idRecipe   Int       @id @default(autoincrement()) @db.Integer
+    title      String    @db.VarChar(100)
+    createdAt  DateTime  @default(now()) @db.Timestamp(0)
+    updatedAt  DateTime  @updatedAt @db.Timestamp(0)
+    idUser     String    @db.VarChar(25)
+    isApproved Boolean   @default(false) @db.Boolean
+    approvedAt DateTime? @db.Timestamp(0)
 
     user                  User                    @relation(fields: [idUser], references: [idUser])
     recipeIngredientGroup RecipeIngredientGroup[]

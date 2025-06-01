@@ -1,6 +1,6 @@
 "use server";
 
-import forgottenPasswordActionValidator from "@/lib/actionValidators/auth/forgottenPasswordActionValidator";
+import forgottenPasswordActionValidator from "@/lib/actionValidators/shared/forgottenPasswordActionValidator";
 import ForgottenPasswordStatusEnum from "@/lib/enums/ForgottenPasswordStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 import logger from "@/lib/services/loggerService";

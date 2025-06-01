@@ -14,6 +14,6 @@ export default async function resendVerificationLinkActionValidator(
 
   return {
     success: true,
-    errors: {},
+    error: {},
   } as ValidationResultType<ResendVerificationEmailFormErrorType>;
 }

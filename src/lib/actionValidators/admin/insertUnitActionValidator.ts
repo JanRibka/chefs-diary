@@ -1,6 +1,6 @@
 import ValidationResultType from "@/lib/types/validation/ValidationResultType";
 import { InsertUnitFormErrorType } from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
-import { validateInsertUnitFormAsync } from "@/lib/validations/validations/admin/insertUnit/validateInsertUnitForm";
+import { validateInsertUnitFormAsync } from "@/lib/validations/validations/admin/validateInsertUnitForm";
 
 export default async function insertUnitActionValidator(
   formData: FormData
@@ -14,6 +14,6 @@ export default async function insertUnitActionValidator(
 
   return {
     success: true,
-    errors: {},
+    error: {},
   } as ValidationResultType<InsertUnitFormErrorType>;
 }

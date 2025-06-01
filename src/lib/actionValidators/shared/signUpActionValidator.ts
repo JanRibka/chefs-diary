@@ -20,7 +20,7 @@ export default async function signUpActionValidator(
 
   const result: ValidationResultType<SignUpFormErrorType> = {
     success: true,
-    errors: {},
+    error: {},
   };
 
   try {
@@ -32,7 +32,7 @@ export default async function signUpActionValidator(
     if (user) {
       return {
         success: false,
-        errors: {
+        error: {
           general: getErrorTextByKey("emailExists"),
           timestamp: new Date().getTime().toString(),
         },
@@ -44,7 +44,7 @@ export default async function signUpActionValidator(
     if (user) {
       return {
         success: false,
-        errors: {
+        error: {
           userName: getErrorTextByKey("userNameExists"),
           timestamp: new Date().getTime().toString(),
         },
@@ -58,7 +58,7 @@ export default async function signUpActionValidator(
 
     return {
       success: false,
-      errors: {
+      error: {
         general: getErrorTextByKey("registerUserMainError"),
         timestamp: new Date().getTime().toString(),
       },

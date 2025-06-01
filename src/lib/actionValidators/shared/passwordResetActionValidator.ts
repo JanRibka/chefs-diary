@@ -14,6 +14,6 @@ export default async function passwordResetActionValidator(
 
   return {
     success: true,
-    errors: {},
+    error: {},
   } as ValidationResultType<PasswordResetFormErrorType>;
 }

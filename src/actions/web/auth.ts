@@ -1,8 +1,8 @@
 "use server";
 
 import { signIn, signOut } from "@/config/auth/auth";
-import logInActionValidator from "@/lib/actionValidators/auth/logInActionValidator";
-import signUpActionValidator from "@/lib/actionValidators/auth/signUpActionValidator";
+import logInActionValidator from "@/lib/actionValidators/shared/logInActionValidator";
+import signUpActionValidator from "@/lib/actionValidators/shared/signUpActionValidator";
 import LogInStatusEnum from "@/lib/enums/LogInStatusEnum";
 import SignUpStatusEnum from "@/lib/enums/SignUpStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";

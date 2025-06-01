@@ -3,6 +3,7 @@ import logger from "@/lib/services/loggerService";
 import AuthError from "../errors/AuthError";
 import ConflictError from "../errors/ConflictError";
 import ForbiddenError from "../errors/ForbiddenError";
+import NotFoundError from "../errors/NotFoundError";
 import UnauthorizedError from "../errors/UnauthorizedError";
 import GetErrorMessageOptionsType from "../types/common/GetErrorMessageOptionsType";
 import { logConsoleError } from "./console";
@@ -90,6 +91,34 @@ export function getConflictErrorFromError(
   return {
     errorMessage,
     isConflictError,
+  };
+}
+
+/**
+ * Gets Not found error message from error object
+ * @param error Error object
+ * @param overrideMessage Fallback error message
+ * @returns {errorMessage, isNotFoundError}
+ */
+export function getNotFoundErrorFromError(
+  error: unknown,
+  overrideMessage?: string
+): {
+  isNotFoundError: boolean;
+  errorMessage: string;
+} {
+  const isNotFoundError = error instanceof NotFoundError;
+  let errorMessage: string;
+
+  if (isNotFoundError) {
+    errorMessage = overrideMessage ?? error.message;
+  } else {
+    errorMessage = "";
+  }
+
+  return {
+    errorMessage,
+    isNotFoundError,
   };
 }
 

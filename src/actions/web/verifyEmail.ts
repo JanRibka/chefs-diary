@@ -1,6 +1,6 @@
 "use server";
 
-import resendVerificationLinkActionValidator from "@/lib/actionValidators/auth/resendVerificationLinkActionValidator";
+import resendVerificationLinkActionValidator from "@/lib/actionValidators/shared/resendVerificationLinkActionValidator";
 import ResendVerificationLinkStatusEnum from "@/lib/enums/ResendVerificationLinkStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 import ValidationError from "@/lib/errors/ValidationError";

@@ -1,6 +1,6 @@
 "use server";
 
-import passwordResetActionValidator from "@/lib/actionValidators/auth/passwordResetActionValidator";
+import passwordResetActionValidator from "@/lib/actionValidators/shared/passwordResetActionValidator";
 import PasswordResetStatusEnum from "@/lib/enums/PasswordResetStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 import logger from "@/lib/services/loggerService";

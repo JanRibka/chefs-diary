@@ -326,6 +326,18 @@ async function main() {
       description: "Spravovat jednotky",
     },
   });
+  const unitDelete = await prisma.permission.upsert({
+    where: { code: "UNIT_DELETE" },
+    update: {
+      value: 112,
+      description: "Mazat jednotky",
+    },
+    create: {
+      code: "UNIT_DELETE",
+      value: 112,
+      description: "Mazat jednotky",
+    },
+  });
 
   console.log({
     userView,
@@ -348,6 +360,7 @@ async function main() {
     settingsEdit,
     unitView,
     unitEdit,
+    unitDelete,
   });
 
   // Vytváření RolePermission a přiřazení pro každou roli
@@ -375,6 +388,7 @@ async function main() {
       settingsEdit.code,
       unitView.code,
       unitEdit.code,
+      unitDelete.code,
     ],
     ADMIN: [
       userView.code,
@@ -386,6 +400,7 @@ async function main() {
       ticketManage.code,
       unitView.code,
       unitEdit.code,
+      unitDelete.code,
     ],
     MODERATOR: [
       postApprove.code,

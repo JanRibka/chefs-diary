@@ -20,8 +20,8 @@ export const validateInsertUnitForm = (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!result.errors[path]) {
-        result.errors[path] = err.message;
+      if (!!!result.error[path]) {
+        result.error[path] = err.message;
         result.success = false;
       }
     });
@@ -33,7 +33,7 @@ export const validateInsertUnitForm = (
 export const validateInsertUnitFormAsync = async (
   formData: Record<string, FormDataEntryValue>
 ) => {
-  const result: ValidationResultType<ErrorType> = { success: true, errors: {} };
+  const result: ValidationResultType<ErrorType> = { success: true, error: {} };
 
   try {
     await insertUnitFormValidationSchema.validate(formData, {
@@ -43,8 +43,8 @@ export const validateInsertUnitFormAsync = async (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!result.errors[path]) {
-        result.errors[path] = err.message;
+      if (!!!result.error[path]) {
+        result.error[path] = err.message;
         result.success = false;
       }
     });

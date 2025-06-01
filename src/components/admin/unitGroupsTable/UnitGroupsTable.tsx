@@ -1,25 +1,13 @@
 "use client";
 
-import {
-  use,
-  useCallback,
-  useMemo,
-  useOptimistic,
-  useRef,
-  useTransition,
-} from "react";
+import { use, useCallback, useMemo, useOptimistic, useState } from "react";
 
-import { insertUnitGroupAction } from "@/actions/admin/webData";
-import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
 import EvaluateActionResponseError from "@/components/shared/evaluateActionResponseError/EvaluateActionResponseError";
 import { useUserContext } from "@/context/UserContext";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
-import addToast from "@/lib/utils/addToast";
-import { nameof } from "@/lib/utils/nameof";
 import { getPageItems, getPages, getSortedItems } from "@/lib/utils/table";
-import { InsertUnitGroupFormType } from "@/lib/validations/schemas/admin/insertUnitGroupFormValidationSchema";
 import {
   Table,
   TableBody,
@@ -31,31 +19,49 @@ import {
 } from "@heroui/react";
 import { UnitGroup } from "@prisma/client";
 
-import InsertUnitGroupDialogContent from "./InsertUnitGroupDialogContent";
+import DeleteUnitGroupModal from "./deleteUnitGroupModal/DeleteUnitGroupModal";
+import EditUnitGroupModal from "./editUnitGroupModal/EditUnitGroupModal";
+import InsertUnitGroupModal from "./InsertUnitGroupModal/InsertUnitGroupModal";
 import UnitGroupsBottomContent from "./UnitGroupsBottomContent";
 import getUnitGroupsColumns from "./unitGroupsColumns";
 import { unitGroupsRenderCell } from "./unitGroupsRenderCell";
 import { useUnitGroupsTableContext } from "./UnitGroupsTableContext";
 import UnitGroupsTopContent from "./UnitGroupsTopContent";
-import useInsertUnitGroupValidation from "./useInsertUnitGroupValidation";
+
+export type SetOptimisticUnitGroupType = {
+  type: "add" | "update" | "delete";
+  group: UnitGroup;
+};
 
 type Props = {
   dataPromise: Promise<ActionResponseDTO<PaginatedDTO<UnitGroup>>>;
 };
 
 export default function UnitGroupsTable({ dataPromise }: Props) {
-  // References
-  const formRef = useRef<HTMLFormElement>(null);
-
-  // State
-  const { error, setError, validate } = useInsertUnitGroupValidation();
-
   // Get data
   const dataWithError = use(dataPromise);
   const data = dataWithError.data!;
 
-  // Insert unit group modal state
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  // State
+  const [groupToDelete, setGroupToDelete] = useState<UnitGroup | null>(null);
+  const [groupToEdit, setGroupToEdit] = useState<UnitGroup | null>(null);
+
+  // Modal states
+  const {
+    isOpen: isOpenInsertGroup,
+    onOpen: onOpenInsertGroup,
+    onOpenChange: onOpenChangeInsertGroup,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenEditGroup,
+    onOpen: onOpenEditGroup,
+    onOpenChange: onOpenChangeEditGroup,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenDeleteGroup,
+    onOpen: onOpenDeleteGroup,
+    onOpenChange: onOpenChangeDeleteGroup,
+  } = useDisclosure();
 
   // Context
   const { user } = useUserContext();
@@ -67,7 +73,10 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
 
   // Constants
   const canEdit =
-    user?.permissions.some((item) => item === PermissionTypeEnum.USER_EDIT) ??
+    user?.permissions.some((item) => item === PermissionTypeEnum.UNIT_EDIT) ??
+    false;
+  const canDelete =
+    user?.permissions.some((item) => item === PermissionTypeEnum.UNIT_DELETE) ??
     false;
   const pages = useMemo(
     () => getPages(data.totalCount, pageSize),
@@ -82,53 +91,36 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
   }, [sortedItems, page, pageSize]);
 
   // Optimistic update
-  const [isPending, startTransition] = useTransition();
-  const [optimisticUnitGroups, addOptimisticUnitGroup] = useOptimistic(
+  const [optimisticUnitGroups, setOptimisticUnitGroup] = useOptimistic(
     pageItems,
-    (state, newGroup: UnitGroup) => {
-      return [...state, newGroup];
+    (state, action: SetOptimisticUnitGroupType) => {
+      switch (action.type) {
+        case "add":
+          return [...state, action.group];
+        case "update":
+          return state.map((item) =>
+            item.idUnitGroup === action.group.idUnitGroup
+              ? { ...item, name: action.group.name }
+              : item
+          );
+        case "delete":
+          return state.filter(
+            (item) => item.idUnitGroup !== action.group.idUnitGroup
+          );
+      }
     }
   );
 
   // Handlers
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    const formData = new FormData(event.currentTarget);
-
-    validate(formData);
+  const handleEditGroup = (group: UnitGroup) => {
+    setGroupToEdit(group);
+    onOpenEditGroup();
   };
 
-  const handleInsertUnitGroupAction = async (formData: FormData) => {
-    addOptimisticUnitGroup({
-      idUnitGroup: Math.random(),
-      name: formData.get(nameof<InsertUnitGroupFormType>("name")) as string,
-    });
-
-    formRef.current?.reset();
-
-    startTransition(async () => {
-      const unitGroup = await insertUnitGroupAction(formData);
-
-      if (!unitGroup.success) {
-        if (typeof unitGroup.error === "object") {
-          setError(unitGroup.error);
-          return;
-        }
-
-        addToast("Chyba", unitGroup.error as string, "danger");
-      } else {
-        onOpenChange();
-      }
-    });
+  const handleDeleteGroup = (group: UnitGroup) => {
+    setGroupToDelete(group);
+    onOpenDeleteGroup();
   };
-
-  const handleOnClose = () => {
-    setError({});
-    onOpenChange();
-  };
-
-  const handleEditGroup = (idUnitGroup: number) => {};
-
-  const handleDeleteGroup = (idUnitGroup: number) => {};
 
   return (
     <>
@@ -137,8 +129,11 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
       <div className="h-full">
         <Table
           isHeaderSticky
+          isStriped
           aria-label="Jednotky"
-          topContent={<UnitGroupsTopContent onPressInsertUnit={onOpen} />}
+          topContent={
+            <UnitGroupsTopContent onPressInsertUnit={onOpenInsertGroup} />
+          }
           topContentPlacement="outside"
           bottomContent={
             <UnitGroupsBottomContent
@@ -155,7 +150,7 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
           onSortChange={setSortDescriptor}
           sortDescriptor={sortDescriptor}
         >
-          <TableHeader columns={getUnitGroupsColumns(canEdit)}>
+          <TableHeader columns={getUnitGroupsColumns(canEdit || canDelete)}>
             {(column) => (
               <TableColumn
                 key={column.key}
@@ -177,7 +172,7 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
                       item,
                       columnKey,
                       canEdit,
-                      item.idUnitGroup,
+                      canDelete,
                       handleEditGroup,
                       handleDeleteGroup
                     )}
@@ -188,22 +183,27 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
           </TableBody>
         </Table>
 
-        <CancelConfirmModal
-          isOpen={isOpen}
-          placement="center"
-          onOpenChange={handleOnClose}
-          headerLabel="Přidat skupinu jednotek"
-          hideFooter
-          isDismissable={false}
-        >
-          <InsertUnitGroupDialogContent
-            onCancel={handleOnClose}
-            action={handleInsertUnitGroupAction}
-            onSubmit={handleSubmit}
-            errors={error}
-            isPending={isPending}
-          />
-        </CancelConfirmModal>
+        <InsertUnitGroupModal
+          isOpen={isOpenInsertGroup}
+          onOpenChange={onOpenChangeInsertGroup}
+          setOptimisticUnitGroup={setOptimisticUnitGroup}
+        />
+
+        <EditUnitGroupModal
+          group={groupToEdit as UnitGroup}
+          isOpen={isOpenEditGroup}
+          onOpenChange={onOpenChangeEditGroup}
+          setOptimisticUnitGroup={setOptimisticUnitGroup}
+          setGroupToEdit={setGroupToEdit}
+        />
+
+        <DeleteUnitGroupModal
+          group={groupToDelete as UnitGroup}
+          isOpen={isOpenDeleteGroup}
+          onOpenChange={onOpenChangeDeleteGroup}
+          setOptimisticUnitGroup={setOptimisticUnitGroup}
+          setGroupToDelete={setGroupToDelete}
+        />
       </div>
     </>
   );

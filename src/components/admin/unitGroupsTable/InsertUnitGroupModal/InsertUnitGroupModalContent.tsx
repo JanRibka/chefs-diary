@@ -19,7 +19,7 @@ type Props = {
   isPending?: boolean;
 };
 
-export default function InsertUnitGroupDialogContent({
+export default function InsertUnitGroupModalContent({
   onCancel,
   action,
   onSubmit,
@@ -54,15 +54,16 @@ export default function InsertUnitGroupDialogContent({
         />
       </div>
       <div className="flex py-2 px-1 justify-between">
-        <Button
-          color="danger"
-          variant="flat"
-          disabled={isPending}
-          onPress={onCancel}
-        >
+        <Button color="danger" variant="flat" onPress={onCancel}>
           Zrušit
         </Button>
-        <SubmitButton color="primary">Uložit</SubmitButton>
+        <SubmitButton
+          color="primary"
+          disabled={isPending}
+          isLoading={isPending}
+        >
+          Uložit
+        </SubmitButton>
       </div>
     </Form>
   );

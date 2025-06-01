@@ -1,6 +1,6 @@
 import ValidationResultType from "@/lib/types/validation/ValidationResultType";
 import { InsertUnitGroupFormErrorType } from "@/lib/validations/schemas/admin/insertUnitGroupFormValidationSchema";
-import { validateInsertUnitGroupFormAsync } from "@/lib/validations/validations/admin/insertUnitGroup/validateInsertUnitGroupForm";
+import { validateInsertUnitGroupFormAsync } from "@/lib/validations/validations/admin/validateInsertUnitGroupForm";
 
 export default async function insertUnitGroupActionValidator(
   formData: FormData

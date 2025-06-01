@@ -1,7 +1,7 @@
 "use server";
 
 import { signIn, signOut } from "@/config/auth/authAdmin";
-import logInActionValidator from "@/lib/actionValidators/auth/logInActionValidator";
+import logInActionValidator from "@/lib/actionValidators/shared/logInActionValidator";
 import LogInStatusEnum from "@/lib/enums/LogInStatusEnum";
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 import FormActionState from "@/lib/types/actions/FormActionState";

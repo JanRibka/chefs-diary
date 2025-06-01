@@ -11,7 +11,7 @@ import {
   InsertUnitFormErrorType,
   InsertUnitFormType,
 } from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
-import { validateInsertUnitForm } from "@/lib/validations/validations/admin/insertUnit/validateInsertUnitForm";
+import { validateInsertUnitForm } from "@/lib/validations/validations/admin/validateInsertUnitForm";
 import {
   Table,
   TableBody,

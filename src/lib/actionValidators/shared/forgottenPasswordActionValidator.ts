@@ -14,6 +14,6 @@ export default async function forgottenPasswordActionValidator(
 
   return {
     success: true,
-    errors: {},
+    error: {},
   } as ValidationResultType<ForgottenPasswordFormErrorType>;
 }

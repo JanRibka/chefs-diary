@@ -9,4 +9,7 @@ model UnitGroupUnit {
 
     @@unique([idUnitGroup, idUnit])
     @@unique([idUnitGroup, isBaseUnit]) // zabrání dvěma base jednotkám ve stejné skupině
+    @@index([idUnitGroup])
+    @@index([idUnit])
+    @@index([isBaseUnit])
 }

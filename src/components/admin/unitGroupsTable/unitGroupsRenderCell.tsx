@@ -9,23 +9,25 @@ export function unitGroupsRenderCell(
   group: UnitGroup,
   columnKey: Key,
   canEdit: boolean,
-  idUnitGroup: number,
-  onEdit: (idUnitGroup: number) => void,
-  onDelete: (idUnitGroup: number) => void
+  canDelete: boolean,
+  onEdit: (group: UnitGroup) => void,
+  onDelete: (group: UnitGroup) => void
 ) {
   const cellValue = group[columnKey as keyof UnitGroup];
 
   switch (columnKey as UnitGroupActions) {
     case "actions":
-      if (!canEdit) return null;
+      if (!canEdit && !canDelete) return null;
 
       return (
         <TableCellActions
           hideDetails
+          hideEdit={!canEdit}
           editLabel="Editovat skupinu"
-          onEdit={() => onEdit(idUnitGroup)}
+          onEdit={() => onEdit(group)}
+          hideDelete={!canDelete}
           deleteLabel="Smazat skupinu"
-          onDelete={() => onDelete(idUnitGroup)}
+          onDelete={() => onDelete(group)}
         />
       );
     default:

@@ -1,6 +1,6 @@
 import TableColumnType from "@/lib/types/common/TableColumnType";
 
-function getUnitGroupsColumns(canEdit: boolean): TableColumnType[] {
+function getUnitGroupsColumns(canEditOrDelete: boolean): TableColumnType[] {
   const columns: TableColumnType[] = [
     {
       label: "Název skupiny",
@@ -9,7 +9,7 @@ function getUnitGroupsColumns(canEdit: boolean): TableColumnType[] {
     },
   ];
 
-  if (canEdit) {
+  if (canEditOrDelete) {
     columns.push({
       label: "Akce",
       key: "actions",

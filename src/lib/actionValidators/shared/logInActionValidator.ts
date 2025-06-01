@@ -14,6 +14,6 @@ export default async function logInActionValidator(
 
   return {
     success: true,
-    errors: {},
+    error: {},
   } as ValidationResultType<LogInFormErrorType>;
 }

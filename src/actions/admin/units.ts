@@ -6,15 +6,13 @@ import editUnitGroupActionValidator from "@/lib/actionValidators/admin/editUnitG
 import insertUnitGroupActionValidator from "@/lib/actionValidators/admin/insertUnitGroupActionValidator";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
-import {
-  deleteUnitGroup,
-  insertUnit,
-} from "@/lib/repositories/webDataRepository";
+import { insertUnit } from "@/lib/repositories/unitsRepository"; // TODO: Bude z service s logovanim
 import adminRoutes from "@/lib/routes/adminRoutes";
 import {
   attemptEditUnitGroup,
   attemptInsertUnitGroup,
-} from "@/lib/services/webDataService";
+  deleteUnitGroup,
+} from "@/lib/services/unitsService";
 import {
   getConflictErrorFromError,
   getErrorMessageFromError,

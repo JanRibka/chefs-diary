@@ -149,10 +149,9 @@ export async function updateUnitGroup(
 /**
  * Deletes unit group
  * @param idUnitGroup Unit group id
- * @returns {Promise<UnitGroup>}
  */
-export async function deleteUnitGroup(idUnitGroup: number): Promise<UnitGroup> {
-  return await prisma.unitGroup.delete({
+export async function deleteUnitGroup(idUnitGroup: number) {
+  await prisma.unitGroup.delete({
     where: {
       idUnitGroup: idUnitGroup,
     },

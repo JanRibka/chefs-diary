@@ -1,9 +1,9 @@
 model AdminLog {
     idAdminLog Int      @id @default(autoincrement()) @db.Integer
     idUser     String   @db.VarChar(25)
-    action     String   @db.VarChar(20) // Vytvořit enum pro toto
-    entity     String   @db.VarChar(50)
-    idEntity   Int?     @db.Integer
+    action     String   @db.VarChar(10)
+    entity     String   @db.VarChar(15)
+    idEntity   Int      @db.Integer
     changes    Json?    @db.JsonB
     createdAt  DateTime @default(now()) @db.Timestamp(0)
 

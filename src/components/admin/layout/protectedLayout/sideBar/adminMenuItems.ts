@@ -7,13 +7,13 @@ import AdminMenuItemType from "@/lib/types/admin/AdminMenuItemType";
 
 const adminMenuItems: AdminMenuItemType[] = [
   {
-    key: "dashboard",
+    key: "dashboard-group",
     label: "Dashboard",
     link: adminRoutes.Dashboard,
     icon: RiDashboardFill,
   },
   {
-    key: "users",
+    key: "users-group",
     label: "Uživatelé",
     permissions: [PermissionTypeEnum.USER_VIEW],
     icon: FaUserLarge,
@@ -39,7 +39,7 @@ const adminMenuItems: AdminMenuItemType[] = [
     ],
   },
   {
-    key: "units",
+    key: "units-group",
     label: "Jednotky",
     permissions: [PermissionTypeEnum.UNIT_VIEW],
     icon: FaUnity,
@@ -59,7 +59,7 @@ const adminMenuItems: AdminMenuItemType[] = [
     ],
   },
   {
-    key: "ingredients",
+    key: "ingredients-group",
     label: "Ingredience",
     permissions: [PermissionTypeEnum.UNIT_VIEW],
     icon: FaDatabase,
@@ -73,7 +73,7 @@ const adminMenuItems: AdminMenuItemType[] = [
     ],
   },
   {
-    key: "roles-permissions",
+    key: "roles-permissions-group",
     label: "Práva a oprávnění",
     permissions: [],
     icon: FaDatabase,

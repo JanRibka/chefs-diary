@@ -2,10 +2,9 @@
 
 import { useCallback, useOptimistic, useState } from "react";
 
-import { insertUnitAction } from "@/actions/admin/webData";
+import { insertUnitAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
 import Spinner from "@/components/shared/spinner/Spinner";
-import useUnitsTableData from "@/lib/hooks/apiHooks/admin/useUnitsTableData";
 import { nameof } from "@/lib/utils/nameof";
 import {
   InsertUnitFormErrorType,
@@ -42,42 +41,41 @@ export default function UnitsTable() {
     useUnitsTableContext();
   //TODO: Data budu tahat přes use a strankovani a podobne věci budu dělat na UI. MOhl bych na strankovani sortovani a podobne blbosti vytvoprřit funkci. To co dam bokem asu budu muset obalit do mem, a+t se mi to nerenderuje
   // Data
-  const { data, pages, isLoading } = useUnitsTableData(
-    page,
-    pageSize,
-    sortDescriptor
-  );
+  // const { data, pages, isLoading } = useUnitsTableData(
+  //   page,
+  //   pageSize,
+  //   sortDescriptor
+  // );
 
   // Optimistic update
-  const [optimisticUnits, addOptimisticUnit] = useOptimistic(
-    data.data,
-    (state, newData: Unit) => {
-      return [...state, newData];
-    }
-  );
+  // const [optimisticUnits, addOptimisticUnit] = useOptimistic(
+  //   data.items,
+  //   (state, newData: Unit) => {
+  //     return [...state, newData];
+  //   }
+  // );
   console.log(optimisticUnits);
   // Render cell
   const renderCell = useCallback(unitsRenderCell, []);
 
   // Insert unit optimistic
-  const handleInsertUnitAction = async (formData: FormData) => {
-    debugger;
-    addOptimisticUnit({
-      idUnit: Math.random(),
-      name: formData.get(nameof<InsertUnitFormType>("name")) as string,
-      displayName: formData.get(
-        nameof<InsertUnitFormType>("displayName")
-      ) as string,
-      idUnitGroup: 1, // TODO: nacitat z formu
-    });
-    //TODO: Nejdruive zjistit, proc mi jednotka zmizne, kdyz nevolam revalidate path asi mus9m vol8n9 zabalit do jin0 komponenty. Tady budu na49tat data a zbytek bbude jinde
-    //TODO: Budu mít funkci, která budecaitat error z akšny a vyhazovar Toat
-    //TODO: Pro Indert unit neudu potřebovat ENum pro vrácení hodnoty
+  // const handleInsertUnitAction = async (formData: FormData) => {
+  //   debugger;
+  //   addOptimisticUnit({
+  //     idUnit: Math.random(),
+  //     name: formData.get(nameof<InsertUnitFormType>("name")) as string,
+  //     displayName: formData.get(
+  //       nameof<InsertUnitFormType>("displayName")
+  //     ) as string,
+  //   });
+  //   //TODO: Nejdruive zjistit, proc mi jednotka zmizne, kdyz nevolam revalidate path asi mus9m vol8n9 zabalit do jin0 komponenty. Tady budu na49tat data a zbytek bbude jinde
+  //   //TODO: Budu mít funkci, která budecaitat error z akšny a vyhazovar Toat
+  //   //TODO: Pro Indert unit neudu potřebovat ENum pro vrácení hodnoty
 
-    // https://www.youtube.com/watch?v=PPOw-sDeoNw&ab_channel=ByteGrad
-    await insertUnitAction(formData);
-    //TODO: Tady bych měl nějak zavolat i refetch s await a oak by to mohlo fungovat
-  };
+  //   // https://www.youtube.com/watch?v=PPOw-sDeoNw&ab_channel=ByteGrad
+  //   await insertUnitAction(formData);
+  //   //TODO: Tady bych měl nějak zavolat i refetch s await a oak by to mohlo fungovat
+  // };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
@@ -87,7 +85,7 @@ export default function UnitsTable() {
     if (!validationResult.success) {
       event.preventDefault();
       setErrors({
-        ...validationResult.errors,
+        ...validationResult.error,
         timestamp: new Date().getTime().toString(),
       });
     }
@@ -95,7 +93,7 @@ export default function UnitsTable() {
 
   return (
     <div className="h-full">
-      <Table
+      {/* <Table
         isHeaderSticky
         aria-label="Jednotky"
         topContent={<UnitsTopContent onPressInsertUnit={onOpen} />}
@@ -138,9 +136,9 @@ export default function UnitsTable() {
             </TableRow>
           )}
         </TableBody>
-      </Table>
+      </Table> */}
 
-      <CancelConfirmModal
+      {/* <CancelConfirmModal
         isOpen={isOpen}
         placement="center"
         onOpenChange={onOpenChange}
@@ -154,7 +152,7 @@ export default function UnitsTable() {
           onSubmit={handleSubmit}
           errors={errors}
         />
-      </CancelConfirmModal>
+      </CancelConfirmModal> */}
     </div>
   );
 }

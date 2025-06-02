@@ -38,31 +38,26 @@ export function logAdminAction<T>(
 
   //   return changes;
   // }
-  void logAdminActionAsync(action, entity, idEntity, changes);
-}
+  (async () => {
+    try {
+      const session = await auth();
+      const changesJson: JsonObject = changes
+        ? JSON.parse(JSON.stringify(changes))
+        : undefined;
 
-async function logAdminActionAsync<T>(
-  action: AdminLogActionTypeEnum,
-  entity: AdminLogEntityTypeEnum,
-  idEntity: number,
-  changes?: T
-) {
-  try {
-    const session = await auth();
-    const changesJson: JsonObject = changes
-      ? JSON.parse(JSON.stringify(changes))
-      : undefined;
+      const data: LogAdminActionDataType = {
+        idUser: session?.user?.id ?? "",
+        action,
+        entity,
+        changes: changesJson,
+        idEntity,
+      };
 
-    const data: LogAdminActionDataType = {
-      idUser: session?.user?.id ?? "",
-      action,
-      entity,
-      changes: changesJson,
-      idEntity,
-    };
-
-    await logAdminActionRepository(data);
-  } catch (error) {
-    getErrorMessageFromError(error);
-  }
+      await logAdminActionRepository(data);
+    } catch (error) {
+      getErrorMessageFromError(error, {
+        consoleErrorTitle: `Admin log for action: ${action}, entity: ${entity}, changes: ${changes}`,
+      });
+    }
+  })(); // <-- fire-and-forget
 }

@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { BsDisplay } from "react-icons/bs";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 
 import Button from "@/components/shared/button/Button";
@@ -8,22 +7,24 @@ import SubmitButton from "@/components/shared/submitButton/SubmitButton";
 import ValidateInput from "@/components/shared/validateInput/ValidateInput";
 import { nameof } from "@/lib/utils/nameof";
 import insertUnitFormValidationSchema, {
-  InsertUnitFormErrorType,
   InsertUnitFormType,
 } from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
+import { InsertUnitGroupFormErrorType } from "@/lib/validations/schemas/admin/insertUnitGroupFormValidationSchema";
 
 type Props = {
   onCancel: () => void;
   action: (formData: FormData) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  errors: InsertUnitFormErrorType;
+  errors: InsertUnitGroupFormErrorType;
+  isPending?: boolean;
 };
 
-export default function InsertUnitDialogContent({
+export default function InsertUnitModalContent({
   onCancel,
   action,
   onSubmit,
   errors,
+  isPending,
 }: Props) {
   const refUnitName = useRef<HTMLInputElement>(null);
 
@@ -51,27 +52,18 @@ export default function InsertUnitDialogContent({
             <MdOutlineDriveFileRenameOutline className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
           }
         />
-        <ValidateInput
-          name={nameof<InsertUnitFormType>("displayName")}
-          label="Zobrazované jméno"
-          className="mb-4"
-          required
-          errors={errors}
-          autoComplete="off"
-          fullWidth
-          variant="faded"
-          color="primary"
-          validationSchema={insertUnitFormValidationSchema}
-          endContent={
-            <BsDisplay className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-          }
-        />
       </div>
       <div className="flex py-2 px-1 justify-between">
         <Button color="danger" variant="flat" onPress={onCancel}>
           Zrušit
         </Button>
-        <SubmitButton color="primary">Uložit</SubmitButton>
+        <SubmitButton
+          color="primary"
+          disabled={isPending}
+          isLoading={isPending}
+        >
+          Uložit
+        </SubmitButton>
       </div>
     </Form>
   );

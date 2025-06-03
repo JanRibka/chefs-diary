@@ -1,7 +1,6 @@
 model Unit {
-    idUnit      Int    @id @default(autoincrement()) @db.Integer
-    name        String @unique @db.VarChar(10) // např. "g"
-    displayName String @db.VarChar(10) // např. "gramy"  
+    idUnit Int    @id @default(autoincrement()) @db.Integer
+    name   String @unique @db.VarChar(10)
 
     unitGroupUnit    UnitGroupUnit[]
     fromConversion   UnitConversion[]   @relation("FromUnitConversion")

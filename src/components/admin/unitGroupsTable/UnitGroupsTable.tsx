@@ -68,9 +68,6 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
   const { page, pageSize, sortDescriptor, setSortDescriptor } =
     useUnitGroupsTableContext();
 
-  // Render cell
-  const renderCell = useCallback(unitGroupsRenderCell, []);
-
   // Constants
   const canEdit =
     user?.permissions.some((item) => item === PermissionTypeEnum.UNIT_EDIT) ??
@@ -89,6 +86,12 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
   const pageItems = useMemo(() => {
     return getPageItems(sortedItems, page, pageSize);
   }, [sortedItems, page, pageSize]);
+
+  // Render cell
+  const renderCell = useCallback(unitGroupsRenderCell, []);
+
+  // Columns
+  const columns = useCallback(getUnitGroupsColumns, []);
 
   // Optimistic update
   const [optimisticUnitGroups, setOptimisticUnitGroup] = useOptimistic(
@@ -150,7 +153,7 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
           onSortChange={setSortDescriptor}
           sortDescriptor={sortDescriptor}
         >
-          <TableHeader columns={getUnitGroupsColumns(canEdit || canDelete)}>
+          <TableHeader columns={columns(canEdit || canDelete)}>
             {(column) => (
               <TableColumn
                 key={column.key}

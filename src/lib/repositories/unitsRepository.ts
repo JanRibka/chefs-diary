@@ -18,34 +18,12 @@ export async function getAllUnitsCached(): Promise<Unit[]> {
 }
 
 /**
- * Get all units paginated
- * @param page Page number
- * @param pageSize Page size
- * @param orderByField Order by field
- * @param orderDirection Order by direction
+ * Get all units
  * @returns {Promise<PaginatedDTO<Unit>>}
  */
-export async function getAllUnitsPaginated(
-  page: number,
-  pageSize: number,
-  orderByField?: string,
-  orderDirection?: string
-): Promise<PaginatedDTO<Unit>> {
-  const skip = (page - 1) * pageSize;
-
-  const orderBy =
-    orderByField && orderDirection
-      ? {
-          [orderByField]: orderDirection,
-        }
-      : undefined;
-
+export async function getAllUnits(): Promise<PaginatedDTO<Unit>> {
   const [units, totalCount] = await Promise.all([
-    prisma.unit.findMany({
-      skip,
-      take: pageSize,
-      orderBy,
-    }),
+    prisma.unit.findMany({}),
 
     prisma.unit.count(),
   ]);
@@ -56,17 +34,37 @@ export async function getAllUnitsPaginated(
 /**
  * Inserts unit
  * @param name Unit name
- * @param displayName Unit display name
  * @returns {Promise<Unit>}
  */
-export async function insertUnit(
-  name: string,
-  displayName: string
-): Promise<Unit> {
+export async function insertUnit(name: string): Promise<Unit> {
   return await prisma.unit.create({
     data: {
       name: name,
-      displayName: displayName,
+    },
+  });
+}
+
+/**
+ * Get unit by name
+ * @param name Unit name
+ * @returns {Promise<Unit | null>}
+ */
+export async function getUnitByName(name: string): Promise<Unit | null> {
+  return await prisma.unit.findUnique({
+    where: {
+      name: name,
+    },
+  });
+}
+
+/**
+ * Get unit by idUnit
+ * @returns {Promise<Unit | null>}
+ */
+export async function getUnitById(idUnit: number): Promise<Unit | null> {
+  return await prisma.unit.findUnique({
+    where: {
+      idUnit: idUnit,
     },
   });
 }

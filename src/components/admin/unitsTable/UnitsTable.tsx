@@ -1,16 +1,13 @@
 "use client";
 
-import { useCallback, useOptimistic, useState } from "react";
+import { use, useCallback, useMemo, useOptimistic, useState } from "react";
 
-import { insertUnitAction } from "@/actions/admin/units";
-import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
 import Spinner from "@/components/shared/spinner/Spinner";
-import { nameof } from "@/lib/utils/nameof";
-import {
-  InsertUnitFormErrorType,
-  InsertUnitFormType,
-} from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
-import { validateInsertUnitForm } from "@/lib/validations/validations/admin/validateInsertUnitForm";
+import { useUserContext } from "@/context/UserContext";
+import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
+import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
+import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
+import { getPageItems, getPages, getSortedItems } from "@/lib/utils/table";
 import {
   Table,
   TableBody,
@@ -22,81 +19,113 @@ import {
 } from "@heroui/react";
 import { Unit } from "@prisma/client";
 
-import InsertUnitDialogContent from "./InsertUnitDialogContent";
+import InsertUnitModal from "./InsertUnitModal/InsertUnitModal";
 import UnitsBottomContent from "./UnitsBottomContent";
-import unitsColumns from "./unitsColumns";
+import getUnitsColumns from "./unitsColumns";
 import { unitsRenderCell } from "./unitsRenderCell";
 import { useUnitsTableContext } from "./UnitsTableContext";
 import UnitsTopContent from "./UnitsTopContent";
 
-export default function UnitsTable() {
-  // Insert unit modal state
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+export type SetOptimisticUnitType = {
+  type: "add" | "update" | "delete";
+  unit: Unit;
+};
+
+type Props = {
+  dataPromise: Promise<ActionResponseDTO<PaginatedDTO<Unit>>>;
+};
+
+export default function UnitsTable({ dataPromise }: Props) {
+  // Get data
+  const dataWithError = use(dataPromise);
+  const data = dataWithError.data!;
 
   // State
-  const [errors, setErrors] = useState<InsertUnitFormErrorType>({});
+  const [unitToDelete, setUnitToDelete] = useState<Unit | null>(null);
+  const [unitToEdit, setUnitToEdit] = useState<Unit | null>(null);
+
+  // Modal states
+  const {
+    isOpen: isOpenInsert,
+    onOpen: onOpenInsert,
+    onOpenChange: onOpenChangeInsert,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenEditUnit,
+    onOpen: onOpenEditUnit,
+    onOpenChange: onOpenChangeEditUnit,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenDeleteUnit,
+    onOpen: onOpenDeleteUnit,
+    onOpenChange: onOpenChangeDeleteUnit,
+  } = useDisclosure();
 
   // Context
+  const { user } = useUserContext();
   const { page, pageSize, sortDescriptor, setSortDescriptor } =
     useUnitsTableContext();
-  //TODO: Data budu tahat přes use a strankovani a podobne věci budu dělat na UI. MOhl bych na strankovani sortovani a podobne blbosti vytvoprřit funkci. To co dam bokem asu budu muset obalit do mem, a+t se mi to nerenderuje
-  // Data
-  // const { data, pages, isLoading } = useUnitsTableData(
-  //   page,
-  //   pageSize,
-  //   sortDescriptor
-  // );
 
-  // Optimistic update
-  // const [optimisticUnits, addOptimisticUnit] = useOptimistic(
-  //   data.items,
-  //   (state, newData: Unit) => {
-  //     return [...state, newData];
-  //   }
-  // );
-  console.log(optimisticUnits);
+  // Constants
+  const canEdit =
+    user?.permissions.some((item) => item === PermissionTypeEnum.UNIT_EDIT) ??
+    false;
+  const canDelete =
+    user?.permissions.some((item) => item === PermissionTypeEnum.UNIT_DELETE) ??
+    false;
+  const pages = useMemo(
+    () => getPages(data.totalCount, pageSize),
+
+    [data.totalCount, pageSize]
+  );
+  const sortedItems = useMemo(() => {
+    return getSortedItems<Unit>(data.items, sortDescriptor);
+  }, [sortDescriptor, data.items]);
+  const pageItems = useMemo(() => {
+    return getPageItems(sortedItems, page, pageSize);
+  }, [sortedItems, page, pageSize]);
+
   // Render cell
   const renderCell = useCallback(unitsRenderCell, []);
+  // Columns
+  const columns = useCallback(getUnitsColumns, []);
 
-  // Insert unit optimistic
-  // const handleInsertUnitAction = async (formData: FormData) => {
-  //   debugger;
-  //   addOptimisticUnit({
-  //     idUnit: Math.random(),
-  //     name: formData.get(nameof<InsertUnitFormType>("name")) as string,
-  //     displayName: formData.get(
-  //       nameof<InsertUnitFormType>("displayName")
-  //     ) as string,
-  //   });
-  //   //TODO: Nejdruive zjistit, proc mi jednotka zmizne, kdyz nevolam revalidate path asi mus9m vol8n9 zabalit do jin0 komponenty. Tady budu na49tat data a zbytek bbude jinde
-  //   //TODO: Budu mít funkci, která budecaitat error z akšny a vyhazovar Toat
-  //   //TODO: Pro Indert unit neudu potřebovat ENum pro vrácení hodnoty
-
-  //   // https://www.youtube.com/watch?v=PPOw-sDeoNw&ab_channel=ByteGrad
-  //   await insertUnitAction(formData);
-  //   //TODO: Tady bych měl nějak zavolat i refetch s await a oak by to mohlo fungovat
-  // };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData);
-    const validationResult = validateInsertUnitForm(data);
-
-    if (!validationResult.success) {
-      event.preventDefault();
-      setErrors({
-        ...validationResult.error,
-        timestamp: new Date().getTime().toString(),
-      });
+  // Optimistic update
+  const [optimisticUnits, setOptimisticUnit] = useOptimistic(
+    pageItems,
+    (state, action: SetOptimisticUnitType) => {
+      switch (action.type) {
+        case "add":
+          return [...state, action.unit];
+        case "update":
+          return state.map((item) =>
+            item.idUnit === action.unit.idUnit
+              ? { ...item, name: action.unit.name }
+              : item
+          );
+        case "delete":
+          return state.filter((item) => item.idUnit !== action.unit.idUnit);
+      }
     }
+  );
+
+  // Handlers
+  const handleEditUnit = (unit: Unit) => {
+    setUnitToEdit(unit);
+    onOpenEditUnit();
+  };
+
+  const handleDeleteUnit = (unit: Unit) => {
+    setUnitToDelete(unit);
+    onOpenDeleteUnit();
   };
 
   return (
     <div className="h-full">
-      {/* <Table
+      <Table
         isHeaderSticky
         aria-label="Jednotky"
-        topContent={<UnitsTopContent onPressInsertUnit={onOpen} />}
+        topContent={<UnitsTopContent onPressInsertUnit={onOpenInsert} />}
         topContentPlacement="outside"
         bottomContent={
           <UnitsBottomContent pages={pages} totalUsers={data.totalCount} />
@@ -110,12 +139,13 @@ export default function UnitsTable() {
         onSortChange={setSortDescriptor}
         sortDescriptor={sortDescriptor}
       >
-        <TableHeader columns={unitsColumns}>
+        <TableHeader columns={columns(canEdit || canDelete)}>
           {(column) => (
             <TableColumn
               key={column.key}
               align={column.align}
               allowsSorting={column.allowsSorting}
+              width={column.width}
             >
               {column.label}
             </TableColumn>
@@ -125,34 +155,32 @@ export default function UnitsTable() {
         <TableBody
           items={optimisticUnits}
           loadingContent={<Spinner />}
-          loadingState={isLoading ? "loading" : "idle"}
           emptyContent="Žádný jednotka nebyla nalezena"
         >
           {(item) => (
             <TableRow key={item.idUnit}>
               {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
+                <TableCell>
+                  {renderCell(
+                    item,
+                    columnKey,
+                    canEdit,
+                    canDelete,
+                    handleEditUnit,
+                    handleDeleteUnit
+                  )}
+                </TableCell>
               )}
             </TableRow>
           )}
         </TableBody>
-      </Table> */}
+      </Table>
 
-      {/* <CancelConfirmModal
-        isOpen={isOpen}
-        placement="center"
-        onOpenChange={onOpenChange}
-        headerLabel="Přidat jednotku"
-        hideFooter
-        isDismissable={false}
-      >
-        <InsertUnitDialogContent
-          onCancel={onOpenChange}
-          action={handleInsertUnitAction}
-          onSubmit={handleSubmit}
-          errors={errors}
-        />
-      </CancelConfirmModal> */}
+      <InsertUnitModal
+        isOpen={isOpenInsert}
+        onOpenChange={onOpenChangeInsert}
+        setOptimisticUnit={setOptimisticUnit}
+      />
     </div>
   );
 }

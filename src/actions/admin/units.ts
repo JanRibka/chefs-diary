@@ -3,13 +3,14 @@
 import { revalidatePath } from "next/cache";
 
 import editUnitGroupActionValidator from "@/lib/actionValidators/admin/editUnitGroupActionValidator";
+import insertUnitActionValidator from "@/lib/actionValidators/admin/insertUnitActionValidator";
 import insertUnitGroupActionValidator from "@/lib/actionValidators/admin/insertUnitGroupActionValidator";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
-import { insertUnit } from "@/lib/repositories/unitsRepository"; // TODO: Bude z service s logovanim
 import adminRoutes from "@/lib/routes/adminRoutes";
 import {
   attemptEditUnitGroup,
+  attemptInsertUnit,
   attemptInsertUnitGroup,
   deleteUnitGroup,
 } from "@/lib/services/unitsService";
@@ -23,7 +24,7 @@ import { getRequireAdminPermissions } from "@/lib/utils/server";
 import { EditUnitGroupFormType } from "@/lib/validations/schemas/admin/editUnitGroupFormValidationSchema";
 import { InsertUnitFormType } from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
 import { InsertUnitGroupFormType } from "@/lib/validations/schemas/admin/insertUnitGroupFormValidationSchema";
-import { UnitGroup } from "@prisma/client";
+import { Unit, UnitGroup } from "@prisma/client";
 
 export async function insertUnitGroupAction(
   formData: FormData
@@ -158,42 +159,49 @@ export async function deleteUnitGroupAction(
   }
 }
 
-export async function insertUnitAction(formData: FormData) {
-  // ): Promise<
-  //   FormActionState<InsertUnitStatusEnum, InsertUnitFormType, InsertUnitFormType>
-  // > {
-  // try {
-  debugger;
-
-  // try {
+export async function insertUnitAction(
+  formData: FormData
+): Promise<ActionResponseDTO<Unit>> {
   await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
-  // const validationResult = await insertUnitActionValidator(formData);
-  //TODO: kontrola na to, 6e jednotka existuje. POdle p5ihlasen9
-  //TODO: Bude tu servisa s attempt insertUnit
-  //TODO: Podle enumu bud pak okno zvaru, nebo pkld je validacni chyba, kterou dam do enumu, tak ji vratim na pkna, nebo vyhodim n2jakou jinou hlasku. Okno zavru jenom pro success
-  const name = formData.get(nameof<InsertUnitFormType>("name")) as string;
-  const displayName = formData.get(
-    nameof<InsertUnitFormType>("displayName")
-  ) as string;
 
   try {
-    await insertUnit(name, displayName);
+    const validationResult = await insertUnitActionValidator(formData);
+
+    if (!validationResult.success) {
+      return {
+        data: null,
+        success: false,
+        error: validationResult.error,
+        timeStamp: new Date(),
+      };
+    }
+
+    const name = formData.get(nameof<InsertUnitFormType>("name")) as string;
+    const unit = await attemptInsertUnit(name);
+
+    return {
+      data: unit,
+      success: true,
+      timeStamp: new Date(),
+    };
   } catch (error) {
+    const conflictError = getConflictErrorFromError(
+      error,
+      "Jednotka již existuje"
+    );
+    let errorMessage = conflictError.errorMessage;
+
+    if (!conflictError.isConflictError) {
+      errorMessage = getErrorMessageFromError(error);
+    }
+
+    return {
+      data: null,
+      success: false,
+      error: errorMessage,
+      timeStamp: new Date(),
+    };
   } finally {
-    revalidatePath(adminRoutes.UnitGroups);
+    revalidatePath(adminRoutes.Units);
   }
-
-  // } catch (error) {
-  // } finally {
-  //console.log("revalidate");
-  //TODO: M9sto revalidate path budu muset na klientovi volat refatch z hooku
-  //revalidatePath(adminRoutes.Units);
-  //}
-
-  //   return {
-  //     generalState: InsertUnitStatusEnum.SUCCESS
-  //   }
-  // } catch () {
-
-  // }
 }

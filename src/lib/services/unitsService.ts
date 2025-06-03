@@ -1,4 +1,4 @@
-import { UnitGroup } from "@prisma/client";
+import { Unit, UnitGroup } from "@prisma/client";
 
 import { ActionResponseDTO } from "../dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
@@ -10,8 +10,11 @@ import NotFoundError from "../errors/NotFoundError";
 import {
   deleteUnitGroup as deleteUnitGroupRepository,
   getAllUnitGroups as GetAllUnitGroupsRepository,
+  getAllUnits as GetAllUnitsRepository,
+  getUnitByName,
   getUnitGroupById as getUnitGroupByIdRepository,
   getUnitGroupByName,
+  insertUnit,
   insertUnitGroup,
   updateUnitGroup,
 } from "../repositories/unitsRepository";
@@ -157,4 +160,58 @@ export async function getUnitGroupById(
   }
 }
 
-//TODO: P5i m8z8n9 a update jedntky budu d2lat log do
+/**
+ * Gets all units
+ * @returns {Promise<ActionResponseDTO<Unit[]>>}
+ */
+export async function getAllUnits(): Promise<
+  ActionResponseDTO<PaginatedDTO<Unit>>
+> {
+  try {
+    await getRequireAdminPermissions([PermissionTypeEnum.UNIT_VIEW]);
+
+    const units = await GetAllUnitsRepository();
+
+    return {
+      data: units,
+      success: true,
+      timeStamp: new Date(),
+    };
+  } catch (error) {
+    const errorMessage = getErrorMessageFromError(error);
+
+    return {
+      data: { items: [], totalCount: 0 },
+      success: false,
+      error: errorMessage,
+      timeStamp: new Date(),
+    };
+  }
+}
+
+/**
+ * Attempts to insert a new unit with the given name.
+ * Throws a ConflictError if a unit with the same name already exists.
+ *
+ * @param name - The name of the unit to insert.
+ * @returns {Promise<Unit>}
+ * @throws {ConflictError} If a unit with the same name already exists.
+ */
+export async function attemptInsertUnit(name: string): Promise<Unit> {
+  const unit = await getUnitByName(name);
+
+  if (unit) {
+    throw new ConflictError();
+  }
+
+  const insertedUnit = await insertUnit(name);
+
+  logAdminAction(
+    AdminLogActionTypeEnum.CREATE,
+    AdminLogEntityTypeEnum.UNIT,
+    insertedUnit.idUnit,
+    { name }
+  );
+
+  return insertedUnit;
+}

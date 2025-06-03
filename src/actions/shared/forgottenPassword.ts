@@ -40,7 +40,7 @@ export const forgottenPasswordAction = async (
   };
 
   if (!validationResult.success) {
-    return { form, errors: validationResult.errors };
+    return { form, errors: validationResult.error };
   }
 
   try {

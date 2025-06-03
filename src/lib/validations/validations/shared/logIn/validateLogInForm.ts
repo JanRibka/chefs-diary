@@ -10,7 +10,7 @@ type ErrorType = Omit<LogInFormErrorType, "timestamp" | "general">;
 export const validateLogInForm = (
   formData: Record<string, FormDataEntryValue>
 ) => {
-  const result: ValidationResultType<ErrorType> = { success: true, errors: {} };
+  const result: ValidationResultType<ErrorType> = { success: true, error: {} };
 
   try {
     logInFormValidationSchema.validateSync(formData, {
@@ -20,8 +20,8 @@ export const validateLogInForm = (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!result.errors[path]) {
-        result.errors[path] = err.message;
+      if (!!!result.error[path]) {
+        result.error[path] = err.message;
         result.success = false;
       }
     });
@@ -33,7 +33,7 @@ export const validateLogInForm = (
 export const validateLogInFormAsync = async (
   formData: Record<string, FormDataEntryValue>
 ) => {
-  const result: ValidationResultType<ErrorType> = { success: true, errors: {} };
+  const result: ValidationResultType<ErrorType> = { success: true, error: {} };
 
   try {
     await logInFormValidationSchema.validate(formData, {
@@ -43,8 +43,8 @@ export const validateLogInFormAsync = async (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!result.errors[path]) {
-        result.errors[path] = err.message;
+      if (!!!result.error[path]) {
+        result.error[path] = err.message;
         result.success = false;
       }
     });

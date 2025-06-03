@@ -80,7 +80,7 @@ export default function AllUsersTable() {
         </TableHeader>
 
         <TableBody
-          items={data.data}
+          items={data.items}
           loadingContent={<Spinner />}
           loadingState={isLoading ? "loading" : "idle"}
           emptyContent="Žádný uživatel nebyl nalezen"

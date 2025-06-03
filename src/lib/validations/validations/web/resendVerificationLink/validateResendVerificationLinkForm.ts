@@ -13,7 +13,7 @@ type ErrorType = Omit<
 export const validateResendVerificationLinkForm = (
   formData: Record<string, FormDataEntryValue>
 ) => {
-  const result: ValidationResultType<ErrorType> = { success: true, errors: {} };
+  const result: ValidationResultType<ErrorType> = { success: true, error: {} };
 
   try {
     resendVerificationEmailValidationSchema.validateSync(formData, {
@@ -23,8 +23,8 @@ export const validateResendVerificationLinkForm = (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!result.errors[path]) {
-        result.errors[path] = err.message;
+      if (!!!result.error[path]) {
+        result.error[path] = err.message;
         result.success = false;
       }
     });
@@ -36,7 +36,7 @@ export const validateResendVerificationLinkForm = (
 export const validateResendVerificationLinkFormAsync = async (
   formData: Record<string, FormDataEntryValue>
 ) => {
-  const result: ValidationResultType<ErrorType> = { success: true, errors: {} };
+  const result: ValidationResultType<ErrorType> = { success: true, error: {} };
 
   try {
     await resendVerificationEmailValidationSchema.validate(formData, {
@@ -46,8 +46,8 @@ export const validateResendVerificationLinkFormAsync = async (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!result.errors[path]) {
-        result.errors[path] = err.message;
+      if (!!!result.error[path]) {
+        result.error[path] = err.message;
         result.success = false;
       }
     });

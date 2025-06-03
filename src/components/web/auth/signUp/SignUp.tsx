@@ -33,7 +33,7 @@ export default function SignUp() {
     if (!validationResult.success) {
       event.preventDefault();
       setErrors({
-        ...validationResult.errors,
+        ...validationResult.error,
         timestamp: new Date().getTime().toString(),
       });
     }

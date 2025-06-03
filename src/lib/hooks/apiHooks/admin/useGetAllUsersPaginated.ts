@@ -15,10 +15,8 @@ export default function useGetAllUserPaginated(
   sortDescriptor: SortDescriptor
 ) {
   const [data, setData] = useState<PaginatedDTO<UserWithStatsDTO>>({
-    data: [],
+    items: [],
     totalCount: 0,
-    page,
-    pageSize,
   });
   const [isLoading, setIsLoading] = useState(true);
 

@@ -41,7 +41,7 @@ export default function EmailNotVerified({ email }: Props) {
     if (!validationResult.success) {
       event.preventDefault();
       setErrors({
-        ...validationResult.errors,
+        ...validationResult.error,
         timestamp: new Date().getTime().toString(),
       });
     }

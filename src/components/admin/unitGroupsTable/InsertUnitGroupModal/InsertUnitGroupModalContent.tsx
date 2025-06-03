@@ -6,16 +6,16 @@ import Form from "@/components/shared/form/Form";
 import SubmitButton from "@/components/shared/submitButton/SubmitButton";
 import ValidateInput from "@/components/shared/validateInput/ValidateInput";
 import { nameof } from "@/lib/utils/nameof";
-import insertUnitGroupFormValidationSchema, {
-  InsertUnitGroupFormErrorType,
-  InsertUnitGroupFormType,
-} from "@/lib/validations/schemas/admin/insertUnitGroupFormValidationSchema";
+import unitGroupFormValidationSchema, {
+  UnitGroupFormErrorType,
+  UnitGroupFormType,
+} from "@/lib/validations/schemas/admin/unitGroupFormValidationSchema";
 
 type Props = {
   onCancel: () => void;
   action: (formData: FormData) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  errors: InsertUnitGroupFormErrorType;
+  errors: UnitGroupFormErrorType;
   isPending?: boolean;
 };
 
@@ -38,7 +38,7 @@ export default function InsertUnitGroupModalContent({
       <div>
         <ValidateInput
           ref={refUnitName}
-          name={nameof<InsertUnitGroupFormType>("name")}
+          name={nameof<UnitGroupFormType>("name")}
           label="Název skupiny jednotek"
           className="mb-4"
           required
@@ -47,7 +47,7 @@ export default function InsertUnitGroupModalContent({
           fullWidth
           variant="faded"
           color="primary"
-          validationSchema={insertUnitGroupFormValidationSchema}
+          validationSchema={unitGroupFormValidationSchema}
           endContent={
             <MdOutlineDriveFileRenameOutline className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
           }

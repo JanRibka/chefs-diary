@@ -2,7 +2,7 @@ import { InferType, object, string } from "yup";
 
 import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 
-const insertUnitFormValidationSchema = object().shape({
+const unitFormValidationSchema = object().shape({
   name: string()
     .required(getErrorTextByKey("unitNameRequired"))
     .max(10, getErrorTextByKey("unitNameMaxLength", "10")),
@@ -11,11 +11,9 @@ const insertUnitFormValidationSchema = object().shape({
   //   .max(10, getErrorTextByKey("unitDisplayNameMaxLength", "10")),
 });
 
-export default insertUnitFormValidationSchema;
+export default unitFormValidationSchema;
 
-export type InsertUnitFormType = InferType<
-  typeof insertUnitFormValidationSchema
->;
-export type InsertUnitFormErrorType = {
-  [K in keyof InsertUnitFormType | "general" | "timestamp"]?: string;
+export type UnitFormType = InferType<typeof unitFormValidationSchema>;
+export type UnitFormErrorType = {
+  [K in keyof UnitFormType | "general" | "timestamp"]?: string;
 };

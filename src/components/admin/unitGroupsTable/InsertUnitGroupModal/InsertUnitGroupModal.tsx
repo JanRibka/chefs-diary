@@ -4,7 +4,7 @@ import { insertUnitGroupAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
 import addToast from "@/lib/utils/addToast";
 import { nameof } from "@/lib/utils/nameof";
-import { InsertUnitGroupFormType } from "@/lib/validations/schemas/admin/insertUnitGroupFormValidationSchema";
+import { UnitGroupFormType } from "@/lib/validations/schemas/admin/unitGroupFormValidationSchema";
 
 import { SetOptimisticUnitGroupType } from "../UnitGroupsTable";
 import InsertUnitGroupModalContent from "./InsertUnitGroupModalContent";
@@ -42,7 +42,7 @@ export default function InsertUnitGroupModal({
       type: "add",
       group: {
         idUnitGroup: Math.random(),
-        name: formData.get(nameof<InsertUnitGroupFormType>("name")) as string,
+        name: formData.get(nameof<UnitGroupFormType>("name")) as string,
       },
     });
 

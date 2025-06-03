@@ -1,19 +1,19 @@
 import { ValidationError } from "yup";
 
 import ValidationResultType from "@/lib/types/validation/ValidationResultType";
-import insertUnitGroupFormValidationSchema, {
-  InsertUnitGroupFormErrorType,
-} from "@/lib/validations/schemas/admin/insertUnitGroupFormValidationSchema";
+import unitFormValidationSchema, {
+  UnitFormErrorType,
+} from "@/lib/validations/schemas/admin/unitFormValidationSchema";
 
-type ErrorType = Omit<InsertUnitGroupFormErrorType, "timestamp" | "general">;
+type ErrorType = Omit<UnitFormErrorType, "timestamp" | "general">;
 
-export const validateInsertUnitGroupForm = (
+export const validateUnitForm = (
   formData: Record<string, FormDataEntryValue>
 ) => {
   const result: ValidationResultType<ErrorType> = { success: true, error: {} };
 
   try {
-    insertUnitGroupFormValidationSchema.validateSync(formData, {
+    unitFormValidationSchema.validateSync(formData, {
       abortEarly: false,
     });
   } catch (error) {
@@ -30,13 +30,13 @@ export const validateInsertUnitGroupForm = (
   return result;
 };
 
-export const validateInsertUnitGroupFormAsync = async (
+export const validateUnitFormAsync = async (
   formData: Record<string, FormDataEntryValue>
 ) => {
   const result: ValidationResultType<ErrorType> = { success: true, error: {} };
 
   try {
-    await insertUnitGroupFormValidationSchema.validate(formData, {
+    await unitFormValidationSchema.validate(formData, {
       abortEarly: false,
     });
   } catch (error) {

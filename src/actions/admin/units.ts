@@ -2,13 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 
-import editUnitGroupActionValidator from "@/lib/actionValidators/admin/editUnitGroupActionValidator";
-import insertUnitActionValidator from "@/lib/actionValidators/admin/insertUnitActionValidator";
-import insertUnitGroupActionValidator from "@/lib/actionValidators/admin/insertUnitGroupActionValidator";
+import unitActionValidator from "@/lib/actionValidators/admin/unitActionValidator";
+import unitGroupActionValidator from "@/lib/actionValidators/admin/unitGroupActionValidator";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
+import { deleteUnit } from "@/lib/repositories/unitsRepository";
 import adminRoutes from "@/lib/routes/adminRoutes";
 import {
+  attemptEditUnit,
   attemptEditUnitGroup,
   attemptInsertUnit,
   attemptInsertUnitGroup,
@@ -21,9 +22,8 @@ import {
 } from "@/lib/utils/error";
 import { nameof } from "@/lib/utils/nameof";
 import { getRequireAdminPermissions } from "@/lib/utils/server";
-import { EditUnitGroupFormType } from "@/lib/validations/schemas/admin/editUnitGroupFormValidationSchema";
-import { InsertUnitFormType } from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
-import { InsertUnitGroupFormType } from "@/lib/validations/schemas/admin/insertUnitGroupFormValidationSchema";
+import { UnitFormType } from "@/lib/validations/schemas/admin/unitFormValidationSchema";
+import { UnitGroupFormType } from "@/lib/validations/schemas/admin/unitGroupFormValidationSchema";
 import { Unit, UnitGroup } from "@prisma/client";
 
 export async function insertUnitGroupAction(
@@ -32,7 +32,7 @@ export async function insertUnitGroupAction(
   await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
 
   try {
-    const validationResult = await insertUnitGroupActionValidator(formData);
+    const validationResult = await unitGroupActionValidator(formData);
 
     if (!validationResult.success) {
       return {
@@ -43,9 +43,7 @@ export async function insertUnitGroupAction(
       };
     }
 
-    const name = formData.get(
-      nameof<InsertUnitGroupFormType>("name")
-    ) as string;
+    const name = formData.get(nameof<UnitGroupFormType>("name")) as string;
     const unitGroup = await attemptInsertUnitGroup(name);
 
     return {
@@ -82,7 +80,7 @@ export async function updateUnitGroupAction(
   await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
 
   try {
-    const validationResult = await editUnitGroupActionValidator(formData);
+    const validationResult = await unitGroupActionValidator(formData);
 
     if (!validationResult.success) {
       return {
@@ -93,7 +91,7 @@ export async function updateUnitGroupAction(
       };
     }
 
-    const name = formData.get(nameof<EditUnitGroupFormType>("name")) as string;
+    const name = formData.get(nameof<UnitGroupFormType>("name")) as string;
 
     const unitGroup = await attemptEditUnitGroup(idUnitGroup, name);
 
@@ -165,7 +163,7 @@ export async function insertUnitAction(
   await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
 
   try {
-    const validationResult = await insertUnitActionValidator(formData);
+    const validationResult = await unitActionValidator(formData);
 
     if (!validationResult.success) {
       return {
@@ -176,7 +174,7 @@ export async function insertUnitAction(
       };
     }
 
-    const name = formData.get(nameof<InsertUnitFormType>("name")) as string;
+    const name = formData.get(nameof<UnitFormType>("name")) as string;
     const unit = await attemptInsertUnit(name);
 
     return {
@@ -188,6 +186,90 @@ export async function insertUnitAction(
     const conflictError = getConflictErrorFromError(
       error,
       "Jednotka již existuje"
+    );
+    let errorMessage = conflictError.errorMessage;
+
+    if (!conflictError.isConflictError) {
+      errorMessage = getErrorMessageFromError(error);
+    }
+
+    return {
+      data: null,
+      success: false,
+      error: errorMessage,
+      timeStamp: new Date(),
+    };
+  } finally {
+    revalidatePath(adminRoutes.Units);
+  }
+}
+
+export async function updateUnitAction(
+  idUnit: number,
+  formData: FormData
+): Promise<ActionResponseDTO<Unit>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
+
+  try {
+    const validationResult = await unitActionValidator(formData);
+
+    if (!validationResult.success) {
+      return {
+        data: null,
+        success: false,
+        error: validationResult.error,
+        timeStamp: new Date(),
+      };
+    }
+
+    const name = formData.get(nameof<UnitFormType>("name")) as string;
+
+    const unit = await attemptEditUnit(idUnit, name);
+
+    return {
+      data: unit,
+      success: true,
+      timeStamp: new Date(),
+    };
+  } catch (error) {
+    const notFoundError = getNotFoundErrorFromError(
+      error,
+      "Jednotka neexistuje"
+    );
+    let errorMessage = notFoundError.errorMessage;
+
+    if (!notFoundError.isNotFoundError) {
+      errorMessage = getErrorMessageFromError(error);
+    }
+
+    return {
+      data: null,
+      success: false,
+      error: errorMessage,
+      timeStamp: new Date(),
+    };
+  } finally {
+    revalidatePath(adminRoutes.Units);
+  }
+}
+
+export async function deleteUnitAction(
+  idUnit: number
+): Promise<ActionResponseDTO<Unit>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.UNIT_DELETE]);
+
+  try {
+    await deleteUnit(idUnit);
+
+    return {
+      data: null,
+      success: true,
+      timeStamp: new Date(),
+    };
+  } catch (error) {
+    const conflictError = getConflictErrorFromError(
+      error,
+      "Jednotka nelze smazat"
     );
     let errorMessage = conflictError.errorMessage;
 

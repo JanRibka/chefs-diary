@@ -1,15 +1,15 @@
 import { useState } from "react";
 
-import { UnitGroupFormErrorType } from "@/lib/validations/schemas/admin/unitGroupFormValidationSchema";
-import { validateUnitGroupForm } from "@/lib/validations/validations/admin/validateUnitGroupForm";
+import { UnitFormErrorType } from "@/lib/validations/schemas/admin/unitFormValidationSchema";
+import { validateUnitForm } from "@/lib/validations/validations/admin/validateUnitForm";
 
-export default function useInsertUnitGroupValidation() {
-  const [error, setError] = useState<UnitGroupFormErrorType>({});
+export default function useEditUnitValidation() {
+  const [error, setError] = useState<UnitFormErrorType>({});
 
   const validate = (event: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
-    const validationResult = validateUnitGroupForm(data);
+    const validationResult = validateUnitForm(data);
 
     if (!validationResult.success) {
       event.preventDefault();

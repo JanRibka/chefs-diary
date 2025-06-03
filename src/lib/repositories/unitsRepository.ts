@@ -70,6 +70,35 @@ export async function getUnitById(idUnit: number): Promise<Unit | null> {
 }
 
 /**
+ * Updates unit
+ * @param idUnit Unit id
+ * @param name Unit name
+ * @returns {Promise<Unit>}
+ */
+export async function updateUnit(idUnit: number, name: string): Promise<Unit> {
+  return await prisma.unit.update({
+    where: {
+      idUnit: idUnit,
+    },
+    data: {
+      name: name,
+    },
+  });
+}
+
+/**
+ * Deletes unit
+ * @param idUnit Unit id
+ */
+export async function deleteUnit(idUnit: number) {
+  await prisma.unit.delete({
+    where: {
+      idUnit: idUnit,
+    },
+  });
+}
+
+/**
  * Get all unit groups
  * @returns {Promise<PaginatedDTO<UnitGroup>>}
  */

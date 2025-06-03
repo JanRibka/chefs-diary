@@ -4,7 +4,7 @@ import { insertUnitAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
 import addToast from "@/lib/utils/addToast";
 import { nameof } from "@/lib/utils/nameof";
-import { InsertUnitFormType } from "@/lib/validations/schemas/admin/insertUnitFormValidationSchema";
+import { UnitFormType } from "@/lib/validations/schemas/admin/unitFormValidationSchema";
 
 import { SetOptimisticUnitType } from "../UnitsTable";
 import InsertUnitModalContent from "./InsertUnitModalContent";
@@ -42,7 +42,7 @@ export default function InsertUnitModal({
       type: "add",
       unit: {
         idUnit: Math.random(),
-        name: formData.get(nameof<InsertUnitFormType>("name")) as string,
+        name: formData.get(nameof<UnitFormType>("name")) as string,
       },
     });
 

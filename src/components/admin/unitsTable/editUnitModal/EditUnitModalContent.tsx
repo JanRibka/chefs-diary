@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 
 import Button from "@/components/shared/button/Button";
@@ -10,8 +10,10 @@ import unitFormValidationSchema, {
   UnitFormErrorType,
   UnitFormType,
 } from "@/lib/validations/schemas/admin/unitFormValidationSchema";
+import { Unit } from "@prisma/client";
 
 type Props = {
+  unit: Unit;
   onCancel: () => void;
   action: (formData: FormData) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -19,7 +21,8 @@ type Props = {
   isPending?: boolean;
 };
 
-export default function InsertUnitModalContent({
+export default function EditUnitModalContent({
+  unit,
   onCancel,
   action,
   onSubmit,
@@ -27,6 +30,8 @@ export default function InsertUnitModalContent({
   isPending,
 }: Props) {
   const refUnitName = useRef<HTMLInputElement>(null);
+
+  const [value, setValue] = useState(unit.name);
 
   return (
     <Form
@@ -39,6 +44,7 @@ export default function InsertUnitModalContent({
         <ValidateInput
           ref={refUnitName}
           name={nameof<UnitFormType>("name")}
+          value={value}
           label="Název jednotky"
           className="mb-4"
           required
@@ -48,6 +54,7 @@ export default function InsertUnitModalContent({
           variant="faded"
           color="primary"
           validationSchema={unitFormValidationSchema}
+          onValueChange={setValue}
           endContent={
             <MdOutlineDriveFileRenameOutline className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
           }

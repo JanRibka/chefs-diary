@@ -6,10 +6,10 @@ import Form from "@/components/shared/form/Form";
 import SubmitButton from "@/components/shared/submitButton/SubmitButton";
 import ValidateInput from "@/components/shared/validateInput/ValidateInput";
 import { nameof } from "@/lib/utils/nameof";
-import editUnitGroupFormValidationSchema, {
-  EditUnitGroupFormErrorType,
-  EditUnitGroupFormType,
-} from "@/lib/validations/schemas/admin/editUnitGroupFormValidationSchema";
+import unitGroupFormValidationSchema, {
+  UnitGroupFormErrorType,
+  UnitGroupFormType,
+} from "@/lib/validations/schemas/admin/unitGroupFormValidationSchema";
 import { UnitGroup } from "@prisma/client";
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
   onCancel: () => void;
   action: (formData: FormData) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  errors: EditUnitGroupFormErrorType;
+  errors: UnitGroupFormErrorType;
   isPending?: boolean;
 };
 
@@ -43,7 +43,7 @@ export default function EditUnitGroupModalContent({
       <div>
         <ValidateInput
           ref={refUnitName}
-          name={nameof<EditUnitGroupFormType>("name")}
+          name={nameof<UnitGroupFormType>("name")}
           value={value}
           label="Název skupiny jednotek"
           className="mb-4"
@@ -53,7 +53,7 @@ export default function EditUnitGroupModalContent({
           fullWidth
           variant="faded"
           color="primary"
-          validationSchema={editUnitGroupFormValidationSchema}
+          validationSchema={unitGroupFormValidationSchema}
           onValueChange={setValue}
           endContent={
             <MdOutlineDriveFileRenameOutline className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />

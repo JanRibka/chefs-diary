@@ -19,6 +19,8 @@ import {
 } from "@heroui/react";
 import { Unit } from "@prisma/client";
 
+import DeleteUnitModal from "./deleteUnitModal/DeleteUnitModal";
+import EditUnitModal from "./editUnitModal/EditUnitModal";
 import InsertUnitModal from "./InsertUnitModal/InsertUnitModal";
 import UnitsBottomContent from "./UnitsBottomContent";
 import getUnitsColumns from "./unitsColumns";
@@ -180,6 +182,22 @@ export default function UnitsTable({ dataPromise }: Props) {
         isOpen={isOpenInsert}
         onOpenChange={onOpenChangeInsert}
         setOptimisticUnit={setOptimisticUnit}
+      />
+
+      <EditUnitModal
+        unit={unitToEdit as Unit}
+        isOpen={isOpenEditUnit}
+        onOpenChange={onOpenChangeEditUnit}
+        setOptimisticUnit={setOptimisticUnit}
+        setUnitToEdit={setUnitToEdit}
+      />
+
+      <DeleteUnitModal
+        unit={unitToDelete as Unit}
+        isOpen={isOpenDeleteUnit}
+        onOpenChange={onOpenChangeDeleteUnit}
+        setOptimisticUnit={setOptimisticUnit}
+        setUnitToDelete={setUnitToDelete}
       />
     </div>
   );

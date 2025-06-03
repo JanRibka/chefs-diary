@@ -11,11 +11,13 @@ import {
   deleteUnitGroup as deleteUnitGroupRepository,
   getAllUnitGroups as GetAllUnitGroupsRepository,
   getAllUnits as GetAllUnitsRepository,
+  getUnitById as getUnitByIdRepository,
   getUnitByName,
   getUnitGroupById as getUnitGroupByIdRepository,
   getUnitGroupByName,
   insertUnit,
   insertUnitGroup,
+  updateUnit,
   updateUnitGroup,
 } from "../repositories/unitsRepository";
 import { getErrorMessageFromError } from "../utils/error";
@@ -214,4 +216,33 @@ export async function attemptInsertUnit(name: string): Promise<Unit> {
   );
 
   return insertedUnit;
+}
+
+/**
+ * Attempts to edit a unit with the given id.
+ * Throws a notFoundError if a unit with the id doesn't exists.
+ *
+ * @param idUnit - The id of the unit to edit.
+ * @param name - The name of the unit to edit.
+ * @returns {Promise<Unit>}
+ * @throws {NotFoundError} If a unit with the same name already exists.
+ */
+export async function attemptEditUnit(
+  idUnit: number,
+  name: string
+): Promise<Unit> {
+  const unit = await getUnitByIdRepository(idUnit);
+
+  if (!unit) {
+    throw new NotFoundError();
+  }
+
+  logAdminAction(
+    AdminLogActionTypeEnum.EDIT,
+    AdminLogEntityTypeEnum.UNIT,
+    idUnit,
+    { name }
+  );
+
+  return await updateUnit(idUnit, name);
 }

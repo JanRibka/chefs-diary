@@ -4,7 +4,7 @@ import { updateUnitGroupAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
 import addToast from "@/lib/utils/addToast";
 import { nameof } from "@/lib/utils/nameof";
-import { EditUnitGroupFormType } from "@/lib/validations/schemas/admin/editUnitGroupFormValidationSchema";
+import { UnitGroupFormType } from "@/lib/validations/schemas/admin/unitGroupFormValidationSchema";
 import { UnitGroup } from "@prisma/client";
 
 import { SetOptimisticUnitGroupType } from "../UnitGroupsTable";
@@ -48,7 +48,7 @@ export default function EditUnitGroupModal({
       type: "update",
       group: {
         idUnitGroup: group.idUnitGroup,
-        name: formData.get(nameof<EditUnitGroupFormType>("name")) as string,
+        name: formData.get(nameof<UnitGroupFormType>("name")) as string,
       },
     });
 

@@ -184,3 +184,26 @@ export async function deleteUnitGroup(idUnitGroup: number) {
     },
   });
 }
+
+/**
+ *
+ * @param idUnit Unit group id
+ * @returns
+ */
+//TODO: Return model
+export async function getAllUnitGroupsWithAssignments(idUnit: number) {
+  return await prisma.unitGroup.findMany({
+    relationLoadStrategy: "join",
+    include: {
+      unitGroupUnit: {
+        where: {
+          idUnit: idUnit,
+        },
+        select: {
+          idUnitGroup: true,
+          isBaseUnit: true,
+        },
+      },
+    },
+  });
+}

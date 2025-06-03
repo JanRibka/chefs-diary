@@ -283,7 +283,7 @@ export async function getAllUsersPaginated(
 ): Promise<PaginatedDTO<UserWithStatsDTO>> {
   const skip = (page - 1) * pageSize;
   const isFilterValue = filterValue && filterValue.length >= 3;
-
+  // TODO: Map bych měl dělat v service
   const orderBy =
     orderByField && orderDirection
       ? {

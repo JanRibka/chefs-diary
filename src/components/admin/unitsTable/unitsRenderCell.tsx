@@ -1,4 +1,5 @@
 import { Key } from "react";
+import { IoIosAddCircle } from "react-icons/io";
 
 import TableCellActions from "@/components/shared/tableCellActions/TableCellActions";
 import UserWithStatsDTO from "@/lib/dTOs/admin/UserWithStatsDTO";
@@ -11,6 +12,7 @@ export function unitsRenderCell(
   columnKey: Key,
   canEdit: boolean,
   canDelete: boolean,
+  onDetails: (unit: Unit) => void,
   onEdit: (unit: Unit) => void,
   onDelete: (unit: Unit) => void
 ) {
@@ -22,7 +24,10 @@ export function unitsRenderCell(
 
       return (
         <TableCellActions
-          hideDetails
+          detailsIcon={IoIosAddCircle}
+          hideDetails={!canEdit}
+          detailsLabel="Přidat jednotku ke skupině"
+          onDetails={() => onDetails(unit)}
           hideEdit={!canEdit}
           editLabel="Editovat jednotku"
           onEdit={() => onEdit(unit)}

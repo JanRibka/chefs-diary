@@ -1,4 +1,5 @@
 import { HTMLAttributes } from "react";
+import { IconType } from "react-icons";
 import { CiEdit } from "react-icons/ci";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
@@ -10,6 +11,7 @@ type Props = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
   hideDetails?: boolean;
   detailsLabel?: string;
   onDetails?: () => void;
+  detailsIcon?: IconType;
 
   hideEdit?: boolean;
   editLabel?: string;
@@ -25,6 +27,7 @@ export default function TableCellActions({
   hideDetails,
   detailsLabel,
   onDetails,
+  detailsIcon: DetailsIcon,
   hideEdit,
   editLabel,
   onEdit,
@@ -44,7 +47,7 @@ export default function TableCellActions({
             className="text-lg text-default-400 cursor-pointer active:opacity-50"
             onClick={onDetails}
           >
-            <IoEyeOutline />
+            {DetailsIcon ? <DetailsIcon /> : <IoEyeOutline />}
           </button>
         </Tooltip>
       )}

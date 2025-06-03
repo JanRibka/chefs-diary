@@ -246,3 +246,19 @@ export async function attemptEditUnit(
 
   return await updateUnit(idUnit, name);
 }
+
+async function getUnitGroupDataForModal(unitId: number) {
+  const groups = await unitGroupRepository.getAllUnitGroupsWithAssignments(
+    unitId
+  );
+
+  return groups.map((group) => {
+    const assignment = group.unitGroupUnit[0];
+    return {
+      idUnitGroup: group.idUnitGroup,
+      name: group.name,
+      isAssigned: !!assignment,
+      isBaseUnit: assignment?.isBaseUnit ?? false,
+    };
+  });
+}

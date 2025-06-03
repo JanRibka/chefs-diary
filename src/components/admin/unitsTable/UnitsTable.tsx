@@ -19,6 +19,7 @@ import {
 } from "@heroui/react";
 import { Unit } from "@prisma/client";
 
+import AddUnitToGroupModal from "./addUnitToGrouptModal/AddUnitToGroupModal";
 import DeleteUnitModal from "./deleteUnitModal/DeleteUnitModal";
 import EditUnitModal from "./editUnitModal/EditUnitModal";
 import InsertUnitModal from "./InsertUnitModal/InsertUnitModal";
@@ -45,6 +46,7 @@ export default function UnitsTable({ dataPromise }: Props) {
   // State
   const [unitToDelete, setUnitToDelete] = useState<Unit | null>(null);
   const [unitToEdit, setUnitToEdit] = useState<Unit | null>(null);
+  const [unitToAdd, setUnitToAdd] = useState<Unit | null>(null);
 
   // Modal states
   const {
@@ -61,6 +63,11 @@ export default function UnitsTable({ dataPromise }: Props) {
     isOpen: isOpenDeleteUnit,
     onOpen: onOpenDeleteUnit,
     onOpenChange: onOpenChangeDeleteUnit,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenAddToGroup,
+    onOpen: onOpenAddToGroup,
+    onOpenChange: onOpenChangeAddToGroup,
   } = useDisclosure();
 
   // Context
@@ -112,6 +119,11 @@ export default function UnitsTable({ dataPromise }: Props) {
   );
 
   // Handlers
+  const handleAddToGroup = (unit: Unit) => {
+    setUnitToAdd(unit);
+    onOpenAddToGroup();
+  };
+
   const handleEditUnit = (unit: Unit) => {
     setUnitToEdit(unit);
     onOpenEditUnit();
@@ -168,6 +180,7 @@ export default function UnitsTable({ dataPromise }: Props) {
                     columnKey,
                     canEdit,
                     canDelete,
+                    handleAddToGroup,
                     handleEditUnit,
                     handleDeleteUnit
                   )}
@@ -198,6 +211,14 @@ export default function UnitsTable({ dataPromise }: Props) {
         onOpenChange={onOpenChangeDeleteUnit}
         setOptimisticUnit={setOptimisticUnit}
         setUnitToDelete={setUnitToDelete}
+      />
+
+      <AddUnitToGroupModal
+        unit={unitToAdd as Unit}
+        isOpen={isOpenAddToGroup}
+        onOpenChange={onOpenChangeAddToGroup}
+        // setOptimisticUnit={setOptimisticUnit}
+        setUnitToAdd={setUnitToAdd}
       />
     </div>
   );

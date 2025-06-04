@@ -1,8 +1,8 @@
-import { Unit, UnitGroup } from "@prisma/client";
+import { Unit, UnitGroup } from '@prisma/client';
 
-import { prisma } from "../../config/prisma/prisma";
-import { UnitGroupsWithAssignmentsDTO } from "../dTOs/admin/UnitGroupsWithAssignmentsDTO";
-import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
+import { prisma } from '../../config/prisma/prisma';
+import { UnitGroupsWithAssignmentsDTO } from '../dTOs/admin/UnitGroupsWithAssignmentsDTO';
+import { PaginatedDTO } from '../dTOs/shared/PaginatedDTO';
 
 /**
  * Get all units cached
@@ -214,3 +214,103 @@ export async function getAllUnitGroupsWithAssignments(
     },
   });
 }
+
+Na základě tebou definovaných Prisma modelů Unit a UnitGroup níže uvádím dvě přesné Prisma dotazy, které odpovídají tvému zadání.
+
+🔍 1. Dotaz: Získat všechny skupiny, včetně:
+názvu skupiny (name)
+
+názvu jejich base unit
+
+všech jednotek, které do dané skupiny patří
+
+ts
+Zkopírovat
+Upravit
+const unitGroupsWithDetails = await prisma.unitGroup.findMany({
+  include: {
+    baseUnit: {
+      select: {
+        name: true,
+      },
+    },
+    unit: {
+      select: {
+        idUnit: true,
+        name: true,
+      },
+    },
+  },
+});
+// ✅ Výstupová struktura:
+// Každá skupina bude mít např.:
+
+// ts
+// Zkopírovat
+// Upravit
+// {
+//   idUnitGroup: 1,
+//   name: "Volume",
+//   baseUnit: {
+//     name: "ml"
+//   },
+//   unit: [
+//     { idUnit: 1, name: "ml" },
+//     { idUnit: 2, name: "l" }
+//   ]
+// }
+// 🔍 2. Dotaz: Získat všechny jednotky, včetně:
+// zda je jednotka baseUnit (true/false)
+
+// název skupiny, ke které patří
+
+// ts
+// Zkopírovat
+// Upravit
+// const unitsWithGroupInfo = await prisma.unit.findMany({
+//   select: {
+//     idUnit: true,
+//     name: true,
+//     unitGroup: {
+//       select: {
+//         name: true,
+//         idBaseUnit: true,
+//       },
+//     },
+//   },
+// });
+// ➕ Vylepšení – výpočet isBaseUnit:
+// Pokud chceš rovnou získat isBaseUnit: true/false, můžeš dotaz transformovat po načtení:
+
+// ts
+// Zkopírovat
+// Upravit
+// const units = await prisma.unit.findMany({
+//   select: {
+//     idUnit: true,
+//     name: true,
+//     unitGroup: {
+//       select: {
+//         name: true,
+//         idBaseUnit: true,
+//       },
+//     },
+//   },
+// });
+
+// const result = units.map((unit) => ({
+//   idUnit: unit.idUnit,
+//   name: unit.name,
+//   groupName: unit.unitGroup?.name ?? null,
+//   isBaseUnit: unit.unitGroup?.idBaseUnit === unit.idUnit,
+// }));
+// ✅ Výstupová struktura:
+// ts
+// Zkopírovat
+// Upravit
+// {
+//   idUnit: 2,
+//   name: "l",
+//   groupName: "Volume",
+//   isBaseUnit: false
+// }

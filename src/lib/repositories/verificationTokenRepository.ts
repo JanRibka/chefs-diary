@@ -1,6 +1,6 @@
 import { VerificationToken } from "@prisma/client";
 
-import { prisma } from "../prisma";
+import { prisma } from "../../config/prisma/prisma";
 
 /**
  * Creates verification token

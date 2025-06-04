@@ -1,6 +1,6 @@
 import { Session } from "@prisma/client";
 
-import { prisma } from "../prisma";
+import { prisma } from "../../config/prisma/prisma";
 
 /**
  * Create session

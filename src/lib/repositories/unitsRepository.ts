@@ -1,7 +1,7 @@
 import { Unit, UnitGroup } from "@prisma/client";
 
+import { prisma } from "../../config/prisma/prisma";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
-import { prisma } from "../prisma";
 
 /**
  * Get all units cached

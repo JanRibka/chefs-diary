@@ -1,10 +1,10 @@
 import type { User, UserInfo, UserLoginHistory } from "@prisma/client";
 
+import { prisma } from "../../config/prisma/prisma";
 import UserWithStatsDTO from "../dTOs/admin/UserWithStatsDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";
 import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
-import { prisma } from "../prisma";
 import { hashPassword } from "../services/hashService";
 
 /**

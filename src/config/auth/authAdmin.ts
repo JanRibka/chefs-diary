@@ -5,7 +5,7 @@ import Credentials, {
 } from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/config/prisma/prisma";
 import { getPermissionsByIdUser } from "@/lib/repositories/userRepository";
 import { logInAdmin, verifyUser } from "@/lib/services/authService";
 

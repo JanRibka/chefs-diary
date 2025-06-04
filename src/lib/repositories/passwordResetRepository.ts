@@ -1,6 +1,6 @@
 import { PasswordResetToken } from "@prisma/client";
 
-import { prisma } from "../prisma";
+import { prisma } from "../../config/prisma/prisma";
 
 /**
  * Creates password reset token

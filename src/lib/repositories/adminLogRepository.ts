@@ -1,4 +1,4 @@
-import { prisma } from "../prisma";
+import { prisma } from "../../config/prisma/prisma";
 import LogAdminActionDataType from "../types/data/LogAdminActionDataType";
 
 /**

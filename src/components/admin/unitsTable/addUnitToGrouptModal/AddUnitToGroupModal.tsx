@@ -3,15 +3,12 @@ import { Dispatch, SetStateAction, useTransition } from "react";
 import { updateUnitAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
 import addToast from "@/lib/utils/addToast";
-import { nameof } from "@/lib/utils/nameof";
-import { UnitFormType } from "@/lib/validations/schemas/admin/unitFormValidationSchema";
 import { Unit } from "@prisma/client";
 
-import { SetOptimisticUnitType } from "../UnitsTable";
-import EditUnitModalContent from "./AddUnitToGroupModalContent";
-import AddUnitToGroupModalContentServerWrapper from "./AddUnitToGroupModalContentServerWrapper";
-import useEditUnitValidation from "./useEditUnitValidation";
+import AddUnitToGroupModalContent from "./AddUnitToGroupModalContent";
 
+// import useEditUnitValidation from "./useEditUnitValidation";
+const error = {};
 type Props = {
   unit: Unit;
   isOpen: boolean;
@@ -28,16 +25,16 @@ export default function AddUnitToGroupModal({
   setUnitToAdd,
 }: Props) {
   // Validations
-  const { error, setError, validate } = useEditUnitValidation();
+  // const { error, setError, validate } = useEditUnitValidation();
 
   // Handlers
   const handleSubmitEditUnit = (event: React.FormEvent<HTMLFormElement>) => {
-    validate(event);
+    // validate(event);
   };
 
   const handleCloseEditUnit = () => {
     setUnitToAdd(null);
-    setError({});
+    // setError({});
     onOpenChange();
   };
 
@@ -58,7 +55,7 @@ export default function AddUnitToGroupModal({
 
       if (!response.success) {
         if (typeof response.error === "object") {
-          setError(response.error);
+          // setError(response.error);
           return;
         }
 
@@ -79,7 +76,7 @@ export default function AddUnitToGroupModal({
       hideFooter
       isDismissable={false}
     >
-      <AddUnitToGroupModalContentServerWrapper
+      <AddUnitToGroupModalContent
         unit={unit}
         onCancel={handleCloseEditUnit}
         action={handleEditUnitAction}

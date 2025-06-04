@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import unitActionValidator from "@/lib/actionValidators/admin/unitActionValidator";
 import unitGroupActionValidator from "@/lib/actionValidators/admin/unitGroupActionValidator";
+import { UnitGroupModalDTO } from "@/lib/dTOs/admin/UnitGroupModalDTO";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 import { deleteUnit } from "@/lib/repositories/unitsRepository";
@@ -14,6 +15,7 @@ import {
   attemptInsertUnit,
   attemptInsertUnitGroup,
   deleteUnitGroup,
+  getUnitGroupDataForModal,
 } from "@/lib/services/unitsService";
 import {
   getConflictErrorFromError,
@@ -285,5 +287,38 @@ export async function deleteUnitAction(
     };
   } finally {
     revalidatePath(adminRoutes.Units);
+  }
+}
+
+export async function getUnitGroupDataForModalAction(
+  idUnit: number
+): Promise<ActionResponseDTO<UnitGroupModalDTO[]>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
+
+  try {
+    const data = await getUnitGroupDataForModal(idUnit);
+
+    return {
+      data: data,
+      success: true,
+      timeStamp: new Date(),
+    };
+  } catch (error) {
+    const conflictError = getConflictErrorFromError(
+      error,
+      "Jednotka načíst jednotky pro modal"
+    );
+    let errorMessage = conflictError.errorMessage;
+
+    if (!conflictError.isConflictError) {
+      errorMessage = getErrorMessageFromError(error);
+    }
+
+    return {
+      data: null,
+      success: false,
+      error: errorMessage,
+      timeStamp: new Date(),
+    };
   }
 }

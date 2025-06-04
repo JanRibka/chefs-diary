@@ -1,8 +1,10 @@
 model Unit {
-    idUnit Int    @id @default(autoincrement()) @db.Integer
-    name   String @unique @db.VarChar(10)
+    idUnit      Int    @id @default(autoincrement()) @db.Integer
+    name        String @unique @db.VarChar(10)
+    idUnitGroup Int?   @db.Integer
 
-    unitGroupUnit    UnitGroupUnit[]
+    unitGroup        UnitGroup?         @relation("GroupUnits", fields: [idUnitGroup], references: [idUnitGroup])
+    baseUnitOf       UnitGroup?         @relation("BaseUnit")
     fromConversion   UnitConversion[]   @relation("FromUnitConversion")
     toConversion     UnitConversion[]   @relation("ToUnitConversion")
     recipeIngredient RecipeIngredient[]

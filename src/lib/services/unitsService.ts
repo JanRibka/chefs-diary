@@ -1,5 +1,6 @@
 import { Unit, UnitGroup } from "@prisma/client";
 
+import { UnitGroupModalDTO } from "../dTOs/admin/UnitGroupModalDTO";
 import { ActionResponseDTO } from "../dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 import AdminLogActionTypeEnum from "../enums/AdminLogActionTypeEnum";
@@ -10,6 +11,7 @@ import NotFoundError from "../errors/NotFoundError";
 import {
   deleteUnitGroup as deleteUnitGroupRepository,
   getAllUnitGroups as GetAllUnitGroupsRepository,
+  getAllUnitGroupsWithAssignments,
   getAllUnits as GetAllUnitsRepository,
   getUnitById as getUnitByIdRepository,
   getUnitByName,
@@ -247,13 +249,25 @@ export async function attemptEditUnit(
   return await updateUnit(idUnit, name);
 }
 
-async function getUnitGroupDataForModal(unitId: number) {
-  const groups = await unitGroupRepository.getAllUnitGroupsWithAssignments(
-    unitId
-  );
+/**
+ * Returns unit group data associated with a specific unit,
+ * formatted for use in a modal dialog.
+ *
+ * Each returned object includes information about whether the unit
+ * is assigned to the group and whether it is marked as the base unit.
+ *
+ * @param idUnit - The ID of the unit for which to retrieve assigned groups.
+ * @returns An array of UnitGroupModalDto objects containing basic group
+ *          information and assignment status related to the given unit.
+ */
+export async function getUnitGroupDataForModal(
+  idUnit: number
+): Promise<UnitGroupModalDTO[]> {
+  const groups = await getAllUnitGroupsWithAssignments(idUnit);
 
   return groups.map((group) => {
-    const assignment = group.unitGroupUnit[0];
+    const assignment = group.unitGroupUnit?.[0];
+
     return {
       idUnitGroup: group.idUnitGroup,
       name: group.name,

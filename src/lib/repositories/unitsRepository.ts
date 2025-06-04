@@ -1,6 +1,7 @@
 import { Unit, UnitGroup } from "@prisma/client";
 
 import { prisma } from "../../config/prisma/prisma";
+import { UnitGroupsWithAssignmentsDTO } from "../dTOs/admin/UnitGroupsWithAssignmentsDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 
 /**
@@ -186,12 +187,18 @@ export async function deleteUnitGroup(idUnitGroup: number) {
 }
 
 /**
+ * Retrieves all unit groups from the database along with their assignment status
+ * for a specific unit (if assigned).
  *
- * @param idUnit Unit group id
- * @returns
+ * Each unit group includes related assignment data (`unitGroupUnit`) only for the given unit.
+ * This is useful for determining which groups the unit belongs to and whether it is a base unit in any of them.
+ *
+ * @param idUnit - The ID of the unit for which to check group assignments.
+ * @returns A list of UnitGroup entities with filtered `unitGroupUnit` relations related to the given unit.
  */
-//TODO: Return model
-export async function getAllUnitGroupsWithAssignments(idUnit: number) {
+export async function getAllUnitGroupsWithAssignments(
+  idUnit: number
+): Promise<UnitGroupsWithAssignmentsDTO[]> {
   return await prisma.unitGroup.findMany({
     relationLoadStrategy: "join",
     include: {

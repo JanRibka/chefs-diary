@@ -1,18 +1,17 @@
-import { use, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 
 import Button from "@/components/shared/button/Button";
 import Form from "@/components/shared/form/Form";
 import SubmitButton from "@/components/shared/submitButton/SubmitButton";
 import ValidateInput from "@/components/shared/validateInput/ValidateInput";
-import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
-import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
+import useUnitGroupDataForModalAction from "@/lib/hooks/apiHooks/admin/useUnitGroupDataForModal";
 import { nameof } from "@/lib/utils/nameof";
 import unitFormValidationSchema, {
   UnitFormErrorType,
   UnitFormType,
 } from "@/lib/validations/schemas/admin/unitFormValidationSchema";
-import { Unit, UnitGroup } from "@prisma/client";
+import { Unit } from "@prisma/client";
 
 type Props = {
   unit: Unit;
@@ -21,7 +20,6 @@ type Props = {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   errors: UnitFormErrorType;
   isPending?: boolean;
-  dataPromise: Promise<ActionResponseDTO<PaginatedDTO<UnitGroup>>>;
 };
 
 export default function AddUnitToGroupModalContent({
@@ -31,11 +29,10 @@ export default function AddUnitToGroupModalContent({
   onSubmit,
   errors,
   isPending,
-  dataPromise,
 }: Props) {
   // Data
-  const dataWithError = use(dataPromise);
-  const data = dataWithError.data;
+  const { data, isLoading } = useUnitGroupDataForModalAction(unit.idUnit);
+
   console.log(data);
   const refUnitName = useRef<HTMLInputElement>(null);
 

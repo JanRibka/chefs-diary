@@ -1,5 +1,5 @@
 "use client";
 
-import { Spinner } from '@heroui/react';
+import { Spinner } from "@heroui/react";
 
 export default Spinner;

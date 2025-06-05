@@ -3,6 +3,7 @@ import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 
 import Button from "@/components/shared/button/Button";
 import Form from "@/components/shared/form/Form";
+import Spinner from "@/components/shared/spinner/Spinner";
 import SubmitButton from "@/components/shared/submitButton/SubmitButton";
 import ValidateInput from "@/components/shared/validateInput/ValidateInput";
 import { UnitGroupModalDTO } from "@/lib/dTOs/admin/UnitGroupModalDTO";
@@ -38,7 +39,28 @@ export default function AddUnitToGroupModalContent({
     data.find((f) => f.idBaseUnit === unit.idUnit)?.idUnitGroup.toString() ??
     "";
 
-  console.log(data);
+  // State
+  const [selected, setSelected] = useState([defaultValue]);
+
+  if (isLoading) {
+    return (
+      <div className="h-80">
+        <Spinner
+          classNames={{
+            circle1: "w-16 h-16",
+            circle2: "w-16 h-16",
+            wrapper: "w-16 h-16",
+          }}
+        />
+      </div>
+    );
+  }
+
+  const handleValueChange = (value: string[]) => {
+    setSelected((prev) => {
+      return value.filter((f) => f !== "" && f !== prev[0]);
+    });
+  };
 
   return (
     <Form
@@ -49,7 +71,8 @@ export default function AddUnitToGroupModalContent({
     >
       <div>
         <CheckboxGroup
-          defaultValue={[defaultValue]}
+          value={selected}
+          onValueChange={handleValueChange}
           label="Vyberte skupinu ke které chcete jednotku přiřadit"
         >
           {data.map((item) => (

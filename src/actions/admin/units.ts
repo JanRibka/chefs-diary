@@ -7,14 +7,14 @@ import unitGroupActionValidator from "@/lib/actionValidators/admin/unitGroupActi
 import { UnitGroupModalDTO } from "@/lib/dTOs/admin/UnitGroupModalDTO";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
-import { deleteUnit } from "@/lib/repositories/unitsRepository";
 import adminRoutes from "@/lib/routes/adminRoutes";
 import {
+  attemptDeleteUnit,
+  attemptDeleteUnitGroup,
   attemptEditUnit,
   attemptEditUnitGroup,
   attemptInsertUnit,
   attemptInsertUnitGroup,
-  deleteUnitGroup,
   getUnitGroupDataForModal,
 } from "@/lib/services/unitsService";
 import {
@@ -130,7 +130,7 @@ export async function deleteUnitGroupAction(
   await getRequireAdminPermissions([PermissionTypeEnum.UNIT_DELETE]);
 
   try {
-    await deleteUnitGroup(idUnitGroup);
+    await attemptDeleteUnitGroup(idUnitGroup);
 
     return {
       data: null,
@@ -138,13 +138,13 @@ export async function deleteUnitGroupAction(
       timeStamp: new Date(),
     };
   } catch (error) {
-    const conflictError = getConflictErrorFromError(
+    const conflictError = getNotFoundErrorFromError(
       error,
       "Skupina jednotek nelze smazat"
     );
     let errorMessage = conflictError.errorMessage;
 
-    if (!conflictError.isConflictError) {
+    if (!conflictError.isNotFoundError) {
       errorMessage = getErrorMessageFromError(error);
     }
 
@@ -261,7 +261,7 @@ export async function deleteUnitAction(
   await getRequireAdminPermissions([PermissionTypeEnum.UNIT_DELETE]);
 
   try {
-    await deleteUnit(idUnit);
+    await attemptDeleteUnit(idUnit);
 
     return {
       data: null,
@@ -269,13 +269,13 @@ export async function deleteUnitAction(
       timeStamp: new Date(),
     };
   } catch (error) {
-    const conflictError = getConflictErrorFromError(
+    const conflictError = getNotFoundErrorFromError(
       error,
       "Jednotka nelze smazat"
     );
     let errorMessage = conflictError.errorMessage;
 
-    if (!conflictError.isConflictError) {
+    if (!conflictError.isNotFoundError) {
       errorMessage = getErrorMessageFromError(error);
     }
 

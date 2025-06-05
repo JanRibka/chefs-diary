@@ -7,6 +7,15 @@ function getUnitGroupsColumns(canEditOrDelete: boolean): TableColumnType[] {
       key: "name",
       allowsSorting: true,
     },
+    {
+      label: "Základní jednotka",
+      key: "baseUnitName",
+      allowsSorting: true,
+    },
+    {
+      label: "Jednotky přiřazené ke skupině",
+      key: "unitNames",
+    },
   ];
 
   if (canEditOrDelete) {

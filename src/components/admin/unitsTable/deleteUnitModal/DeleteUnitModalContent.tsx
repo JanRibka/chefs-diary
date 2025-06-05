@@ -1,10 +1,10 @@
 import Button from "@/components/shared/button/Button";
 import Form from "@/components/shared/form/Form";
 import SubmitButton from "@/components/shared/submitButton/SubmitButton";
-import { Unit } from "@prisma/client";
+import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
 
 type Props = {
-  unit: Unit;
+  unit: UnitWithGroupInfoSummaryDTO;
   onCancel: () => void;
   action: (formData: FormData) => void;
   isPending?: boolean;

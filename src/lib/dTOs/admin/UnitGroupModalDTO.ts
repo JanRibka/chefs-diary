@@ -1,6 +1,7 @@
 export type UnitGroupModalDTO = {
   idUnitGroup: number;
-  name: string;
-  isAssigned: boolean;
+  unitGroupName: string;
+  idBaseUnit: number;
   isBaseUnit: boolean;
+  baseUnitName: string;
 };

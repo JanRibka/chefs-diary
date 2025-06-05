@@ -1,5 +1,4 @@
-import { IconType } from "react-icons";
-
+import { AdminMenuItemsIconMapType } from "@/components/admin/layout/protectedLayout/sideBar/adminMenuItemsIconMap";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 import { RouteValue } from "@/lib/routes/adminRoutes";
 
@@ -7,7 +6,7 @@ type AdminMenuItemType = {
   key: string;
   label: string;
   link?: RouteValue;
-  icon?: IconType;
+  icon?: AdminMenuItemsIconMapType;
   permissions?: PermissionTypeEnum[];
   subitems?: AdminMenuItemType[];
 };

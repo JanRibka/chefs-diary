@@ -1,6 +1,3 @@
-import { FaDatabase, FaUnity, FaUserLarge } from "react-icons/fa6";
-import { RiDashboardFill } from "react-icons/ri";
-
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 import adminRoutes from "@/lib/routes/adminRoutes";
 import AdminMenuItemType from "@/lib/types/admin/AdminMenuItemType";
@@ -10,13 +7,13 @@ const adminMenuItems: AdminMenuItemType[] = [
     key: "dashboard-group",
     label: "Dashboard",
     link: adminRoutes.Dashboard,
-    icon: RiDashboardFill,
+    icon: "RiDashboardFill",
   },
   {
     key: "users-group",
     label: "Uživatelé",
     permissions: [PermissionTypeEnum.USER_VIEW],
-    icon: FaUserLarge,
+    icon: "FaUserLarge",
     subitems: [
       {
         key: "all-users",
@@ -42,7 +39,7 @@ const adminMenuItems: AdminMenuItemType[] = [
     key: "units-group",
     label: "Jednotky",
     permissions: [PermissionTypeEnum.UNIT_VIEW],
-    icon: FaUnity,
+    icon: "FaUnity",
     subitems: [
       {
         key: "units-groups",
@@ -62,7 +59,7 @@ const adminMenuItems: AdminMenuItemType[] = [
     key: "ingredients-group",
     label: "Ingredience",
     permissions: [PermissionTypeEnum.UNIT_VIEW],
-    icon: FaDatabase,
+    icon: "FaDatabase",
     subitems: [
       {
         key: "ingredients",
@@ -76,7 +73,7 @@ const adminMenuItems: AdminMenuItemType[] = [
     key: "roles-permissions-group",
     label: "Práva a oprávnění",
     permissions: [],
-    icon: FaDatabase,
+    icon: "FaDatabase",
     subitems: [
       {
         key: "roles",

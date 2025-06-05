@@ -2,18 +2,18 @@ import { Dispatch, SetStateAction, useTransition } from "react";
 
 import { deleteUnitGroupAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import { UnitGroupSummaries } from "@/lib/dTOs/admin/UnitGroupSummariesDTO";
 import addToast from "@/lib/utils/addToast";
-import { UnitGroup } from "@prisma/client";
 
 import { SetOptimisticUnitGroupType } from "../UnitGroupsTable";
 import DeleteUnitGroupModalContent from "./DeleteUnitGroupModalContent";
 
 type Props = {
-  group: UnitGroup;
+  group: UnitGroupSummaries;
   isOpen: boolean;
   onOpenChange: () => void;
   setOptimisticUnitGroup: (action: SetOptimisticUnitGroupType) => void;
-  setGroupToDelete: Dispatch<SetStateAction<UnitGroup | null>>;
+  setGroupToDelete: Dispatch<SetStateAction<UnitGroupSummaries | null>>;
 };
 
 export default function DeleteUnitGroupModal({

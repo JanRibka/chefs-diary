@@ -2,21 +2,21 @@ import { Dispatch, SetStateAction, useTransition } from "react";
 
 import { updateUnitGroupAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import { UnitGroupSummaries } from "@/lib/dTOs/admin/UnitGroupSummariesDTO";
 import addToast from "@/lib/utils/addToast";
 import { nameof } from "@/lib/utils/nameof";
 import { UnitGroupFormType } from "@/lib/validations/schemas/admin/unitGroupFormValidationSchema";
-import { UnitGroup } from "@prisma/client";
 
 import { SetOptimisticUnitGroupType } from "../UnitGroupsTable";
 import EditUnitGroupModalContent from "./EditUnitGroupModalContent";
 import useEditUnitGroupValidation from "./useEditUnitGroupValidation";
 
 type Props = {
-  group: UnitGroup;
+  group: UnitGroupSummaries;
   isOpen: boolean;
   onOpenChange: () => void;
   setOptimisticUnitGroup: (action: SetOptimisticUnitGroupType) => void;
-  setGroupToEdit: Dispatch<SetStateAction<UnitGroup | null>>;
+  setGroupToEdit: Dispatch<SetStateAction<UnitGroupSummaries | null>>;
 };
 
 export default function EditUnitGroupModal({
@@ -49,6 +49,8 @@ export default function EditUnitGroupModal({
       group: {
         idUnitGroup: group.idUnitGroup,
         name: formData.get(nameof<UnitGroupFormType>("name")) as string,
+        baseUnitName: group.baseUnitName,
+        unitNames: group.unitNames,
       },
     });
 

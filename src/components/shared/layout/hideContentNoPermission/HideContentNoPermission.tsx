@@ -1,3 +1,5 @@
+"use client";
+
 import { useUserContext } from "@/context/UserContext";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 
@@ -5,7 +7,7 @@ type Props = {
   allowedPermissions?: PermissionTypeEnum[];
   children: React.ReactNode;
 };
-
+// TODO: Kdyby to byla serverová komponenta, tak by se mi menu vyrenderovalo už na serveru a neproblikávalo by
 export default function HideContentNoPermission({
   allowedPermissions,
   children,

@@ -5,15 +5,15 @@ import Button from "@/components/shared/button/Button";
 import Form from "@/components/shared/form/Form";
 import SubmitButton from "@/components/shared/submitButton/SubmitButton";
 import ValidateInput from "@/components/shared/validateInput/ValidateInput";
+import { UnitGroupSummaries } from "@/lib/dTOs/admin/UnitGroupSummariesDTO";
 import { nameof } from "@/lib/utils/nameof";
 import unitGroupFormValidationSchema, {
   UnitGroupFormErrorType,
   UnitGroupFormType,
 } from "@/lib/validations/schemas/admin/unitGroupFormValidationSchema";
-import { UnitGroup } from "@prisma/client";
 
 type Props = {
-  group: UnitGroup;
+  group: UnitGroupSummaries;
   onCancel: () => void;
   action: (formData: FormData) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;

@@ -2,23 +2,33 @@ import { Key } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 
 import TableCellActions from "@/components/shared/tableCellActions/TableCellActions";
-import UserWithStatsDTO from "@/lib/dTOs/admin/UserWithStatsDTO";
-import { Unit } from "@prisma/client";
+import TableCellBoolean from "@/components/shared/tableCellBoolean/TableCellBoolean";
+import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
 
-type UserWithStatsActions = keyof UserWithStatsDTO | "actions";
+type WithActionsActions = keyof UnitWithGroupInfoSummaryDTO | "actions";
 
 export function unitsRenderCell(
-  unit: Unit,
+  unit: UnitWithGroupInfoSummaryDTO,
   columnKey: Key,
   canEdit: boolean,
   canDelete: boolean,
-  onDetails: (unit: Unit) => void,
-  onEdit: (unit: Unit) => void,
-  onDelete: (unit: Unit) => void
+  onDetails: (unit: UnitWithGroupInfoSummaryDTO) => void,
+  onEdit: (unit: UnitWithGroupInfoSummaryDTO) => void,
+  onDelete: (unit: UnitWithGroupInfoSummaryDTO) => void
 ) {
-  const cellValue = unit[columnKey as keyof Unit];
+  const cellValue = unit[columnKey as keyof UnitWithGroupInfoSummaryDTO];
 
-  switch (columnKey as UserWithStatsActions) {
+  switch (columnKey as WithActionsActions) {
+    case "isBaseUnit":
+      return (
+        <TableCellBoolean
+          value={cellValue as boolean}
+          trueLabel="Ano"
+          trueColor="success"
+          falseLabel="Ne"
+          falseColor="danger"
+        />
+      );
     case "actions":
       if (!canEdit && !canDelete) return null;
 

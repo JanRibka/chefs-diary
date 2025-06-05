@@ -1,14 +1,16 @@
-import { Unit, UnitGroup } from '@prisma/client';
+import { Unit, UnitGroup } from "@prisma/client";
 
-import { prisma } from '../../config/prisma/prisma';
-import { UnitGroupsWithAssignmentsDTO } from '../dTOs/admin/UnitGroupsWithAssignmentsDTO';
-import { PaginatedDTO } from '../dTOs/shared/PaginatedDTO';
+import { prisma } from "../../config/prisma/prisma";
+import { UnitGroupsWithAssignmentsDTO } from "../dTOs/admin/UnitGroupWithAssignmentsDTO";
+import { UnitGroupWithDetailDTO } from "../dTOs/admin/UnitGroupWithDetailDTO";
+import { UnitWithGroupInfoDTO } from "../dTOs/admin/UnitWithGroupInfoDTO";
+import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 
 /**
- * Get all units cached
+ * Get all units
  * @returns {Promise<Unit[]>}
  */
-export async function getAllUnitsCached(): Promise<Unit[]> {
+export async function getAllUnits(): Promise<Unit[]> {
   return await prisma.unit.findMany({
     cacheStrategy: {
       ttl: 3600,
@@ -16,20 +18,6 @@ export async function getAllUnitsCached(): Promise<Unit[]> {
       tags: ["all_units"],
     },
   });
-}
-
-/**
- * Get all units
- * @returns {Promise<PaginatedDTO<Unit>>}
- */
-export async function getAllUnits(): Promise<PaginatedDTO<Unit>> {
-  const [units, totalCount] = await Promise.all([
-    prisma.unit.findMany({}),
-
-    prisma.unit.count(),
-  ]);
-
-  return { items: units, totalCount };
 }
 
 /**
@@ -101,15 +89,16 @@ export async function deleteUnit(idUnit: number) {
 
 /**
  * Get all unit groups
- * @returns {Promise<PaginatedDTO<UnitGroup>>}
+ * @returns {Promise<UnitGroup>}
  */
-export async function getAllUnitGroups(): Promise<PaginatedDTO<UnitGroup>> {
-  const [unitGroups, totalCount] = await Promise.all([
-    prisma.unitGroup.findMany({}),
-    prisma.unitGroup.count(),
-  ]);
-
-  return { items: unitGroups, totalCount };
+export async function getAllUnitGroups(): Promise<UnitGroup[]> {
+  return await prisma.unitGroup.findMany({
+    cacheStrategy: {
+      ttl: 3600,
+      swr: 1200,
+      tags: ["all_unit_groups"],
+    },
+  });
 }
 
 /**
@@ -193,124 +182,94 @@ export async function deleteUnitGroup(idUnitGroup: number) {
  * Each unit group includes related assignment data (`unitGroupUnit`) only for the given unit.
  * This is useful for determining which groups the unit belongs to and whether it is a base unit in any of them.
  *
- * @param idUnit - The ID of the unit for which to check group assignments.
  * @returns A list of UnitGroup entities with filtered `unitGroupUnit` relations related to the given unit.
  */
-export async function getAllUnitGroupsWithAssignments(
-  idUnit: number
-): Promise<UnitGroupsWithAssignmentsDTO[]> {
+export async function getAllUnitGroupsWithAssignments(): Promise<
+  UnitGroupsWithAssignmentsDTO[]
+> {
   return await prisma.unitGroup.findMany({
     relationLoadStrategy: "join",
     include: {
-      unitGroupUnit: {
-        where: {
-          idUnit: idUnit,
-        },
+      baseUnit: {
         select: {
-          idUnitGroup: true,
-          isBaseUnit: true,
+          name: true,
         },
       },
     },
   });
 }
 
-Na základě tebou definovaných Prisma modelů Unit a UnitGroup níže uvádím dvě přesné Prisma dotazy, které odpovídají tvému zadání.
-
-🔍 1. Dotaz: Získat všechny skupiny, včetně:
-názvu skupiny (name)
-
-názvu jejich base unit
-
-všech jednotek, které do dané skupiny patří
-
-ts
-Zkopírovat
-Upravit
-const unitGroupsWithDetails = await prisma.unitGroup.findMany({
-  include: {
-    baseUnit: {
+/**
+ * Retrieves all unit groups from the database along with their related details.
+ *
+ * For each unit group, the function includes:
+ * - the group's ID and name,
+ * - the name of its base unit (if assigned),
+ * - a list of all units assigned to the group (with their IDs and names).
+ *
+ * This data is typically used for displaying detailed unit group information in the UI.
+ *
+ * @returns A list of UnitGroupWithDetailDTO objects representing unit groups with their base unit
+ *          and assigned units.
+ */
+export async function getAllUnitGroupsWithDetails(): Promise<
+  PaginatedDTO<UnitGroupWithDetailDTO>
+> {
+  const [items, totalCount] = await Promise.all([
+    prisma.unitGroup.findMany({
+      relationLoadStrategy: "join",
       select: {
+        idUnitGroup: true,
         name: true,
+        baseUnit: {
+          select: {
+            name: true,
+          },
+        },
+        unit: {
+          select: {
+            name: true,
+          },
+        },
       },
-    },
-    unit: {
+    }),
+    prisma.unitGroup.count(),
+  ]);
+
+  return { items, totalCount };
+}
+
+/**
+ * Retrieves all units from the database along with related group information.
+ *
+ * For each unit, the function includes:
+ * - the unit's ID and name,
+ * - the name of the group to which the unit belongs (if any),
+ * - the group's base unit ID to determine if the unit is the base unit.
+ *
+ * Returns the data in a paginated format using `PaginatedDTO`.
+ *
+ * @returns A paginated list of units with associated group info.
+ */
+export async function getAllUnitsWithGroupInfo(): Promise<
+  PaginatedDTO<UnitWithGroupInfoDTO>
+> {
+  const [items, totalCount] = await Promise.all([
+    prisma.unit.findMany({
+      relationLoadStrategy: "join",
       select: {
         idUnit: true,
         name: true,
+        unitGroup: {
+          select: {
+            name: true,
+            idBaseUnit: true,
+          },
+        },
       },
-    },
-  },
-});
-// ✅ Výstupová struktura:
-// Každá skupina bude mít např.:
+    }),
+    prisma.unit.count(),
+  ]);
 
-// ts
-// Zkopírovat
-// Upravit
-// {
-//   idUnitGroup: 1,
-//   name: "Volume",
-//   baseUnit: {
-//     name: "ml"
-//   },
-//   unit: [
-//     { idUnit: 1, name: "ml" },
-//     { idUnit: 2, name: "l" }
-//   ]
-// }
-// 🔍 2. Dotaz: Získat všechny jednotky, včetně:
-// zda je jednotka baseUnit (true/false)
-
-// název skupiny, ke které patří
-
-// ts
-// Zkopírovat
-// Upravit
-// const unitsWithGroupInfo = await prisma.unit.findMany({
-//   select: {
-//     idUnit: true,
-//     name: true,
-//     unitGroup: {
-//       select: {
-//         name: true,
-//         idBaseUnit: true,
-//       },
-//     },
-//   },
-// });
-// ➕ Vylepšení – výpočet isBaseUnit:
-// Pokud chceš rovnou získat isBaseUnit: true/false, můžeš dotaz transformovat po načtení:
-
-// ts
-// Zkopírovat
-// Upravit
-// const units = await prisma.unit.findMany({
-//   select: {
-//     idUnit: true,
-//     name: true,
-//     unitGroup: {
-//       select: {
-//         name: true,
-//         idBaseUnit: true,
-//       },
-//     },
-//   },
-// });
-
-// const result = units.map((unit) => ({
-//   idUnit: unit.idUnit,
-//   name: unit.name,
-//   groupName: unit.unitGroup?.name ?? null,
-//   isBaseUnit: unit.unitGroup?.idBaseUnit === unit.idUnit,
-// }));
-// ✅ Výstupová struktura:
-// ts
-// Zkopírovat
-// Upravit
-// {
-//   idUnit: 2,
-//   name: "l",
-//   groupName: "Volume",
-//   isBaseUnit: false
-// }
+  return { items, totalCount };
+}

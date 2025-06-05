@@ -2,18 +2,18 @@ import { useTransition } from "react";
 
 import { insertUnitAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
 import addToast from "@/lib/utils/addToast";
 import { nameof } from "@/lib/utils/nameof";
 import { UnitFormType } from "@/lib/validations/schemas/admin/unitFormValidationSchema";
 
-import { SetOptimisticUnitType } from "../UnitsTable";
 import InsertUnitModalContent from "./InsertUnitModalContent";
 import useInsertUnitValidation from "./useInsertUnitValidation";
 
 type Props = {
   isOpen: boolean;
   onOpenChange: () => void;
-  setOptimisticUnit: (action: SetOptimisticUnitType) => void;
+  setOptimisticUnit: (unit: UnitWithGroupInfoSummaryDTO) => void;
 };
 
 export default function InsertUnitModal({
@@ -39,11 +39,10 @@ export default function InsertUnitModal({
 
   const handleInsertUnitAction = async (formData: FormData) => {
     setOptimisticUnit({
-      type: "add",
-      unit: {
-        idUnit: Math.random(),
-        name: formData.get(nameof<UnitFormType>("name")) as string,
-      },
+      idUnit: Math.random(),
+      name: formData.get(nameof<UnitFormType>("name")) as string,
+      isBaseUnit: null,
+      unitGroupName: null,
     });
 
     startTransition(async () => {

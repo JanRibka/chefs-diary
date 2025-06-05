@@ -1,13 +1,9 @@
 "use client";
 
-import { use, useCallback, useMemo, useOptimistic, useState } from "react";
-
 import Spinner from "@/components/shared/spinner/Spinner";
-import { useUserContext } from "@/context/UserContext";
+import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
-import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
-import { getPageItems, getPages, getSortedItems } from "@/lib/utils/table";
 import {
   Table,
   TableBody,
@@ -15,131 +11,71 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  useDisclosure,
 } from "@heroui/react";
-import { Unit } from "@prisma/client";
 
-import AddUnitToGroupModal from "./addUnitToGrouptModal/AddUnitToGroupModal";
+import AddUnitToGroupModal from "./addUnitToGroupModal/AddUnitToGroupModal";
 import DeleteUnitModal from "./deleteUnitModal/DeleteUnitModal";
 import EditUnitModal from "./editUnitModal/EditUnitModal";
 import InsertUnitModal from "./InsertUnitModal/InsertUnitModal";
 import UnitsBottomContent from "./UnitsBottomContent";
 import getUnitsColumns from "./unitsColumns";
 import { unitsRenderCell } from "./unitsRenderCell";
-import { useUnitsTableContext } from "./UnitsTableContext";
 import UnitsTopContent from "./UnitsTopContent";
+import useUnitOptimistic from "./useUnitOptimistic";
+import useUnitHandlers from "./useUnitsHandlers";
+import { useUnitsTableState } from "./useUnitsTableState";
 
 export type SetOptimisticUnitType = {
   type: "add" | "update" | "delete";
-  unit: Unit;
+  unit: UnitWithGroupInfoSummaryDTO;
 };
 
 type Props = {
-  dataPromise: Promise<ActionResponseDTO<PaginatedDTO<Unit>>>;
+  dataPromise: Promise<
+    ActionResponseDTO<PaginatedDTO<UnitWithGroupInfoSummaryDTO>>
+  >;
 };
 
 export default function UnitsTable({ dataPromise }: Props) {
-  // Get data
-  const dataWithError = use(dataPromise);
-  const data = dataWithError.data!;
-
-  // State
-  const [unitToDelete, setUnitToDelete] = useState<Unit | null>(null);
-  const [unitToEdit, setUnitToEdit] = useState<Unit | null>(null);
-  const [unitToAdd, setUnitToAdd] = useState<Unit | null>(null);
-
-  // Modal states
   const {
-    isOpen: isOpenInsert,
-    onOpen: onOpenInsert,
-    onOpenChange: onOpenChangeInsert,
-  } = useDisclosure();
+    data,
+    sortDescriptor,
+    setSortDescriptor,
+    pages,
+    canEdit,
+    canDelete,
+    optimisticUnits,
+    setOptimisticUnit,
+  } = useUnitsTableState(dataPromise);
+
+  const { insertUnit, editUnit, deleteUnit } =
+    useUnitOptimistic(setOptimisticUnit);
+
   const {
-    isOpen: isOpenEditUnit,
-    onOpen: onOpenEditUnit,
-    onOpenChange: onOpenChangeEditUnit,
-  } = useDisclosure();
-  const {
-    isOpen: isOpenDeleteUnit,
-    onOpen: onOpenDeleteUnit,
-    onOpenChange: onOpenChangeDeleteUnit,
-  } = useDisclosure();
-  const {
-    isOpen: isOpenAddToGroup,
-    onOpen: onOpenAddToGroup,
-    onOpenChange: onOpenChangeAddToGroup,
-  } = useDisclosure();
-
-  // Context
-  const { user } = useUserContext();
-  const { page, pageSize, sortDescriptor, setSortDescriptor } =
-    useUnitsTableContext();
-
-  // Constants
-  const canEdit =
-    user?.permissions.some((item) => item === PermissionTypeEnum.UNIT_EDIT) ??
-    false;
-  const canDelete =
-    user?.permissions.some((item) => item === PermissionTypeEnum.UNIT_DELETE) ??
-    false;
-  const pages = useMemo(
-    () => getPages(data.totalCount, pageSize),
-
-    [data.totalCount, pageSize]
-  );
-  const sortedItems = useMemo(() => {
-    return getSortedItems<Unit>(data.items, sortDescriptor);
-  }, [sortDescriptor, data.items]);
-  const pageItems = useMemo(() => {
-    return getPageItems(sortedItems, page, pageSize);
-  }, [sortedItems, page, pageSize]);
-
-  // Render cell
-  const renderCell = useCallback(unitsRenderCell, []);
-  // Columns
-  const columns = useCallback(getUnitsColumns, []);
-
-  // Optimistic update
-  const [optimisticUnits, setOptimisticUnit] = useOptimistic(
-    pageItems,
-    (state, action: SetOptimisticUnitType) => {
-      switch (action.type) {
-        case "add":
-          return [...state, action.unit];
-        case "update":
-          return state.map((item) =>
-            item.idUnit === action.unit.idUnit
-              ? { ...item, name: action.unit.name }
-              : item
-          );
-        case "delete":
-          return state.filter((item) => item.idUnit !== action.unit.idUnit);
-      }
-    }
-  );
-
-  // Handlers
-  const handleAddToGroup = (unit: Unit) => {
-    setUnitToAdd(unit);
-    onOpenAddToGroup();
-  };
-
-  const handleEditUnit = (unit: Unit) => {
-    setUnitToEdit(unit);
-    onOpenEditUnit();
-  };
-
-  const handleDeleteUnit = (unit: Unit) => {
-    setUnitToDelete(unit);
-    onOpenDeleteUnit();
-  };
+    unitToDelete,
+    setUnitToDelete,
+    unitToEdit,
+    setUnitToEdit,
+    unitToAdd,
+    setUnitToAdd,
+    insertModal,
+    editModal,
+    deleteModal,
+    addToGroupModal,
+    handleDeleteUnit,
+    handleEditUnit,
+    handleAddToGroup,
+  } = useUnitHandlers();
 
   return (
     <div className="h-full">
       <Table
         isHeaderSticky
+        isStriped
         aria-label="Jednotky"
-        topContent={<UnitsTopContent onPressInsertUnit={onOpenInsert} />}
+        topContent={
+          <UnitsTopContent onPressInsertUnit={insertModal.onOpenChange} />
+        }
         topContentPlacement="outside"
         bottomContent={
           <UnitsBottomContent pages={pages} totalUsers={data.totalCount} />
@@ -153,7 +89,7 @@ export default function UnitsTable({ dataPromise }: Props) {
         onSortChange={setSortDescriptor}
         sortDescriptor={sortDescriptor}
       >
-        <TableHeader columns={columns(canEdit || canDelete)}>
+        <TableHeader columns={getUnitsColumns(canEdit || canDelete)}>
           {(column) => (
             <TableColumn
               key={column.key}
@@ -175,7 +111,7 @@ export default function UnitsTable({ dataPromise }: Props) {
             <TableRow key={item.idUnit}>
               {(columnKey) => (
                 <TableCell>
-                  {renderCell(
+                  {unitsRenderCell(
                     item,
                     columnKey,
                     canEdit,
@@ -192,31 +128,31 @@ export default function UnitsTable({ dataPromise }: Props) {
       </Table>
 
       <InsertUnitModal
-        isOpen={isOpenInsert}
-        onOpenChange={onOpenChangeInsert}
-        setOptimisticUnit={setOptimisticUnit}
+        isOpen={insertModal.isOpen}
+        onOpenChange={insertModal.onOpenChange}
+        setOptimisticUnit={insertUnit}
       />
 
       <EditUnitModal
-        unit={unitToEdit as Unit}
-        isOpen={isOpenEditUnit}
-        onOpenChange={onOpenChangeEditUnit}
-        setOptimisticUnit={setOptimisticUnit}
+        unit={unitToEdit}
+        isOpen={editModal.isOpen}
+        onOpenChange={editModal.onOpenChange}
+        setOptimisticUnit={editUnit}
         setUnitToEdit={setUnitToEdit}
       />
 
       <DeleteUnitModal
-        unit={unitToDelete as Unit}
-        isOpen={isOpenDeleteUnit}
-        onOpenChange={onOpenChangeDeleteUnit}
-        setOptimisticUnit={setOptimisticUnit}
+        unit={unitToDelete}
+        isOpen={deleteModal.isOpen}
+        onOpenChange={deleteModal.onOpenChange}
+        setOptimisticUnit={deleteUnit}
         setUnitToDelete={setUnitToDelete}
       />
 
       <AddUnitToGroupModal
-        unit={unitToAdd as Unit}
-        isOpen={isOpenAddToGroup}
-        onOpenChange={onOpenChangeAddToGroup}
+        unit={unitToAdd}
+        isOpen={addToGroupModal.isOpen}
+        onOpenChange={addToGroupModal.onOpenChange}
         // setOptimisticUnit={setOptimisticUnit}
         setUnitToAdd={setUnitToAdd}
       />

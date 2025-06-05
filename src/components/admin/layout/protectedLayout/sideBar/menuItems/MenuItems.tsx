@@ -1,5 +1,3 @@
-import { memo } from "react";
-
 import AccordionItem from "@/components/shared/accordionItem/AccordionItem";
 import HideContentNoPermission from "@/components/shared/layout/hideContentNoPermission/HideContentNoPermission";
 import SideBarMenuListItem from "@/components/shared/sideBarMenuListItem/SideBarMenuListItem";
@@ -42,4 +40,4 @@ const MenuItems = () => {
   );
 };
 
-export default memo(MenuItems);
+export default MenuItems;

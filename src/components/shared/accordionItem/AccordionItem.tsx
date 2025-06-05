@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HTMLAttributes } from "react";
-import { IconType } from "react-icons";
 
+import adminMenuItemsIconMap, {
+  AdminMenuItemsIconMapType,
+} from "@/components/admin/layout/protectedLayout/sideBar/adminMenuItemsIconMap";
 import { RouteValue as AdminRouteValue } from "@/lib/routes/adminRoutes";
 import { RouteValue as WebRouteValue } from "@/lib/routes/webRoutes";
 import { mergeStyles } from "@/lib/utils/styles";
@@ -17,7 +21,7 @@ import accordionItemVariants from "./accordionItemVariants";
 
 type Props = HTMLAttributes<HTMLLIElement> & {
   label: string;
-  labelIcon?: IconType;
+  labelIcon?: AdminMenuItemsIconMapType;
   value: string;
   routeLink: WebRouteValue | AdminRouteValue | "#";
 };
@@ -26,7 +30,7 @@ export default function AccordionItem({
   children,
   className,
   label,
-  labelIcon: LabelIcon,
+  labelIcon,
   value,
   routeLink,
   ...restProps
@@ -38,6 +42,9 @@ export default function AccordionItem({
   const pathName = usePathname();
   const isActive = pathName === routeLink;
   const isOpened = listOpenedValue === value;
+
+  // Label icon
+  const LabelIcon = labelIcon ? adminMenuItemsIconMap[labelIcon] : null;
 
   // Handles
   const handleClick = () => {

@@ -1,19 +1,19 @@
 import { Key } from "react";
 
 import TableCellActions from "@/components/shared/tableCellActions/TableCellActions";
-import { UnitGroup } from "@prisma/client";
+import { UnitGroupSummaries } from "@/lib/dTOs/admin/UnitGroupSummariesDTO";
 
-type UnitGroupActions = keyof UnitGroup | "actions";
+type UnitGroupActions = keyof UnitGroupSummaries | "actions";
 
 export function unitGroupsRenderCell(
-  group: UnitGroup,
+  group: UnitGroupSummaries,
   columnKey: Key,
   canEdit: boolean,
   canDelete: boolean,
-  onEdit: (group: UnitGroup) => void,
-  onDelete: (group: UnitGroup) => void
+  onEdit: (group: UnitGroupSummaries) => void,
+  onDelete: (group: UnitGroupSummaries) => void
 ) {
-  const cellValue = group[columnKey as keyof UnitGroup];
+  const cellValue = group[columnKey as keyof UnitGroupSummaries];
 
   switch (columnKey as UnitGroupActions) {
     case "actions":

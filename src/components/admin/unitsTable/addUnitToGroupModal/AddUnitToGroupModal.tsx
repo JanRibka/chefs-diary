@@ -2,19 +2,19 @@ import { Dispatch, SetStateAction, useTransition } from "react";
 
 import { updateUnitAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
 import addToast from "@/lib/utils/addToast";
-import { Unit } from "@prisma/client";
 
 import AddUnitToGroupModalContent from "./AddUnitToGroupModalContent";
 
 // import useEditUnitValidation from "./useEditUnitValidation";
 const error = {};
 type Props = {
-  unit: Unit;
+  unit: UnitWithGroupInfoSummaryDTO | null;
   isOpen: boolean;
   onOpenChange: () => void;
   // setOptimisticUnit: (action: SetOptimisticUnitType) => void;
-  setUnitToAdd: Dispatch<SetStateAction<Unit | null>>;
+  setUnitToAdd: Dispatch<SetStateAction<UnitWithGroupInfoSummaryDTO | null>>;
 };
 
 export default function AddUnitToGroupModal({
@@ -50,6 +50,8 @@ export default function AddUnitToGroupModal({
     //   },
     // });
 
+    if (!unit) return;
+
     startTransition(async () => {
       const response = await updateUnitAction(unit.idUnit, formData);
 
@@ -66,6 +68,8 @@ export default function AddUnitToGroupModal({
       }
     });
   };
+
+  if (!unit) return null;
 
   return (
     <CancelConfirmModal

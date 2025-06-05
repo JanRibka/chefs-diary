@@ -2,21 +2,20 @@ import { Dispatch, SetStateAction, useTransition } from "react";
 
 import { updateUnitAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
 import addToast from "@/lib/utils/addToast";
 import { nameof } from "@/lib/utils/nameof";
 import { UnitFormType } from "@/lib/validations/schemas/admin/unitFormValidationSchema";
-import { Unit } from "@prisma/client";
 
-import { SetOptimisticUnitType } from "../UnitsTable";
 import EditUnitModalContent from "./EditUnitModalContent";
 import useEditUnitValidation from "./useEditUnitValidation";
 
 type Props = {
-  unit: Unit;
+  unit: UnitWithGroupInfoSummaryDTO | null;
   isOpen: boolean;
   onOpenChange: () => void;
-  setOptimisticUnit: (action: SetOptimisticUnitType) => void;
-  setUnitToEdit: Dispatch<SetStateAction<Unit | null>>;
+  setOptimisticUnit: (unit: UnitWithGroupInfoSummaryDTO) => void;
+  setUnitToEdit: Dispatch<SetStateAction<UnitWithGroupInfoSummaryDTO | null>>;
 };
 
 export default function EditUnitModal({
@@ -44,12 +43,13 @@ export default function EditUnitModal({
   const [isPending, startTransition] = useTransition();
 
   const handleEditUnitAction = async (formData: FormData) => {
+    if (!unit) return;
+
     setOptimisticUnit({
-      type: "update",
-      unit: {
-        idUnit: unit.idUnit,
-        name: formData.get(nameof<UnitFormType>("name")) as string,
-      },
+      idUnit: unit?.idUnit,
+      name: formData.get(nameof<UnitFormType>("name")) as string,
+      isBaseUnit: unit.isBaseUnit,
+      unitGroupName: unit.unitGroupName,
     });
 
     startTransition(async () => {
@@ -68,6 +68,8 @@ export default function EditUnitModal({
       }
     });
   };
+
+  if (!unit) return null;
 
   return (
     <CancelConfirmModal

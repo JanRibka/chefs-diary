@@ -4,6 +4,7 @@ import { use, useCallback, useMemo, useOptimistic, useState } from "react";
 
 import EvaluateActionResponseError from "@/components/shared/evaluateActionResponseError/EvaluateActionResponseError";
 import { useUserContext } from "@/context/UserContext";
+import { UnitGroupSummaries } from "@/lib/dTOs/admin/UnitGroupSummariesDTO";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
@@ -17,7 +18,6 @@ import {
   TableRow,
   useDisclosure,
 } from "@heroui/react";
-import { UnitGroup } from "@prisma/client";
 
 import DeleteUnitGroupModal from "./deleteUnitGroupModal/DeleteUnitGroupModal";
 import EditUnitGroupModal from "./editUnitGroupModal/EditUnitGroupModal";
@@ -30,11 +30,11 @@ import UnitGroupsTopContent from "./UnitGroupsTopContent";
 
 export type SetOptimisticUnitGroupType = {
   type: "add" | "update" | "delete";
-  group: UnitGroup;
+  group: UnitGroupSummaries;
 };
 
 type Props = {
-  dataPromise: Promise<ActionResponseDTO<PaginatedDTO<UnitGroup>>>;
+  dataPromise: Promise<ActionResponseDTO<PaginatedDTO<UnitGroupSummaries>>>;
 };
 
 export default function UnitGroupsTable({ dataPromise }: Props) {
@@ -43,8 +43,12 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
   const data = dataWithError.data!;
 
   // State
-  const [groupToDelete, setGroupToDelete] = useState<UnitGroup | null>(null);
-  const [groupToEdit, setGroupToEdit] = useState<UnitGroup | null>(null);
+  const [groupToDelete, setGroupToDelete] = useState<UnitGroupSummaries | null>(
+    null
+  );
+  const [groupToEdit, setGroupToEdit] = useState<UnitGroupSummaries | null>(
+    null
+  );
 
   // Modal states
   const {
@@ -81,7 +85,7 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
     [data.totalCount, pageSize]
   );
   const sortedItems = useMemo(() => {
-    return getSortedItems<UnitGroup>(data.items, sortDescriptor);
+    return getSortedItems<UnitGroupSummaries>(data.items, sortDescriptor);
   }, [sortDescriptor, data.items]);
   const pageItems = useMemo(() => {
     return getPageItems(sortedItems, page, pageSize);
@@ -91,7 +95,7 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
   const renderCell = useCallback(unitGroupsRenderCell, []);
 
   // Columns
-  const columns = useCallback(getUnitGroupsColumns, []);
+  const getColumns = useCallback(getUnitGroupsColumns, []);
 
   // Optimistic update
   const [optimisticUnitGroups, setOptimisticUnitGroup] = useOptimistic(
@@ -115,12 +119,12 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
   );
 
   // Handlers
-  const handleEditGroup = (group: UnitGroup) => {
+  const handleEditGroup = (group: UnitGroupSummaries) => {
     setGroupToEdit(group);
     onOpenEditGroup();
   };
 
-  const handleDeleteGroup = (group: UnitGroup) => {
+  const handleDeleteGroup = (group: UnitGroupSummaries) => {
     setGroupToDelete(group);
     onOpenDeleteGroup();
   };
@@ -153,7 +157,7 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
           onSortChange={setSortDescriptor}
           sortDescriptor={sortDescriptor}
         >
-          <TableHeader columns={columns(canEdit || canDelete)}>
+          <TableHeader columns={getColumns(canEdit || canDelete)}>
             {(column) => (
               <TableColumn
                 key={column.key}
@@ -193,7 +197,7 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
         />
 
         <EditUnitGroupModal
-          group={groupToEdit as UnitGroup}
+          group={groupToEdit as UnitGroupSummaries}
           isOpen={isOpenEditGroup}
           onOpenChange={onOpenChangeEditGroup}
           setOptimisticUnitGroup={setOptimisticUnitGroup}
@@ -201,7 +205,7 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
         />
 
         <DeleteUnitGroupModal
-          group={groupToDelete as UnitGroup}
+          group={groupToDelete as UnitGroupSummaries}
           isOpen={isOpenDeleteGroup}
           onOpenChange={onOpenChangeDeleteGroup}
           setOptimisticUnitGroup={setOptimisticUnitGroup}

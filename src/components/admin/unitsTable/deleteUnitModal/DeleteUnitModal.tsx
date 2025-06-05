@@ -2,18 +2,17 @@ import { Dispatch, SetStateAction, useTransition } from "react";
 
 import { deleteUnitAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
 import addToast from "@/lib/utils/addToast";
-import { Unit } from "@prisma/client";
 
-import { SetOptimisticUnitType } from "../UnitsTable";
 import DeleteUnitModalContent from "./DeleteUnitModalContent";
 
 type Props = {
-  unit: Unit;
+  unit: UnitWithGroupInfoSummaryDTO | null;
   isOpen: boolean;
   onOpenChange: () => void;
-  setOptimisticUnit: (action: SetOptimisticUnitType) => void;
-  setUnitToDelete: Dispatch<SetStateAction<Unit | null>>;
+  setOptimisticUnit: (action: UnitWithGroupInfoSummaryDTO) => void;
+  setUnitToDelete: Dispatch<SetStateAction<UnitWithGroupInfoSummaryDTO | null>>;
 };
 
 export default function DeleteUnitModal({
@@ -27,11 +26,10 @@ export default function DeleteUnitModal({
   const [isPending, startTransition] = useTransition();
 
   const handleDeleteUnitAction = async () => {
+    if (!unit) return;
+
     setOptimisticUnit({
-      type: "delete",
-      unit: {
-        ...unit,
-      },
+      ...unit,
     });
 
     startTransition(async () => {
@@ -51,6 +49,8 @@ export default function DeleteUnitModal({
     setUnitToDelete(null);
     onOpenChange();
   };
+
+  if (!unit) return null;
 
   return (
     <CancelConfirmModal

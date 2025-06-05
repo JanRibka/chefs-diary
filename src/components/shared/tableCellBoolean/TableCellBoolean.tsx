@@ -15,6 +15,8 @@ export default function TableCellBoolean({
   falseColor,
   falseLabel,
 }: Props) {
+  if (value === undefined || value === null) return null;
+
   const label = value ? trueLabel : falseLabel;
   const color = value ? trueColor : falseColor;
 

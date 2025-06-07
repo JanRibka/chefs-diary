@@ -11,6 +11,7 @@ import PermissionTypeEnum from "../enums/PermissionTypeEnum";
 import ConflictError from "../errors/ConflictError";
 import NotFoundError from "../errors/NotFoundError";
 import {
+  addUnitToGroup,
   deleteUnit,
   deleteUnitGroup,
   getAllUnitGroupsWithAssignments,
@@ -214,9 +215,10 @@ export async function getUnitGroupDataForModal(
       idUnitGroup: item.idUnitGroup,
       unitGroupName: item.name,
       isBaseUnit: item.idBaseUnit === idUnit,
-      idBaseUnit: item.idBaseUnit,
-      baseUnitName: item.baseUnit?.name,
-    } as UnitGroupModalDTO;
+      idBaseUnit: item.idBaseUnit ?? null,
+      baseUnitName: item.baseUnit?.name ?? null,
+      idsUnit: item.unit?.map((m) => m.idUnit) ?? null,
+    } satisfies UnitGroupModalDTO;
   });
 }
 
@@ -259,16 +261,16 @@ export async function getUnitGroupSummaries(): Promise<
 > {
   try {
     await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
-    debugger;
+
     const { items, totalCount } = await getAllUnitGroupsWithDetails();
 
     const newItems = items.map((item) => {
       return {
         idUnitGroup: item.idUnitGroup,
         name: item.name,
-        basUnitName: item.baseUnit?.name,
-        unitNames: item.unit?.join(", "),
-      } as unknown as UnitGroupSummaries;
+        baseUnitName: item.baseUnit?.name ?? null,
+        unitNames: item.unit?.map((u) => u.name).join(", ") ?? null,
+      } satisfies UnitGroupSummaries;
     });
 
     return {
@@ -288,25 +290,39 @@ export async function getUnitGroupSummaries(): Promise<
   }
 }
 
+/**
+ * Retrieves a paginated summary of all units, including their group affiliation and
+ * whether each unit is the base unit of its group.
+ *
+ * - Requires the user to have the `UNIT_EDIT` permission.
+ * - If permission is denied or an error occurs, returns an empty result with error info.
+ *
+ * Each returned item includes:
+ * - `idUnit`: Unit ID
+ * - `name`: Unit name
+ * - `unitGroupName`: Name of the group the unit belongs to (if any)
+ * - `isBaseUnit`: Boolean flag indicating whether the unit is the group's base unit
+ *
+ * @returns An `ActionResponseDTO` containing a `PaginatedDTO` with unit and group summary data.
+ */
 export async function getUnitWithGroupInfoSummary(): Promise<
   ActionResponseDTO<PaginatedDTO<UnitWithGroupInfoSummaryDTO>>
 > {
   try {
     await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
-    debugger;
+
     const { items, totalCount } = await getAllUnitsWithGroupInfo();
 
     const newItems = items.map((item) => {
       const unitGroupName = item.unitGroup?.name;
+      const idBaseUnit = item.unitGroup?.idBaseUnit;
 
       return {
         idUnit: item.idUnit,
         name: item.name,
-        unitGroupName,
-        idBaseUnite: unitGroupName
-          ? item.unitGroup?.idBaseUnit === item.idUnit
-          : null,
-      } as unknown as UnitWithGroupInfoSummaryDTO;
+        unitGroupName: unitGroupName ?? "",
+        isBaseUnit: idBaseUnit ? idBaseUnit === item.idUnit : null,
+      } satisfies UnitWithGroupInfoSummaryDTO;
     });
 
     return {
@@ -324,4 +340,38 @@ export async function getUnitWithGroupInfoSummary(): Promise<
       timeStamp: new Date(),
     };
   }
+}
+
+/**
+ * Attempts to assign a unit to a group and optionally mark it as the base unit.
+ *
+ * - Verifies that the unit with the given ID exists.
+ * - Logs the admin action before applying the change.
+ * - Delegates the group assignment logic to `addUnitToGroup`.
+ *
+ * @param idUnit - ID of the unit to assign.
+ * @param isBaseUnit - Whether the unit should be marked as the base unit of the group.
+ * @param idUnitGroup - ID of the group to assign the unit to.
+ *
+ * @throws {NotFoundError} If the unit with the specified ID does not exist.
+ */
+export async function attemptAddUnitToGroup(
+  idUnit: number,
+  isBaseUnit: boolean | null,
+  idUnitGroup: number | null
+): Promise<void> {
+  const unit = await getUnitByIdRepository(idUnit);
+
+  if (!unit) {
+    throw new NotFoundError();
+  }
+
+  logAdminAction(
+    AdminLogActionTypeEnum.ADD_TO_GROUP,
+    AdminLogEntityTypeEnum.UNIT,
+    idUnit,
+    { isBaseUnit, idUnitGroup }
+  );
+
+  await addUnitToGroup(idUnit, isBaseUnit, idUnitGroup);
 }

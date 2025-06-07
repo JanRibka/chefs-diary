@@ -1,7 +1,8 @@
 export type UnitGroupModalDTO = {
   idUnitGroup: number;
   unitGroupName: string;
-  idBaseUnit: number;
+  idBaseUnit: number | null;
   isBaseUnit: boolean;
-  baseUnitName: string;
+  baseUnitName: string | null;
+  idsUnit: number[] | null;
 };

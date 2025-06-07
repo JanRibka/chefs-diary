@@ -9,6 +9,7 @@ import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 import adminRoutes from "@/lib/routes/adminRoutes";
 import {
+  attemptAddUnitToGroup,
   attemptDeleteUnit,
   attemptDeleteUnitGroup,
   attemptEditUnit,
@@ -320,5 +321,48 @@ export async function getUnitGroupDataForModalAction(
       error: errorMessage,
       timeStamp: new Date(),
     };
+  }
+}
+
+export async function addUnitToGroupAction(
+  idUnit: number,
+  formData: FormData
+): Promise<ActionResponseDTO<void>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
+
+  try {
+    const isBaseUnitRaw = formData.get(nameof<UnitGroupModalDTO>("isBaseUnit"));
+    const isBaseUnit = isBaseUnitRaw === null ? null : isBaseUnitRaw === "true";
+    const idUnitGroupRaw = formData.get(
+      nameof<UnitGroupModalDTO>("idUnitGroup")
+    );
+    const idUnitGroup = idUnitGroupRaw !== null ? Number(idUnitGroupRaw) : null;
+
+    await attemptAddUnitToGroup(idUnit, isBaseUnit, idUnitGroup);
+
+    return {
+      data: null,
+      success: true,
+      timeStamp: new Date(),
+    };
+  } catch (error) {
+    const notFoundError = getNotFoundErrorFromError(
+      error,
+      "Jednotka neexistuje"
+    );
+    let errorMessage = notFoundError.errorMessage;
+
+    if (!notFoundError.isNotFoundError) {
+      errorMessage = getErrorMessageFromError(error);
+    }
+
+    return {
+      data: null,
+      success: false,
+      error: errorMessage,
+      timeStamp: new Date(),
+    };
+  } finally {
+    revalidatePath(adminRoutes.Units);
   }
 }

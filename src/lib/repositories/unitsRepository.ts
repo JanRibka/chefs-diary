@@ -195,6 +195,11 @@ export async function getAllUnitGroupsWithAssignments(): Promise<
           name: true,
         },
       },
+      unit: {
+        select: {
+          idUnit: true,
+        },
+      },
     },
   });
 }
@@ -272,4 +277,57 @@ export async function getAllUnitsWithGroupInfo(): Promise<
   ]);
 
   return { items, totalCount };
+}
+
+/**
+ * Assigns a unit to a unit group and optionally marks it as the base unit of that group.
+ *
+ * - Always clears the unit from being a base unit in any other group.
+ * - If `isBaseUnit` is true and `idUnitGroup` is provided, the unit is set as the base unit of that group.
+ * - If `idUnitGroup` is null, the unit is unassigned from any group.
+ *
+ * @param idUnit - ID of the unit to assign or unassign.
+ * @param isBaseUnit - Whether the unit should be set as the base unit (true), not set (false), or left undefined/null.
+ * @param idUnitGroup - ID of the group to assign the unit to, or null to unassign.
+ *
+ * @returns A Promise that resolves when the update completes
+ */
+export async function addUnitToGroup(
+  idUnit: number,
+  isBaseUnit: boolean | null,
+  idUnitGroup: number | null
+): Promise<void> {
+  await prisma.$transaction(async (tx) => {
+    // Always clear base unit assignment if unit is currently base unit somewhere
+    await tx.unitGroup.updateMany({
+      where: {
+        idBaseUnit: idUnit,
+      },
+      data: {
+        idBaseUnit: null,
+      },
+    });
+
+    // If setting as base unit, ensure group is specified
+    if (isBaseUnit && idUnitGroup != null) {
+      await tx.unitGroup.update({
+        where: {
+          idUnitGroup: idUnitGroup,
+        },
+        data: {
+          idBaseUnit: idUnit,
+        },
+      });
+    }
+
+    // Update the unit's group (can be undefined/null to unassign)
+    await tx.unit.update({
+      where: {
+        idUnit: idUnit,
+      },
+      data: {
+        idUnitGroup: idUnitGroup,
+      },
+    });
+  });
 }

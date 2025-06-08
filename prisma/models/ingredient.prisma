@@ -1,8 +1,13 @@
 model Ingredient {
-    idIngredient Int    @id @default(autoincrement()) @db.Integer
-    name         String @unique @db.VarChar(50)
+    idIngredient       Int    @id @default(autoincrement()) @db.Integer
+    name               String @unique @db.VarChar(50)
+    idIngredientGroup  Int?
+    idParentIngredient Int?
 
-    recipeIngredient RecipeIngredient[]
+    group              IngredientGroup?   @relation(fields: [idIngredientGroup], references: [idIngredientGroup])
+    parent             Ingredient?        @relation("IngredientVariants", fields: [idParentIngredient], references: [idIngredient])
+    ingredientVariants Ingredient[]       @relation("IngredientVariants")
+    recipeIngredient   RecipeIngredient[]
 }
 
 // Má smysl dělat i nějaké skupiny u ingrediencí? Jako je například maso, koření nebo nějaké jiné skupiny které tě nenápadnou?

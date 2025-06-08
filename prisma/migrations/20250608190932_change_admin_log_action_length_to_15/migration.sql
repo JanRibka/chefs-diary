@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "AdminLog" ALTER COLUMN "action" SET DATA TYPE VARCHAR(15);

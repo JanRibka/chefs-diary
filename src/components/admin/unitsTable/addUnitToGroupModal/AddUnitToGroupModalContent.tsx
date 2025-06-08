@@ -112,7 +112,7 @@ export default function AddUnitToGroupModalContent({
         </CheckboxGroup>
 
         <CheckboxGroup
-          label="Vyberte za je jednotka základní jednotka"
+          label="Vyberte zda je jednotka základní jednotka"
           value={[isBaseUnit.toString()]}
           onValueChange={handleValueChangeIsBaseUnit}
         >
@@ -128,7 +128,7 @@ export default function AddUnitToGroupModalContent({
             value={true.toString()}
             name={nameof<UnitGroupModalDTO>("isBaseUnit")}
           >
-            Je výchozí jednotka
+            Je základní jednotka
           </Checkbox>
         </CheckboxGroup>
       </div>

@@ -316,12 +316,13 @@ export async function getUnitWithGroupInfoSummary(): Promise<
     const newItems = items.map((item) => {
       const unitGroupName = item.unitGroup?.name;
       const idBaseUnit = item.unitGroup?.idBaseUnit;
+      const idUnitGroup = item.unitGroup?.idUnitGroup;
 
       return {
         idUnit: item.idUnit,
         name: item.name,
         unitGroupName: unitGroupName ?? "",
-        isBaseUnit: idBaseUnit ? idBaseUnit === item.idUnit : null,
+        isBaseUnit: idUnitGroup ? idBaseUnit === item.idUnit : null,
       } satisfies UnitWithGroupInfoSummaryDTO;
     });
 

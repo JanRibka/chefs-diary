@@ -1,0 +1,13 @@
+model IngredientUnitConversion {
+    idIngredientUnitConversion Int   @id @default(autoincrement()) @db.Integer
+    idIngredient               Int   @db.Integer
+    idUnit                     Int   @db.Integer
+    conversionToBase           Float // např. 1 ks -> 150 g (základní jednotka ve skupině)
+
+    ingredient Ingredient @relation(fields: [idIngredient], references: [idIngredient])
+    unit       Unit       @relation(fields: [idUnit], references: [idUnit])
+
+    @@unique([idIngredient, idUnit])
+    @@index([idIngredient])
+    @@index([idUnit])
+}

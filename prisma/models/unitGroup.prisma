@@ -1,8 +1,6 @@
 model UnitGroup {
     idUnitGroup Int    @id @default(autoincrement()) @db.Integer
     name        String @unique @db.VarChar(20)
-    idBaseUnit  Int?   @unique @db.Integer
 
-    baseUnit Unit?  @relation("BaseUnit", fields: [idBaseUnit], references: [idUnit])
-    unit     Unit[] @relation("GroupUnits")
+    unitGroupUnit UnitGroupUnit[]
 }

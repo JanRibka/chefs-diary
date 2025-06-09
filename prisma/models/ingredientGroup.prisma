@@ -2,5 +2,5 @@ model IngredientGroup {
     idIngredientGroup Int    @id @default(autoincrement()) @db.Integer
     name              String @unique @db.VarChar(50)
 
-    ingredients Ingredient[]
+    ingredient Ingredient[]
 }

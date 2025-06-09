@@ -1,0 +1,11 @@
+model IngredientGroupMapping {
+    idIngredientGroupMapping Int @id @default(autoincrement()) @db.Integer
+    idParentIngredient       Int @db.Integer
+    idChildIngredient        Int @db.Integer
+
+    parentIngredient Ingredient @relation("ParentIngredient", fields: [idParentIngredient], references: [idIngredient])
+    childIngredient  Ingredient @relation("ChildIngredient", fields: [idChildIngredient], references: [idIngredient])
+
+    @@index([idParentIngredient])
+    @@index([idChildIngredient])
+}

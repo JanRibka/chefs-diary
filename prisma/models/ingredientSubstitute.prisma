@@ -1,0 +1,15 @@
+model IngredientSubstitute {
+    idIngredientSubstitute  Int    @id @default(autoincrement()) @db.Integer
+    idUser                  String @db.VarChar(25)
+    idOriginalIngredient    Int    @db.Integer
+    idAlternativeIngredient Int    @db.Integer
+
+    originalIngredient    Ingredient @relation("SubstituteTarget", fields: [idOriginalIngredient], references: [idIngredient])
+    alternativeIngredient Ingredient @relation("SubstituteSource", fields: [idAlternativeIngredient], references: [idIngredient])
+    user                  User       @relation(fields: [idUser], references: [idUser])
+
+    @@unique([idUser, idOriginalIngredient, idAlternativeIngredient])
+    @@index([idUser])
+    @@index([idOriginalIngredient])
+    @@index([idAlternativeIngredient])
+}

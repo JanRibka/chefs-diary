@@ -1,0 +1,14 @@
+model UnitGroupUnit {
+    idUnitGroupUnit Int     @id @default(autoincrement()) @db.Integer
+    idUnitGroup     Int     @db.Integer
+    idUnit          Int     @db.Integer
+    isBaseUnit      Boolean @default(false)
+
+    unitGroup UnitGroup @relation(fields: [idUnitGroup], references: [idUnitGroup])
+    unit      Unit      @relation(fields: [idUnit], references: [idUnit])
+
+    @@unique([idUnitGroup, idUnit]) // Každá jednotka ve skupině pouze jednou
+    @@unique([idUnitGroup, isBaseUnit]) // Pouze jedna jednotka může být base
+    @@index([idUnit])
+    @@index([idUnitGroup])
+}

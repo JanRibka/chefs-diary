@@ -1,5 +1,7 @@
-import { Unit, UnitGroup } from "@prisma/client";
+import { Unit, UnitGroup, UnitGroupUnit } from "@prisma/client";
 
 export type UnitWithGroupInfoDTO = Pick<Unit, "idUnit" | "name"> & {
-  unitGroup: Pick<UnitGroup, "idUnitGroup" | "idBaseUnit" | "name"> | null;
+  unitGroupUnit: (Pick<UnitGroupUnit, "idUnitGroup" | "isBaseUnit"> & {
+    unitGroup: Pick<UnitGroup, "name"> | null;
+  })[];
 };

@@ -176,27 +176,31 @@ export async function deleteUnitGroup(idUnitGroup: number) {
 }
 
 /**
- * Retrieves all unit groups from the database along with their assignment status
- * for a specific unit (if assigned).
+ * Retrieves all unit groups with assignment information for a specific unit.
  *
- * Each unit group includes related assignment data (`unitGroupUnit`) only for the given unit.
- * This is useful for determining which groups the unit belongs to and whether it is a base unit in any of them.
+ * Each unit group includes:
+ * - group ID and name,
+ * - base unit info (name),
+ * - assignment info for the given unit via `unitGroupUnit` (if assigned),
+ *   including whether the unit is base unit in that group.
  *
- * @returns A list of UnitGroup entities with filtered `unitGroupUnit` relations related to the given unit.
+ * @param idUnit - ID of the unit to filter assignments by.
+ * @returns A list of UnitGroups with assignment info filtered to the given unit.
  */
-export async function getAllUnitGroupsWithAssignments(): Promise<
-  UnitGroupsWithAssignmentsDTO[]
-> {
-  return await prisma.unitGroup.findMany({
+export async function getAllUnitGroupsWithAssignments(
+  idUnit: number
+): Promise<UnitGroupsWithAssignmentsDTO[]> {
+  return prisma.unitGroup.findMany({
     relationLoadStrategy: "join",
-    include: {
-      baseUnit: {
-        select: {
-          name: true,
+    select: {
+      idUnitGroup: true,
+      name: true,
+      unitGroupUnit: {
+        where: {
+          idUnit,
         },
-      },
-      unit: {
         select: {
+          isBaseUnit: true,
           idUnit: true,
         },
       },
@@ -226,14 +230,15 @@ export async function getAllUnitGroupsWithDetails(): Promise<
       select: {
         idUnitGroup: true,
         name: true,
-        baseUnit: {
+        unitGroupUnit: {
           select: {
-            name: true,
-          },
-        },
-        unit: {
-          select: {
-            name: true,
+            isBaseUnit: true,
+            unit: {
+              select: {
+                idUnit: true,
+                name: true,
+              },
+            },
           },
         },
       },
@@ -245,16 +250,16 @@ export async function getAllUnitGroupsWithDetails(): Promise<
 }
 
 /**
- * Retrieves all units from the database along with related group information.
+ * Retrieves all units from the database along with their group assignments.
  *
- * For each unit, the function includes:
- * - the unit's ID and name,
- * - the name of the group to which the unit belongs (if any),
- * - the group's base unit ID to determine if the unit is the base unit.
+ * For each unit, includes:
+ * - unit ID and name,
+ * - an array of assigned groups (id and name),
+ * - an indication if the unit is base unit in each group.
  *
- * Returns the data in a paginated format using `PaginatedDTO`.
+ * Returns data in paginated format using `PaginatedDTO`.
  *
- * @returns A paginated list of units with associated group info.
+ * @returns A paginated list of units with their group assignments.
  */
 export async function getAllUnitsWithGroupInfo(): Promise<
   PaginatedDTO<UnitWithGroupInfoDTO>
@@ -265,11 +270,15 @@ export async function getAllUnitsWithGroupInfo(): Promise<
       select: {
         idUnit: true,
         name: true,
-        unitGroup: {
+        unitGroupUnit: {
           select: {
             idUnitGroup: true,
-            name: true,
-            idBaseUnit: true,
+            isBaseUnit: true,
+            unitGroup: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },
@@ -281,17 +290,18 @@ export async function getAllUnitsWithGroupInfo(): Promise<
 }
 
 /**
- * Assigns a unit to a unit group and optionally marks it as the base unit of that group.
+ * Assigns a unit to a unit group and optionally marks it as the base unit within that group.
  *
- * - Always clears the unit from being a base unit in any other group.
- * - If `isBaseUnit` is true and `idUnitGroup` is provided, the unit is set as the base unit of that group.
- * - If `idUnitGroup` is null, the unit is unassigned from any group.
+ * - Always removes the unit from any existing group assignments (1 unit = 1 group).
+ * - If `isBaseUnit` is true, ensures there is no other base unit in the same group.
+ *   If a base unit exists, it is unset and the new one is assigned.
+ * - If `idUnitGroup` is null, the unit will be removed from all groups.
  *
  * @param idUnit - ID of the unit to assign or unassign.
- * @param isBaseUnit - Whether the unit should be set as the base unit (true), not set (false), or left undefined/null.
- * @param idUnitGroup - ID of the group to assign the unit to, or null to unassign.
+ * @param isBaseUnit - true = set as base unit, false = regular unit, null = ignore base status.
+ * @param idUnitGroup - ID of the group to assign the unit to. If null, the unit will be removed from all groups.
  *
- * @returns A Promise that resolves when the update completes
+ * @returns Promise<void>
  */
 export async function addUnitToGroup(
   idUnit: number,
@@ -299,35 +309,28 @@ export async function addUnitToGroup(
   idUnitGroup: number | null
 ): Promise<void> {
   await prisma.$transaction(async (tx) => {
-    // Always clear base unit assignment if unit is currently base unit somewhere
-    await tx.unitGroup.updateMany({
-      where: {
-        idBaseUnit: idUnit,
-      },
-      data: {
-        idBaseUnit: null,
-      },
-    });
+    // If no group is provided, stop here (unit was unassigned)
+    if (idUnitGroup == null) return;
 
-    // If setting as base unit, ensure group is specified
-    if (isBaseUnit && idUnitGroup != null) {
-      await tx.unitGroup.update({
+    // If setting this unit as the base unit, unset the current base unit of the group
+    if (isBaseUnit) {
+      await tx.unitGroupUnit.updateMany({
         where: {
-          idUnitGroup: idUnitGroup,
+          idUnitGroup,
+          isBaseUnit: true,
         },
         data: {
-          idBaseUnit: idUnit,
+          isBaseUnit: false,
         },
       });
     }
 
-    // Update the unit's group (can be undefined/null to unassign)
-    await tx.unit.update({
-      where: {
-        idUnit: idUnit,
-      },
+    // Create a new assignment of the unit to the group with the appropriate base flag
+    await tx.unitGroupUnit.create({
       data: {
-        idUnitGroup: idUnitGroup,
+        idUnit,
+        idUnitGroup,
+        isBaseUnit: isBaseUnit ?? false,
       },
     });
   });

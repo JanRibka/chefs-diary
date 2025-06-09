@@ -30,12 +30,12 @@ export default function AddUnitToGroupModalContent({
   const isInitialized = useRef(false);
 
   // State
-  const [selectedGroupId, setSelectedGroupId] = useState<string[]>([]);
+  const [idSelectedGroup, setIdSelectedGroup] = useState<string[]>([]);
   const [isBaseUnit, setIsBaseUnit] = useState<boolean>(false);
 
   // Derived
   const selectedGroup = data.find(
-    (g) => g.idUnitGroup === parseInt(selectedGroupId[0])
+    (g) => g.idUnitGroup === parseInt(idSelectedGroup[0])
   );
   const showBaseUnitWarning =
     selectedGroup?.idBaseUnit && selectedGroup.idBaseUnit !== unit.idUnit;
@@ -49,7 +49,7 @@ export default function AddUnitToGroupModalContent({
       ?.idUnitGroup.toString();
 
     if (defaultValue) {
-      setSelectedGroupId([defaultValue]);
+      setIdSelectedGroup([defaultValue]);
     }
 
     const selectedGroup = data.find(
@@ -65,7 +65,7 @@ export default function AddUnitToGroupModalContent({
 
   // Handlers
   const handleValueChangeUnitGroup = (value: string[]) => {
-    setSelectedGroupId((prev) => {
+    setIdSelectedGroup((prev) => {
       return value.filter((f) => f !== "" && f !== prev[0]);
     });
 
@@ -95,7 +95,7 @@ export default function AddUnitToGroupModalContent({
     <Form action={action} className="flex flex-col gap-5" noValidate>
       <div>
         <CheckboxGroup
-          value={selectedGroupId}
+          value={idSelectedGroup}
           onValueChange={handleValueChangeUnitGroup}
           className="mb-6"
           label="Vyberte skupinu ke které chcete jednotku přiřadit"

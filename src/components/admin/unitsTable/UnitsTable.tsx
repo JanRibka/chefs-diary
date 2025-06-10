@@ -104,8 +104,9 @@ export default function UnitsTable({ dataPromise }: Props) {
 
         <TableBody
           items={optimisticUnits}
+          isLoading={false}
           loadingContent={<Spinner />}
-          emptyContent="Žádný jednotka nebyla nalezena"
+          emptyContent="Žádná jednotka nebyla nalezena"
         >
           {(item) => (
             <TableRow key={item.idUnit}>

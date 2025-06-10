@@ -3,6 +3,7 @@
 import { use, useCallback, useMemo, useOptimistic, useState } from "react";
 
 import EvaluateActionResponseError from "@/components/shared/evaluateActionResponseError/EvaluateActionResponseError";
+import Spinner from "@/components/shared/spinner/Spinner";
 import { useUserContext } from "@/context/UserContext";
 import { UnitGroupSummaries } from "@/lib/dTOs/admin/UnitGroupSummariesDTO";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
@@ -170,7 +171,12 @@ export default function UnitGroupsTable({ dataPromise }: Props) {
             )}
           </TableHeader>
 
-          <TableBody items={optimisticUnitGroups}>
+          <TableBody
+            items={optimisticUnitGroups}
+            isLoading={false}
+            loadingContent={<Spinner />}
+            emptyContent="Žádná skupina nebyla nalezena"
+          >
             {(item) => (
               <TableRow key={item.idUnitGroup}>
                 {(columnKey) => (

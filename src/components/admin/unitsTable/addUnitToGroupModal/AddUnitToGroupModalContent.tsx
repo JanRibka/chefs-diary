@@ -98,7 +98,7 @@ export default function AddUnitToGroupModalContent({
           value={idSelectedGroup}
           onValueChange={handleValueChangeUnitGroup}
           className="mb-6"
-          label="Vyberte skupinu ke které chcete jednotku přiřadit"
+          label="Vyberte skupinu ke které chcete jednotku přiřadit" // TODO: Tady napíšu tučným o jakou jednotku se jedná
         >
           {data.map((group) => (
             <Checkbox
@@ -144,6 +144,10 @@ export default function AddUnitToGroupModalContent({
         >
           Uložit
         </SubmitButton>
+
+        {/* <Button type="submit" name="action" value="remove">
+  Odebrat jednotku ze skupiny
+</Button> */}
       </div>
     </Form>
   );

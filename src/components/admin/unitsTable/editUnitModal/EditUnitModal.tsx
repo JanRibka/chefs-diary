@@ -48,8 +48,8 @@ export default function EditUnitModal({
     setOptimisticUnit({
       idUnit: unit?.idUnit,
       name: formData.get(nameof<UnitFormType>("name")) as string,
-      isBaseUnit: unit.isBaseUnit,
-      unitGroupName: unit.unitGroupName,
+      isBaseUnitInGroup: unit.isBaseUnitInGroup,
+      unitGroupNames: unit.unitGroupNames,
     });
 
     startTransition(async () => {

@@ -7,8 +7,8 @@ model UnitGroupUnit {
     unitGroup UnitGroup @relation(fields: [idUnitGroup], references: [idUnitGroup])
     unit      Unit      @relation(fields: [idUnit], references: [idUnit])
 
-    @@unique([idUnitGroup, idUnit]) // Každá jednotka ve skupině pouze jednou
-    @@unique([idUnitGroup, isBaseUnit]) // Pouze jedna jednotka může být base
+    @@unique([idUnitGroup, idUnit])
+    @@unique([idUnitGroup, idUnit, isBaseUnit])
     @@index([idUnit])
     @@index([idUnitGroup])
 }

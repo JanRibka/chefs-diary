@@ -202,6 +202,11 @@ export async function getAllUnitGroupsWithAssignments(
         select: {
           isBaseUnit: true,
           idUnit: true,
+          unit: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
     },
@@ -235,7 +240,6 @@ export async function getAllUnitGroupsWithDetails(): Promise<
             isBaseUnit: true,
             unit: {
               select: {
-                idUnit: true,
                 name: true,
               },
             },
@@ -273,6 +277,7 @@ export async function getAllUnitsWithGroupInfo(): Promise<
         unitGroupUnit: {
           select: {
             idUnitGroup: true,
+            idUnit: true,
             isBaseUnit: true,
             unitGroup: {
               select: {

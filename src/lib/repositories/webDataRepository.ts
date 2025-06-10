@@ -56,17 +56,12 @@ export async function getAllUnitsPaginated(
 /**
  * Inserts unit
  * @param name Unit name
- * @param displayName Unit display name
  * @returns {Promise<Unit>}
  */
-export async function insertUnit(
-  name: string,
-  displayName: string
-): Promise<Unit> {
+export async function insertUnit(name: string): Promise<Unit> {
   return await prisma.unit.create({
     data: {
       name: name,
-      displayName: displayName,
     },
   });
 }

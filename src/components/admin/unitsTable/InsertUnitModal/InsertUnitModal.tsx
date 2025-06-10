@@ -41,8 +41,8 @@ export default function InsertUnitModal({
     setOptimisticUnit({
       idUnit: Math.random(),
       name: formData.get(nameof<UnitFormType>("name")) as string,
-      isBaseUnit: null,
-      unitGroupName: null,
+      isBaseUnitInGroup: null,
+      unitGroupNames: null,
     });
 
     startTransition(async () => {

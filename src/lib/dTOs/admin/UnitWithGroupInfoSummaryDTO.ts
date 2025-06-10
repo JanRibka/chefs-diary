@@ -1,6 +1,6 @@
 import { Unit } from "@prisma/client";
 
 export type UnitWithGroupInfoSummaryDTO = Pick<Unit, "idUnit" | "name"> & {
-  unitGroupName: string;
-  isBaseUnit: boolean | null;
+  unitGroupNames: string | null;
+  isBaseUnitInGroup: string | null;
 };

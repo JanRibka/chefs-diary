@@ -8,14 +8,12 @@ function getUnitsColumns(canEditOrDelete: boolean): TableColumnType[] {
       allowsSorting: true,
     },
     {
-      label: "Je základní jednotka",
-      key: "isBaseUnit",
-      allowsSorting: true,
+      label: "Patří do skupiny",
+      key: "unitGroupNames",
     },
     {
-      label: "Patří do skupiny",
-      key: "unitGroupName",
-      allowsSorting: true,
+      label: "Základní jednotka ve skupině",
+      key: "isBaseUnitInGroup",
     },
   ];
 

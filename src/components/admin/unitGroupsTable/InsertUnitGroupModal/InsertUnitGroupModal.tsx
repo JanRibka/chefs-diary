@@ -43,6 +43,8 @@ export default function InsertUnitGroupModal({
       group: {
         idUnitGroup: Math.random(),
         name: formData.get(nameof<UnitGroupFormType>("name")) as string,
+        baseUnitName: null,
+        unitNames: null,
       },
     });
 

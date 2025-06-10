@@ -2,7 +2,6 @@ import { Key } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 
 import TableCellActions from "@/components/shared/tableCellActions/TableCellActions";
-import TableCellBoolean from "@/components/shared/tableCellBoolean/TableCellBoolean";
 import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
 
 type WithActionsActions = keyof UnitWithGroupInfoSummaryDTO | "actions";
@@ -19,16 +18,6 @@ export function unitsRenderCell(
   const cellValue = unit[columnKey as keyof UnitWithGroupInfoSummaryDTO];
 
   switch (columnKey as WithActionsActions) {
-    case "isBaseUnit":
-      return (
-        <TableCellBoolean
-          value={cellValue as boolean}
-          trueLabel="Ano"
-          trueColor="success"
-          falseLabel="Ne"
-          falseColor="danger"
-        />
-      );
     case "actions":
       if (!canEdit && !canDelete) return null;
 

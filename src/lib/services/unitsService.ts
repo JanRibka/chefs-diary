@@ -208,16 +208,21 @@ export async function attemptEditUnit(
 export async function getUnitGroupDataForModal(
   idUnit: number
 ): Promise<UnitGroupModalDTO[]> {
-  const groups = await getAllUnitGroupsWithAssignments();
+  const groups = await getAllUnitGroupsWithAssignments(idUnit);
 
   return groups.map((item) => {
+    const assignedUnit = item.unitGroupUnit.find(
+      (rel) => rel.idUnit === idUnit
+    );
+    const baseUnitRelation = item.unitGroupUnit.find((rel) => rel.isBaseUnit);
+
     return {
       idUnitGroup: item.idUnitGroup,
       unitGroupName: item.name,
-      isBaseUnit: item.idBaseUnit === idUnit,
-      idBaseUnit: item.idBaseUnit ?? null,
-      baseUnitName: item.baseUnit?.name ?? null,
-      idsUnit: item.unit?.map((m) => m.idUnit) ?? null,
+      isBaseUnit: assignedUnit?.isBaseUnit ?? false,
+      idBaseUnit: baseUnitRelation?.idUnit ?? null,
+      baseUnitName: baseUnitRelation?.unit?.name ?? null,
+      idsUnit: item.unitGroupUnit.map((rel) => rel.idUnit),
     } satisfies UnitGroupModalDTO;
   });
 }
@@ -268,8 +273,9 @@ export async function getUnitGroupSummaries(): Promise<
       return {
         idUnitGroup: item.idUnitGroup,
         name: item.name,
-        baseUnitName: item.baseUnit?.name ?? null,
-        unitNames: item.unit?.map((u) => u.name).join(", ") ?? null,
+        baseUnitName:
+          item.unitGroupUnit.find((u) => u.isBaseUnit)?.unit.name ?? null,
+        unitNames: item.unitGroupUnit.map((u) => u.unit.name).join(", "),
       } satisfies UnitGroupSummaries;
     });
 
@@ -314,15 +320,20 @@ export async function getUnitWithGroupInfoSummary(): Promise<
     const { items, totalCount } = await getAllUnitsWithGroupInfo();
 
     const newItems = items.map((item) => {
-      const unitGroupName = item.unitGroup?.name;
-      const idBaseUnit = item.unitGroup?.idBaseUnit;
-      const idUnitGroup = item.unitGroup?.idUnitGroup;
+      const unitGroupUnits = item.unitGroupUnit;
+      const unitGroupNames = unitGroupUnits
+        .map((m) => m.unitGroup?.name)
+        .join(", ");
+      const isBaseUnitInGroup = unitGroupUnits
+        .filter((bu) => bu.isBaseUnit)
+        .map((gn) => gn.unitGroup?.name)
+        .join(", ");
 
       return {
         idUnit: item.idUnit,
         name: item.name,
-        unitGroupName: unitGroupName ?? "",
-        isBaseUnit: idUnitGroup ? idBaseUnit === item.idUnit : null,
+        unitGroupNames,
+        isBaseUnitInGroup,
       } satisfies UnitWithGroupInfoSummaryDTO;
     });
 
@@ -362,7 +373,9 @@ export async function attemptAddUnitToGroup(
   idUnitGroup: number | null
 ): Promise<void> {
   const unit = await getUnitByIdRepository(idUnit);
-
+  // TODO: Přidat kontroly, že je ve skupině již základní jednotka, že jednotka ve skupině již existuje, a pod
+  // TODO: Pokud odškrtnu, že je zakladní, musí se že je zakladní jednotak smazat
+  // TODO: Přidat možnost smazata jednotku ze skupiny
   if (!unit) {
     throw new NotFoundError();
   }

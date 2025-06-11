@@ -34,6 +34,7 @@ export default function AddUnitToGroupModalContent({
   const [isBaseUnit, setIsBaseUnit] = useState<boolean>(false);
 
   // Derived
+  const baseUnitGroup = data.find((g) => g.isBaseUnit);
   const selectedGroup = data.find(
     (g) => g.idUnitGroup === parseInt(idSelectedGroup[0])
   );
@@ -66,10 +67,15 @@ export default function AddUnitToGroupModalContent({
   // Handlers
   const handleValueChangeUnitGroup = (value: string[]) => {
     setIdSelectedGroup((prev) => {
-      return value.filter((f) => f !== "" && f !== prev[0]);
-    });
+      const selectedValue = value.filter((f) => f !== "" && f !== prev[0]);
 
-    if (selectedGroup) setIsBaseUnit(false);
+      const isBase =
+        baseUnitGroup?.idUnitGroup === Number(selectedValue[0]) ? true : false;
+
+      setIsBaseUnit(isBase);
+
+      return selectedValue;
+    });
   };
 
   const handleValueChangeIsBaseUnit = (value: string[]) => {
@@ -98,7 +104,12 @@ export default function AddUnitToGroupModalContent({
           value={idSelectedGroup}
           onValueChange={handleValueChangeUnitGroup}
           className="mb-6"
-          label="Vyberte skupinu ke které chcete jednotku přiřadit" // TODO: Tady napíšu tučným o jakou jednotku se jedná
+          label={
+            <>
+              Vyberte skupinu ke které chcete jednotku &quot;
+              <strong>{unit.name}</strong>&quot; přiřadit
+            </>
+          }
         >
           {data.map((group) => (
             <Checkbox

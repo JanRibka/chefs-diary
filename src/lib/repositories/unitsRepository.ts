@@ -330,13 +330,38 @@ export async function addUnitToGroup(
       });
     }
 
-    // Create a new assignment of the unit to the group with the appropriate base flag
-    await tx.unitGroupUnit.create({
-      data: {
-        idUnit,
-        idUnitGroup,
-        isBaseUnit: isBaseUnit ?? false,
+    // Check if the unit is already assigned to the group
+    const existing = await tx.unitGroupUnit.findUnique({
+      where: {
+        idUnitGroup_idUnit: {
+          idUnitGroup,
+          idUnit,
+        },
       },
     });
+
+    if (existing) {
+      // Just update the isBaseUnit flag
+      await tx.unitGroupUnit.update({
+        where: {
+          idUnitGroup_idUnit: {
+            idUnitGroup,
+            idUnit,
+          },
+        },
+        data: {
+          isBaseUnit: isBaseUnit ?? false,
+        },
+      });
+    } else {
+      // Create a new assignment
+      await tx.unitGroupUnit.create({
+        data: {
+          idUnit,
+          idUnitGroup,
+          isBaseUnit: isBaseUnit ?? false,
+        },
+      });
+    }
   });
 }

@@ -190,7 +190,7 @@ export async function deleteUnitGroup(idUnitGroup: number) {
 export async function getAllUnitGroupsWithAssignments(
   idUnit: number
 ): Promise<UnitGroupsWithAssignmentsDTO[]> {
-  return prisma.unitGroup.findMany({
+  return await prisma.unitGroup.findMany({
     relationLoadStrategy: "join",
     select: {
       idUnitGroup: true,
@@ -200,6 +200,7 @@ export async function getAllUnitGroupsWithAssignments(
           idUnit,
         },
         select: {
+          idUnitGroup: true,
           isBaseUnit: true,
           idUnit: true,
           unit: {

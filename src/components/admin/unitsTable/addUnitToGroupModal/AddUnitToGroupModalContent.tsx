@@ -38,9 +38,10 @@ export default function AddUnitToGroupModalContent({
   const selectedGroup = data.find(
     (g) => g.idUnitGroup === parseInt(idSelectedGroup[0])
   );
-  const showBaseUnitWarning =
-    selectedGroup?.idBaseUnit && selectedGroup.idBaseUnit !== unit.idUnit;
-
+  const showBaseUnitWarning = true;
+  //   baseUnitGroup?.idUnitGroup === selectedGroup?.idUnitGroup &&
+  //   !baseUnitGroup?.idsUnit?.includes(unit.idUnit);
+  // debugger;
   // Effects
   useEffect(() => {
     if (isInitialized.current || !data.length) return;

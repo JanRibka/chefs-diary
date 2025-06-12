@@ -214,15 +214,13 @@ export async function getUnitGroupDataForModal(
     const assignedUnit = item.unitGroupUnit.find(
       (rel) => rel.idUnit === idUnit
     );
-    const baseUnitRelation = item.unitGroupUnit.find((rel) => rel.isBaseUnit);
 
     return {
       idUnitGroup: item.idUnitGroup,
       unitGroupName: item.name,
       isBaseUnit: assignedUnit?.isBaseUnit ?? false,
-      idBaseUnit: baseUnitRelation?.idUnit ?? null,
-      baseUnitName: baseUnitRelation?.unit?.name ?? null,
       idsUnit: item.unitGroupUnit.map((rel) => rel.idUnit),
+      baseUnit: item.baseUnit,
     } satisfies UnitGroupModalDTO;
   });
 }

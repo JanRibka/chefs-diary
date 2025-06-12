@@ -195,12 +195,17 @@ export async function getAllUnitGroupsWithAssignments(
     select: {
       idUnitGroup: true,
       name: true,
+      baseUnit: {
+        select: {
+          idUnit: true,
+          name: true,
+        },
+      },
       unitGroupUnit: {
         where: {
           idUnit,
         },
         select: {
-          idUnitGroup: true,
           isBaseUnit: true,
           idUnit: true,
           unit: {
@@ -327,6 +332,15 @@ export async function addUnitToGroup(
         },
         data: {
           isBaseUnit: false,
+        },
+      });
+
+      await tx.unitGroup.update({
+        where: {
+          idUnitGroup: idUnitGroup,
+        },
+        data: {
+          idBaseUnit: idUnit,
         },
       });
     }

@@ -7,6 +7,7 @@ model Unit {
     toConversion             UnitConversion[]           @relation("ToUnitConversion")
     recipeIngredient         RecipeIngredient[]
     ingredientUnitConversion IngredientUnitConversion[]
+    unitGroup                UnitGroup?
 }
 
 // Jak by se daly do tabulky vložit nutriční hodnoty potravin které by se pak prepocetly pro dané množství v receptu?

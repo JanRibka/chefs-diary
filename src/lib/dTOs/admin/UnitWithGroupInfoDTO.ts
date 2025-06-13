@@ -5,6 +5,6 @@ export type UnitWithGroupInfoDTO = Pick<Unit, "idUnit" | "name"> & {
     UnitGroupUnit,
     "idUnitGroup" | "idUnit" | "isBaseUnit"
   > & {
-    unitGroup: Pick<UnitGroup, "name"> | null;
+    unitGroup: Pick<UnitGroup, "idBaseUnit" | "name"> | null;
   })[];
 };

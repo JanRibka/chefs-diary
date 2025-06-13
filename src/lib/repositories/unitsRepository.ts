@@ -287,6 +287,7 @@ export async function getAllUnitsWithGroupInfo(): Promise<
             isBaseUnit: true,
             unitGroup: {
               select: {
+                idBaseUnit: true,
                 name: true,
               },
             },

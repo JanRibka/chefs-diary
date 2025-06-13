@@ -316,22 +316,26 @@ export async function getUnitWithGroupInfoSummary(): Promise<
     await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
 
     const { items, totalCount } = await getAllUnitsWithGroupInfo();
-
+    debugger;
     const newItems = items.map((item) => {
       const unitGroupUnits = item.unitGroupUnit;
       const unitGroupNames = unitGroupUnits
         .map((m) => m.unitGroup?.name)
         .join(", ");
-      const isBaseUnitInGroup = unitGroupUnits
-        .filter((bu) => bu.isBaseUnit)
+      const baseUnitGroup = unitGroupUnits.filter((bu) => bu.isBaseUnit);
+      const isBaseUnitInGroup = baseUnitGroup
         .map((gn) => gn.unitGroup?.name)
         .join(", ");
+      const baseUnitGroupIds: number[] = baseUnitGroup.map(
+        (gn) => gn.idUnitGroup
+      );
 
       return {
         idUnit: item.idUnit,
         name: item.name,
         unitGroupNames,
         isBaseUnitInGroup,
+        baseUnitGroupIds,
       } satisfies UnitWithGroupInfoSummaryDTO;
     });
 

@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import Button from "@/components/shared/button/Button";
-import Form from "@/components/shared/form/Form";
-import Spinner from "@/components/shared/spinner/Spinner";
-import SubmitButton from "@/components/shared/submitButton/SubmitButton";
-import { UnitGroupModalDTO } from "@/lib/dTOs/admin/UnitGroupModalDTO";
-import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
-import useUnitGroupDataForModalAction from "@/lib/hooks/apiHooks/admin/useUnitGroupDataForModal";
-import { nameof } from "@/lib/utils/nameof";
-import { Checkbox, CheckboxGroup } from "@heroui/react";
+import Button from '@/components/shared/button/Button';
+import Form from '@/components/shared/form/Form';
+import Spinner from '@/components/shared/spinner/Spinner';
+import SubmitButton from '@/components/shared/submitButton/SubmitButton';
+import { UnitGroupModalDTO } from '@/lib/dTOs/admin/UnitGroupModalDTO';
+import { UnitWithGroupInfoSummaryDTO } from '@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO';
+import useUnitGroupDataForModalAction from '@/lib/hooks/apiHooks/admin/useUnitGroupDataForModal';
+import { nameof } from '@/lib/utils/nameof';
+import { Checkbox, CheckboxGroup } from '@heroui/react';
 
 type Props = {
   unit: UnitWithGroupInfoSummaryDTO;
@@ -31,13 +31,14 @@ export default function AddUnitToGroupModalContent({
 
   // State
   const [idSelectedGroup, setIdSelectedGroup] = useState<string[]>([]);
-  const [isBaseUnit, setIsBaseUnit] = useState<boolean>(false);
-
+  const [isBaseUnit, setIsBaseUnit] = useState<boolean>(false);  
+  
   // Derived
-  const baseUnitGroup = data.find((g) => g.isBaseUnit);
+  const baseUnitGroup = data.find((g) => !!g.baseUnit);
   const selectedGroup = data.find(
     (g) => g.idUnitGroup === parseInt(idSelectedGroup[0])
   );
+  debugger;
   const showBaseUnitWarning = true;
   //   baseUnitGroup?.idUnitGroup === selectedGroup?.idUnitGroup &&
   //   !baseUnitGroup?.idsUnit?.includes(unit.idUnit);

@@ -7,7 +7,7 @@ import webRoutes from '@/lib/routes/webRoutes';
 type Props = { children: React.ReactNode };
 
 export default async function ProtectedLayout({ children }: Props) {
-  //TODO: Pou69t funkci z session
+  //TODO: Použít funkci z session
   const session = await auth();
 
   if (!session?.user?.id) {

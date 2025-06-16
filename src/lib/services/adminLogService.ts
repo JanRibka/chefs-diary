@@ -1,12 +1,12 @@
-import { JsonObject } from "next-auth/adapters";
+import { JsonObject } from 'next-auth/adapters';
 
-import { auth } from "@/config/auth/authAdmin";
-import { logAdminAction as logAdminActionRepository } from "@/lib/repositories/adminLogRepository";
+import { auth } from '@/config/auth/authAdmin';
+import { logAdminAction as logAdminActionRepository } from '@/lib/repositories/adminLogRepository';
 
-import AdminLogActionTypeEnum from "../enums/AdminLogActionTypeEnum";
-import AdminLogEntityTypeEnum from "../enums/AdminLogEntityTypeEnum";
-import LogAdminActionDataType from "../types/data/LogAdminActionDataType";
-import { getErrorMessageFromError } from "../utils/error";
+import AdminLogActionTypeEnum from '../enums/AdminLogActionTypeEnum';
+import AdminLogEntityTypeEnum from '../enums/AdminLogEntityTypeEnum';
+import LogAdminActionDataType from '../types/data/LogAdminActionDataType';
+import { getErrorMessageFromError } from '../utils/error';
 
 /**
  * Logs an admin action into the AdminLog table.
@@ -40,6 +40,7 @@ export function logAdminAction<T>(
   // }
   (async () => {
     try {
+      //TODO: Použít funkci z session
       const session = await auth();
       const changesJson: JsonObject = changes
         ? JSON.parse(JSON.stringify(changes))

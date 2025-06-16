@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
-import Button from '@/components/shared/button/Button';
-import Form from '@/components/shared/form/Form';
-import Spinner from '@/components/shared/spinner/Spinner';
-import SubmitButton from '@/components/shared/submitButton/SubmitButton';
-import { UnitGroupModalDTO } from '@/lib/dTOs/admin/UnitGroupModalDTO';
-import { UnitWithGroupInfoSummaryDTO } from '@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO';
-import useUnitGroupDataForModalAction from '@/lib/hooks/apiHooks/admin/useUnitGroupDataForModal';
-import { nameof } from '@/lib/utils/nameof';
-import { Checkbox, CheckboxGroup } from '@heroui/react';
+import Button from "@/components/shared/button/Button";
+import Form from "@/components/shared/form/Form";
+import Spinner from "@/components/shared/spinner/Spinner";
+import SubmitButton from "@/components/shared/submitButton/SubmitButton";
+import { UnitGroupModalDTO } from "@/lib/dTOs/admin/UnitGroupModalDTO";
+import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
+import useUnitGroupDataForModalAction from "@/lib/hooks/apiHooks/admin/useUnitGroupDataForModal";
+import { nameof } from "@/lib/utils/nameof";
+import { Checkbox, CheckboxGroup } from "@heroui/react";
 
 type Props = {
   unit: UnitWithGroupInfoSummaryDTO;
@@ -31,18 +31,20 @@ export default function AddUnitToGroupModalContent({
 
   // State
   const [idSelectedGroup, setIdSelectedGroup] = useState<string[]>([]);
-  const [isBaseUnit, setIsBaseUnit] = useState<boolean>(false);  
-  
+  const [isBaseUnit, setIsBaseUnit] = useState<boolean>(false);
+
   // Derived
-  const baseUnitGroup = data.find((g) => !!g.baseUnit);
   const selectedGroup = data.find(
     (g) => g.idUnitGroup === parseInt(idSelectedGroup[0])
   );
-  debugger;
-  const showBaseUnitWarning = true;
-  //   baseUnitGroup?.idUnitGroup === selectedGroup?.idUnitGroup &&
-  //   !baseUnitGroup?.idsUnit?.includes(unit.idUnit);
-  // debugger;
+
+  const baseUnitSelectedGroup = data?.find(
+    (f) => f.idUnitGroup === selectedGroup?.idUnitGroup
+  )?.baseUnit;
+
+  const showBaseUnitWarning =
+    selectedGroup?.baseUnit?.idUnit !== unit.idUnit && !!baseUnitSelectedGroup;
+
   // Effects
   useEffect(() => {
     if (isInitialized.current || !data.length) return;
@@ -71,8 +73,9 @@ export default function AddUnitToGroupModalContent({
     setIdSelectedGroup((prev) => {
       const selectedValue = value.filter((f) => f !== "" && f !== prev[0]);
 
-      const isBase =
-        baseUnitGroup?.idUnitGroup === Number(selectedValue[0]) ? true : false;
+      const isBase = unit.baseUnitGroupIds.includes(Number(selectedValue[0]))
+        ? true
+        : false;
 
       setIsBaseUnit(isBase);
 
@@ -132,7 +135,7 @@ export default function AddUnitToGroupModalContent({
           {showBaseUnitWarning && (
             <p className="text-sm text-yellow-600 mt-1">
               Aktuální základní jednotka:{" "}
-              <strong>{selectedGroup?.baseUnitName}</strong>
+              <strong>{selectedGroup?.baseUnit?.name}</strong>
               <br />
               Zaškrtnutím změníte základní jednotku.
             </p>
@@ -158,6 +161,7 @@ export default function AddUnitToGroupModalContent({
           Uložit
         </SubmitButton>
 
+        {/* TODO Bu+d 4udl, nebo odšktnutí a dialog. To samé isBaseUnit*/}
         {/* <Button type="submit" name="action" value="remove">
   Odebrat jednotku ze skupiny
 </Button> */}

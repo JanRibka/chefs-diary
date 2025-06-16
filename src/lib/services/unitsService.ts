@@ -378,6 +378,7 @@ export async function attemptAddUnitToGroup(
   // TODO: Přidat kontroly, že je ve skupině již základní jednotka, že jednotka ve skupině již existuje, a pod
   // TODO: Pokud odškrtnu, že je zakladní, musí se že je zakladní jednotak smazat
   // TODO: Přidat možnost smazata jednotku ze skupiny
+  // TODO: KOntroly bych dal asi jen na UI, je zbytečné to validovat 2x a prudit s dialogama
   if (!unit) {
     throw new NotFoundError();
   }

@@ -1,8 +1,10 @@
 model UnitGroup {
     idUnitGroup Int    @id @default(autoincrement()) @db.Integer
     name        String @unique @db.VarChar(20)
-    idBaseUnit  Int?   @unique @db.Integer
+    idBaseUnit  Int?   @db.Integer
 
-    baseUnit      Unit?           @relation(fields: [idBaseUnit], references: [idUnit])
+    baseUnit      Unit?           @relation("BaseUnit", fields: [idBaseUnit], references: [idUnit])
     unitGroupUnit UnitGroupUnit[]
+
+    @@index([idBaseUnit])
 }

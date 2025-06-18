@@ -12,10 +12,22 @@ import {
 type Props = ModalProps & {
   headerLabel: string;
   cancelButtonLabel?: string;
+  cancelButtonColor?:
+    | "danger"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning";
   onCancel?: () => void;
   confirmButtonIsDisabled?: boolean;
   confirmButtonIsLoading?: boolean;
   confirmButtonLabel?: string;
+  confirmButtonColor?:
+    | "danger"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning";
   onConfirm?: () => void;
   hideFooter?: boolean;
 };
@@ -25,10 +37,12 @@ export default function CancelConfirmModal({
   headerLabel,
   children,
   cancelButtonLabel = "Zrušit",
+  cancelButtonColor = "danger",
   onCancel,
   confirmButtonIsDisabled,
   confirmButtonIsLoading,
   confirmButtonLabel = "Potvrdit",
+  confirmButtonColor = "primary",
   onConfirm,
   hideFooter,
   ...restProps
@@ -42,11 +56,15 @@ export default function CancelConfirmModal({
             <ModalBody>{children}</ModalBody>
             {!hideFooter && (
               <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onCancel}>
+                <Button
+                  color={cancelButtonColor}
+                  variant="flat"
+                  onPress={onCancel}
+                >
                   {cancelButtonLabel}
                 </Button>
                 <Button
-                  color="primary"
+                  color={confirmButtonColor}
                   isDisabled={confirmButtonIsDisabled}
                   isLoading={confirmButtonIsLoading}
                   onPress={onConfirm}

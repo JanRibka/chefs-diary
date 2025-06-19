@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from 'yup';
 
 // TODO: Zvazit jestli tu mus9 b7t generika, ted s emi nechce nad t9m premyslet
 export const validateField = <T extends object>(
@@ -13,7 +13,7 @@ export const validateField = <T extends object>(
       .validateSync({ [name as string]: value }, { abortEarly: false });
   } catch (error) {
     (error as Yup.ValidationError).inner.every((err: Yup.ValidationError) => {
-      if (!!errorMessage) {
+      if (errorMessage) {
         return false;
       }
 
@@ -36,7 +36,7 @@ export const validateFieldAsync = async <T extends object>(
       .validate({ [name as string]: value }, { abortEarly: false });
   } catch (error) {
     (error as Yup.ValidationError).inner.every((err: Yup.ValidationError) => {
-      if (!!errorMessage) {
+      if (errorMessage) {
         return false;
       }
 

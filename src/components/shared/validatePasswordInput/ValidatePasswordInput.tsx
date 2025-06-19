@@ -1,11 +1,11 @@
 "use client";
 
-import { memo, SVGProps, useEffect, useState } from "react";
-import * as Yup from "yup";
+import { memo, SVGProps, useEffect, useState } from 'react';
+import * as Yup from 'yup';
 
-import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
-import { validateField } from "@/lib/validations/validations/shared/field/validateField";
-import { Input, InputProps } from "@heroui/react";
+import useIsFirstRender from '@/lib/hooks/useIsFirstRender';
+import { validateField } from '@/lib/validations/validations/shared/field/validateField';
+import { Input, InputProps } from '@heroui/react';
 
 export const EyeSlashFilledIcon = memo((props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -90,7 +90,7 @@ export default function ValidatePasswordInput<T extends object>({
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const setErrorMessage = (value: string) => {
-    if (!!!value) {
+    if (!value) {
       setLocalErrorMessage("");
       return;
     }

@@ -1,34 +1,24 @@
-import { Unit, UnitGroup } from "@prisma/client";
+import { Unit, UnitGroup } from '@prisma/client';
 
-import { UnitGroupModalDTO } from "../dTOs/admin/UnitGroupModalDTO";
-import { UnitGroupSummaries } from "../dTOs/admin/UnitGroupSummariesDTO";
-import { UnitWithGroupInfoSummaryDTO } from "../dTOs/admin/UnitWithGroupInfoSummaryDTO";
-import { ActionResponseDTO } from "../dTOs/shared/ActionResponseDTO";
-import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
-import AdminLogActionTypeEnum from "../enums/AdminLogActionTypeEnum";
-import AdminLogEntityTypeEnum from "../enums/AdminLogEntityTypeEnum";
-import PermissionTypeEnum from "../enums/PermissionTypeEnum";
-import ConflictError from "../errors/ConflictError";
-import NotFoundError from "../errors/NotFoundError";
+import { UnitGroupModalDTO } from '../dTOs/admin/UnitGroupModalDTO';
+import { UnitGroupSummaries } from '../dTOs/admin/UnitGroupSummariesDTO';
+import { UnitWithGroupInfoSummaryDTO } from '../dTOs/admin/UnitWithGroupInfoSummaryDTO';
+import { ActionResponseDTO } from '../dTOs/shared/ActionResponseDTO';
+import { PaginatedDTO } from '../dTOs/shared/PaginatedDTO';
+import AdminLogActionTypeEnum from '../enums/AdminLogActionTypeEnum';
+import AdminLogEntityTypeEnum from '../enums/AdminLogEntityTypeEnum';
+import PermissionTypeEnum from '../enums/PermissionTypeEnum';
+import ConflictError from '../errors/ConflictError';
+import NotFoundError from '../errors/NotFoundError';
 import {
-  addUnitToGroup,
-  deleteUnit,
-  deleteUnitGroup,
-  getAllUnitGroupsWithAssignments,
-  getAllUnitGroupsWithDetails,
-  getAllUnitsWithGroupInfo,
-  getUnitById as getUnitByIdRepository,
-  getUnitByName,
-  getUnitGroupById as getUnitGroupByIdRepository,
-  getUnitGroupByName,
-  insertUnit,
-  insertUnitGroup,
-  updateUnit,
-  updateUnitGroup,
-} from "../repositories/unitsRepository";
-import { getErrorMessageFromError } from "../utils/error";
-import { getRequireAdminPermissions } from "../utils/server";
-import { logAdminAction } from "./adminLogService";
+    addUnitToGroup, deleteUnit, deleteUnitGroup, getAllUnitGroupsWithAssignments,
+    getAllUnitGroupsWithDetails, getAllUnitsWithGroupInfo, getUnitById as getUnitByIdRepository,
+    getUnitByName, getUnitGroupById as getUnitGroupByIdRepository, getUnitGroupByName, insertUnit,
+    insertUnitGroup, updateUnit, updateUnitGroup
+} from '../repositories/unitsRepository';
+import { getErrorMessageFromError } from '../utils/error';
+import { getRequireAdminPermissions } from '../utils/server';
+import { logAdminAction } from './adminLogService';
 
 /**
  * Attempts to insert a new unit group with the given name.
@@ -316,7 +306,7 @@ export async function getUnitWithGroupInfoSummary(): Promise<
     await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
 
     const { items, totalCount } = await getAllUnitsWithGroupInfo();
-    debugger;
+
     const newItems = items.map((item) => {
       const unitGroupUnits = item.unitGroupUnit;
       const unitGroupNames = unitGroupUnits

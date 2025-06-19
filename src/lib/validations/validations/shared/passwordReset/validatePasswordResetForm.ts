@@ -1,9 +1,9 @@
-import { ValidationError } from "yup";
+import { ValidationError } from 'yup';
 
-import ValidationResultType from "@/lib/types/validation/ValidationResultType";
+import ValidationResultType from '@/lib/types/validation/ValidationResultType';
 import passwordResetFormValidationSchema, {
-  PasswordResetFormErrorType,
-} from "@/lib/validations/schemas/shared/passwordReset/passwordResetFormValidationSchema";
+    PasswordResetFormErrorType
+} from '@/lib/validations/schemas/shared/passwordReset/passwordResetFormValidationSchema';
 
 type ErrorType = Omit<PasswordResetFormErrorType, "timestamp" | "general">;
 
@@ -20,7 +20,7 @@ export const validatePasswordResetForm = (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!result.error[path]) {
+      if (!result.error[path]) {
         result.error[path] = err.message;
         result.success = false;
       }
@@ -43,7 +43,7 @@ export const validatePasswordResetFormAsync = async (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!result.error[path]) {
+      if (!result.error[path]) {
         result.error[path] = err.message;
         result.success = false;
       }

@@ -1,9 +1,9 @@
-import { ValidationError } from "yup";
+import { ValidationError } from 'yup';
 
-import ValidationResultType from "@/lib/types/validation/ValidationResultType";
+import ValidationResultType from '@/lib/types/validation/ValidationResultType';
 import resendVerificationEmailValidationSchema, {
-  ResendVerificationEmailFormErrorType,
-} from "@/lib/validations/schemas/web/resendVerificationEmail/resendVerificationEmailValidationSchema";
+    ResendVerificationEmailFormErrorType
+} from '@/lib/validations/schemas/web/resendVerificationEmail/resendVerificationEmailValidationSchema';
 
 type ErrorType = Omit<
   ResendVerificationEmailFormErrorType,
@@ -23,7 +23,7 @@ export const validateResendVerificationLinkForm = (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!result.error[path]) {
+      if (!result.error[path]) {
         result.error[path] = err.message;
         result.success = false;
       }
@@ -46,7 +46,7 @@ export const validateResendVerificationLinkFormAsync = async (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ErrorType;
 
-      if (!!!result.error[path]) {
+      if (!result.error[path]) {
         result.error[path] = err.message;
         result.success = false;
       }

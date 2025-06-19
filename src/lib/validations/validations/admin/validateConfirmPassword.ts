@@ -1,8 +1,8 @@
-import { ValidationError } from "yup";
+import { ValidationError } from 'yup';
 
 import confirmPasswordValidationSchema, {
-  ConfirmPasswordFormErrorType,
-} from "@/lib/validations/schemas/shared/confirmPassword/confirmPasswordValidationSchema";
+    ConfirmPasswordFormErrorType
+} from '@/lib/validations/schemas/shared/confirmPassword/confirmPasswordValidationSchema';
 
 export const validateConfirmPassword = (
   formData: Record<string, FormDataEntryValue>
@@ -17,7 +17,7 @@ export const validateConfirmPassword = (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ConfirmPasswordFormErrorType;
 
-      if (!!!errors[path]) {
+      if (!errors[path]) {
         errors[path] = err.message;
       }
     });
@@ -39,7 +39,7 @@ export const validateConfirmPasswordAsync = async (
     (error as ValidationError).inner.forEach((err: ValidationError) => {
       const path = err.path as keyof ConfirmPasswordFormErrorType;
 
-      if (!!!errors[path]) {
+      if (!errors[path]) {
         errors[path] = err.message;
       }
     });

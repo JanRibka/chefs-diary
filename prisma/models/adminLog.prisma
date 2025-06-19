@@ -1,7 +1,7 @@
 model AdminLog {
     idAdminLog Int      @id @default(autoincrement()) @db.Integer
     idUser     String   @db.VarChar(25)
-    action     String   @db.VarChar(15)
+    action     String   @db.VarChar(20)
     entity     String   @db.VarChar(15)
     idEntity   Int      @db.Integer
     changes    Json?    @db.JsonB

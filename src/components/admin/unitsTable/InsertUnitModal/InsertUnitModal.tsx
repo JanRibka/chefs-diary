@@ -1,14 +1,14 @@
-import { useTransition } from "react";
+import { useTransition } from 'react';
 
-import { insertUnitAction } from "@/actions/admin/units";
-import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
-import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
-import addToast from "@/lib/utils/addToast";
-import { nameof } from "@/lib/utils/nameof";
-import { UnitFormType } from "@/lib/validations/schemas/admin/unitFormValidationSchema";
+import { insertUnitAction } from '@/actions/admin/units';
+import CancelConfirmModal from '@/components/shared/actionModal/CancelConfirmModal';
+import { UnitWithGroupInfoSummaryDTO } from '@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO';
+import addToast from '@/lib/utils/addToast';
+import { nameof } from '@/lib/utils/nameof';
+import { UnitFormType } from '@/lib/validations/schemas/admin/unitFormValidationSchema';
 
-import InsertUnitModalContent from "./InsertUnitModalContent";
-import useInsertUnitValidation from "./useInsertUnitValidation";
+import InsertUnitModalContent from './InsertUnitModalContent';
+import useInsertUnitValidation from './useInsertUnitValidation';
 
 type Props = {
   isOpen: boolean;
@@ -43,6 +43,7 @@ export default function InsertUnitModal({
       name: formData.get(nameof<UnitFormType>("name")) as string,
       isBaseUnitInGroup: null,
       unitGroupNames: null,
+      baseUnitGroupIds: [],
     });
 
     startTransition(async () => {

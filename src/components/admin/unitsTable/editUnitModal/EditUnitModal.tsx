@@ -1,14 +1,14 @@
-import { Dispatch, SetStateAction, useTransition } from "react";
+import { Dispatch, SetStateAction, useTransition } from 'react';
 
-import { updateUnitAction } from "@/actions/admin/units";
-import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
-import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
-import addToast from "@/lib/utils/addToast";
-import { nameof } from "@/lib/utils/nameof";
-import { UnitFormType } from "@/lib/validations/schemas/admin/unitFormValidationSchema";
+import { updateUnitAction } from '@/actions/admin/units';
+import CancelConfirmModal from '@/components/shared/actionModal/CancelConfirmModal';
+import { UnitWithGroupInfoSummaryDTO } from '@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO';
+import addToast from '@/lib/utils/addToast';
+import { nameof } from '@/lib/utils/nameof';
+import { UnitFormType } from '@/lib/validations/schemas/admin/unitFormValidationSchema';
 
-import EditUnitModalContent from "./EditUnitModalContent";
-import useEditUnitValidation from "./useEditUnitValidation";
+import EditUnitModalContent from './EditUnitModalContent';
+import useEditUnitValidation from './useEditUnitValidation';
 
 type Props = {
   unit: UnitWithGroupInfoSummaryDTO | null;
@@ -50,6 +50,7 @@ export default function EditUnitModal({
       name: formData.get(nameof<UnitFormType>("name")) as string,
       isBaseUnitInGroup: unit.isBaseUnitInGroup,
       unitGroupNames: unit.unitGroupNames,
+      baseUnitGroupIds: unit.baseUnitGroupIds,
     });
 
     startTransition(async () => {

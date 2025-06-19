@@ -1,24 +1,35 @@
-import { Unit, UnitGroup } from '@prisma/client';
+import { Unit, UnitGroup } from "@prisma/client";
 
-import { UnitGroupModalDTO } from '../dTOs/admin/UnitGroupModalDTO';
-import { UnitGroupSummaries } from '../dTOs/admin/UnitGroupSummariesDTO';
-import { UnitWithGroupInfoSummaryDTO } from '../dTOs/admin/UnitWithGroupInfoSummaryDTO';
-import { ActionResponseDTO } from '../dTOs/shared/ActionResponseDTO';
-import { PaginatedDTO } from '../dTOs/shared/PaginatedDTO';
-import AdminLogActionTypeEnum from '../enums/AdminLogActionTypeEnum';
-import AdminLogEntityTypeEnum from '../enums/AdminLogEntityTypeEnum';
-import PermissionTypeEnum from '../enums/PermissionTypeEnum';
-import ConflictError from '../errors/ConflictError';
-import NotFoundError from '../errors/NotFoundError';
+import { UnitGroupModalDTO } from "../dTOs/admin/UnitGroupModalDTO";
+import { UnitGroupSummaries } from "../dTOs/admin/UnitGroupSummariesDTO";
+import { UnitWithGroupInfoSummaryDTO } from "../dTOs/admin/UnitWithGroupInfoSummaryDTO";
+import { ActionResponseDTO } from "../dTOs/shared/ActionResponseDTO";
+import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
+import AdminLogActionTypeEnum from "../enums/AdminLogActionTypeEnum";
+import AdminLogEntityTypeEnum from "../enums/AdminLogEntityTypeEnum";
+import PermissionTypeEnum from "../enums/PermissionTypeEnum";
+import ConflictError from "../errors/ConflictError";
+import NotFoundError from "../errors/NotFoundError";
 import {
-    addUnitToGroup, deleteUnit, deleteUnitGroup, getAllUnitGroupsWithAssignments,
-    getAllUnitGroupsWithDetails, getAllUnitsWithGroupInfo, getUnitById as getUnitByIdRepository,
-    getUnitByName, getUnitGroupById as getUnitGroupByIdRepository, getUnitGroupByName, insertUnit,
-    insertUnitGroup, updateUnit, updateUnitGroup
-} from '../repositories/unitsRepository';
-import { getErrorMessageFromError } from '../utils/error';
-import { getRequireAdminPermissions } from '../utils/server';
-import { logAdminAction } from './adminLogService';
+  addUnitToGroup,
+  deleteUnit,
+  deleteUnitGroup,
+  getAllUnitGroupsWithAssignments,
+  getAllUnitGroupsWithDetails,
+  getAllUnitsWithGroupInfo,
+  getUnitById as getUnitByIdRepository,
+  getUnitByName,
+  getUnitGroupById as getUnitGroupByIdRepository,
+  getUnitGroupByName,
+  insertUnit,
+  insertUnitGroup,
+  removeUnitFromGroup,
+  updateUnit,
+  updateUnitGroup,
+} from "../repositories/unitsRepository";
+import { getErrorMessageFromError } from "../utils/error";
+import { getRequireAdminPermissions } from "../utils/server";
+import { logAdminAction } from "./adminLogService";
 
 /**
  * Attempts to insert a new unit group with the given name.
@@ -367,8 +378,7 @@ export async function attemptAddUnitToGroup(
   const unit = await getUnitByIdRepository(idUnit);
   // TODO: Přidat kontroly, že je ve skupině již základní jednotka, že jednotka ve skupině již existuje, a pod
   // TODO: Pokud odškrtnu, že je zakladní, musí se že je zakladní jednotak smazat
-  // TODO: Přidat možnost smazata jednotku ze skupiny
-  // TODO: KOntroly bych dal asi jen na UI, je zbytečné to validovat 2x a prudit s dialogama
+
   if (!unit) {
     throw new NotFoundError();
   }
@@ -381,4 +391,39 @@ export async function attemptAddUnitToGroup(
   );
 
   await addUnitToGroup(idUnit, isBaseUnit, idUnitGroup);
+}
+
+/**
+ * Removes a unit from a specific group after validating its existence.
+ *
+ * - Verifies that both the unit and the group with the given IDs exist.
+ * - Logs the admin action before performing the removal.
+ * - Delegates the actual removal to `removeUnitFromGroup`.
+ *
+ * @param idUnit - ID of the unit to be removed from the group.
+ * @param idUnitGroup - ID of the group from which the unit should be removed.
+ *
+ * @throws {NotFoundError} If the unit or group with the specified IDs does not exist.
+ *
+ * @returns {Promise<void>}
+ */
+export async function attemptRemoveUnitFromGroup(
+  idUnit: number,
+  idUnitGroup: number
+): Promise<void> {
+  const unit = await getUnitByIdRepository(idUnit);
+  const unitGroup = await getUnitGroupByIdRepository(idUnitGroup);
+
+  if (!unit || !unitGroup) {
+    throw new NotFoundError();
+  }
+
+  logAdminAction(
+    AdminLogActionTypeEnum.REMOVE_FROM_GROUP,
+    AdminLogEntityTypeEnum.UNIT,
+    idUnit,
+    { idUnitGroup }
+  );
+
+  await removeUnitFromGroup(idUnit, idUnitGroup);
 }

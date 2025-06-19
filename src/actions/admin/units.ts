@@ -16,6 +16,7 @@ import {
   attemptEditUnitGroup,
   attemptInsertUnit,
   attemptInsertUnitGroup,
+  attemptRemoveUnitFromGroup,
   getUnitGroupDataForModal,
 } from "@/lib/services/unitsService";
 import {
@@ -349,6 +350,42 @@ export async function addUnitToGroupAction(
     const notFoundError = getNotFoundErrorFromError(
       error,
       "Jednotka neexistuje"
+    );
+    let errorMessage = notFoundError.errorMessage;
+
+    if (!notFoundError.isNotFoundError) {
+      errorMessage = getErrorMessageFromError(error);
+    }
+
+    return {
+      data: null,
+      success: false,
+      error: errorMessage,
+      timeStamp: new Date(),
+    };
+  } finally {
+    revalidatePath(adminRoutes.Units);
+  }
+}
+
+export async function removeUnitFromGroupAction(
+  idUnit: number,
+  idUnitGroup: number
+): Promise<ActionResponseDTO<void>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
+
+  try {
+    await attemptRemoveUnitFromGroup(idUnit, idUnitGroup);
+
+    return {
+      data: null,
+      success: true,
+      timeStamp: new Date(),
+    };
+  } catch (error) {
+    const notFoundError = getNotFoundErrorFromError(
+      error,
+      "Jednotka nebo skupina neexistuje"
     );
     let errorMessage = notFoundError.errorMessage;
 

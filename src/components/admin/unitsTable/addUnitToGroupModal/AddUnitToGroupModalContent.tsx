@@ -14,14 +14,16 @@ import { Checkbox, CheckboxGroup } from "@heroui/react";
 type Props = {
   unit: UnitWithGroupInfoSummaryDTO;
   onCancel: () => void;
-  action: (formData: FormData) => void;
+  saveAction: (formData: FormData) => void;
+  removeAction: (idUnitGroup: number) => Promise<void>;
   isPending?: boolean;
 };
 
 export default function AddUnitToGroupModalContent({
   unit,
   onCancel,
-  action,
+  saveAction,
+  removeAction,
   isPending,
 }: Props) {
   // Data
@@ -38,6 +40,7 @@ export default function AddUnitToGroupModalContent({
     message: "",
     onConfirm: () => void 0,
   });
+  const [isRemoving, setIsRemoving] = useState(false);
 
   // Derived
   const selectedGroup = data.find(
@@ -75,12 +78,12 @@ export default function AddUnitToGroupModalContent({
   }, [data, unit.idUnit]);
 
   // Handlers
-  const showConfirmation = (message: string, isBase: boolean) => {
+  const showConfirmation = (message: string, confirmAction: () => void) => {
     setModalState({
       isOpen: true,
       message,
       onConfirm: () => {
-        setIsBaseUnit(isBase);
+        confirmAction();
         handleCloseModal();
       },
     });
@@ -89,7 +92,6 @@ export default function AddUnitToGroupModalContent({
   const handleValueChangeUnitGroup = (value: string[]) => {
     setIdSelectedGroup((prev) => {
       const selectedValue = value.filter((f) => f !== "" && f !== prev[0]);
-
       const isBase = unit.baseUnitGroupIds.includes(Number(selectedValue[0]))
         ? true
         : false;
@@ -101,6 +103,8 @@ export default function AddUnitToGroupModalContent({
   };
 
   const handleValueChangeIsBaseUnit = (value: string[]) => {
+    if (isRemoving) return;
+
     const isBase = value.length ? true : false;
 
     // If we need to show confirmation dialog
@@ -112,7 +116,7 @@ export default function AddUnitToGroupModalContent({
         ? "Zaškrtnutím této volby změníte základní jednotku ve skupině. Pokračovat?"
         : "Odškrtnutím této volby zrušíte základní jednotku ve skupině. Pokračovat?";
 
-      showConfirmation(message, isBase);
+      showConfirmation(message, () => setIsBaseUnit(false));
       return;
     }
 
@@ -125,6 +129,22 @@ export default function AddUnitToGroupModalContent({
       message: "",
       onConfirm: () => void 0,
     });
+  };
+
+  const handleRemoveAction = () => {
+    if (!selectedGroup) return;
+    //TODO: Musí tu být hláška, že se chystám odebrat základní jednotku ze skupiny
+    setIsRemoving(true);
+    showConfirmation(
+      "Chcete opravdu odebrat jednotku ze skupiny? Pokračovat?",
+      async () => {
+        try {
+          await removeAction(selectedGroup.idUnitGroup);
+        } finally {
+          setIsRemoving(false);
+        }
+      }
+    );
   };
 
   // Loading state
@@ -144,7 +164,7 @@ export default function AddUnitToGroupModalContent({
 
   return (
     <>
-      <Form action={action} className="flex flex-col gap-5" noValidate>
+      <Form action={saveAction} className="flex flex-col gap-5" noValidate>
         <div>
           <CheckboxGroup
             value={idSelectedGroup}
@@ -184,6 +204,7 @@ export default function AddUnitToGroupModalContent({
             <Checkbox
               value={true.toString()}
               name={nameof<UnitGroupModalDTO>("isBaseUnit")}
+              isDisabled={idSelectedGroup.length === 0}
             >
               Je základní jednotka
             </Checkbox>
@@ -191,16 +212,29 @@ export default function AddUnitToGroupModalContent({
         </div>
 
         <div className="flex py-2 px-1 justify-between">
-          <Button color="danger" variant="flat" onPress={onCancel}>
+          <Button color="primary" variant="bordered" onPress={onCancel}>
             Zrušit
           </Button>
-          <SubmitButton
-            color="primary"
-            disabled={isPending}
-            isLoading={isPending}
-          >
-            Uložit
-          </SubmitButton>
+          <div className="flex gap-2">
+            <Button
+              color="danger"
+              variant="flat"
+              disabled={isPending}
+              isLoading={isPending}
+              isDisabled={idSelectedGroup.length === 0}
+              onPress={handleRemoveAction}
+            >
+              Odebrat ze skupiny
+            </Button>
+            <SubmitButton
+              color="primary"
+              disabled={isPending}
+              isLoading={isPending}
+              isDisabled={idSelectedGroup.length === 0}
+            >
+              Uložit
+            </SubmitButton>
+          </div>
         </div>
       </Form>
 

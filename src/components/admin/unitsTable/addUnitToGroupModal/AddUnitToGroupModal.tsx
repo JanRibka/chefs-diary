@@ -1,6 +1,9 @@
 import { Dispatch, SetStateAction, useTransition } from "react";
 
-import { addUnitToGroupAction } from "@/actions/admin/units";
+import {
+  addUnitToGroupAction,
+  removeUnitFromGroupAction,
+} from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
 import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
 import addToast from "@/lib/utils/addToast";
@@ -26,7 +29,7 @@ export default function AddUnitToGroupModal({
     onOpenChange();
   };
 
-  // Update bas unit
+  // Actions
   const [isPending, startTransition] = useTransition();
 
   const handleEditUnitAction = async (formData: FormData) => {
@@ -36,16 +39,33 @@ export default function AddUnitToGroupModal({
       const response = await addUnitToGroupAction(unit.idUnit, formData);
 
       if (!response.success) {
-        if (typeof response.error === "object") {
-          // setError(response.error);
-          return;
-        }
-
         addToast("Chyba", response.error as string, "danger");
       } else {
         addToast(
           "Úspěch",
           "Jednotka byla úspěšně přiřazena do skupiny",
+          "success"
+        );
+        onOpenChange();
+      }
+    });
+  };
+
+  const handleRemoveUnitAction = async (idUnitGroup: number) => {
+    if (!unit) return;
+
+    startTransition(async () => {
+      const response = await removeUnitFromGroupAction(
+        unit.idUnit,
+        idUnitGroup
+      );
+
+      if (!response.success) {
+        addToast("Chyba", response.error as string, "danger");
+      } else {
+        addToast(
+          "Úspěch",
+          "Jednotka byla úspěšně odebraná ze skupiny",
           "success"
         );
         onOpenChange();
@@ -67,7 +87,8 @@ export default function AddUnitToGroupModal({
       <AddUnitToGroupModalContent
         unit={unit}
         onCancel={handleCloseEditUnit}
-        action={handleEditUnitAction}
+        saveAction={handleEditUnitAction}
+        removeAction={handleRemoveUnitAction}
         isPending={isPending}
       />
     </CancelConfirmModal>

@@ -154,7 +154,6 @@ export default function UnitsTable({ dataPromise }: Props) {
         unit={unitToAdd}
         isOpen={addToGroupModal.isOpen}
         onOpenChange={addToGroupModal.onOpenChange}
-        // setOptimisticUnit={setOptimisticUnit}
         setUnitToAdd={setUnitToAdd}
       />
     </div>

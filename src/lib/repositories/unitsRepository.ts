@@ -313,7 +313,7 @@ export async function getAllUnitsWithGroupInfo(): Promise<
  * @param isBaseUnit - true = set as base unit, false = regular unit, null = ignore base status.
  * @param idUnitGroup - ID of the group to assign the unit to. If null, the unit will be removed from all groups.
  *
- * @returns Promise<void>
+ * @returns {Promise<void>}
  */
 export async function addUnitToGroup(
   idUnit: number,
@@ -379,5 +379,30 @@ export async function addUnitToGroup(
         },
       });
     }
+  });
+}
+
+/**
+ * Removes a specific unit from a specific unit group.
+ *
+ * Deletes the assignment of a unit to the given group.
+ * If the unit is not assigned to the specified group, the operation has no effect.
+ *
+ * @param idUnit - ID of the unit to remove.
+ * @param idUnitGroup - ID of the group from which the unit should be removed.
+ *
+ * @returns {Promise<void>}
+ */
+export async function removeUnitFromGroup(
+  idUnit: number,
+  idUnitGroup: number
+): Promise<void> {
+  await prisma.unitGroupUnit.delete({
+    where: {
+      idUnitGroup_idUnit: {
+        idUnitGroup,
+        idUnit,
+      },
+    },
   });
 }

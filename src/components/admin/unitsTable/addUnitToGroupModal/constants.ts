@@ -53,3 +53,21 @@ export const SPINNER_CLASSES = {
   circle2: "w-16 h-16",
   wrapper: "w-16 h-16",
 } as const;
+
+export const BUTTON_CONFIG = {
+  cancel: {
+    color: "success" as const,
+    variant: "flat" as const,
+    text: "Zrušit",
+  },
+  remove: {
+    color: "danger" as const,
+    variant: "flat" as const,
+    text: "odebrat ze skupiny",
+  },
+  save: {
+    color: "primary" as const,
+    variant: "solid" as const,
+    text: "Uložit",
+  },
+} as const;

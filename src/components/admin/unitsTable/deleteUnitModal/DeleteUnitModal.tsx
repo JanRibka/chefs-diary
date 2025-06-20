@@ -1,19 +1,9 @@
-import { Dispatch, SetStateAction, useTransition } from "react";
-
-import { deleteUnitAction } from "@/actions/admin/units";
 import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
-import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
-import addToast from "@/lib/utils/addToast";
 
+import { MODAL_CONFIG } from "./constants";
 import DeleteUnitModalContent from "./DeleteUnitModalContent";
-
-type Props = {
-  unit: UnitWithGroupInfoSummaryDTO | null;
-  isOpen: boolean;
-  onOpenChange: () => void;
-  setOptimisticUnit: (action: UnitWithGroupInfoSummaryDTO) => void;
-  setUnitToDelete: Dispatch<SetStateAction<UnitWithGroupInfoSummaryDTO | null>>;
-};
+import { useDeleteUnitAction } from "./hooks";
+import { DeleteUnitModalProps } from "./types";
 
 export default function DeleteUnitModal({
   unit,
@@ -21,50 +11,34 @@ export default function DeleteUnitModal({
   onOpenChange,
   setOptimisticUnit,
   setUnitToDelete,
-}: Props) {
-  // Optimistic update
-  const [isPending, startTransition] = useTransition();
-
-  const handleDeleteUnitAction = async () => {
-    if (!unit) return;
-
-    setOptimisticUnit({
-      ...unit,
-    });
-
-    startTransition(async () => {
-      const response = await deleteUnitAction(unit.idUnit);
-
-      if (!response.success) {
-        addToast("Chyba", response.error as string, "danger");
-      } else {
-        addToast("Úspěch", "Skupina jednotek byla úspěšně smazána", "success");
-        onOpenChange();
-      }
-    });
-  };
-
-  // Handlers
-  const handleCloseDeleteUnit = () => {
+}: DeleteUnitModalProps) {
+  const handleClose = () => {
     setUnitToDelete(null);
     onOpenChange();
   };
 
+  const { isPending, handleDeleteUnit } = useDeleteUnitAction({
+    unit,
+    setOptimisticUnit,
+    onSuccess: handleClose,
+  });
+
+  // Early return pokud není unit
   if (!unit) return null;
 
   return (
     <CancelConfirmModal
       isOpen={isOpen}
-      placement="center"
-      onOpenChange={handleCloseDeleteUnit}
-      headerLabel="Smazat skupinu jednotek"
-      hideFooter
-      isDismissable={false}
+      placement={MODAL_CONFIG.placement}
+      onOpenChange={handleClose}
+      headerLabel={MODAL_CONFIG.headerLabel}
+      hideFooter={MODAL_CONFIG.hideFooter}
+      isDismissable={MODAL_CONFIG.isDismissable}
     >
       <DeleteUnitModalContent
         unit={unit}
-        onCancel={handleCloseDeleteUnit}
-        action={handleDeleteUnitAction}
+        onCancel={handleClose}
+        action={handleDeleteUnit}
         isPending={isPending}
       />
     </CancelConfirmModal>

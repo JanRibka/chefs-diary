@@ -1,34 +1,24 @@
-import Button from "@/components/shared/button/Button";
 import Form from "@/components/shared/form/Form";
-import SubmitButton from "@/components/shared/submitButton/SubmitButton";
-import { UnitWithGroupInfoSummaryDTO } from "@/lib/dTOs/admin/UnitWithGroupInfoSummaryDTO";
 
-type Props = {
-  unit: UnitWithGroupInfoSummaryDTO;
-  onCancel: () => void;
-  action: (formData: FormData) => void;
-  isPending?: boolean;
-};
+import DeleteActions from "./components/DeleteActions";
+import DeleteConfirmationText from "./components/DeleteConfirmationText";
+import { FORM_CONFIG } from "./constants";
+import { DeleteUnitModalContentProps } from "./types";
 
 export default function DeleteUnitModalContent({
   unit,
   onCancel,
   action,
-  isPending,
-}: Props) {
+  isPending = false,
+}: DeleteUnitModalContentProps) {
   return (
-    <Form action={action} className="flex flex-col gap-5" noValidate>
-      <p>
-        Opravdu chcete smazat jednotku <strong>{unit?.name}</strong>?
-      </p>
-      <div className="flex py-2 px-1 justify-between">
-        <Button color="success" variant="flat" onPress={onCancel}>
-          Zrušit
-        </Button>
-        <SubmitButton color="danger" disabled={isPending} isLoading={isPending}>
-          Smazat
-        </SubmitButton>
-      </div>
+    <Form
+      action={action}
+      className={FORM_CONFIG.className}
+      noValidate={FORM_CONFIG.noValidate}
+    >
+      <DeleteConfirmationText unitName={unit.name} />
+      <DeleteActions onCancel={onCancel} isPending={isPending} />
     </Form>
   );
 }

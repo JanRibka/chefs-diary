@@ -37,6 +37,7 @@ interface UseUnitActionsReturn {
   handleRemoveUnit: RemoveUnitActionHandler;
 }
 
+// useUnitActions
 export function useUnitActions({
   unit,
   onSuccess,
@@ -107,6 +108,7 @@ export function useUnitActions({
   };
 }
 
+// useUnitGroupModal
 export function useUnitGroupModal(
   unit: UnitWithGroupInfoSummaryDTO,
   removeAction: (idUnitGroup: number) => Promise<void>

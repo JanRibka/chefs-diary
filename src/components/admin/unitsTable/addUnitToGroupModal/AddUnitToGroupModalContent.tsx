@@ -2,9 +2,9 @@ import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmMod
 import Form from "@/components/shared/form/Form";
 import Spinner from "@/components/shared/spinner/Spinner";
 
-import { ActionButtons } from "./components/ActionButtons";
-import { BaseUnitSection } from "./components/BaseUnitSelection";
-import { GroupSelectionSection } from "./components/GroupSelectionSection";
+import ActionButtons from "./components/ActionButtons";
+import BaseUnitSection from "./components/BaseUnitSelection";
+import GroupSelectionSection from "./components/GroupSelectionSection";
 import { SPINNER_CLASSES } from "./constants";
 import { useUnitGroupModal } from "./hooks";
 import { UnitGroupModalProps } from "./types";
@@ -57,7 +57,6 @@ export default function AddUnitToGroupModalContent({
             showBaseUnitWarning={showBaseUnitWarning}
             baseUnitInSelectedGroup={baseUnitInSelectedGroup}
             selectedGroupIds={state.selectedGroupIds}
-            isRemoving={state.isRemoving}
             onBaseUnitToggle={handleBaseUnitToggle}
           />
         </div>

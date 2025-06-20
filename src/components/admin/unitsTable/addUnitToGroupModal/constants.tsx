@@ -71,3 +71,29 @@ export const BUTTON_CONFIG = {
     text: "Uložit",
   },
 } as const;
+
+export const BASE_UNIT_CONFIG = {
+  labels: {
+    checkboxGroup: "Vyberte zda je jednotka základní jednotka",
+    checkbox: "Je základní jednotka",
+    currentBaseUnit: "Aktuální základní jednotka: ",
+    changeWarning: "Zaškrtnutím změníte základní jednotku.",
+  },
+  styles: {
+    warning: "text-sm text-yellow-600 mb-2 p-2 bg-yellow-50 rounded",
+  },
+};
+
+export const GROUP_SELECTION_CONFIG = {
+  labels: {
+    checkboxGroup: (unitName: string) => (
+      <span>
+        Vyberte skupinu ke které chcete jednotku{" "}
+        <strong>&quot;{unitName}&quot;</strong> přiřadit
+      </span>
+    ),
+  },
+  keys: {
+    checkbox: (idUnitGroup: number) => `unitGroup_${idUnitGroup}`,
+  },
+};

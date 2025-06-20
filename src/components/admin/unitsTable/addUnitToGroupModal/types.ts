@@ -70,7 +70,6 @@ export interface BaseUnitSectionProps {
     | null
     | undefined;
   selectedGroupIds: string[];
-  isRemoving: boolean;
   onBaseUnitToggle: (value: string[]) => void;
 }
 

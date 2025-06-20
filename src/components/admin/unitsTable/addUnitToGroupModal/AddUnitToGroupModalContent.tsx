@@ -11,6 +11,7 @@ import useUnitGroupDataForModalAction from "@/lib/hooks/apiHooks/admin/useUnitGr
 import { nameof } from "@/lib/utils/nameof";
 import { Checkbox, CheckboxGroup } from "@heroui/react";
 
+// Types
 type Props = {
   unit: UnitWithGroupInfoSummaryDTO;
   onCancel: () => void;
@@ -133,18 +134,23 @@ export default function AddUnitToGroupModalContent({
 
   const handleRemoveAction = () => {
     if (!selectedGroup) return;
-    //TODO: Musí tu být hláška, že se chystám odebrat základní jednotku ze skupiny
+
     setIsRemoving(true);
-    showConfirmation(
-      "Chcete opravdu odebrat jednotku ze skupiny? Pokračovat?",
-      async () => {
-        try {
-          await removeAction(selectedGroup.idUnitGroup);
-        } finally {
-          setIsRemoving(false);
-        }
-      }
+
+    const isBaseUnitInSelectedGroup = unit.baseUnitGroupIds.some(
+      (s) => s === selectedGroup.baseUnit?.idUnit
     );
+    const message = isBaseUnitInSelectedGroup
+      ? "Chystáte se odebrat jednotku ze skupiny, která je nastavená jako základní jednotka. Pokračovat?"
+      : "Chcete opravdu odebrat jednotku ze skupiny? Pokračovat?";
+
+    showConfirmation(message, async () => {
+      try {
+        await removeAction(selectedGroup.idUnitGroup);
+      } finally {
+        setIsRemoving(false);
+      }
+    });
   };
 
   // Loading state

@@ -1,9 +1,9 @@
-import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import CancelConfirmModal from '@/components/shared/actionModal/CancelConfirmModal';
 
-import { EDIT_UNIT_MODAL_TEXTS, MODAL_CONFIG } from "./constants";
-import EditUnitModalContent from "./EditUnitModalContent";
-import { useEditUnitModal } from "./hooks";
-import { EditUnitModalProps } from "./types";
+import { EDIT_UNIT_MODAL_TEXTS } from './constants';
+import EditUnitModalContent from './EditUnitModalContent';
+import { useEditUnitModal } from './hooks';
+import { EditUnitModalProps } from './types';
 
 const EditUnitModal = ({
   unit,
@@ -25,11 +25,11 @@ const EditUnitModal = ({
   return (
     <CancelConfirmModal
       isOpen={isOpen}
-      placement={MODAL_CONFIG.PLACEMENT}
+      placement="center"
       onOpenChange={handleClose}
       headerLabel={EDIT_UNIT_MODAL_TEXTS.HEADER_LABEL}
-      hideFooter={MODAL_CONFIG.HIDE_FOOTER}
-      isDismissable={MODAL_CONFIG.IS_DISMISSABLE}
+      hideFooter={true}
+      isDismissable={false}
     >
       <EditUnitModalContent
         unit={unit}

@@ -176,7 +176,7 @@ export async function deleteUnitGroup(idUnitGroup: number) {
 }
 
 /**
- * Retrieves all unit groups with assignment information for a specific unit.
+ * Retrieves all unit groups along with the units assigned to each group.
  *
  * Each unit group includes:
  * - group ID and name,
@@ -187,7 +187,7 @@ export async function deleteUnitGroup(idUnitGroup: number) {
  * @param idUnit - ID of the unit to filter assignments by.
  * @returns A list of UnitGroups with assignment info filtered to the given unit.
  */
-export async function getAllUnitGroupsWithAssignments(
+export async function getUnitGroupsWithAssignedUnits(
   idUnit: number
 ): Promise<UnitGroupsWithAssignmentsDTO[]> {
   return await prisma.unitGroup.findMany({
@@ -232,7 +232,7 @@ export async function getAllUnitGroupsWithAssignments(
  * @returns A list of UnitGroupWithDetailDTO objects representing unit groups with their base unit
  *          and assigned units.
  */
-export async function getAllUnitGroupsWithDetails(): Promise<
+export async function getUnitGroupOverviewList(): Promise<
   PaginatedDTO<UnitGroupWithDetailDTO>
 > {
   const [items, totalCount] = await Promise.all([
@@ -260,7 +260,7 @@ export async function getAllUnitGroupsWithDetails(): Promise<
 }
 
 /**
- * Retrieves all units from the database along with their group assignments.
+ * Returns all units along with their assigned unit groups.
  *
  * For each unit, includes:
  * - unit ID and name,
@@ -271,7 +271,7 @@ export async function getAllUnitGroupsWithDetails(): Promise<
  *
  * @returns A paginated list of units with their group assignments.
  */
-export async function getAllUnitsWithGroupInfo(): Promise<
+export async function getUnitsWithGroupMemberships(): Promise<
   PaginatedDTO<UnitWithGroupInfoDTO>
 > {
   const [items, totalCount] = await Promise.all([
@@ -383,7 +383,7 @@ export async function addUnitToGroup(
 }
 
 /**
- * Removes a specific unit from a specific unit group.
+ * Deletes a specific unit from a specific unit group.
  *
  * Deletes the assignment of a unit to the given group.
  * If the unit is not assigned to the specified group, the operation has no effect.
@@ -393,7 +393,7 @@ export async function addUnitToGroup(
  *
  * @returns {Promise<void>}
  */
-export async function removeUnitFromGroup(
+export async function deleteUnitFromGroup(
   idUnit: number,
   idUnitGroup: number
 ): Promise<void> {
@@ -406,3 +406,23 @@ export async function removeUnitFromGroup(
     },
   });
 }
+
+export const unitRepository = {
+  getAllUnits,
+  insertUnit,
+  getUnitByName,
+  getUnitById,
+  updateUnit,
+  deleteUnit,
+  getAllUnitGroups,
+  insertUnitGroup,
+  getUnitGroupByName,
+  getUnitGroupById,
+  updateUnitGroup,
+  deleteUnitGroup,
+  getUnitGroupsWithAssignedUnits,
+  getUnitGroupOverviewList,
+  getUnitsWithGroupMemberships,
+  addUnitToGroup,
+  deleteUnitFromGroup,
+};

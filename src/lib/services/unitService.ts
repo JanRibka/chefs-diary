@@ -10,23 +10,7 @@ import AdminLogEntityTypeEnum from "../enums/AdminLogEntityTypeEnum";
 import PermissionTypeEnum from "../enums/PermissionTypeEnum";
 import ConflictError from "../errors/ConflictError";
 import NotFoundError from "../errors/NotFoundError";
-import {
-  addUnitToGroup,
-  deleteUnit,
-  deleteUnitGroup,
-  getAllUnitGroupsWithAssignments,
-  getAllUnitGroupsWithDetails,
-  getAllUnitsWithGroupInfo,
-  getUnitById as getUnitByIdRepository,
-  getUnitByName,
-  getUnitGroupById as getUnitGroupByIdRepository,
-  getUnitGroupByName,
-  insertUnit,
-  insertUnitGroup,
-  removeUnitFromGroup,
-  updateUnit,
-  updateUnitGroup,
-} from "../repositories/unitRepository";
+import { unitRepository } from "../repositories/unitRepository";
 import { getErrorMessageFromError } from "../utils/error";
 import { getRequireAdminPermissions } from "../utils/server";
 import { logAdminAction } from "./adminLogService";
@@ -40,13 +24,13 @@ import { logAdminAction } from "./adminLogService";
  * @throws {ConflictError} If a unit group with the same name already exists.
  */
 export async function attemptInsertUnitGroup(name: string): Promise<UnitGroup> {
-  const unitGroup = await getUnitGroupByName(name);
+  const unitGroup = await unitRepository.getUnitGroupByName(name);
 
   if (unitGroup) {
     throw new ConflictError();
   }
 
-  const insertedUnitGroup = await insertUnitGroup(name);
+  const insertedUnitGroup = await unitRepository.insertUnitGroup(name);
 
   logAdminAction(
     AdminLogActionTypeEnum.CREATE,
@@ -71,7 +55,7 @@ export async function attemptEditUnitGroup(
   idUnitGroup: number,
   name: string
 ): Promise<UnitGroup> {
-  const unitGroup = await getUnitGroupByIdRepository(idUnitGroup);
+  const unitGroup = await unitRepository.getUnitGroupById(idUnitGroup);
 
   if (!unitGroup) {
     throw new NotFoundError();
@@ -84,7 +68,7 @@ export async function attemptEditUnitGroup(
     { name }
   );
 
-  return await updateUnitGroup(idUnitGroup, name);
+  return await unitRepository.updateUnitGroup(idUnitGroup, name);
 }
 
 /**
@@ -95,7 +79,7 @@ export async function attemptEditUnitGroup(
  * @throws {NotFoundError} If a unit group with the same name already exists.
  */
 export async function attemptDeleteUnitGroup(idUnitGroup: number) {
-  const unitGroup = await getUnitGroupByIdRepository(idUnitGroup);
+  const unitGroup = await unitRepository.getUnitGroupById(idUnitGroup);
 
   if (!unitGroup) {
     throw new NotFoundError();
@@ -107,7 +91,7 @@ export async function attemptDeleteUnitGroup(idUnitGroup: number) {
     idUnitGroup
   );
 
-  await deleteUnitGroup(idUnitGroup);
+  await unitRepository.deleteUnitGroup(idUnitGroup);
 }
 
 /**
@@ -120,7 +104,7 @@ export async function getUnitGroupById(
   try {
     await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
 
-    const unitGroup = await getUnitGroupByIdRepository(idUnitGroup);
+    const unitGroup = await unitRepository.getUnitGroupById(idUnitGroup);
 
     return {
       data: unitGroup,
@@ -148,13 +132,13 @@ export async function getUnitGroupById(
  * @throws {ConflictError} If a unit with the same name already exists.
  */
 export async function attemptInsertUnit(name: string): Promise<Unit> {
-  const unit = await getUnitByName(name);
+  const unit = await unitRepository.getUnitByName(name);
 
   if (unit) {
     throw new ConflictError();
   }
 
-  const insertedUnit = await insertUnit(name);
+  const insertedUnit = await unitRepository.insertUnit(name);
 
   logAdminAction(
     AdminLogActionTypeEnum.CREATE,
@@ -179,7 +163,7 @@ export async function attemptEditUnit(
   idUnit: number,
   name: string
 ): Promise<Unit> {
-  const unit = await getUnitByIdRepository(idUnit);
+  const unit = await unitRepository.getUnitById(idUnit);
 
   if (!unit) {
     throw new NotFoundError();
@@ -192,7 +176,7 @@ export async function attemptEditUnit(
     { name }
   );
 
-  return await updateUnit(idUnit, name);
+  return await unitRepository.updateUnit(idUnit, name);
 }
 
 /**
@@ -209,7 +193,7 @@ export async function attemptEditUnit(
 export async function getUnitGroupDataForModal(
   idUnit: number
 ): Promise<UnitGroupModalDTO[]> {
-  const groups = await getAllUnitGroupsWithAssignments(idUnit);
+  const groups = await unitRepository.getUnitGroupsWithAssignedUnits(idUnit);
 
   return groups.map((item) => {
     const assignedUnit = item.unitGroupUnit.find(
@@ -234,7 +218,7 @@ export async function getUnitGroupDataForModal(
  * @throws {NotFoundError} If a unit with the same name already exists.
  */
 export async function attemptDeleteUnit(idUnit: number) {
-  const unit = await getUnitByIdRepository(idUnit);
+  const unit = await unitRepository.getUnitById(idUnit);
 
   if (!unit) {
     throw new NotFoundError();
@@ -246,7 +230,7 @@ export async function attemptDeleteUnit(idUnit: number) {
     idUnit
   );
 
-  await deleteUnit(idUnit);
+  await unitRepository.deleteUnit(idUnit);
 }
 
 /**
@@ -266,7 +250,8 @@ export async function getUnitGroupSummaries(): Promise<
   try {
     await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
 
-    const { items, totalCount } = await getAllUnitGroupsWithDetails();
+    const { items, totalCount } =
+      await unitRepository.getUnitGroupOverviewList();
 
     const newItems = items.map((item) => {
       return {
@@ -316,7 +301,8 @@ export async function getUnitWithGroupInfoSummary(): Promise<
   try {
     await getRequireAdminPermissions([PermissionTypeEnum.UNIT_EDIT]);
 
-    const { items, totalCount } = await getAllUnitsWithGroupInfo();
+    const { items, totalCount } =
+      await unitRepository.getUnitsWithGroupMemberships();
 
     const newItems = items.map((item) => {
       const unitGroupUnits = item.unitGroupUnit;
@@ -375,7 +361,7 @@ export async function attemptAddUnitToGroup(
   isBaseUnit: boolean | null,
   idUnitGroup: number | null
 ): Promise<void> {
-  const unit = await getUnitByIdRepository(idUnit);
+  const unit = await unitRepository.getUnitById(idUnit);
   // TODO: Přidat kontroly, že je ve skupině již základní jednotka, že jednotka ve skupině již existuje, a pod
   // TODO: Pokud odškrtnu, že je zakladní, musí se že je zakladní jednotak smazat
 
@@ -390,7 +376,7 @@ export async function attemptAddUnitToGroup(
     { isBaseUnit, idUnitGroup }
   );
 
-  await addUnitToGroup(idUnit, isBaseUnit, idUnitGroup);
+  await unitRepository.addUnitToGroup(idUnit, isBaseUnit, idUnitGroup);
 }
 
 /**
@@ -411,8 +397,8 @@ export async function attemptRemoveUnitFromGroup(
   idUnit: number,
   idUnitGroup: number
 ): Promise<void> {
-  const unit = await getUnitByIdRepository(idUnit);
-  const unitGroup = await getUnitGroupByIdRepository(idUnitGroup);
+  const unit = await unitRepository.getUnitById(idUnit);
+  const unitGroup = await unitRepository.getUnitGroupById(idUnitGroup);
 
   if (!unit || !unitGroup) {
     throw new NotFoundError();
@@ -425,5 +411,5 @@ export async function attemptRemoveUnitFromGroup(
     { idUnitGroup }
   );
 
-  await removeUnitFromGroup(idUnit, idUnitGroup);
+  await unitRepository.deleteUnitFromGroup(idUnit, idUnitGroup);
 }

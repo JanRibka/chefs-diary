@@ -4,7 +4,7 @@ import PageContentSection from "@/components/admin/pageContentSection/PageConten
 import UnitGroupsTable from "@/components/admin/unitGroupsTable/UnitGroupsTable";
 import { UnitGroupsTableContextProvider } from "@/components/admin/unitGroupsTable/UnitGroupsTableContext";
 import Spinner from "@/components/shared/spinner/Spinner";
-import { getUnitGroupSummaries } from "@/lib/services/unitsService";
+import { getUnitGroupSummaries } from "@/lib/services/unitService";
 
 export default async function UnitGroupsPage() {
   const dataPromise = getUnitGroupSummaries();

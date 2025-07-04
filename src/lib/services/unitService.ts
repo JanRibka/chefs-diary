@@ -26,7 +26,7 @@ import {
   removeUnitFromGroup,
   updateUnit,
   updateUnitGroup,
-} from "../repositories/unitsRepository";
+} from "../repositories/unitRepository";
 import { getErrorMessageFromError } from "../utils/error";
 import { getRequireAdminPermissions } from "../utils/server";
 import { logAdminAction } from "./adminLogService";

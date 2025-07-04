@@ -53,6 +53,7 @@ export async function createUser(
   email: string,
   password: string
 ): Promise<User> {
+  // TODO: Hash by se m2l d2lat v service
   const hashedPassword = await hashPassword(password);
 
   return await prisma.$transaction(async (tx) => {
@@ -411,3 +412,17 @@ export async function getAllUsersPaginated(
 
   return { items: users, totalCount };
 }
+
+export const userRepository = {
+  getUserByUserName,
+  getUserByEmail,
+  createUser,
+  getUserRoleValuesByIdUser,
+  logLoginAttempt,
+  getUserInfoByIdUser,
+  updateUserInfoByEmail,
+  getFailedLoginAttemptsCountByIdUser,
+  updateUserByIdUser,
+  getPermissionsByIdUser,
+  getAllUsersPaginated,
+};

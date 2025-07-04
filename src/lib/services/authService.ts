@@ -1,24 +1,25 @@
-import { compare } from 'bcrypt';
-import { AdapterUser } from 'next-auth/adapters';
-import { JWTEncodeParams } from 'next-auth/jwt';
+import { compare } from "bcrypt";
+import { AdapterUser } from "next-auth/adapters";
+import { JWTEncodeParams } from "next-auth/jwt";
 
-import { getCookieAsync } from '@/lib/services/cookieServerService';
-import { User } from '@prisma/client';
+import { getCookieAsync } from "@/lib/services/cookieServerService";
+import { User } from "@prisma/client";
 
-import AuthenticationModeEnum from '../enums/AuthenticationModeEnum';
-import UserRoleTypeEnum from '../enums/UserRoleTypeEnum';
-import AuthError from '../errors/AuthError';
-import { sendSignUpEmail } from '../mail/signUpEmail';
+import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";
+import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
+import AuthError from "../errors/AuthError";
+import { sendSignUpEmail } from "../mail/signUpEmail";
 import {
-    deleteSessionAdminByIdUser, deleteSessionByIdUser
-} from '../repositories/sessionRepository';
+  deleteSessionAdminByIdUser,
+  deleteSessionByIdUser,
+} from "../repositories/sessionRepository";
+import { userRepository } from "../repositories/userRepository";
 import {
-    createUser, getFailedLoginAttemptsCountByIdUser, getUserByEmail, getUserInfoByIdUser,
-    getUserRoleValuesByIdUser, logLoginAttempt, updateUserByIdUser
-} from '../repositories/userRepository';
-import {
-    createSession, createSessionAdmin, getSessionAdminExists, getSessionExists
-} from './sessionService';
+  createSession,
+  createSessionAdmin,
+  getSessionAdminExists,
+  getSessionExists,
+} from "./sessionService";
 
 /**
  * Register user
@@ -32,8 +33,8 @@ export async function registerUser(
   email: string,
   password: string
 ): Promise<User> {
-  const user = await createUser(userName, email, password);
-  const userInfo = await getUserInfoByIdUser(user.idUser);
+  const user = await userRepository.createUser(userName, email, password);
+  const userInfo = await userRepository.getUserInfoByIdUser(user.idUser);
 
   await sendSignUpEmail(userInfo?.email ?? "", userInfo?.email ?? "");
 
@@ -52,7 +53,7 @@ export async function verifyUser(
   password: string,
   verifyAdmin: boolean = false
 ): Promise<AdapterUser> {
-  const user = await getUserByEmail(email);
+  const user = await userRepository.getUserByEmail(email);
 
   if (!user) {
     //TODO: Tady by měl být not found error. I všude, kde už něco existuje
@@ -89,7 +90,11 @@ export async function verifyUser(
     : AuthenticationModeEnum.WEB;
 
   if (!(await checkCredentials(user, password))) {
-    await logLoginAttempt(user.idUser, false, authenticationMode);
+    await userRepository.logLoginAttempt(
+      user.idUser,
+      false,
+      authenticationMode
+    );
 
     if (
       await getIpFailedLoginCountReachedLimitLast15Minutes(
@@ -104,7 +109,7 @@ export async function verifyUser(
     throw new AuthError("incorrectLoginPassword");
   }
 
-  const userInfo = await getUserInfoByIdUser(user.idUser);
+  const userInfo = await userRepository.getUserInfoByIdUser(user.idUser);
 
   if (!userInfo?.emailVerifiedAt) {
     throw new AuthError("emailNotVerified");
@@ -115,13 +120,21 @@ export async function verifyUser(
     await login2FA(user);
   }
 
-  const userRoles = await getUserRoleValuesByIdUser(user.idUser);
+  const userRoles = await userRepository.getUserRoleValuesByIdUser(user.idUser);
 
   if (verifyAdmin && !getIisAdminRole(userRoles)) {
-    await logLoginAttempt(user.idUser, false, authenticationMode);
+    await userRepository.logLoginAttempt(
+      user.idUser,
+      false,
+      authenticationMode
+    );
     throw new AuthError("adminRequired");
   } else if (!getIisEditorRole) {
-    await logLoginAttempt(user.idUser, false, authenticationMode);
+    await userRepository.logLoginAttempt(
+      user.idUser,
+      false,
+      authenticationMode
+    );
     throw new AuthError("editorRequired");
   }
 
@@ -170,7 +183,11 @@ export async function logIn(
   );
   const idUser: string = (params.token?.idUser as string) ?? "";
 
-  await logLoginAttempt(idUser, true, AuthenticationModeEnum.WEB);
+  await userRepository.logLoginAttempt(
+    idUser,
+    true,
+    AuthenticationModeEnum.WEB
+  );
 
   if (sessionCookieValue) {
     // Scenario added here:
@@ -203,7 +220,11 @@ export async function logInAdmin(
   );
   const idUser: string = (params.token?.idUser as string) ?? "";
 
-  await logLoginAttempt(idUser, true, AuthenticationModeEnum.ADMIN);
+  await userRepository.logLoginAttempt(
+    idUser,
+    true,
+    AuthenticationModeEnum.ADMIN
+  );
 
   if (sessionCookieValue) {
     // Scenario added here:
@@ -236,14 +257,14 @@ export async function getIpFailedLoginCountReachedLimitLast15Minutes(
 ): Promise<boolean> {
   const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
 
-  const loginCount = await getFailedLoginAttemptsCountByIdUser(
+  const loginCount = await userRepository.getFailedLoginAttemptsCountByIdUser(
     idUser,
     fifteenMinutesAgo,
     authMode
   );
 
   if (loginCount >= loginLimit) {
-    await updateUserByIdUser(idUser, {
+    await userRepository.updateUserByIdUser(idUser, {
       [`${authMode}LoginRestrictedUntil`]: new Date(
         Date.now() + 15 * 60 * 1000
       ),

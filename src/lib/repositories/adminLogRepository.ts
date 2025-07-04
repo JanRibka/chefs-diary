@@ -16,3 +16,5 @@ export async function logAdminAction(data: LogAdminActionDataType) {
     },
   });
 }
+
+export const adminLogRepository = { logAdminAction };

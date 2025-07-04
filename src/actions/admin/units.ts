@@ -18,7 +18,7 @@ import {
   attemptInsertUnitGroup,
   attemptRemoveUnitFromGroup,
   getUnitGroupDataForModal,
-} from "@/lib/services/unitsService";
+} from "@/lib/services/unitService";
 import {
   getConflictErrorFromError,
   getErrorMessageFromError,

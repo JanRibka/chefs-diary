@@ -4,7 +4,7 @@ import PageContentSection from "@/components/admin/pageContentSection/PageConten
 import UnitsTable from "@/components/admin/unitsTable/UnitsTable";
 import { UnitsTableContextProvider } from "@/components/admin/unitsTable/UnitsTableContext";
 import Spinner from "@/components/shared/spinner/Spinner";
-import { getUnitWithGroupInfoSummary } from "@/lib/services/unitsService";
+import { getUnitWithGroupInfoSummary } from "@/lib/services/unitService";
 
 export default function UnitsPage() {
   const dataPromise = getUnitWithGroupInfoSummary();

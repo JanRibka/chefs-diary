@@ -1,0 +1,18 @@
+name: 🔧 Refaktoring
+description: Zlepšení struktury nebo kvality kódu bez změny jeho chování
+title: "[Refaktoring] "
+labels: ["typ:refaktoring"]
+body:
+  - type: textarea
+    id: scope
+    attributes:
+      label: Co je potřeba refaktorovat?
+      placeholder: "Která část kódu a proč?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Proč je to potřeba?
+      placeholder: "Lepší čitelnost, výkon, testovatelnost..."

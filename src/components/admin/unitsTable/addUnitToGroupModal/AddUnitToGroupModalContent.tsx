@@ -1,4 +1,4 @@
-import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import CancelConfirmModal from "@/components/shared/cancelConfirmModal/CancelConfirmModal";
 import Form from "@/components/shared/form/Form";
 import Spinner from "@/components/shared/spinner/Spinner";
 

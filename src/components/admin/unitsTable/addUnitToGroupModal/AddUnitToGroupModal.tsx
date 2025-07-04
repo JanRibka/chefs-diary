@@ -1,4 +1,4 @@
-import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import CancelConfirmModal from "@/components/shared/cancelConfirmModal/CancelConfirmModal";
 
 import AddUnitToGroupModalContent from "./AddUnitToGroupModalContent";
 import { MODAL_CONFIG } from "./constants";

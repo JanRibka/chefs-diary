@@ -1,7 +1,7 @@
 import { useTransition } from "react";
 
 import { insertUnitGroupAction } from "@/actions/admin/units";
-import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import CancelConfirmModal from "@/components/shared/cancelConfirmModal/CancelConfirmModal";
 import addToast from "@/lib/utils/addToast";
 import { nameof } from "@/lib/utils/nameof";
 import { UnitGroupFormType } from "@/lib/validations/schemas/admin/unitGroupFormValidationSchema";

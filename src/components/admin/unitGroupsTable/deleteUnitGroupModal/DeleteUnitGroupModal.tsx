@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useTransition } from "react";
 
 import { deleteUnitGroupAction } from "@/actions/admin/units";
-import CancelConfirmModal from "@/components/shared/actionModal/CancelConfirmModal";
+import CancelConfirmModal from "@/components/shared/cancelConfirmModal/CancelConfirmModal";
 import { UnitGroupSummaries } from "@/lib/dTOs/admin/UnitGroupSummariesDTO";
 import addToast from "@/lib/utils/addToast";
 

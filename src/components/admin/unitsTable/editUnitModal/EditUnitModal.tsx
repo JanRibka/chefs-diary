@@ -1,9 +1,9 @@
-import CancelConfirmModal from '@/components/shared/actionModal/CancelConfirmModal';
+import CancelConfirmModal from "@/components/shared/cancelConfirmModal/CancelConfirmModal";
 
-import { EDIT_UNIT_MODAL_TEXTS } from './constants';
-import EditUnitModalContent from './EditUnitModalContent';
-import { useEditUnitModal } from './hooks';
-import { EditUnitModalProps } from './types';
+import { EDIT_UNIT_MODAL_TEXTS } from "./constants";
+import EditUnitModalContent from "./EditUnitModalContent";
+import { useEditUnitModal } from "./hooks";
+import { EditUnitModalProps } from "./types";
 
 const EditUnitModal = ({
   unit,

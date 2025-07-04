@@ -3,6 +3,14 @@ description: Zlepšení struktury nebo kvality kódu bez změny jeho chování
 title: "[Refaktoring] "
 labels: ["typ:refaktoring"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        👉 **Důležité:** Začni název issue prefixem s oblastí v hranatých závorkách.  
+        Například: `[Web] Možnost duplikace receptu` nebo `[Admin] Nový layout detailu`.
+
+        Dostupné oblasti: `Web`, `Admin`, `Api`
+
   - type: textarea
     id: scope
     attributes:

@@ -3,6 +3,14 @@ description: Prostor pro otevřenou diskuzi k funkcím nebo návrhům
 title: "[Diskuze] "
 labels: ["typ:diskuze"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        👉 **Důležité:** Začni název issue prefixem s oblastí v hranatých závorkách.  
+        Například: `[Web] Možnost duplikace receptu` nebo `[Admin] Nový layout detailu`.
+
+        Dostupné oblasti: `Web`, `Admin`, `Api`
+
   - type: textarea
     id: tema
     attributes:

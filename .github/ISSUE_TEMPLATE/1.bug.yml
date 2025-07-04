@@ -3,6 +3,14 @@ description: Nahlášení chyby nebo neočekávaného chování
 title: "[Chyba] "
 labels: ["typ:chyba"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        👉 **Důležité:** Začni název issue prefixem s oblastí v hranatých závorkách.  
+        Například: `[Web] Možnost duplikace receptu` nebo `[Admin] Nový layout detailu`.
+
+        Dostupné oblasti: `Web`, `Admin`, `Api`
+
   - type: textarea
     id: popis
     attributes:

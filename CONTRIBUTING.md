@@ -15,10 +15,12 @@ Děkujeme, že chceš přispět do projektu! 🙌 Tento dokument popisuje, jak s
 
 ## ✅ Typy změn (branch prefixy)
 
-- `feature/` – nová funkcionalita
-- `fix/` – oprava chyby
-- `refactor/` – změna struktury kódu bez změny chování
-- `discussion/` – návrhy nebo diskuze
+- feature/ – nová funkcionalita
+- fix/ – oprava chyby
+- refactor/ – změna struktury kódu bez změny chování
+- docs/ – změny v dokumentaci
+- style/ – formátování, mezery, komentáře
+- chore/ – aktualizace závislostí, build nástroje apod.
 
 ---
 

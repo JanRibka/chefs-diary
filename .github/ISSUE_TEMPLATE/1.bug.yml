@@ -1,7 +1,7 @@
 name: 🐛 Chyba v aplikaci
 description: Nahlášení chyby nebo neočekávaného chování
 title: "[Chyba] "
-labels: ["typ:chyba"]
+labels: ["stav:k-posouzeni"]
 body:
   - type: markdown
     attributes:

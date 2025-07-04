@@ -1,7 +1,7 @@
 name: 🔧 Refaktoring
 description: Zlepšení struktury nebo kvality kódu bez změny jeho chování
 title: "[Refaktoring] "
-labels: ["typ:refaktoring"]
+labels: ["stav:k-posouzeni"]
 body:
   - type: markdown
     attributes:

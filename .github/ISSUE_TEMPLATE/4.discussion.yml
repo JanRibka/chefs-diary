@@ -1,7 +1,7 @@
 name: 💬 Návrh nebo diskuze
 description: Prostor pro otevřenou diskuzi k funkcím nebo návrhům
 title: "[Diskuze] "
-labels: ["typ:diskuze"]
+labels: ["stav:k-posouzeni"]
 body:
   - type: markdown
     attributes:

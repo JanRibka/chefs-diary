@@ -1,7 +1,7 @@
 name: ✨ Nová funkce
 description: Návrh nové funkcionality do aplikace
 title: "[Funkce] "
-labels: ["typ:funkce"]
+labels: ["stav:k-posouzeni"]
 body:
   - type: markdown
     attributes:

@@ -302,6 +302,7 @@ async function main() {
       description: "Spravovat nastavení systému",
     },
   });
+
   const unitView = await prisma.permission.upsert({
     where: { code: "UNIT_VIEW" },
     update: {
@@ -339,6 +340,43 @@ async function main() {
     },
   });
 
+  const ingredientView = await prisma.permission.upsert({
+    where: { code: "INGREDIENT_VIEW" },
+    update: {
+      value: 120,
+      description: "Zobrazit ingredience",
+    },
+    create: {
+      code: "INGREDIENT_VIEW",
+      value: 120,
+      description: "Zobrazit ingredience",
+    },
+  });
+  const ingredientEdit = await prisma.permission.upsert({
+    where: { code: "INGREDIENT_EDIT" },
+    update: {
+      value: 121,
+      description: "Spravovat ingrediencí",
+    },
+    create: {
+      code: "INGREDIENT_EDIT",
+      value: 121,
+      description: "Spravovat ingrediencí",
+    },
+  });
+  const ingredientDelete = await prisma.permission.upsert({
+    where: { code: "INGREDIENT_DELETE" },
+    update: {
+      value: 122,
+      description: "Mazat ingredience",
+    },
+    create: {
+      code: "INGREDIENT_DELETE",
+      value: 122,
+      description: "Mazat ingredience",
+    },
+  });
+
   console.log({
     userView,
     userEdit,
@@ -361,6 +399,9 @@ async function main() {
     unitView,
     unitEdit,
     unitDelete,
+    ingredientView,
+    ingredientEdit,
+    ingredientDelete,
   });
 
   // Vytváření RolePermission a přiřazení pro každou roli

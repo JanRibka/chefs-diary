@@ -1,6 +1,12 @@
-import { useCallback, useMemo } from "react";
+"use client";
+
+import { use, useCallback, useEffect, useMemo, useState } from "react";
 
 import Spinner from "@/components/shared/spinner/Spinner";
+import { prisma } from "@/config/prisma/prisma";
+import { IngredientGroupWithAssignedIngredientsDTO } from "@/lib/dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
+import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
+import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
 import { getPages } from "@/lib/utils/table";
 import {
   Table,
@@ -10,23 +16,40 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
+import { IngredientGroup } from "@prisma/client";
 
-import IngredientGroupsBottomContent from "./components/IngredientGroupsBottomContent";
-import IngredientGroupsTopContent from "./components/IngredientGroupsTopContent";
+// import IngredientGroupsBottomContent from "./components/IngredientGroupsBottomContent";
+import { IngredientGroupsRenderCell } from "./components/IngredientGroupsRenderCell";
+// import IngredientGroupsTopContent from "./components/IngredientGroupsTopContent";
 import getIngredientGroupsColumns from "./constants/ingredientGroupsColumns";
-import { useIngredientGroupsTableSortDescriptor } from "./ingredientGroupsTableContext";
 
-export default function IngredientGroupsTable() {
-  const { sortDescriptor, setSortDescriptor } =
-    useIngredientGroupsTableSortDescriptor();
+// import { useIngredientGroupsTableSortDescriptor } from "./ingredientGroupsTableContext";
 
-  const pages = useMemo(
-    () => getPages(data.totalCount, pageSize),
+type Props = {
+  dataPromise: Promise<
+    ActionResponseDTO<PaginatedDTO<IngredientGroupWithAssignedIngredientsDTO>>
+  >;
+};
 
-    [data.totalCount, pageSize]
-  );
+export default function IngredientGroupsTable({ dataPromise }: Props) {
+  // const { sortDescriptor, setSortDescriptor } =
+  //   useIngredientGroupsTableSortDescriptor();
+  // const { pageSize } = useIngredientGroupsTablePageSize();
+
+  // Get data
+  const dataWithError = use(dataPromise);
+  const data = dataWithError.data!;
+
+  // const pages = useMemo(
+  //   () => getPages(data.totalCount, pageSize),
+
+  //   [data.totalCount, pageSize]
+  // );
+
+  const renderCell = useCallback(IngredientGroupsRenderCell, []);
 
   const getColumns = useCallback(getIngredientGroupsColumns, []);
+
   return (
     <>
       <div className="h-full">
@@ -34,24 +57,24 @@ export default function IngredientGroupsTable() {
           isHeaderSticky
           isStriped
           aria-label="Skupiny ingrediencí"
-          topContent={
-            <IngredientGroupsTopContent onPressInsertGroup={() => {}} />
-          }
-          topContentPlacement="outside"
-          bottomContent={
-            <IngredientGroupsBottomContent
-              pages={pages}
-              totalGroups={data.totalCount}
-            />
-          }
-          bottomContentPlacement="outside"
+          // topContent={
+          //   <IngredientGroupsTopContent onPressInsertGroup={() => {}} />
+          // }
+          // topContentPlacement="outside"
+          // bottomContent={
+          //   <IngredientGroupsBottomContent
+          //     pages={pages}
+          //     totalGroups={data.totalCount}
+          //   />
+          // }
+          // bottomContentPlacement="outside"
           fullWidth
           className="h-full"
           classNames={{
             wrapper: "rounded-none shadow-none p-0 flex-1",
           }}
-          onSortChange={setSortDescriptor}
-          sortDescriptor={sortDescriptor}
+          // onSortChange={setSortDescriptor}
+          // sortDescriptor={sortDescriptor}
         >
           <TableHeader columns={getColumns(true)}>
             {(column) => (
@@ -67,22 +90,22 @@ export default function IngredientGroupsTable() {
           </TableHeader>
 
           <TableBody
-            items={[]}
+            items={data.items}
             isLoading={false}
             loadingContent={<Spinner />}
             emptyContent="Žádná skupina nebyla nalezena"
           >
             {(item) => (
-              <TableRow key={item.idUnitGroup}>
+              <TableRow key={item.idIngredientGroup}>
                 {(columnKey) => (
                   <TableCell>
                     {renderCell(
                       item,
                       columnKey,
-                      canEdit,
-                      canDelete,
-                      handleEditGroup,
-                      handleDeleteGroup
+                      true,
+                      true,
+                      () => {},
+                      () => {}
                     )}
                   </TableCell>
                 )}

@@ -2,8 +2,9 @@ import { memo, useCallback } from "react";
 
 import RecordsCount from "@/components/shared/table/bottomContent/RecordCount";
 import TablePagination from "@/components/shared/table/bottomContent/TablePagination";
-import PageSizeSelector from "@/components/shared/table/PageSizeSelector";
 import { mergeStyles } from "@/lib/utils/styles";
+
+import PageSizeSelector from "./PageSizeSelector";
 
 interface TableBottomContentProps {
   // Pagination

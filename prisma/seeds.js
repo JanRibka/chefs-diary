@@ -430,6 +430,9 @@ async function main() {
       unitView.code,
       unitEdit.code,
       unitDelete.code,
+      ingredientView.code,
+      ingredientEdit.code,
+      ingredientDelete.code,
     ],
     ADMIN: [
       userView.code,
@@ -442,6 +445,9 @@ async function main() {
       unitView.code,
       unitEdit.code,
       unitDelete.code,
+      ingredientView.code,
+      ingredientEdit.code,
+      ingredientDelete.code,
     ],
     MODERATOR: [
       postApprove.code,
@@ -449,8 +455,14 @@ async function main() {
       commentDelete.code,
       recipeDelete.code,
       unitView.code,
+      ingredientView.code,
     ],
-    SUPPORT: [ticketView.code, ticketManage.code, unitView.code],
+    SUPPORT: [
+      ticketView.code,
+      ticketManage.code,
+      unitView.code,
+      ingredientView.code,
+    ],
     EDITOR: [
       recipePublish.code,
       recipeEdit.code,
@@ -460,7 +472,7 @@ async function main() {
       commentPublish.code,
       ratingPublish.code,
     ],
-    AUDITOR: [userView.code, logView.code, unitView.code],
+    AUDITOR: [userView.code, logView.code, unitView.code, ingredientView.code],
   };
 
   for (const [roleCode, permissionCodes] of Object.entries(rolePermissionMap)) {

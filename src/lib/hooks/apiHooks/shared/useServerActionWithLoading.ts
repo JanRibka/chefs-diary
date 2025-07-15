@@ -3,7 +3,7 @@ import { useEffect, useState, useTransition } from "react";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import addToast from "@/lib/utils/addToast";
 
-export function usePromiseWithLoading<T>(
+export function useServerActionWithLoading<T>(
   serverAction: () => Promise<ActionResponseDTO<T>>
 ) {
   const [isPending, startTransition] = useTransition();

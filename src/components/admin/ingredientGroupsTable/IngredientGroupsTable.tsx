@@ -6,7 +6,7 @@ import Spinner from "@/components/shared/spinner/Spinner";
 import { IngredientGroupWithAssignedIngredientsDTO } from "@/lib/dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
-import { usePromiseWithLoading } from "@/lib/hooks/apiHooks/shared/usePromiseWithLoading";
+import { useServerActionWithLoading } from "@/lib/hooks/apiHooks/shared/useServerActionWithLoading";
 import { getPages } from "@/lib/utils/table";
 import {
   Table,
@@ -36,7 +36,7 @@ export default function IngredientGroupsTable({ serverAction }: Props) {
   const { pageSize } = useIngredientGroupsTablePageSize();
 
   // Get data
-  const { isPending, data } = usePromiseWithLoading(serverAction);
+  const { isPending, data } = useServerActionWithLoading(serverAction);
 
   const totalCount = data?.totalCount ?? 0;
   const items = data?.items ?? [];

@@ -1,12 +1,12 @@
 "use client";
 
-import { use, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 
 import Spinner from "@/components/shared/spinner/Spinner";
-import { prisma } from "@/config/prisma/prisma";
 import { IngredientGroupWithAssignedIngredientsDTO } from "@/lib/dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
+import { usePromiseWithLoading } from "@/lib/hooks/apiHooks/shared/usePromiseWithLoading";
 import { getPages } from "@/lib/utils/table";
 import {
   Table,
@@ -16,35 +16,36 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
-import { IngredientGroup } from "@prisma/client";
 
-// import IngredientGroupsBottomContent from "./components/IngredientGroupsBottomContent";
+import IngredientGroupsBottomContent from "./components/IngredientGroupsBottomContent";
 import { IngredientGroupsRenderCell } from "./components/IngredientGroupsRenderCell";
-// import IngredientGroupsTopContent from "./components/IngredientGroupsTopContent";
+import IngredientGroupsTopContent from "./components/IngredientGroupsTopContent";
 import getIngredientGroupsColumns from "./constants/ingredientGroupsColumns";
-
-// import { useIngredientGroupsTableSortDescriptor } from "./ingredientGroupsTableContext";
+import { useIngredientGroupsTablePageSize } from "./context/hooks/useIngredientGroupsTablePageSize";
+import { useIngredientGroupsTableSortDescriptor } from "./context/hooks/useIngredientGroupsTableSortDescriptor";
 
 type Props = {
-  dataPromise: Promise<
+  serverAction: () => Promise<
     ActionResponseDTO<PaginatedDTO<IngredientGroupWithAssignedIngredientsDTO>>
   >;
 };
 
-export default function IngredientGroupsTable({ dataPromise }: Props) {
-  // const { sortDescriptor, setSortDescriptor } =
-  //   useIngredientGroupsTableSortDescriptor();
-  // const { pageSize } = useIngredientGroupsTablePageSize();
+export default function IngredientGroupsTable({ serverAction }: Props) {
+  const { sortDescriptor, setSortDescriptor } =
+    useIngredientGroupsTableSortDescriptor();
+  const { pageSize } = useIngredientGroupsTablePageSize();
 
   // Get data
-  const dataWithError = use(dataPromise);
-  const data = dataWithError.data!;
+  const { isPending, data } = usePromiseWithLoading(serverAction);
 
-  // const pages = useMemo(
-  //   () => getPages(data.totalCount, pageSize),
+  const totalCount = data?.totalCount ?? 0;
+  const items = data?.items ?? [];
 
-  //   [data.totalCount, pageSize]
-  // );
+  const pages = useMemo(
+    () => getPages(totalCount, pageSize),
+
+    [totalCount, pageSize]
+  );
 
   const renderCell = useCallback(IngredientGroupsRenderCell, []);
 
@@ -57,24 +58,24 @@ export default function IngredientGroupsTable({ dataPromise }: Props) {
           isHeaderSticky
           isStriped
           aria-label="Skupiny ingrediencí"
-          // topContent={
-          //   <IngredientGroupsTopContent onPressInsertGroup={() => {}} />
-          // }
-          // topContentPlacement="outside"
-          // bottomContent={
-          //   <IngredientGroupsBottomContent
-          //     pages={pages}
-          //     totalGroups={data.totalCount}
-          //   />
-          // }
-          // bottomContentPlacement="outside"
+          topContent={
+            <IngredientGroupsTopContent onPressInsertGroup={() => {}} />
+          }
+          topContentPlacement="outside"
+          bottomContent={
+            <IngredientGroupsBottomContent
+              pages={pages}
+              totalGroups={data?.totalCount ?? 0}
+            />
+          }
+          bottomContentPlacement="outside"
           fullWidth
           className="h-full"
           classNames={{
             wrapper: "rounded-none shadow-none p-0 flex-1",
           }}
-          // onSortChange={setSortDescriptor}
-          // sortDescriptor={sortDescriptor}
+          onSortChange={setSortDescriptor}
+          sortDescriptor={sortDescriptor}
         >
           <TableHeader columns={getColumns(true)}>
             {(column) => (
@@ -90,8 +91,8 @@ export default function IngredientGroupsTable({ dataPromise }: Props) {
           </TableHeader>
 
           <TableBody
-            items={data.items}
-            isLoading={false}
+            items={items}
+            isLoading={isPending}
             loadingContent={<Spinner />}
             emptyContent="Žádná skupina nebyla nalezena"
           >

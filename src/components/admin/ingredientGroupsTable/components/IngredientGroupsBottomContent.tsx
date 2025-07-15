@@ -2,7 +2,7 @@ import { memo } from "react";
 
 import TableBottomContent from "@/components/shared/table/bottomContent/TableBottomContent";
 
-import { useIngredientGroupsTableContext } from "../ingredientGroupsTableContext";
+import { useIngredientGroupsTableContext } from "../context/hooks/useIngredientGroupsTableContext";
 
 interface IngredientGroupsBottomContentProps {
   pages: number;

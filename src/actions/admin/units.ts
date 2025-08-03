@@ -141,13 +141,13 @@ export async function deleteUnitGroupAction(
       timeStamp: getActualTime(),
     };
   } catch (error) {
-    const conflictError = getNotFoundErrorFromError(
+    const notFoundError = getNotFoundErrorFromError(
       error,
       "Skupina jednotek nelze smazat"
     );
-    let errorMessage = conflictError.errorMessage;
+    let errorMessage = notFoundError.errorMessage;
 
-    if (!conflictError.isNotFoundError) {
+    if (!notFoundError.isNotFoundError) {
       errorMessage = getErrorMessageFromError(error);
     }
 

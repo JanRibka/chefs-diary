@@ -1,19 +1,22 @@
 import { Key } from "react";
 
 import TableCellActions from "@/components/shared/table/cells/TableCellActions";
-import { IngredientGroup } from "@prisma/client";
+import { IngredientGroupWithAssignedIngredientsDTO } from "@/lib/dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
 
-type IngredientGroupActions = keyof IngredientGroup | "actions";
+type IngredientGroupActions =
+  | keyof IngredientGroupWithAssignedIngredientsDTO
+  | "actions";
 
 export function IngredientGroupsRenderCell(
-  group: IngredientGroup,
+  group: IngredientGroupWithAssignedIngredientsDTO,
   columnKey: Key,
   canEdit: boolean,
   canDelete: boolean,
-  onEdit: (group: IngredientGroup) => void,
-  onDelete: (group: IngredientGroup) => void
+  onEdit: (group: IngredientGroupWithAssignedIngredientsDTO) => void,
+  onDelete: (group: IngredientGroupWithAssignedIngredientsDTO) => void
 ) {
-  const cellValue = group[columnKey as keyof IngredientGroup];
+  const cellValue =
+    group[columnKey as keyof IngredientGroupWithAssignedIngredientsDTO];
 
   switch (columnKey as IngredientGroupActions) {
     case "actions":

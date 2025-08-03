@@ -13,7 +13,7 @@ export default function IngredientGroupLayout({ children }: Props) {
       redirectPath={adminRoutes.Dashboard}
     >
       <div className="min-h-full flex flex-col">
-        <PageTitle>Jednotky</PageTitle>
+        <PageTitle>Skupiny ingrediencí</PageTitle>
         <PageContent className="flex-1">{children}</PageContent>
       </div>
     </RedirectUnpermittedPage>

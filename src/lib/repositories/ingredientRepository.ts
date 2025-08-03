@@ -60,9 +60,12 @@ export async function getIngredientUnitGroupWithAssignedIngredients(): Promise<
 export async function getIngredientGroupByName(
   name: string
 ): Promise<IngredientGroup | null> {
-  return await prisma.ingredientGroup.findUnique({
+  return await prisma.ingredientGroup.findFirst({
     where: {
-      name: name,
+      name: {
+        search: name,
+        mode: "insensitive",
+      },
     },
   });
 }

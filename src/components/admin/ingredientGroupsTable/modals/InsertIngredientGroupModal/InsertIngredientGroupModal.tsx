@@ -7,7 +7,7 @@ import { nameof } from "@/lib/utils/nameof";
 import { IngredientGroupFormType } from "@/lib/validations/schemas/admin/ingredientGroupFormValidationSchema";
 
 import { SetOptimisticIngredientGroupType } from "../../IngredientGroupsTable";
-import InsertIngredientGroupModalContent from "./InsertIngredientGroupModalContent";
+import InsertIngredientGroupModalContent from "./insertIngredientGroupModalContent/InsertIngredientGroupModalContent";
 import useInsertIngredientGroupValidation from "./useInsertIngredientGroupValidation";
 
 type Props = {

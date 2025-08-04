@@ -24,7 +24,7 @@ import { useIngredientGroupsTablePageSize } from './context/hooks/useIngredientG
 import {
     useIngredientGroupsTableSortDescriptor
 } from './context/hooks/useIngredientGroupsTableSortDescriptor';
-import DeleteIngredientGroupModal from './modals/deleteIngredientGroupModal/DeleteIngredientGroupModal';
+import DeleteIngredientGroupModal from './modals/deleteIngredientGroupModal/deleteIngredientGroupModal/DeleteIngredientGroupModal';
 import EditIngredientGroupModal from './modals/editIngredientGroupModal/EditIngredientGroupModal';
 import {
     InsertIngredientGroupModal

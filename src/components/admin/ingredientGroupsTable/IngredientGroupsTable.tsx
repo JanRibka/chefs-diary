@@ -1,34 +1,34 @@
 "use client";
 
-import { useCallback, useMemo, useOptimistic, useState } from "react";
+import { useCallback, useMemo, useOptimistic, useState } from 'react';
 
-import Spinner from "@/components/shared/spinner/Spinner";
-import { useUserContext } from "@/context/UserContext";
-import { IngredientGroupWithAssignedIngredientsDTO } from "@/lib/dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
-import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
-import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
-import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
-import { useServerActionWithLoading } from "@/lib/hooks/apiHooks/shared/useServerActionWithLoading";
-import { getPages } from "@/lib/utils/table";
+import Spinner from '@/components/shared/spinner/Spinner';
+import { useUserContext } from '@/context/UserContext';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-  useDisclosure,
-} from "@heroui/react";
+    IngredientGroupWithAssignedIngredientsDTO
+} from '@/lib/dTOs/admin/IngredientGroupWithAssignedIngredientsDTO';
+import { ActionResponseDTO } from '@/lib/dTOs/shared/ActionResponseDTO';
+import { PaginatedDTO } from '@/lib/dTOs/shared/PaginatedDTO';
+import PermissionTypeEnum from '@/lib/enums/PermissionTypeEnum';
+import { useServerActionWithLoading } from '@/lib/hooks/apiHooks/shared/useServerActionWithLoading';
+import { getPages } from '@/lib/utils/table';
+import {
+    Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure
+} from '@heroui/react';
 
-import IngredientGroupsBottomContent from "./components/IngredientGroupsBottomContent";
-import { IngredientGroupsRenderCell } from "./components/IngredientGroupsRenderCell";
-import IngredientGroupsTopContent from "./components/IngredientGroupsTopContent";
-import getIngredientGroupsColumns from "./constants/ingredientGroupsColumns";
-import { useIngredientGroupsTablePageSize } from "./context/hooks/useIngredientGroupsTablePageSize";
-import { useIngredientGroupsTableSortDescriptor } from "./context/hooks/useIngredientGroupsTableSortDescriptor";
-import DeleteIngredientGroupModal from "./modals/deleteIngredientGroupModal/DeleteIngredientGroupModal";
-import EditIngredientGroupModal from "./modals/editIngredientGroupModal/EditIngredientGroupModal";
-import InsertIngredientGroupModal from "./modals/InsertIngredientGroupModal/InsertIngredientGroupModal";
+import IngredientGroupsBottomContent from './components/IngredientGroupsBottomContent';
+import { IngredientGroupsRenderCell } from './components/IngredientGroupsRenderCell';
+import IngredientGroupsTopContent from './components/IngredientGroupsTopContent';
+import getIngredientGroupsColumns from './constants/ingredientGroupsColumns';
+import { useIngredientGroupsTablePageSize } from './context/hooks/useIngredientGroupsTablePageSize';
+import {
+    useIngredientGroupsTableSortDescriptor
+} from './context/hooks/useIngredientGroupsTableSortDescriptor';
+import DeleteIngredientGroupModal from './modals/deleteIngredientGroupModal/DeleteIngredientGroupModal';
+import EditIngredientGroupModal from './modals/editIngredientGroupModal/EditIngredientGroupModal';
+import {
+    InsertIngredientGroupModal
+} from './modals/InsertIngredientGroupModal/insertIngredientGroupModal/InsertIngredientGroupModal';
 
 export type SetOptimisticIngredientGroupType = {
   type: "add" | "update" | "delete";

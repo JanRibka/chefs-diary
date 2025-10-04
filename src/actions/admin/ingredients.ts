@@ -1,7 +1,9 @@
 "use server";
 
+import ingredientActionValidator from "@/lib/actionValidators/admin/ingredientActionValidator";
 import ingredientGroupActionValidator from "@/lib/actionValidators/admin/ingredientGroupActionValidator";
 import { IngredientGroupWithAssignedIngredientsDTO } from "@/lib/dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
+import { IngredientWithAssignedGroupDTO } from "@/lib/dTOs/admin/IngredientWithAssignedGroupDTO";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
@@ -14,8 +16,9 @@ import {
 } from "@/lib/utils/error";
 import { nameof } from "@/lib/utils/nameof";
 import { getRequireAdminPermissions } from "@/lib/utils/server";
+import { IngredientFormType } from "@/lib/validations/schemas/admin/ingredientFormValidationSchema";
 import { IngredientGroupFormType } from "@/lib/validations/schemas/admin/ingredientGroupFormValidationSchema";
-import { IngredientGroup } from "@prisma/client";
+import { Ingredient, IngredientGroup } from "@prisma/client";
 
 export async function getIngredientUnitGroupWithAssignedIngredientsAction(): Promise<
   ActionResponseDTO<PaginatedDTO<IngredientGroupWithAssignedIngredientsDTO>>
@@ -170,6 +173,76 @@ export async function deleteIngredientGroupAction(
     let errorMessage = notFoundError.errorMessage;
 
     if (!notFoundError.isNotFoundError) {
+      errorMessage = getErrorMessageFromError(error);
+    }
+
+    return {
+      data: null,
+      success: false,
+      error: errorMessage,
+      timeStamp: getActualTime(),
+    };
+  }
+}
+
+export async function getIngredientsWithAssignedGroupsAction(): Promise<
+  ActionResponseDTO<PaginatedDTO<IngredientWithAssignedGroupDTO>>
+> {
+  await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_EDIT]);
+
+  try {
+    const data = await ingredientService.getIngredientsWithAssignedGroups();
+
+    return {
+      data: data,
+      success: true,
+      timeStamp: getActualTime(),
+    };
+  } catch (error) {
+    const errorMessage = getErrorMessageFromError(error);
+
+    return {
+      data: null,
+      success: false,
+      error: errorMessage,
+      timeStamp: getActualTime(),
+    };
+  }
+}
+
+export async function insertIngredientAction(
+  formData: FormData
+): Promise<ActionResponseDTO<Ingredient>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_EDIT]);
+
+  try {
+    const validationResult = await ingredientActionValidator(formData);
+
+    if (!validationResult.success) {
+      return {
+        data: null,
+        success: false,
+        error: validationResult.error,
+        timeStamp: getActualTime(),
+      };
+    }
+
+    const name = formData.get(nameof<IngredientFormType>("name")) as string;
+    const ingredient = await ingredientService.attemptInsertIngredient(name);
+
+    return {
+      data: ingredient,
+      success: true,
+      timeStamp: getActualTime(),
+    };
+  } catch (error) {
+    const conflictError = getConflictErrorFromError(
+      error,
+      "Ingredience již existuje"
+    );
+    let errorMessage = conflictError.errorMessage;
+
+    if (!conflictError.isConflictError) {
       errorMessage = getErrorMessageFromError(error);
     }
 

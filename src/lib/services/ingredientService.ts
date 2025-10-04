@@ -1,6 +1,7 @@
 import { IngredientGroup } from "@prisma/client";
 
 import { IngredientGroupWithAssignedIngredientsDTO } from "../dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
+import { IngredientWithAssignedGroupDTO } from "../dTOs/admin/IngredientWithAssignedGroupDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 import AdminLogActionTypeEnum from "../enums/AdminLogActionTypeEnum";
 import AdminLogEntityTypeEnum from "../enums/AdminLogEntityTypeEnum";
@@ -97,9 +98,16 @@ export async function attemptDeleteIngredientGroup(idIngredientGroup: number) {
   await ingredientRepository.deleteIngredientGroup(idIngredientGroup);
 }
 
+export async function getIngredientsWithAssignedGroups(): Promise<
+  PaginatedDTO<IngredientWithAssignedGroupDTO>
+> {
+  return await ingredientRepository.getIngredientsWithAssignedGroups();
+}
+
 export const ingredientService = {
   getIngredientUnitGroupWithAssignedIngredients,
   attemptInsertIngredientGroup,
   attemptEditIngredientGroup,
   attemptDeleteIngredientGroup,
+  getIngredientsWithAssignedGroups,
 } as const;

@@ -18,7 +18,7 @@ interface TableBottomContentProps {
   pageSizeOptions?: number[];
 
   // Records count
-  totalRecords: number;
+  totalRecords: number | null | undefined;
   recordLabels?: {
     singular: string;
     plural: string;
@@ -68,7 +68,7 @@ const TableBottomContent = memo(
       >
         {showRecordsCount && (
           <RecordsCount
-            total={totalRecords}
+            total={totalRecords ?? 0}
             singularLabel={recordLabels.singular}
             pluralLabel={recordLabels.plural}
             fewLabel={recordLabels.few}

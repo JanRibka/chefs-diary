@@ -55,6 +55,9 @@ const errorTexts: ErrorLibraryType = {
   ingredientGroupNameRequired: "Název skupiny ingrediencí je povinný",
   ingredientGroupNameMaxLength:
     "Název skupiny ingrediencí může obsahovat maximálně {0} znak",
+  ingredientNameRequired: "Název ingredience je povinný",
+  ingredientNameMaxLength:
+    "Název ingredience může obsahovat maximálně {0} znak",
 };
 
 const getErrorTextByKey = (key: keyof ErrorLibraryType, ...args: string[]) => {

@@ -1,16 +1,16 @@
-import { getIngredientUnitGroupWithAssignedIngredientsAction } from "@/actions/admin/ingredients";
-import IngredientGroupsTable from "@/components/admin/ingredientGroupsTable/IngredientGroupsTable";
+import { getIngredientsWithAssignedGroupsAction } from "@/actions/admin/ingredients";
+import { IngredientsTableContextProvider } from "@/components/admin/ingredientsTable/context/provider";
+import IngredientsTable from "@/components/admin/ingredientsTable/IngredientsTable";
 import PageContentSection from "@/components/admin/pageContentSection/PageContentSection";
-import { UnitsTableContextProvider } from "@/components/admin/unitsTable/UnitsTableContext";
 
 export default function IngredientGroupsPage() {
   return (
     <PageContentSection className="flex-1">
-      <UnitsTableContextProvider>
-        <IngredientGroupsTable
-          serverAction={getIngredientUnitGroupWithAssignedIngredientsAction}
+      <IngredientsTableContextProvider>
+        <IngredientsTable
+          serverAction={getIngredientsWithAssignedGroupsAction}
         />
-      </UnitsTableContextProvider>
+      </IngredientsTableContextProvider>
     </PageContentSection>
   );
 }

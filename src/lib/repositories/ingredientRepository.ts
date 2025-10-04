@@ -2,6 +2,7 @@ import { IngredientGroup } from "@prisma/client";
 
 import { prisma } from "../../config/prisma/prisma";
 import { IngredientGroupWithAssignedIngredientsDTO } from "../dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
+import { IngredientWithAssignedGroupDTO } from "../dTOs/admin/IngredientWithAssignedGroupDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 
 /**
@@ -136,12 +137,40 @@ export async function updateIngredientGroup(
  * Deletes unit group
  * @param idUnitGroup Unit group id
  */
-export async function deleteIngredientGroup(idIngredientGroup: number) {
+export async function deleteIngredientGroup(
+  idIngredientGroup: number
+): Promise<void> {
   await prisma.ingredientGroup.delete({
     where: {
       idIngredientGroup: idIngredientGroup,
     },
   });
+}
+
+/**
+ *
+ */
+export async function getIngredientsWithAssignedGroups(): Promise<
+  PaginatedDTO<IngredientWithAssignedGroupDTO>
+> {
+  const [items, totalCount] = await Promise.all([
+    prisma.ingredient.findMany({
+      relationLoadStrategy: "join",
+      select: {
+        idIngredient: true,
+        name: true,
+        group: {
+          select: {
+            idIngredientGroup: true,
+            name: true,
+          },
+        },
+      },
+    }),
+    prisma.ingredient.count(),
+  ]);
+
+  return { items, totalCount };
 }
 
 export const ingredientRepository = {
@@ -151,4 +180,5 @@ export const ingredientRepository = {
   insertIngredientGroup,
   updateIngredientGroup,
   deleteIngredientGroup,
+  getIngredientsWithAssignedGroups,
 } as const;

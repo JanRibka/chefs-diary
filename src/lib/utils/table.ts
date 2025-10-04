@@ -25,7 +25,10 @@ export function getVisibleColumns(
  * @param pageSize
  * @returns
  */
-export function getPages(totalCount: number, pageSize: number): number {
+export function getPages(
+  totalCount: number | null | undefined,
+  pageSize: number
+): number {
   return Math.ceil((totalCount || 0) / pageSize);
 }
 
@@ -54,10 +57,10 @@ export function getPageItems<T>(
  * @returns {T[]}
  */
 export function getSortedItems<T>(
-  items: T[],
+  items: T[] | null | undefined,
   sortDescriptor: SortDescriptor
 ): T[] {
-  return [...items].sort((a: T, b: T) => {
+  return [...(items ?? [])].sort((a: T, b: T) => {
     const first = a[sortDescriptor.column as keyof T] as number;
     const second = b[sortDescriptor.column as keyof T] as number;
     const cmp = first < second ? -1 : first > second ? 1 : 0;

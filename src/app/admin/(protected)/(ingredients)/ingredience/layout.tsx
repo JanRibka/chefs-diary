@@ -9,11 +9,11 @@ type Props = { children: React.ReactNode };
 export default function UnitsLayout({ children }: Props) {
   return (
     <RedirectUnpermittedPage
-      allowedPermissions={getPermissionsForAdminMenuItem("units")}
+      allowedPermissions={getPermissionsForAdminMenuItem("ingredients")}
       redirectPath={adminRoutes.Dashboard}
     >
       <div className="min-h-full flex flex-col">
-        <PageTitle>Jednotky</PageTitle>
+        <PageTitle>Ingredience</PageTitle>
         <PageContent className="flex-1">{children}</PageContent>
       </div>
     </RedirectUnpermittedPage>

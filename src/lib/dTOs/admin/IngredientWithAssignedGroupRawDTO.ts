@@ -1,8 +1,10 @@
 import { Ingredient } from "@prisma/client";
 
-export type IngredientWithAssignedGroupDTO = Pick<
+export type IngredientWithAssignedGroupRawDTO = Pick<
   Ingredient,
   "idIngredient" | "name"
 > & {
-  groupName: string | null;
+  group: {
+    name: string;
+  } | null;
 };

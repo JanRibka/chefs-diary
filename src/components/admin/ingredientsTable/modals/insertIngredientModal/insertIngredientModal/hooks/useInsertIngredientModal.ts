@@ -36,7 +36,7 @@ export function useInsertIngredientModal({
     setOptimisticIngredient({
       idIngredient: Math.random(),
       name: formData.get(nameof<IngredientFormType>("name")) as string,
-      group: null,
+      groupName: null,
     });
 
     startTransition(async () => {

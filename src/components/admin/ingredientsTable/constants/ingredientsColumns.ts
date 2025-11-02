@@ -9,7 +9,7 @@ function getIngredientsColumns(canEditOrDelete: boolean): TableColumn[] {
     },
     {
       label: "Patří do skupin",
-      key: "ingredientGroupNames",
+      key: "groupName",
     },
   ];
 

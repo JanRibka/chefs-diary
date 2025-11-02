@@ -1,8 +1,9 @@
 import { Ingredient, IngredientGroup } from "@prisma/client";
 
 import { prisma } from "../../config/prisma/prisma";
+import { IngredientGroupsWithAssignmentsDTO } from "../dTOs/admin/IngredientGroupsWithAssignmentsDTO";
 import { IngredientGroupWithAssignedIngredientsDTO } from "../dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
-import { IngredientWithAssignedGroupDTO } from "../dTOs/admin/IngredientWithAssignedGroupDTO";
+import { IngredientWithAssignedGroupRawDTO } from "../dTOs/admin/IngredientWithAssignedGroupRawDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 import { createRecord, findByNameCaseInsensitive } from "../utils/prisma";
 
@@ -138,10 +139,10 @@ export async function deleteIngredientGroup(
  *
  * Returns paginated results for displaying in data tables.
  *
- * @returns Promise<PaginatedDTO<IngredientWithAssignedGroupDTO>> - Paginated ingredients with groups.
+ * @returns Promise<PaginatedDTO<IngredientWithAssignedGroupRawDTO>> - Paginated ingredients with groups.
  */
 export async function getIngredientsWithAssignedGroups(): Promise<
-  PaginatedDTO<IngredientWithAssignedGroupDTO>
+  PaginatedDTO<IngredientWithAssignedGroupRawDTO>
 > {
   const [items, totalCount] = await Promise.all([
     prisma.ingredient.findMany({
@@ -151,7 +152,6 @@ export async function getIngredientsWithAssignedGroups(): Promise<
         name: true,
         group: {
           select: {
-            idIngredientGroup: true,
             name: true,
           },
         },
@@ -253,6 +253,54 @@ export async function updateIngredient(
 }
 
 /**
+ * Assigns an ingredient to an ingredient group.
+ *
+ * @param idIngredient - The ID of the ingredient to assign.
+ * @param idIngredientGroup - The ID of the ingredient group to assign to, or null to unassign.
+ * @returns Promise<void>
+ */
+export async function assignIngredientToGroup(
+  idIngredient: number,
+  idIngredientGroup: number | null
+): Promise<void> {
+  await prisma.ingredient.update({
+    where: {
+      idIngredient: idIngredient,
+    },
+    data: {
+      idIngredientGroup: idIngredientGroup,
+    },
+  });
+}
+
+/**
+ * Retrieves all ingredient groups with information about whether a specific ingredient is assigned to them.
+ *
+ * @param idIngredient - The ID of the ingredient to check assignments for.
+ * @returns Promise<IngredientGroupsWithAssignmentsDTO[]> - List of ingredient groups with assignment info.
+ */
+export async function getIngredientGroupsWithAssignedIngredients(
+  idIngredient: number
+): Promise<IngredientGroupsWithAssignmentsDTO[]> {
+  return await prisma.ingredientGroup.findMany({
+    relationLoadStrategy: "join",
+    select: {
+      idIngredientGroup: true,
+      name: true,
+      ingredient: {
+        where: {
+          idIngredient,
+        },
+        select: {
+          idIngredient: true,
+          name: true,
+        },
+      },
+    },
+  });
+}
+
+/**
  * Ingredient repository object containing all ingredient and ingredient group operations.
  *
  * Provides a centralized interface for database operations related to ingredients and their groups.
@@ -266,9 +314,11 @@ export const ingredientRepository = {
   updateIngredientGroup,
   deleteIngredientGroup,
   getIngredientsWithAssignedGroups,
+  getIngredientGroupsWithAssignedIngredients,
   getIngredientByName,
   insertIngredient,
   getIngredientById,
   deleteIngredient,
   updateIngredient,
+  assignIngredientToGroup,
 } as const;

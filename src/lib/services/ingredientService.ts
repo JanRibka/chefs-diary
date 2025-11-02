@@ -1,5 +1,6 @@
 import { Ingredient, IngredientGroup } from "@prisma/client";
 
+import { IngredientGroupModalDTO } from "../dTOs/admin/IngredientGroupModalDTO";
 import { IngredientGroupWithAssignedIngredientsDTO } from "../dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
 import { IngredientWithAssignedGroupDTO } from "../dTOs/admin/IngredientWithAssignedGroupDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
@@ -11,6 +12,7 @@ import {
   deleteEntity,
   validateNameConflict,
 } from "../utils/actionHelpers";
+import { transformIngredientWithGroup } from "../utils/dtoTransformers";
 import { logAdminAction } from "./adminLogService";
 
 /**
@@ -119,7 +121,13 @@ export async function attemptDeleteIngredientGroup(
 export async function getIngredientsWithAssignedGroups(): Promise<
   PaginatedDTO<IngredientWithAssignedGroupDTO>
 > {
-  return await ingredientRepository.getIngredientsWithAssignedGroups();
+  const ingredients =
+    await ingredientRepository.getIngredientsWithAssignedGroups();
+
+  return {
+    ...ingredients,
+    items: ingredients.items.map(transformIngredientWithGroup),
+  };
 }
 
 /**
@@ -208,6 +216,73 @@ export async function attemptEditIngredient(
 }
 
 /**
+ * Attempts to assign an ingredient to an ingredient group.
+ * Throws a NotFoundError if the ingredient doesn't exist.
+ *
+ * @param idIngredient - The ID of the ingredient to assign.
+ * @param idIngredientGroup - The ID of the ingredient group to assign to, or null to unassign.
+ * @returns {Promise<void>}
+ * @throws {NotFoundError} If the ingredient with the given ID doesn't exist.
+ */
+export async function attemptAssignIngredientToGroup(
+  idIngredient: number,
+  idIngredientGroup: number | null
+): Promise<void> {
+  // Check if ingredient exists
+  const ingredient = await ingredientRepository.getIngredientById(idIngredient);
+  if (!ingredient) {
+    const NotFoundError = (await import("../errors/NotFoundError")).default;
+    throw new NotFoundError();
+  }
+
+  // If assigning to a group, check if the group exists
+  if (idIngredientGroup !== null) {
+    const group = await ingredientRepository.getIngredientGroupById(
+      idIngredientGroup
+    );
+    if (!group) {
+      const NotFoundError = (await import("../errors/NotFoundError")).default;
+      throw new NotFoundError();
+    }
+  }
+
+  // Log admin action
+  logAdminAction(
+    AdminLogActionTypeEnum.ADD_TO_GROUP,
+    AdminLogEntityTypeEnum.INGREDIENT,
+    idIngredient,
+    { idIngredientGroup }
+  );
+
+  // Assign ingredient to group
+  await ingredientRepository.assignIngredientToGroup(
+    idIngredient,
+    idIngredientGroup
+  );
+}
+
+/**
+ * Retrieves ingredient group data for modal display.
+ *
+ * @param idIngredient - The ID of the ingredient to get group data for.
+ * @returns Promise<IngredientGroupModalDTO[]> - List of ingredient groups with assignment info.
+ */
+export async function getIngredientGroupDataForModal(
+  idIngredient: number
+): Promise<IngredientGroupModalDTO[]> {
+  const groups =
+    await ingredientRepository.getIngredientGroupsWithAssignedIngredients(
+      idIngredient
+    );
+
+  return groups.map((item) => ({
+    idIngredientGroup: item.idIngredientGroup,
+    ingredientGroupName: item.name,
+    idsIngredient: item.ingredient.map((ing) => ing.idIngredient),
+  }));
+}
+
+/**
  * Ingredient service object containing all ingredient and ingredient group business logic operations.
  *
  * Provides a centralized interface for ingredient-related business operations including
@@ -223,4 +298,6 @@ export const ingredientService = {
   attemptInsertIngredient,
   attemptDeleteIngredient,
   attemptEditIngredient,
+  attemptAssignIngredientToGroup,
+  getIngredientGroupDataForModal,
 } as const;

@@ -61,7 +61,7 @@ export const useEditIngredient = ({
       setOptimisticIngredient({
         idIngredient: ingredient.idIngredient,
         name: formData.get(nameof<IngredientFormType>("name")) as string,
-        group: ingredient.group,
+        groupName: ingredient.groupName,
       });
 
       startTransition(async () => {

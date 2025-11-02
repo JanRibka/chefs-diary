@@ -1,12 +1,16 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import ingredientActionValidator from "@/lib/actionValidators/admin/ingredientActionValidator";
 import ingredientGroupActionValidator from "@/lib/actionValidators/admin/ingredientGroupActionValidator";
+import { IngredientGroupModalDTO } from "@/lib/dTOs/admin/IngredientGroupModalDTO";
 import { IngredientGroupWithAssignedIngredientsDTO } from "@/lib/dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
 import { IngredientWithAssignedGroupDTO } from "@/lib/dTOs/admin/IngredientWithAssignedGroupDTO";
 import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
+import adminRoutes from "@/lib/routes/adminRoutes";
 import { ingredientService } from "@/lib/services/ingredientService";
 import {
   createErrorResponse,
@@ -255,5 +259,95 @@ export async function updateIngredientAction(
       conflictMessage: "Ingredience již existuje",
     });
     return createErrorResponse(errorMessage);
+  }
+}
+
+/**
+ * Retrieves ingredient group data for modal display.
+ *
+ * Requires INGREDIENT_EDIT permission. Returns ingredient groups with assignment info for the specified ingredient.
+ *
+ * @param idIngredient - The ID of the ingredient to get group data for.
+ * @returns Promise<ActionResponseDTO<IngredientGroupModalDTO[]>> - Success response with group data or error response.
+ */
+export async function getIngredientGroupDataForModalAction(
+  idIngredient: number
+): Promise<ActionResponseDTO<IngredientGroupModalDTO[]>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_EDIT]);
+
+  try {
+    const data = await ingredientService.getIngredientGroupDataForModal(
+      idIngredient
+    );
+
+    return createSuccessResponse(data);
+  } catch (error) {
+    const errorMessage = handleActionError(error);
+    return createErrorResponse(errorMessage);
+  }
+}
+
+/**
+ * Adds an ingredient to an ingredient group.
+ *
+ * Requires INGREDIENT_EDIT permission. Assigns the ingredient to the specified group.
+ *
+ * @param idIngredient - The ID of the ingredient to assign.
+ * @param formData - The form data containing the ingredient group ID.
+ * @returns Promise<ActionResponseDTO<void>> - Success response or error response.
+ */
+export async function addIngredientToGroupAction(
+  idIngredient: number,
+  formData: FormData
+): Promise<ActionResponseDTO<void>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_EDIT]);
+
+  try {
+    const idIngredientGroupRaw = formData.get(
+      nameof<IngredientGroupModalDTO>("idIngredientGroup")
+    );
+    const idIngredientGroup =
+      idIngredientGroupRaw !== null ? Number(idIngredientGroupRaw) : null;
+
+    await ingredientService.attemptAssignIngredientToGroup(
+      idIngredient,
+      idIngredientGroup
+    );
+
+    return createSuccessResponse(null);
+  } catch (error) {
+    const errorMessage = handleActionError(error, {
+      notFoundMessage: "Ingredience neexistuje",
+    });
+    return createErrorResponse(errorMessage);
+  } finally {
+    revalidatePath(adminRoutes.Ingredients);
+  }
+}
+
+/**
+ * Removes an ingredient from its ingredient group.
+ *
+ * Requires INGREDIENT_EDIT permission. Unassigns the ingredient from any group.
+ *
+ * @param idIngredient - The ID of the ingredient to unassign.
+ * @returns Promise<ActionResponseDTO<void>> - Success response or error response.
+ */
+export async function removeIngredientFromGroupAction(
+  idIngredient: number
+): Promise<ActionResponseDTO<void>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_EDIT]);
+
+  try {
+    await ingredientService.attemptAssignIngredientToGroup(idIngredient, null);
+
+    return createSuccessResponse(null);
+  } catch (error) {
+    const errorMessage = handleActionError(error, {
+      notFoundMessage: "Ingredience neexistuje",
+    });
+    return createErrorResponse(errorMessage);
+  } finally {
+    revalidatePath(adminRoutes.Ingredients);
   }
 }

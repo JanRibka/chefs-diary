@@ -7,7 +7,7 @@ export function useIngredientsTableContext() {
 
   if (!context) {
     throw new Error(
-      "useIngredientsTableContext must be used within a IngredientsTableContextProvider"
+      "useIngredientsTableContext must be used within an IngredientsTableContextProvider"
     );
   }
 

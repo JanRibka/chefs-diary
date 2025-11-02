@@ -2,7 +2,7 @@ import { IngredientWithAssignedGroupDTO } from "@/lib/dTOs/admin/IngredientWithA
 
 import { SetOptimisticIngredient } from "./useIngredientsTableState";
 
-export default function useUnitOptimistic(
+export default function useIngredientOptimistic(
   setOptimisticIngredient: (action: SetOptimisticIngredient) => void
 ) {
   return {

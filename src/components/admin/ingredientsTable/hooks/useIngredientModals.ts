@@ -1,24 +1,26 @@
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { IngredientWithAssignedGroupDTO } from "@/lib/dTOs/admin/IngredientWithAssignedGroupDTO";
 import { useDisclosure } from "@heroui/react";
 
-type UseIngredientHandlersReturn = {
-  // Ingredients
+interface UseIngredientModalsReturn {
+  // State
   ingredientToDelete: IngredientWithAssignedGroupDTO | null;
   ingredientToEdit: IngredientWithAssignedGroupDTO | null;
   ingredientToAdd: IngredientWithAssignedGroupDTO | null;
-  setIngredientToDelete: Dispatch<
-    SetStateAction<IngredientWithAssignedGroupDTO | null>
+
+  // Setters
+  setIngredientToDelete: React.Dispatch<
+    React.SetStateAction<IngredientWithAssignedGroupDTO | null>
   >;
-  setIngredientToEdit: Dispatch<
-    SetStateAction<IngredientWithAssignedGroupDTO | null>
+  setIngredientToEdit: React.Dispatch<
+    React.SetStateAction<IngredientWithAssignedGroupDTO | null>
   >;
-  setIngredientToAdd: Dispatch<
-    SetStateAction<IngredientWithAssignedGroupDTO | null>
+  setIngredientToAdd: React.Dispatch<
+    React.SetStateAction<IngredientWithAssignedGroupDTO | null>
   >;
 
-  // Modal Disclosure
+  // Modal disclosures
   insertModal: ReturnType<typeof useDisclosure>;
   editModal: ReturnType<typeof useDisclosure>;
   deleteModal: ReturnType<typeof useDisclosure>;
@@ -28,15 +30,14 @@ type UseIngredientHandlersReturn = {
   handleDeleteIngredient: (ingredient: IngredientWithAssignedGroupDTO) => void;
   handleEditIngredient: (ingredient: IngredientWithAssignedGroupDTO) => void;
   handleAddToGroup: (ingredient: IngredientWithAssignedGroupDTO) => void;
-};
+}
 
 /**
- * Custom hook for managing ingredient modal states and handlers.
- * Provides state management for ingredient CRUD operations and modal visibility.
- *
- * @returns Object containing ingredient states, modal disclosures, and event handlers
+ * Centralized hook for managing all ingredient modal states and handlers.
+ * Combines functionality from useIngredientHandlers for better organization.
  */
-export default function useIngredientHandlers(): UseIngredientHandlersReturn {
+export function useIngredientModals(): UseIngredientModalsReturn {
+  // Ingredient states
   const [ingredientToDelete, setIngredientToDelete] =
     useState<IngredientWithAssignedGroupDTO | null>(null);
   const [ingredientToEdit, setIngredientToEdit] =
@@ -44,11 +45,13 @@ export default function useIngredientHandlers(): UseIngredientHandlersReturn {
   const [ingredientToAdd, setIngredientToAdd] =
     useState<IngredientWithAssignedGroupDTO | null>(null);
 
+  // Modal disclosures
   const insertModal = useDisclosure();
   const deleteModal = useDisclosure();
   const editModal = useDisclosure();
   const addToGroupModal = useDisclosure();
 
+  // Handlers
   const handleDeleteIngredient = useCallback(
     (ingredient: IngredientWithAssignedGroupDTO) => {
       setIngredientToDelete(ingredient);
@@ -74,15 +77,17 @@ export default function useIngredientHandlers(): UseIngredientHandlersReturn {
   );
 
   return {
-    // Ingredients
+    // State
     ingredientToDelete,
     ingredientToEdit,
     ingredientToAdd,
+
+    // Setters
     setIngredientToDelete,
     setIngredientToEdit,
     setIngredientToAdd,
 
-    // Modal Disclosure
+    // Modal disclosures
     insertModal,
     editModal,
     deleteModal,

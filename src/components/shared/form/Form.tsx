@@ -1,22 +1,24 @@
-import { FormHTMLAttributes } from "react";
+import { FormHTMLAttributes, forwardRef } from "react";
 
 import { mergeStyles } from "@/lib/utils/styles";
 
 type Props = FormHTMLAttributes<HTMLFormElement> & {};
 
-export default function Form({
-  action,
-  children,
-  className,
-  ...restProps
-}: Props) {
-  return (
-    <form
-      className={mergeStyles("w-full", className)}
-      action={action}
-      {...restProps}
-    >
-      {children}
-    </form>
-  );
-}
+const Form = forwardRef<HTMLFormElement, Props>(
+  ({ action, children, className, ...restProps }, ref) => {
+    return (
+      <form
+        ref={ref}
+        className={mergeStyles("w-full", className)}
+        action={action}
+        {...restProps}
+      >
+        {children}
+      </form>
+    );
+  }
+);
+
+Form.displayName = "Form";
+
+export default Form;

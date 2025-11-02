@@ -20,6 +20,8 @@ import getIngredientsColumns from "./constants/ingredientsColumns";
 import useIngredientHandlers from "./hooks/useIngredientHandlers";
 import useIngredientOptimistic from "./hooks/useIngredientOptimistic";
 import { useIngredientsTableState } from "./hooks/useIngredientsTableState";
+import DeleteIngredientModal from "./modals/deleteIngredientModal/deleteIngredientModal/DeleteIngredientModal";
+import EditIngredientModal from "./modals/editIngredientModal/editIngredientModal/EditIngredientModal";
 import { InsertIngredientModal } from "./modals/insertIngredientModal/insertIngredientModal/InsertIngredientModal";
 
 type Props = {
@@ -124,23 +126,23 @@ export default function IngredientsTable({ serverAction }: Props) {
         refetch={refetch}
       />
 
-      {/* <EditIngredientGroupModal
-        group={groupToEdit as IngredientGroupWithAssignedIngredientsDTO}
-        isOpen={isOpenEditGroup}
-        onOpenChange={onOpenChangeEditGroup}
-        setOptimisticIngredientGroup={setOptimisticIngredientGroup}
-        setGroupToEdit={setGroupToEdit}
+      <EditIngredientModal
+        ingredient={ingredientToEdit as IngredientWithAssignedGroupDTO}
+        isOpen={editModal.isOpen}
+        onOpenChange={editModal.onOpenChange}
+        setOptimisticIngredient={editIngredient}
+        setIngredientToEdit={setIngredientToEdit}
         refetch={refetch}
       />
 
-      <DeleteIngredientGroupModal
-        group={groupToDelete as IngredientGroupWithAssignedIngredientsDTO}
-        isOpen={isOpenDeleteGroup}
-        onOpenChange={onOpenChangeDeleteGroup}
-        setOptimisticIngredientGroup={setOptimisticIngredientGroup}
-        setGroupToDelete={setGroupToDelete}
+      <DeleteIngredientModal
+        ingredient={ingredientToDelete as IngredientWithAssignedGroupDTO}
+        isOpen={deleteModal.isOpen}
+        onOpenChange={deleteModal.onOpenChange}
+        setOptimisticIngredient={deleteIngredient}
+        setIngredientToDelete={setIngredientToDelete}
         refetch={refetch}
-      /> */}
+      />
     </div>
   );
 }

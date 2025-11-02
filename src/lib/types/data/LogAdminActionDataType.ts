@@ -1,5 +1,5 @@
-import AdminLogActionTypeEnum from "@/lib/enums/AdminLogActionTypeEnum";
-import AdminLogEntityTypeEnum from "@/lib/enums/AdminLogEntityTypeEnum";
+import { AdminLogActionTypeEnum } from "@/lib/enums/AdminLogActionTypeEnum";
+import { AdminLogEntityTypeEnum } from "@/lib/enums/AdminLogEntityTypeEnum";
 import { JsonObject } from "@prisma/client/runtime/library";
 
 type LogAdminActionDataType = {

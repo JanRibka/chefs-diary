@@ -1,25 +1,18 @@
-import { IngredientGroup } from "@prisma/client";
+import { Ingredient, IngredientGroup } from "@prisma/client";
 
 import { prisma } from "../../config/prisma/prisma";
 import { IngredientGroupWithAssignedIngredientsDTO } from "../dTOs/admin/IngredientGroupWithAssignedIngredientsDTO";
 import { IngredientWithAssignedGroupDTO } from "../dTOs/admin/IngredientWithAssignedGroupDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
+import { createRecord, findByNameCaseInsensitive } from "../utils/prisma";
 
 /**
- * Retrieves all ingredient groups from the database along with their assigned ingredients.
+ * Retrieves all ingredient groups with their assigned ingredients.
  *
- * For each ingredient group, the function includes:
- * - the group's ID and name,
- * - a list of all ingredients assigned to the group (with their IDs and names).
+ * Returns paginated results for displaying in data tables or management interfaces.
  *
- * The function returns paginated results with the total count of ingredient groups.
- * This data is typically used for displaying ingredient group information with
- * their associated ingredients in data tables or management interfaces.
- *
- * @returns {Promise<PaginatedDTO<IngredientGroupWithAssignedIngredientsDTO>>}
- *          A paginated response containing:
- *          - items: Array of ingredient groups with their assigned ingredients
- *          - totalCount: Total number of ingredient groups in the database
+ * @returns Promise<PaginatedDTO<IngredientGroupWithAssignedIngredientsDTO>>
+ *          A paginated response with ingredient groups and their ingredients.
  */
 export async function getIngredientUnitGroupWithAssignedIngredients(): Promise<
   PaginatedDTO<IngredientGroupWithAssignedIngredientsDTO>
@@ -45,32 +38,33 @@ export async function getIngredientUnitGroupWithAssignedIngredients(): Promise<
 }
 
 /**
- * Retrieves a specific ingredient group from the database by its name.
+ * Retrieves an ingredient group by name (case-insensitive).
  *
- * The function searches for an ingredient group with the exact name match
- * and returns the complete ingredient group record if found. This is typically
- * used for validation purposes, checking if a group with a specific name
- * already exists, or for retrieving group details when only the name is known.
+ * Used for validation or lookup. Returns null if not found.
  *
- * @param {string} name - The exact name of the ingredient group to search for
- * @returns {Promise<IngredientGroup | null>}
- *          A promise that resolves to:
- *          - IngredientGroup object if a group with the specified name exists
- *          - null if no ingredient group with the given name is found
+ * @param name - The name of the ingredient group to search for.
+ * @returns Promise<IngredientGroup | null> - The ingredient group or null.
  */
 export async function getIngredientGroupByName(
   name: string
 ): Promise<IngredientGroup | null> {
-  return await prisma.ingredientGroup.findFirst({
-    where: {
-      name: {
-        search: name,
-        mode: "insensitive",
-      },
-    },
-  });
+  return findByNameCaseInsensitive<IngredientGroup>(
+    prisma.ingredientGroup,
+    name
+  );
 }
 
+/**
+ * Retrieves a specific ingredient group from the database by its ID.
+ *
+ * - Searches for an ingredient group with the exact ID match.
+ * - Returns the complete ingredient group record if found.
+ * - Typically used for retrieving group details when the ID is known.
+ *
+ * @param idIngredientGroup - The unique identifier of the ingredient group.
+ *
+ * @returns Promise<IngredientGroup | null> - The ingredient group if found, otherwise null.
+ */
 export async function getIngredientGroupById(
   idIngredientGroup: number
 ): Promise<IngredientGroup | null> {
@@ -82,42 +76,27 @@ export async function getIngredientGroupById(
 }
 
 /**
- * Creates a new ingredient group in the database with the specified name.
+ * Creates a new ingredient group with the specified name.
  *
- * The function inserts a new ingredient group record into the database
- * using the provided name. This is typically used when adding new categories
- * for organizing ingredients, such as "Vegetables", "Spices", "Dairy", etc.
- * The newly created group can then be used to categorize ingredients.
+ * Used for adding new categories like "Vegetables" or "Spices".
  *
- * @param {string} name - The name of the new ingredient group to create
- * @returns {Promise<IngredientGroup>}
- *          A promise that resolves to the newly created IngredientGroup object
- *          containing the generated ID and the provided name
+ * @param name - The name of the new ingredient group.
+ * @returns Promise<IngredientGroup> - The created ingredient group.
  */
 export async function insertIngredientGroup(
   name: string
 ): Promise<IngredientGroup> {
-  return await prisma.ingredientGroup.create({
-    data: {
-      name: name,
-    },
-  });
+  return createRecord<IngredientGroup>(prisma.ingredientGroup, { name });
 }
 
 /**
- * Updates an existing ingredient group's name in the database.
+ * Updates an ingredient group's name by ID.
  *
- * The function modifies the name of an ingredient group identified by its ID.
- * This is typically used when renaming ingredient categories, such as changing
- * "Veggies" to "Vegetables" or correcting typos in group names. The operation
- * updates only the name field while preserving all other group properties
- * and relationships with assigned ingredients.
+ * Preserves all other properties and relationships.
  *
- * @param {number} idIngredientGroup - The unique identifier of the ingredient group to update
- * @param {string} name - The new name to assign to the ingredient group
- * @returns {Promise<void>}
- *          A promise that resolves when the update operation is completed successfully.
- *          No data is returned as this is a modification operation.
+ * @param idIngredientGroup - The ID of the ingredient group to update.
+ * @param name - The new name for the ingredient group.
+ * @returns Promise<void>
  */
 export async function updateIngredientGroup(
   idIngredientGroup: number,
@@ -134,8 +113,15 @@ export async function updateIngredientGroup(
 }
 
 /**
- * Deletes unit group
- * @param idUnitGroup Unit group id
+ * Deletes an ingredient group from the database by its ID.
+ *
+ * - Removes the ingredient group and all its associations.
+ * - Use with caution, as this operation is irreversible.
+ * - Typically used for removing unused or obsolete ingredient categories.
+ *
+ * @param idIngredientGroup - The unique identifier of the ingredient group to delete.
+ *
+ * @returns Promise<void>
  */
 export async function deleteIngredientGroup(
   idIngredientGroup: number
@@ -148,7 +134,11 @@ export async function deleteIngredientGroup(
 }
 
 /**
+ * Retrieves all ingredients with their assigned groups.
  *
+ * Returns paginated results for displaying in data tables.
+ *
+ * @returns Promise<PaginatedDTO<IngredientWithAssignedGroupDTO>> - Paginated ingredients with groups.
  */
 export async function getIngredientsWithAssignedGroups(): Promise<
   PaginatedDTO<IngredientWithAssignedGroupDTO>
@@ -173,6 +163,101 @@ export async function getIngredientsWithAssignedGroups(): Promise<
   return { items, totalCount };
 }
 
+/**
+ * Retrieves an ingredient by name (case-insensitive).
+ *
+ * Used for validation or lookup. Returns null if not found.
+ *
+ * @param name - The name of the ingredient to search for.
+ * @returns Promise<Ingredient | null> - The ingredient or null.
+ */
+export async function getIngredientByName(
+  name: string
+): Promise<Ingredient | null> {
+  return findByNameCaseInsensitive<Ingredient>(prisma.ingredient, name);
+}
+
+/**
+ * Creates a new ingredient group with the specified name.
+ *
+ * Used for adding new categories like "Vegetables" or "Spices".
+ *
+ * @param name - The name of the new ingredient group.
+ * @returns Promise<IngredientGroup> - The created ingredient group.
+ */
+export async function insertIngredient(name: string): Promise<Ingredient> {
+  return createRecord<Ingredient>(prisma.ingredient, { name });
+}
+
+/**
+ * Retrieves a specific ingredient from the database by its ID.
+ *
+ * - Searches for an ingredient with the exact ID match.
+ * - Returns the complete ingredient record if found.
+ * - Typically used for retrieving ingredient details when the ID is known.
+ *
+ * @param idIngredient - The unique identifier of the ingredient.
+ *
+ * @returns Promise<Ingredient | null> - The ingredient if found, otherwise null.
+ */
+export async function getIngredientById(
+  idIngredient: number
+): Promise<Ingredient | null> {
+  return await prisma.ingredient.findUnique({
+    where: {
+      idIngredient: idIngredient,
+    },
+  });
+}
+
+/**
+ * Deletes an ingredient from the database by its ID.
+ *
+ * - Removes the ingredient and all its associations.
+ * - Use with caution, as this operation is irreversible.
+ * - Typically used for removing unused or obsolete ingredients.
+ *
+ * @param idIngredient - The unique identifier of the ingredient to delete.
+ *
+ * @returns Promise<void>
+ */
+export async function deleteIngredient(idIngredient: number): Promise<void> {
+  await prisma.ingredient.delete({
+    where: {
+      idIngredient: idIngredient,
+    },
+  });
+}
+
+/**
+ * Updates an ingredient's name by ID.
+ *
+ * Preserves all other properties and relationships.
+ *
+ * @param idIngredient - The ID of the ingredient to update.
+ * @param name - The new name for the ingredient.
+ * @returns Promise<void>
+ */
+export async function updateIngredient(
+  idIngredient: number,
+  name: string
+): Promise<void> {
+  await prisma.ingredient.update({
+    where: {
+      idIngredient: idIngredient,
+    },
+    data: {
+      name: name,
+    },
+  });
+}
+
+/**
+ * Ingredient repository object containing all ingredient and ingredient group operations.
+ *
+ * Provides a centralized interface for database operations related to ingredients and their groups.
+ * All operations are async and return appropriate data types or void for mutations.
+ */
 export const ingredientRepository = {
   getIngredientUnitGroupWithAssignedIngredients,
   getIngredientGroupByName,
@@ -181,4 +266,9 @@ export const ingredientRepository = {
   updateIngredientGroup,
   deleteIngredientGroup,
   getIngredientsWithAssignedGroups,
+  getIngredientByName,
+  insertIngredient,
+  getIngredientById,
+  deleteIngredient,
+  updateIngredient,
 } as const;

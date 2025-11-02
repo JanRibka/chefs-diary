@@ -8,44 +8,44 @@ import { ActionResponseDTO } from "@/lib/dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 import { ingredientService } from "@/lib/services/ingredientService";
-import { getActualTime } from "@/lib/utils/date";
 import {
-  getConflictErrorFromError,
-  getErrorMessageFromError,
-  getNotFoundErrorFromError,
-} from "@/lib/utils/error";
+  createErrorResponse,
+  createSuccessResponse,
+  executeAction,
+  handleActionError,
+} from "@/lib/utils/actionHelpers";
 import { nameof } from "@/lib/utils/nameof";
 import { getRequireAdminPermissions } from "@/lib/utils/server";
 import { IngredientFormType } from "@/lib/validations/schemas/admin/ingredientFormValidationSchema";
 import { IngredientGroupFormType } from "@/lib/validations/schemas/admin/ingredientGroupFormValidationSchema";
 import { Ingredient, IngredientGroup } from "@prisma/client";
 
+/**
+ * Retrieves all ingredient groups with their assigned ingredients.
+ *
+ * Requires INGREDIENT_EDIT permission. Returns paginated results for displaying
+ * in data tables or management interfaces.
+ *
+ * @returns Promise<ActionResponseDTO<PaginatedDTO<IngredientGroupWithAssignedIngredientsDTO>>>
+ *          A paginated response with ingredient groups and their ingredients.
+ */
 export async function getIngredientUnitGroupWithAssignedIngredientsAction(): Promise<
   ActionResponseDTO<PaginatedDTO<IngredientGroupWithAssignedIngredientsDTO>>
 > {
-  await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_EDIT]);
-
-  try {
-    const data =
-      await ingredientService.getIngredientUnitGroupWithAssignedIngredients();
-
-    return {
-      data: data,
-      success: true,
-      timeStamp: getActualTime(),
-    };
-  } catch (error) {
-    const errorMessage = getErrorMessageFromError(error);
-
-    return {
-      data: null,
-      success: false,
-      error: errorMessage,
-      timeStamp: getActualTime(),
-    };
-  }
+  return executeAction([PermissionTypeEnum.INGREDIENT_EDIT], () =>
+    ingredientService.getIngredientUnitGroupWithAssignedIngredients()
+  );
 }
 
+/**
+ * Creates a new ingredient group.
+ *
+ * Requires INGREDIENT_EDIT permission. Validates the form data and creates
+ * a new ingredient group with the provided name.
+ *
+ * @param formData - The form data containing the ingredient group name.
+ * @returns Promise<ActionResponseDTO<IngredientGroup>> - The created ingredient group or error response.
+ */
 export async function insertIngredientGroupAction(
   formData: FormData
 ): Promise<ActionResponseDTO<IngredientGroup>> {
@@ -55,12 +55,7 @@ export async function insertIngredientGroupAction(
     const validationResult = await ingredientGroupActionValidator(formData);
 
     if (!validationResult.success) {
-      return {
-        data: null,
-        success: false,
-        error: validationResult.error,
-        timeStamp: getActualTime(),
-      };
+      return createErrorResponse("Validation failed");
     }
 
     const name = formData.get(
@@ -70,47 +65,36 @@ export async function insertIngredientGroupAction(
       name
     );
 
-    return {
-      data: unitGroup,
-      success: true,
-      timeStamp: getActualTime(),
-    };
+    return createSuccessResponse(unitGroup);
   } catch (error) {
-    const conflictError = getConflictErrorFromError(
-      error,
-      "Skupina ingrediencí již existuje"
-    );
-    let errorMessage = conflictError.errorMessage;
-
-    if (!conflictError.isConflictError) {
-      errorMessage = getErrorMessageFromError(error);
-    }
-
-    return {
-      data: null,
-      success: false,
-      error: errorMessage,
-      timeStamp: getActualTime(),
-    };
+    const errorMessage = handleActionError(error, {
+      conflictMessage: "Skupina ingrediencí již existuje",
+    });
+    return createErrorResponse(errorMessage);
   }
 }
 
+/**
+ * Updates an existing ingredient group.
+ *
+ * Requires INGREDIENT_EDIT permission. Validates the form data and updates
+ * the ingredient group with the provided name.
+ *
+ * @param idIngredientGroup - The ID of the ingredient group to update.
+ * @param formData - The form data containing the new ingredient group name.
+ * @returns Promise<ActionResponseDTO<null>> - Success response or error response.
+ */
 export async function updateIngredientGroupAction(
   idIngredientGroup: number,
   formData: FormData
-): Promise<ActionResponseDTO<IngredientGroup>> {
+): Promise<ActionResponseDTO<null>> {
   await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_EDIT]);
 
   try {
     const validationResult = await ingredientGroupActionValidator(formData);
 
     if (!validationResult.success) {
-      return {
-        data: null,
-        success: false,
-        error: validationResult.error,
-        timeStamp: getActualTime(),
-      };
+      return createErrorResponse("Validation failed");
     }
 
     const name = formData.get(
@@ -119,72 +103,25 @@ export async function updateIngredientGroupAction(
 
     await ingredientService.attemptEditIngredientGroup(idIngredientGroup, name);
 
-    return {
-      data: null,
-      success: true,
-      timeStamp: getActualTime(),
-    };
+    return createSuccessResponse(null);
   } catch (error) {
-    const notFoundError = getNotFoundErrorFromError(
-      error,
-      "Skupina ingrediencí neexistuje"
-    );
-    let errorMessage = notFoundError.errorMessage;
-
-    if (!notFoundError.isNotFoundError) {
-      const conflictError = getConflictErrorFromError(
-        error,
-        "Skupina ingrediencí již existuje"
-      );
-      if (conflictError.isConflictError) {
-        errorMessage = conflictError.errorMessage;
-      } else {
-        errorMessage = getErrorMessageFromError(error);
-      }
-    }
-
-    return {
-      data: null,
-      success: false,
-      error: errorMessage,
-      timeStamp: getActualTime(),
-    };
+    const errorMessage = handleActionError(error, {
+      notFoundMessage: "Skupina ingrediencí neexistuje",
+      conflictMessage: "Skupina ingrediencí již existuje",
+    });
+    return createErrorResponse(errorMessage);
   }
 }
 
-export async function deleteIngredientGroupAction(
-  idIngredientGroup: number
-): Promise<ActionResponseDTO<IngredientGroup>> {
-  await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_DELETE]);
-
-  try {
-    await ingredientService.attemptDeleteIngredientGroup(idIngredientGroup);
-
-    return {
-      data: null,
-      success: true,
-      timeStamp: getActualTime(),
-    };
-  } catch (error) {
-    const notFoundError = getNotFoundErrorFromError(
-      error,
-      "Skupina ingrediencí nelze smazat"
-    );
-    let errorMessage = notFoundError.errorMessage;
-
-    if (!notFoundError.isNotFoundError) {
-      errorMessage = getErrorMessageFromError(error);
-    }
-
-    return {
-      data: null,
-      success: false,
-      error: errorMessage,
-      timeStamp: getActualTime(),
-    };
-  }
-}
-
+/**
+ * Retrieves all ingredients with their assigned groups.
+ *
+ * Requires INGREDIENT_EDIT permission. Returns paginated results for displaying
+ * in data tables or management interfaces.
+ *
+ * @returns Promise<ActionResponseDTO<PaginatedDTO<IngredientWithAssignedGroupDTO>>>
+ *          A paginated response with ingredients and their groups.
+ */
 export async function getIngredientsWithAssignedGroupsAction(): Promise<
   ActionResponseDTO<PaginatedDTO<IngredientWithAssignedGroupDTO>>
 > {
@@ -193,23 +130,22 @@ export async function getIngredientsWithAssignedGroupsAction(): Promise<
   try {
     const data = await ingredientService.getIngredientsWithAssignedGroups();
 
-    return {
-      data: data,
-      success: true,
-      timeStamp: getActualTime(),
-    };
+    return createSuccessResponse(data);
   } catch (error) {
-    const errorMessage = getErrorMessageFromError(error);
-
-    return {
-      data: null,
-      success: false,
-      error: errorMessage,
-      timeStamp: getActualTime(),
-    };
+    const errorMessage = handleActionError(error);
+    return createErrorResponse(errorMessage);
   }
 }
 
+/**
+ * Creates a new ingredient.
+ *
+ * Requires INGREDIENT_EDIT permission. Validates the form data and creates
+ * a new ingredient with the provided name.
+ *
+ * @param formData - The form data containing the ingredient name.
+ * @returns Promise<ActionResponseDTO<Ingredient>> - The created ingredient or error response.
+ */
 export async function insertIngredientAction(
   formData: FormData
 ): Promise<ActionResponseDTO<Ingredient>> {
@@ -219,38 +155,105 @@ export async function insertIngredientAction(
     const validationResult = await ingredientActionValidator(formData);
 
     if (!validationResult.success) {
-      return {
-        data: null,
-        success: false,
-        error: validationResult.error,
-        timeStamp: getActualTime(),
-      };
+      return createErrorResponse("Validation failed");
     }
 
     const name = formData.get(nameof<IngredientFormType>("name")) as string;
     const ingredient = await ingredientService.attemptInsertIngredient(name);
 
-    return {
-      data: ingredient,
-      success: true,
-      timeStamp: getActualTime(),
-    };
+    return createSuccessResponse(ingredient);
   } catch (error) {
-    const conflictError = getConflictErrorFromError(
-      error,
-      "Ingredience již existuje"
-    );
-    let errorMessage = conflictError.errorMessage;
+    const errorMessage = handleActionError(error, {
+      conflictMessage: "Ingredience již existuje",
+    });
+    return createErrorResponse(errorMessage);
+  }
+}
 
-    if (!conflictError.isConflictError) {
-      errorMessage = getErrorMessageFromError(error);
+/**
+ * Deletes an ingredient group.
+ *
+ * Requires INGREDIENT_DELETE permission. Removes the ingredient group if it exists
+ * and has no assigned ingredients.
+ *
+ * @param idIngredientGroup - The ID of the ingredient group to delete.
+ * @returns Promise<ActionResponseDTO<null>> - Success response or error response.
+ */
+export async function deleteIngredientGroupAction(
+  idIngredientGroup: number
+): Promise<ActionResponseDTO<null>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_DELETE]);
+
+  try {
+    await ingredientService.attemptDeleteIngredientGroup(idIngredientGroup);
+
+    return createSuccessResponse(null);
+  } catch (error) {
+    const errorMessage = handleActionError(error, {
+      notFoundMessage: "Skupina ingrediencí nelze smazat",
+    });
+    return createErrorResponse(errorMessage);
+  }
+}
+
+/**
+ * Deletes an ingredient.
+ *
+ * Requires INGREDIENT_DELETE permission. Removes the ingredient if it exists.
+ *
+ * @param idIngredient - The ID of the ingredient to delete.
+ * @returns Promise<ActionResponseDTO<null>> - Success response or error response.
+ */
+export async function deleteIngredientAction(
+  idIngredient: number
+): Promise<ActionResponseDTO<null>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_DELETE]);
+
+  try {
+    await ingredientService.attemptDeleteIngredient(idIngredient);
+
+    return createSuccessResponse(null);
+  } catch (error) {
+    const errorMessage = handleActionError(error, {
+      notFoundMessage: "Ingredience nelze smazat",
+    });
+    return createErrorResponse(errorMessage);
+  }
+}
+
+/**
+ * Updates an existing ingredient.
+ *
+ * Requires INGREDIENT_EDIT permission. Validates the form data and updates
+ * the ingredient with the provided name.
+ *
+ * @param idIngredient - The ID of the ingredient to update.
+ * @param formData - The form data containing the new ingredient name.
+ * @returns Promise<ActionResponseDTO<null>> - Success response or error response.
+ */
+export async function updateIngredientAction(
+  idIngredient: number,
+  formData: FormData
+): Promise<ActionResponseDTO<null>> {
+  await getRequireAdminPermissions([PermissionTypeEnum.INGREDIENT_EDIT]);
+
+  try {
+    const validationResult = await ingredientActionValidator(formData);
+
+    if (!validationResult.success) {
+      return createErrorResponse("Validation failed");
     }
 
-    return {
-      data: null,
-      success: false,
-      error: errorMessage,
-      timeStamp: getActualTime(),
-    };
+    const name = formData.get(nameof<IngredientFormType>("name")) as string;
+
+    await ingredientService.attemptEditIngredient(idIngredient, name);
+
+    return createSuccessResponse(null);
+  } catch (error) {
+    const errorMessage = handleActionError(error, {
+      notFoundMessage: "Ingredience neexistuje",
+      conflictMessage: "Ingredience již existuje",
+    });
+    return createErrorResponse(errorMessage);
   }
 }

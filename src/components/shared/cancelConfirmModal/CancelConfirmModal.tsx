@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import { mergeStyles } from "@/lib/utils/styles";
 import {
   Button,
@@ -32,50 +34,56 @@ type Props = ModalProps & {
   hideFooter?: boolean;
 };
 
-export default function CancelConfirmModal({
-  className,
-  headerLabel,
-  children,
-  cancelButtonLabel = "Zrušit",
-  cancelButtonColor = "danger",
-  onCancel,
-  confirmButtonIsDisabled,
-  confirmButtonIsLoading,
-  confirmButtonLabel = "Potvrdit",
-  confirmButtonColor = "primary",
-  onConfirm,
-  hideFooter,
-  ...restProps
-}: Props) {
-  return (
-    <Modal className={mergeStyles("", className)} {...restProps}>
-      <ModalContent>
-        {() => (
-          <>
-            <ModalHeader>{headerLabel}</ModalHeader>
-            <ModalBody>{children}</ModalBody>
-            {!hideFooter && (
-              <ModalFooter>
-                <Button
-                  color={cancelButtonColor}
-                  variant="flat"
-                  onPress={onCancel}
-                >
-                  {cancelButtonLabel}
-                </Button>
-                <Button
-                  color={confirmButtonColor}
-                  isDisabled={confirmButtonIsDisabled}
-                  isLoading={confirmButtonIsLoading}
-                  onPress={onConfirm}
-                >
-                  {confirmButtonLabel}
-                </Button>
-              </ModalFooter>
-            )}
-          </>
-        )}
-      </ModalContent>
-    </Modal>
-  );
-}
+const CancelConfirmModal = memo<Props>(
+  ({
+    className,
+    headerLabel,
+    children,
+    cancelButtonLabel = "Zrušit",
+    cancelButtonColor = "danger",
+    onCancel,
+    confirmButtonIsDisabled,
+    confirmButtonIsLoading,
+    confirmButtonLabel = "Potvrdit",
+    confirmButtonColor = "primary",
+    onConfirm,
+    hideFooter,
+    ...restProps
+  }) => {
+    return (
+      <Modal className={mergeStyles("", className)} {...restProps}>
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader>{headerLabel}</ModalHeader>
+              <ModalBody>{children}</ModalBody>
+              {!hideFooter && (
+                <ModalFooter>
+                  <Button
+                    color={cancelButtonColor}
+                    variant="flat"
+                    onPress={onCancel}
+                  >
+                    {cancelButtonLabel}
+                  </Button>
+                  <Button
+                    color={confirmButtonColor}
+                    isDisabled={confirmButtonIsDisabled}
+                    isLoading={confirmButtonIsLoading}
+                    onPress={onConfirm}
+                  >
+                    {confirmButtonLabel}
+                  </Button>
+                </ModalFooter>
+              )}
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    );
+  }
+);
+
+CancelConfirmModal.displayName = "CancelConfirmModal";
+
+export default CancelConfirmModal;

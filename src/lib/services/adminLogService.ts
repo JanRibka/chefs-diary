@@ -3,8 +3,8 @@ import { JsonObject } from "next-auth/adapters";
 import { auth } from "@/config/auth/authAdmin";
 import { adminLogRepository } from "@/lib/repositories/adminLogRepository";
 
-import AdminLogActionTypeEnum from "../enums/AdminLogActionTypeEnum";
-import AdminLogEntityTypeEnum from "../enums/AdminLogEntityTypeEnum";
+import { AdminLogActionTypeEnum } from "../enums/AdminLogActionTypeEnum";
+import { AdminLogEntityTypeEnum } from "../enums/AdminLogEntityTypeEnum";
 import LogAdminActionDataType from "../types/data/LogAdminActionDataType";
 import { getErrorMessageFromError } from "../utils/error";
 

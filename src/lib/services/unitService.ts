@@ -5,12 +5,16 @@ import { UnitGroupSummaries } from "../dTOs/admin/UnitGroupSummariesDTO";
 import { UnitWithGroupInfoSummaryDTO } from "../dTOs/admin/UnitWithGroupInfoSummaryDTO";
 import { ActionResponseDTO } from "../dTOs/shared/ActionResponseDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
-import AdminLogActionTypeEnum from "../enums/AdminLogActionTypeEnum";
-import AdminLogEntityTypeEnum from "../enums/AdminLogEntityTypeEnum";
+import { AdminLogActionTypeEnum } from "../enums/AdminLogActionTypeEnum";
+import { AdminLogEntityTypeEnum } from "../enums/AdminLogEntityTypeEnum";
 import PermissionTypeEnum from "../enums/PermissionTypeEnum";
-import ConflictError from "../errors/ConflictError";
 import NotFoundError from "../errors/NotFoundError";
 import { unitRepository } from "../repositories/unitRepository";
+import {
+  createEntity,
+  deleteEntity,
+  validateNameConflict,
+} from "../utils/actionHelpers";
 import { getActualTime } from "../utils/date";
 import { getErrorMessageFromError } from "../utils/error";
 import { getRequireAdminPermissions } from "../utils/server";
@@ -25,22 +29,14 @@ import { logAdminAction } from "./adminLogService";
  * @throws {ConflictError} If a unit group with the same name already exists.
  */
 export async function attemptInsertUnitGroup(name: string): Promise<UnitGroup> {
-  const unitGroup = await unitRepository.getUnitGroupByName(name);
-
-  if (unitGroup) {
-    throw new ConflictError();
-  }
-
-  const insertedUnitGroup = await unitRepository.insertUnitGroup(name);
-
-  logAdminAction(
-    AdminLogActionTypeEnum.CREATE,
+  return await createEntity(
+    unitRepository.getUnitGroupByName,
+    unitRepository.insertUnitGroup,
+    logAdminAction,
     AdminLogEntityTypeEnum.UNIT_GROUP,
-    insertedUnitGroup.idUnitGroup,
-    { name }
+    (entity) => entity.idUnitGroup,
+    name
   );
-
-  return insertedUnitGroup;
 }
 
 /**
@@ -56,12 +52,22 @@ export async function attemptEditUnitGroup(
   idUnitGroup: number,
   name: string
 ): Promise<UnitGroup> {
-  const unitGroup = await unitRepository.getUnitGroupById(idUnitGroup);
-
-  if (!unitGroup) {
+  // Check if entity exists
+  const existingEntity = await unitRepository.getUnitGroupById(idUnitGroup);
+  if (!existingEntity) {
+    const NotFoundError = (await import("../errors/NotFoundError")).default;
     throw new NotFoundError();
   }
 
+  // Validate name conflict
+  await validateNameConflict(
+    unitRepository.getUnitGroupByName,
+    name,
+    idUnitGroup,
+    (entity) => entity.idUnitGroup
+  );
+
+  // Log admin action
   logAdminAction(
     AdminLogActionTypeEnum.EDIT,
     AdminLogEntityTypeEnum.UNIT_GROUP,
@@ -69,6 +75,7 @@ export async function attemptEditUnitGroup(
     { name }
   );
 
+  // Update entity
   return await unitRepository.updateUnitGroup(idUnitGroup, name);
 }
 
@@ -79,20 +86,16 @@ export async function attemptEditUnitGroup(
  * @param idUnitGroup - The id of the unit group to edit.
  * @throws {NotFoundError} If a unit group with the same name already exists.
  */
-export async function attemptDeleteUnitGroup(idUnitGroup: number) {
-  const unitGroup = await unitRepository.getUnitGroupById(idUnitGroup);
-
-  if (!unitGroup) {
-    throw new NotFoundError();
-  }
-
-  logAdminAction(
-    AdminLogActionTypeEnum.DELETE,
+export async function attemptDeleteUnitGroup(
+  idUnitGroup: number
+): Promise<void> {
+  await deleteEntity(
+    unitRepository.getUnitGroupById,
+    unitRepository.deleteUnitGroup,
+    logAdminAction,
     AdminLogEntityTypeEnum.UNIT_GROUP,
     idUnitGroup
   );
-
-  await unitRepository.deleteUnitGroup(idUnitGroup);
 }
 
 /**
@@ -134,22 +137,14 @@ export async function getUnitGroupById(
  * @throws {ConflictError} If a unit with the same name already exists.
  */
 export async function attemptInsertUnit(name: string): Promise<Unit> {
-  const unit = await unitRepository.getUnitByName(name);
-
-  if (unit) {
-    throw new ConflictError();
-  }
-
-  const insertedUnit = await unitRepository.insertUnit(name);
-
-  logAdminAction(
-    AdminLogActionTypeEnum.CREATE,
+  return await createEntity(
+    unitRepository.getUnitByName,
+    unitRepository.insertUnit,
+    logAdminAction,
     AdminLogEntityTypeEnum.UNIT,
-    insertedUnit.idUnit,
-    { name }
+    (entity) => entity.idUnit,
+    name
   );
-
-  return insertedUnit;
 }
 
 /**
@@ -165,12 +160,22 @@ export async function attemptEditUnit(
   idUnit: number,
   name: string
 ): Promise<Unit> {
-  const unit = await unitRepository.getUnitById(idUnit);
-
-  if (!unit) {
+  // Check if entity exists
+  const existingEntity = await unitRepository.getUnitById(idUnit);
+  if (!existingEntity) {
+    const NotFoundError = (await import("../errors/NotFoundError")).default;
     throw new NotFoundError();
   }
 
+  // Validate name conflict
+  await validateNameConflict(
+    unitRepository.getUnitByName,
+    name,
+    idUnit,
+    (entity) => entity.idUnit
+  );
+
+  // Log admin action
   logAdminAction(
     AdminLogActionTypeEnum.EDIT,
     AdminLogEntityTypeEnum.UNIT,
@@ -178,6 +183,7 @@ export async function attemptEditUnit(
     { name }
   );
 
+  // Update entity
   return await unitRepository.updateUnit(idUnit, name);
 }
 
@@ -219,20 +225,14 @@ export async function getUnitGroupDataForModal(
  * @param idUnit - The id of the unit to edit.
  * @throws {NotFoundError} If a unit with the same name already exists.
  */
-export async function attemptDeleteUnit(idUnit: number) {
-  const unit = await unitRepository.getUnitById(idUnit);
-
-  if (!unit) {
-    throw new NotFoundError();
-  }
-
-  logAdminAction(
-    AdminLogActionTypeEnum.DELETE,
+export async function attemptDeleteUnit(idUnit: number): Promise<void> {
+  await deleteEntity(
+    unitRepository.getUnitById,
+    unitRepository.deleteUnit,
+    logAdminAction,
     AdminLogEntityTypeEnum.UNIT,
     idUnit
   );
-
-  await unitRepository.deleteUnit(idUnit);
 }
 
 /**
@@ -407,7 +407,7 @@ export async function attemptRemoveUnitFromGroup(
   }
 
   logAdminAction(
-    AdminLogActionTypeEnum.REMOVE_FROM_GROUP,
+    AdminLogActionTypeEnum.DELETE_FROM_GROUP,
     AdminLogEntityTypeEnum.UNIT,
     idUnit,
     { idUnitGroup }

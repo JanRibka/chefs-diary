@@ -5,6 +5,7 @@ import { UnitGroupsWithAssignmentsDTO } from "../dTOs/admin/UnitGroupWithAssignm
 import { UnitGroupWithDetailDTO } from "../dTOs/admin/UnitGroupWithDetailDTO";
 import { UnitWithGroupInfoDTO } from "../dTOs/admin/UnitWithGroupInfoDTO";
 import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
+import { createRecord } from "../utils/prisma";
 
 /**
  * Get all units
@@ -26,11 +27,7 @@ export async function getAllUnits(): Promise<Unit[]> {
  * @returns {Promise<Unit>}
  */
 export async function insertUnit(name: string): Promise<Unit> {
-  return await prisma.unit.create({
-    data: {
-      name: name,
-    },
-  });
+  return createRecord<Unit>(prisma.unit, { name });
 }
 
 /**
@@ -107,11 +104,7 @@ export async function getAllUnitGroups(): Promise<UnitGroup[]> {
  * @returns {Promise<UnitGroup>}
  */
 export async function insertUnitGroup(name: string): Promise<UnitGroup> {
-  return await prisma.unitGroup.create({
-    data: {
-      name: name,
-    },
-  });
+  return createRecord<UnitGroup>(prisma.unitGroup, { name });
 }
 
 /**

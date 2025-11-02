@@ -17,7 +17,7 @@ const IngredientGroupsTopContent = memo(({ onPressInsertGroup }: Props) => {
           color="primary"
           label="Přidat skupinu"
           onPress={onPressInsertGroup}
-          requiredPermissions={[PermissionTypeEnum.UNIT_EDIT]}
+          requiredPermissions={[PermissionTypeEnum.INGREDIENT_EDIT]}
         />
       </TableTopContentActions>
     </TableTopContent>

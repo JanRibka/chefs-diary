@@ -7,6 +7,7 @@ import { PaginatedDTO } from "@/lib/dTOs/shared/PaginatedDTO";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 import { useServerActionWithLoading } from "@/lib/hooks/apiHooks/shared/useServerActionWithLoading";
 import { getPageItems, getPages, getSortedItems } from "@/lib/utils/table";
+import { SortDescriptor } from "@heroui/react";
 
 import { useIngredientsTableContext } from "../context/hooks/useIngredientsTableContext";
 
@@ -15,11 +16,42 @@ export type SetOptimisticIngredient = {
   ingredient: IngredientWithAssignedGroupDTO;
 };
 
+export type UseIngredientsTableStateReturn = {
+  data: PaginatedDTO<IngredientWithAssignedGroupDTO> | null;
+  sortDescriptor: SortDescriptor;
+  setSortDescriptor: (descriptor: SortDescriptor) => void;
+  pages: number;
+  canEdit: boolean;
+  canDelete: boolean;
+  optimisticIngredients: IngredientWithAssignedGroupDTO[];
+  setOptimisticIngredient: (action: SetOptimisticIngredient) => void;
+  isPending: boolean;
+  refetch: () => void;
+};
+
+/**
+ * useIngredientsTableState - Hook for managing ingredients table state
+ *
+ * Provides state management for ingredients table including sorting, pagination,
+ * permissions, and optimistic updates.
+ *
+ * @param serverAction - Server action to fetch ingredients data
+ * @returns Object containing table state and actions
+ *
+ * @example
+ * const {
+ *   data,
+ *   pages,
+ *   canEdit,
+ *   optimisticIngredients,
+ *   isPending
+ * } = useIngredientsTableState(fetchIngredientsAction);
+ */
 export function useIngredientsTableState(
   serverAction: () => Promise<
     ActionResponseDTO<PaginatedDTO<IngredientWithAssignedGroupDTO>>
   >
-) {
+): UseIngredientsTableStateReturn {
   // Get data
   const { isPending, data, refetch } = useServerActionWithLoading(serverAction);
 

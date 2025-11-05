@@ -5,7 +5,7 @@ import getErrorTextByKey from "@/lib/errorLibrary/auth/authErrorLibrary";
 const ingredientFormValidationSchema = object().shape({
   name: string()
     .required(getErrorTextByKey("ingredientNameRequired"))
-    .max(20, getErrorTextByKey("ingredientNameMaxLength", "20")),
+    .max(35, getErrorTextByKey("ingredientNameMaxLength", "35")),
 });
 
 export default ingredientFormValidationSchema;

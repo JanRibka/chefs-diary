@@ -1,5 +1,6 @@
 /**
  * Helper function for case-insensitive search by name in Prisma models.
+ * Uses case-insensitive exact match for reliable name lookups.
  * Reduces duplication for similar queries across repositories.
  *
  * @param model - The Prisma model delegate with findFirst capability.
@@ -14,7 +15,7 @@ export async function findByNameCaseInsensitive<T>(
   return await model.findFirst({
     where: {
       name: {
-        search: name,
+        equals: name,
         mode: "insensitive",
       },
     },

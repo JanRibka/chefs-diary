@@ -3,13 +3,13 @@
 import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import NextLink from "next/link";
+import { useState } from "react";
 // icons moved into inline SVG for the logo
 import { GiChefToque, GiScrollQuill } from "react-icons/gi";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { IoLogOut, IoPerson, IoSearch, IoSettings } from "react-icons/io5";
 
 import webRoutes from "@/lib/routes/webRoutes";
-import { useState } from "react";
 import {
   Avatar,
   Button,
@@ -137,10 +137,30 @@ export default function PublicNavbar() {
           className="p-2 rounded-md text-foreground hover:bg-background/60 focus:outline-none focus:ring-2 focus:ring-primary"
         >
           {/* simple hamburger icon */}
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 7H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            <path d="M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            <path d="M4 17H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <svg
+            className="w-6 h-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 7H20"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <path
+              d="M4 12H20"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <path
+              d="M4 17H20"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
           </svg>
         </button>
       </div>
@@ -196,16 +216,32 @@ export default function PublicNavbar() {
         aria-hidden={!mobileOpen}
       >
         <div className="px-4 py-3 flex flex-col gap-2">
-          <Link as={NextLink} href="/" className="py-2 rounded-md hover:bg-muted">
+          <Link
+            as={NextLink}
+            href="/"
+            className="py-2 rounded-md hover:bg-muted"
+          >
             Domů
           </Link>
-          <Link as={NextLink} href="/recipes" className="py-2 rounded-md hover:bg-muted">
+          <Link
+            as={NextLink}
+            href="/recipes"
+            className="py-2 rounded-md hover:bg-muted"
+          >
             Recepty
           </Link>
-          <Link as={NextLink} href="/categories" className="py-2 rounded-md hover:bg-muted">
+          <Link
+            as={NextLink}
+            href="/categories"
+            className="py-2 rounded-md hover:bg-muted"
+          >
             Kategorie
           </Link>
-          <Link as={NextLink} href="/about" className="py-2 rounded-md hover:bg-muted">
+          <Link
+            as={NextLink}
+            href="/about"
+            className="py-2 rounded-md hover:bg-muted"
+          >
             O nás
           </Link>
         </div>

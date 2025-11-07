@@ -1,4 +1,4 @@
-import { heroui } from "@heroui/react";
+import { heroui } from '@heroui/react';
 
 import type { Config } from "tailwindcss";
 
@@ -25,9 +25,9 @@ const config: Config = {
       },
       colors: {
         primary: {
-          light: "rgb(126, 186, 67)",
-          DEFAULT: "rgb(95, 139, 50)",
-          dark: "rgb(75, 111, 40)",
+          light: "rgb(255, 107, 53)",
+          DEFAULT: "rgb(255, 87, 35)",
+          dark: "rgb(204, 70, 28)",
         },
         secondary: {
           light: "rgb(252, 252, 252)",

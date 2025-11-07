@@ -9,6 +9,7 @@ import { HiMoon, HiSun } from "react-icons/hi";
 import { IoLogOut, IoPerson, IoSearch, IoSettings } from "react-icons/io5";
 
 import webRoutes from "@/lib/routes/webRoutes";
+import { useState } from "react";
 import {
   Avatar,
   Button,
@@ -27,6 +28,7 @@ export default function PublicNavbar() {
   const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
   const user = session?.user as { name?: string; image?: string } | undefined;
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <Navbar
@@ -126,6 +128,23 @@ export default function PublicNavbar() {
         </NextLink>
       </NavbarBrand>
 
+      {/* Mobile controls: hamburger and optional simple actions */}
+      <div className="flex items-center gap-2 sm:hidden">
+        <button
+          aria-label="Otevřít menu"
+          aria-expanded={mobileOpen}
+          onClick={() => setMobileOpen((v) => !v)}
+          className="p-2 rounded-md text-foreground hover:bg-background/60 focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          {/* simple hamburger icon */}
+          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 7H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <path d="M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <path d="M4 17H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
           <Link
@@ -168,6 +187,29 @@ export default function PublicNavbar() {
           </Link>
         </NavbarItem>
       </NavbarContent>
+
+      {/* Mobile menu panel (mobile-first, slide down) */}
+      <div
+        className={`sm:hidden absolute left-0 right-0 top-full bg-background/95 backdrop-blur-md border-b border-divider transition-transform duration-200 ease-in-out origin-top ${
+          mobileOpen ? "scale-y-100" : "scale-y-0"
+        }`}
+        aria-hidden={!mobileOpen}
+      >
+        <div className="px-4 py-3 flex flex-col gap-2">
+          <Link as={NextLink} href="/" className="py-2 rounded-md hover:bg-muted">
+            Domů
+          </Link>
+          <Link as={NextLink} href="/recipes" className="py-2 rounded-md hover:bg-muted">
+            Recepty
+          </Link>
+          <Link as={NextLink} href="/categories" className="py-2 rounded-md hover:bg-muted">
+            Kategorie
+          </Link>
+          <Link as={NextLink} href="/about" className="py-2 rounded-md hover:bg-muted">
+            O nás
+          </Link>
+        </div>
+      </div>
 
       <NavbarContent justify="end" className="items-center gap-3">
         <NavbarItem>

@@ -6,7 +6,7 @@ import { HTMLAttributes } from "react";
 
 import adminMenuItemsIconMap, {
   AdminMenuItemsIconMapType,
-} from "@/components/admin/layout/protectedLayout/sideBar/adminMenuItemsIconMap";
+} from "@/components/features/layout/admin/protectedLayout/sideBar/adminMenuItemsIconMap";
 import { RouteValue as AdminRouteValue } from "@/lib/routes/adminRoutes";
 import { RouteValue as WebRouteValue } from "@/lib/routes/webRoutes";
 import { mergeStyles } from "@/lib/utils/styles";

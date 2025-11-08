@@ -1,5 +1,6 @@
-import adminMenuItems from "@/components/admin/layout/protectedLayout/sideBar/adminMenuItems";
+import adminMenuItems from "@/components/features/layout/admin/protectedLayout/sideBar/adminMenuItems";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
+import AdminMenuItemType from "@/lib/types/admin/AdminMenuItemType";
 
 export function getPermissionsForAdminMenuItem(
   itemKey: string
@@ -10,7 +11,9 @@ export function getPermissionsForAdminMenuItem(
     }
 
     if (item.subitems) {
-      const sub = item.subitems.find((s) => s.key === itemKey);
+      const sub = item.subitems.find(
+        (s: AdminMenuItemType) => s.key === itemKey
+      );
       if (sub) {
         return sub.permissions ?? [];
       }

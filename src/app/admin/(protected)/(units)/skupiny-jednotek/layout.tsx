@@ -1,5 +1,5 @@
-import PageContent from "@/components/admin/pageContent/PageContent";
-import PageTitle from "@/components/admin/pageTitle/PageTitle";
+import PageContent from "@/components/features/admin/pageContent/PageContent";
+import PageTitle from "@/components/features/admin/pageTitle/PageTitle";
 import RedirectUnpermittedPage from "@/components/shared/layout/redirectUnpermittedPage/RedirectUnpermittedPage";
 import adminRoutes from "@/lib/routes/adminRoutes";
 import { getPermissionsForAdminMenuItem } from "@/lib/utils/admin";

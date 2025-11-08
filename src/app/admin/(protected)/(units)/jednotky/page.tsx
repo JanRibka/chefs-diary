@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 
-import PageContentSection from "@/components/admin/pageContentSection/PageContentSection";
-import UnitsTable from "@/components/admin/unitsTable/UnitsTable";
-import { UnitsTableContextProvider } from "@/components/admin/unitsTable/UnitsTableContext";
+import PageContentSection from "@/components/features/admin/pageContentSection/PageContentSection";
+import UnitsTable from "@/components/features/admin/unitsTable/UnitsTable";
+import { UnitsTableContextProvider } from "@/components/features/admin/unitsTable/UnitsTableContext";
 import Spinner from "@/components/shared/spinner/Spinner";
 import { getUnitWithGroupInfoSummary } from "@/lib/services/unitService";
 

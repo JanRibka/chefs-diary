@@ -2,8 +2,8 @@
 
 import { SessionProvider } from "next-auth/react";
 
-import PublicFooter from "@/components/web/layout/PublicFooter";
-import PublicNavbar from "@/components/web/layout/PublicNavbar";
+import PublicFooter from "@/components/features/layout/PublicFooter";
+import PublicNavbar from "@/components/features/layout/PublicNavbar";
 import { Providers } from "@/config/heroUI/providers";
 
 export default function PublicLayout({

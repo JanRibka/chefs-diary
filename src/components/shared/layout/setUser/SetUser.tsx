@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect } from "react";
 
-import { useUserContext } from "@/context/UserContext";
+import { useUserContext } from "@/lib/context/UserContext";
 import SessionUserType from "@/lib/types/common/SessionUserType";
 
 type Props = {

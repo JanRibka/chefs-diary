@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import ForgottenPassword from "@/components/web/auth/forgottenPassword/ForgottenPassword";
+import ForgottenPassword from "@/components/features/web/auth/forgottenPassword/ForgottenPassword";
 import adminRoutes from "@/lib/routes/adminRoutes";
 
 export const metadata: Metadata = {

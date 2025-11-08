@@ -1,7 +1,7 @@
 import { getIngredientsWithAssignedGroupsAction } from "@/actions/admin/ingredients";
-import { IngredientsTableContextProvider } from "@/components/admin/ingredientsTable/context/provider";
-import IngredientsTable from "@/components/admin/ingredientsTable/IngredientsTable";
-import PageContentSection from "@/components/admin/pageContentSection/PageContentSection";
+import { IngredientsTableContextProvider } from "@/components/features/admin/ingredientsTable/context/provider";
+import IngredientsTable from "@/components/features/admin/ingredientsTable/IngredientsTable";
+import PageContentSection from "@/components/features/admin/pageContentSection/PageContentSection";
 
 export default function IngredientGroupsPage() {
   return (

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
-import { useUserContext } from "@/context/UserContext";
+import { useUserContext } from "@/lib/context/UserContext";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 import { RouteValue as AdminRouteValue } from "@/lib/routes/adminRoutes";
 import { RouteValue as WebRouteValue } from "@/lib/routes/webRoutes";

@@ -1,8 +1,8 @@
-import CategoriesSection from '@/components/web/home/CategoriesSection';
-import FeaturedRecipes from '@/components/web/home/FeaturedRecipes';
-import HeroSection from '@/components/web/home/HeroSection';
-import NewsletterSection from '@/components/web/home/NewsletterSection';
-import StatsSection from '@/components/web/home/StatsSection';
+import CategoriesSection from "@/components/features/web/home/CategoriesSection";
+import FeaturedRecipes from "@/components/features/web/home/FeaturedRecipes";
+import HeroSection from "@/components/features/web/home/HeroSection";
+import NewsletterSection from "@/components/features/web/home/NewsletterSection";
+import StatsSection from "@/components/features/web/home/StatsSection";
 
 export default function Home() {
   return (

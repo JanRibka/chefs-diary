@@ -1,8 +1,8 @@
-import AllUsersTable from '@/components/admin/allUsersTable/AllUsersTable';
+import AllUsersTable from '@/components/features/admin/allUsersTable/AllUsersTable';
 import {
     AllUsersTableContextProvider
-} from '@/components/admin/allUsersTable/AllUsersTableContext';
-import PageContentSection from '@/components/admin/pageContentSection/PageContentSection';
+} from '@/components/features/admin/allUsersTable/AllUsersTableContext';
+import PageContentSection from '@/components/features/admin/pageContentSection/PageContentSection';
 
 export default function AllUsersPage() {
   return (

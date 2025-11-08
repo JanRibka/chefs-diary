@@ -1,4 +1,4 @@
-import { AdminMenuItemsIconMapType } from "@/components/admin/layout/protectedLayout/sideBar/adminMenuItemsIconMap";
+import { AdminMenuItemsIconMapType } from "@/components/features/layout/admin/protectedLayout/sideBar/adminMenuItemsIconMap";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 import { RouteValue } from "@/lib/routes/adminRoutes";
 

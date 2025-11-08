@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 
+import ForgottenPassword from "@/components/features/web/auth/forgottenPassword/ForgottenPassword";
 import webRoutes from "@/lib/routes/webRoutes";
-
-import ForgottenPassword from "../../../components/web/auth/forgottenPassword/ForgottenPassword";
 
 export const metadata: Metadata = {
   title: "Zapomenuté heslo - Kuchařův deník",

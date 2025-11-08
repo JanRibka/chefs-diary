@@ -1,6 +1,6 @@
 "use client";
 
-import { useUserContext } from "@/context/UserContext";
+import { useUserContext } from "@/lib/context/UserContext";
 import PermissionTypeEnum from "@/lib/enums/PermissionTypeEnum";
 
 type Props = {

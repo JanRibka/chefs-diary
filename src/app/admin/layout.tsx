@@ -1,5 +1,5 @@
-import { SideBarContextProvider } from "@/context/SideBarContext";
-import { UserContextProvider } from "@/context/UserContext";
+import { SideBarContextProvider } from "@/lib/context/SideBarContext";
+import { UserContextProvider } from "@/lib/context/UserContext";
 
 type Props = { children: React.ReactNode };
 

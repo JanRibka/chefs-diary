@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import SignUp from "../../../components/features/auth/signUp/SignUp";
+import SignUp from "@/components/features/web/auth/signUp/SignUp";
 
 export const metadata: Metadata = {
   title: "Registrace",

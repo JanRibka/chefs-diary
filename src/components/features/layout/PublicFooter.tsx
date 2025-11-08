@@ -16,6 +16,7 @@ import { HiLocationMarker, HiMail, HiPhone, HiSparkles } from "react-icons/hi";
 import { IoRestaurant, IoTime, IoTrendingUp } from "react-icons/io5";
 
 import { Button, Divider } from "@heroui/react";
+import { fontSerif, fontOrn } from "@/config/app/fonts";
 
 export default function PublicFooter() {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -171,11 +172,12 @@ export default function PublicFooter() {
                   </div>
 
                   <div className="flex flex-col">
-                    <span className="font-black text-2xl leading-tight tracking-wide bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent">
-                      KUCHAŘŮV
-                    </span>
-                    <span className="font-bold text-lg leading-tight tracking-wide bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent -mt-1">
-                      DENÍK
+                    <span className={`${fontSerif.variable} sr-only`}>serif</span>
+                    <span className={`${fontOrn.variable} font-extrabold text-2xl leading-tight tracking-tight text-amber-900 dark:text-amber-100`} style={{ fontFamily: `var(${fontOrn.variable})` }}>Kuchařův</span>
+                    <span className={`${fontOrn.variable} font-bold text-lg leading-tight tracking-wide text-amber-700 dark:text-amber-300 -mt-1 flex items-center gap-2`} style={{ fontFamily: `var(${fontOrn.variable})` }}>Deník
+                      <svg width="36" height="10" viewBox="0 0 36 10" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-80">
+                        <path d="M0 5C3 2 8 1 12 1C16 1 20 2 24 3C28 4 32 7 36 5" stroke="currentColor" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
                     </span>
                   </div>
                 </div>

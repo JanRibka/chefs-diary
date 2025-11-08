@@ -18,6 +18,7 @@ import {
 } from "react-icons/io5";
 
 import webRoutes from "@/lib/routes/webRoutes";
+import { fontDisplay, fontSerif, fontOrn } from "@/config/app/fonts";
 import {
   Avatar,
   Button,
@@ -89,14 +90,27 @@ export default function PublicNavbar() {
                   <div className="absolute inset-0 w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300 -z-10" />
                 </div>
 
-                {/* Brand Text */}
-                <div className="hidden sm:flex flex-col">
-                  <span className="font-black text-lg lg:text-xl leading-tight tracking-wide bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent">
-                    KUCHAŘŮV
+                {/* Brand Text - elegant serif wordmark */}
+                <div className="hidden sm:flex flex-col leading-none">
+                  {/* keep fontDisplay and fontSerif imported for other components and builds */}
+                  <span className={`${fontDisplay.variable} sr-only`}>display-font</span>
+                  <span className={`${fontSerif.variable} sr-only`}>serif-font</span>
+                  <span
+                    className={`${fontOrn.variable} text-sm tracking-widest uppercase text-amber-700 dark:text-amber-300 font-semibold opacity-95`}
+                    style={{ fontFamily: `var(${fontOrn.variable})` }}
+                  >
+                    Kuchařův
                   </span>
-                  <span className="font-bold text-sm lg:text-base leading-tight tracking-wide bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent -mt-1">
-                    DENÍK
+                  <span
+                    className={`${fontOrn.variable} font-extrabold text-2xl lg:text-3xl tracking-tight text-amber-900 dark:text-amber-100 -mt-1 flex items-center gap-2`}
+                    style={{ fontFamily: `var(${fontOrn.variable})` }}
+                  >
+                    Deník
+                    <svg width="28" height="8" viewBox="0 0 28 8" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-80">
+                      <path d="M0 4C2 2 6 1 9 1C12 1 16 2 18 3C20 4 24 6 28 4" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </span>
+                  {/* tagline removed per user request */}
                 </div>
               </NextLink>
             </div>

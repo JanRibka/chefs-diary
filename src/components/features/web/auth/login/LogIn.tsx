@@ -10,9 +10,9 @@ import webRoutes from "@/lib/routes/webRoutes";
 import { LogInFormErrorType } from "@/lib/validations/schemas/shared/logIn/logInValidationSchema";
 import { validateLogInForm } from "@/lib/validations/validations/shared/logIn/validateLogInForm";
 
-import CreateAccount from "../../../shared/auth/createAccount/CreateAccount";
-import EmailNotVerified from "../../../shared/auth/logIn/EmailNotVerified";
-import LogInForm from "../../../shared/auth/logIn/LogInForm";
+import CreateAccount from "../../../../shared/auth/createAccount/CreateAccount";
+import EmailNotVerified from "../../../../shared/auth/logIn/EmailNotVerified";
+import LogInForm from "../../../../shared/auth/logIn/LogInForm";
 
 export default function LogIn() {
   const isFirstRender = useIsFirstRender();

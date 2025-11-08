@@ -2,7 +2,7 @@ import type { Viewport } from "next";
 import "@/styles/globals.css";
 
 import ToastProvider from "@/components/shared/toastProvider/ToastProvider";
-import { fontSans } from "@/config/app/fonts";
+import { fontSans, fontDisplay, fontSerif, fontOrn } from "@/config/app/fonts";
 import { mergeStyles } from "@/lib/utils/styles";
 
 import { Providers } from "../config/heroUI/providers";
@@ -34,7 +34,14 @@ export default function RootLayout({
       <body
         className={mergeStyles(
           "min-h-screen font-sans overflow-y-auto",
-          fontSans.variable
+          mergeStyles(
+            fontSans.variable,
+            fontDisplay.variable,
+            fontSerif.variable,
+            fontOrn.variable,
+            /* ensure the font CSS is injected */
+            fontOrn.className
+          )
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>

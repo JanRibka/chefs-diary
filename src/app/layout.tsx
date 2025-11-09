@@ -2,7 +2,7 @@ import type { Viewport } from "next";
 import "@/styles/globals.css";
 
 import ToastProvider from "@/components/shared/toastProvider/ToastProvider";
-import { fontSans, fontDisplay, fontSerif, fontOrn } from "@/config/app/fonts";
+import { fontDisplay, fontOrn, fontSans, fontSerif } from "@/config/app/fonts";
 import { mergeStyles } from "@/lib/utils/styles";
 
 import { Providers } from "../config/heroUI/providers";
@@ -33,7 +33,7 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         className={mergeStyles(
-          "min-h-screen font-sans overflow-y-auto",
+          "min-h-screen font-sans overflow-y-auto pt-16 lg:pt-20",
           mergeStyles(
             fontSans.variable,
             fontDisplay.variable,
@@ -44,7 +44,14 @@ export default function RootLayout({
           )
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
+        <Providers
+          themeProps={{
+            attribute: "class",
+            defaultTheme: "light",
+            storageKey: "theme",
+            enableSystem: true,
+          }}
+        >
           <ToastProvider
             placement="top-center"
             toastOffset={60}

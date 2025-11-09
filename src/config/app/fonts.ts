@@ -1,4 +1,10 @@
-import { Fira_Code as FontMono, Inter as FontSans, Poppins as FontDisplay, Playfair_Display as FontSerif, Merriweather as FontOrn } from "next/font/google";
+import {
+  Fira_Code as FontMono,
+  Inter as FontSans,
+  Merriweather as FontOrn,
+  Playfair_Display as FontSerif,
+  Poppins as FontDisplay,
+} from "next/font/google";
 
 export const fontSans = FontSans({
   subsets: ["latin"],

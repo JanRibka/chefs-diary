@@ -1,9 +1,9 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import NextLink from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GiChefToque, GiScrollQuill } from "react-icons/gi";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { HiSparkles } from "react-icons/hi2";
@@ -17,8 +17,8 @@ import {
   IoSettings,
 } from "react-icons/io5";
 
+import { fontDisplay, fontOrn, fontSerif } from "@/config/app/fonts";
 import webRoutes from "@/lib/routes/webRoutes";
-import { fontDisplay, fontSerif, fontOrn } from "@/config/app/fonts";
 import {
   Avatar,
   Button,
@@ -30,21 +30,66 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   useDisclosure,
 } from "@heroui/react";
 
 export default function PublicNavbar() {
   const { data: session } = useSession();
-  const { theme, setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const user = session?.user as { name?: string; image?: string } | undefined;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [loginFlyoutOpen, setLoginFlyoutOpen] = useState(false);
+  const [loginFlyoutOpenedByHover, setLoginFlyoutOpenedByHover] =
+    useState(false);
+  const loginTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const flyoutFirstInputRef = useRef<HTMLInputElement | null>(null);
+  const hoverOpenTimerRef = useRef<number | null>(null);
 
-  // Handle scroll effect
+  // Login form state for popover
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!loginFlyoutOpen) return;
+    setTimeout(() => flyoutFirstInputRef.current?.focus(), 50);
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLoginFlyoutOpen(false);
+        loginTriggerRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [loginFlyoutOpen]);
+
+  // Reset login form when popover opens
+  useEffect(() => {
+    if (loginFlyoutOpen) {
+      setLoginError(null);
+      setLoginEmail("");
+      setLoginPassword("");
+      setLoginLoading(false);
+    }
+  }, [loginFlyoutOpen]);
+
+  // mark when component is mounted client-side to avoid SSR/client mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Enhanced scroll effect with multiple states
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const scrollY = window.scrollY;
+      setScrolled(scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -61,53 +106,106 @@ export default function PublicNavbar() {
 
   return (
     <>
-      {/* Main Navigation */}
+      {/* Main Navigation - Fixed with Enhanced Scroll Effects */}
       <nav
         className={`
-        transition-all duration-300 ease-out
+        fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out
         ${
           scrolled
-            ? "backdrop-blur-xl bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-black/5 border-b border-white/20 dark:border-slate-800/40"
-            : "backdrop-blur-md bg-white/70 dark:bg-slate-900/70 border-b border-white/10 dark:border-slate-800/20"
+            ? "backdrop-blur-2xl bg-white/95 dark:bg-slate-900/95 shadow-2xl shadow-black/10 border-b border-white/30 dark:border-slate-800/60 h-14 lg:h-16"
+            : "backdrop-blur-md bg-white/80 dark:bg-slate-900/80 shadow-lg shadow-black/5 border-b border-white/20 dark:border-slate-800/30 h-16 lg:h-20"
         }
       `}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
+          <div
+            className={`flex items-center justify-between transition-all duration-500 ease-out ${
+              scrolled ? "h-14 lg:h-16" : "h-16 lg:h-20"
+            }`}
+          >
             {/* Logo Section */}
             <div className="flex items-center">
               <NextLink href="/" className="flex items-center gap-3 group">
-                {/* Enhanced Logo with 3D effect */}
+                {/* Enhanced Logo with 3D effect - responsive to scroll */}
                 <div className="relative">
-                  <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 rounded-2xl shadow-xl shadow-orange-500/25 group-hover:shadow-orange-500/40 transition-all duration-300 flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3">
+                  <div
+                    className={`bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 rounded-2xl shadow-xl shadow-orange-500/25 group-hover:shadow-orange-500/40 transition-all duration-500 flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 ${
+                      scrolled
+                        ? "w-10 h-10 lg:w-12 lg:h-12"
+                        : "w-12 h-12 lg:w-14 lg:h-14"
+                    }`}
+                  >
                     <div className="relative">
-                      <GiScrollQuill className="w-6 h-6 lg:w-7 lg:h-7 text-white drop-shadow-lg" />
-                      <GiChefToque className="w-5 h-5 lg:w-6 lg:h-6 text-white absolute -top-1 -right-1 drop-shadow-lg" />
+                      <GiScrollQuill
+                        className={`text-white drop-shadow-lg ${
+                          scrolled
+                            ? "w-5 h-5 lg:w-6 lg:h-6"
+                            : "w-6 h-6 lg:w-7 lg:h-7"
+                        }`}
+                      />
+                      <GiChefToque
+                        className={`text-white absolute -top-1 -right-1 drop-shadow-lg ${
+                          scrolled
+                            ? "w-4 h-4 lg:w-5 lg:h-5"
+                            : "w-5 h-5 lg:w-6 lg:h-6"
+                        }`}
+                      />
                       <HiSparkles className="w-3 h-3 text-yellow-200 absolute -top-2 -right-2 animate-pulse" />
                     </div>
                   </div>
                   {/* Glow effect */}
-                  <div className="absolute inset-0 w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300 -z-10" />
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 -z-10 ${
+                      scrolled
+                        ? "w-10 h-10 lg:w-12 lg:h-12"
+                        : "w-12 h-12 lg:w-14 lg:h-14"
+                    }`}
+                  />
                 </div>
 
                 {/* Brand Text - elegant serif wordmark */}
                 <div className="hidden sm:flex flex-col leading-none">
                   {/* keep fontDisplay and fontSerif imported for other components and builds */}
-                  <span className={`${fontDisplay.variable} sr-only`}>display-font</span>
-                  <span className={`${fontSerif.variable} sr-only`}>serif-font</span>
+                  <span className={`${fontDisplay.variable} sr-only`}>
+                    display-font
+                  </span>
+                  <span className={`${fontSerif.variable} sr-only`}>
+                    serif-font
+                  </span>
                   <span
-                    className={`${fontOrn.variable} text-sm tracking-widest uppercase text-amber-700 dark:text-amber-300 font-semibold opacity-95`}
+                    className={`${
+                      fontOrn.variable
+                    } tracking-widest uppercase text-amber-700 dark:text-amber-300 font-semibold opacity-95 ${
+                      scrolled ? "text-xs" : "text-sm"
+                    }`}
                     style={{ fontFamily: `var(${fontOrn.variable})` }}
                   >
                     Kuchařův
                   </span>
                   <span
-                    className={`${fontOrn.variable} font-extrabold text-2xl lg:text-3xl tracking-tight text-amber-900 dark:text-amber-100 -mt-1 flex items-center gap-2`}
+                    className={`${
+                      fontOrn.variable
+                    } font-extrabold tracking-tight text-amber-900 dark:text-amber-100 -mt-1 flex items-center gap-2 ${
+                      scrolled ? "text-xl lg:text-2xl" : "text-2xl lg:text-3xl"
+                    }`}
                     style={{ fontFamily: `var(${fontOrn.variable})` }}
                   >
                     Deník
-                    <svg width="28" height="8" viewBox="0 0 28 8" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-80">
-                      <path d="M0 4C2 2 6 1 9 1C12 1 16 2 18 3C20 4 24 6 28 4" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+                    <svg
+                      width="28"
+                      height="8"
+                      viewBox="0 0 28 8"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="opacity-80"
+                    >
+                      <path
+                        d="M0 4C2 2 6 1 9 1C12 1 16 2 18 3C20 4 24 6 28 4"
+                        stroke="currentColor"
+                        strokeWidth="0.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </span>
                   {/* tagline removed per user request */}
@@ -190,37 +288,46 @@ export default function PublicNavbar() {
             {/* Right Section - Enhanced */}
             <div className="flex items-center gap-3 lg:gap-4">
               {/* Search Button with enhanced effects */}
-              <div className="relative group">
+              <div className="relative group cursor-pointer">
                 <Button
                   isIconOnly
                   variant="light"
                   size="lg"
                   onPress={onOpen}
-                  className="hidden sm:flex relative overflow-hidden rounded-2xl transition-all duration-300 hover:bg-gradient-to-r hover:from-orange-100 hover:to-red-100 dark:hover:from-orange-900/30 dark:hover:to-red-900/30 group-hover:scale-110 group-hover:shadow-lg"
+                  className="relative overflow-hidden rounded-2xl transition-all duration-300 hover:bg-gradient-to-r hover:from-yellow-100 hover:to-orange-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 group-hover:scale-110 group-hover:shadow-lg"
                   aria-label="Hledat"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
-                  <IoSearch className="w-6 h-6 text-slate-600 dark:text-slate-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-all duration-300 group-hover:scale-110 relative z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 dark:from-blue-500/20 dark:to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+                  <div className="relative z-10 transition-all duration-500 group-hover:rotate-12">
+                    <IoSearch className="w-6 h-6 text-slate-600 dark:text-slate-400 transition-all duration-300 group-hover:scale-110" />
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
                 </Button>
                 {/* Pulse ring */}
-                <div className="absolute inset-0 rounded-2xl bg-orange-500/30 animate-ping opacity-0 group-hover:opacity-75 transition-opacity duration-300" />
+                <div className="absolute inset-0 rounded-2xl bg-yellow-500/30 dark:bg-blue-500/30 animate-ping opacity-0 group-hover:opacity-75 transition-opacity duration-300" />
+                {/* Glow effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-yellow-500/40 to-orange-500/40 dark:from-blue-500/40 dark:to-purple-500/40 opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-xl scale-150" />
               </div>
 
               {/* Theme Toggle with enhanced effects */}
-              <div className="relative group">
+              <div className="relative group cursor-pointer">
                 <Button
                   isIconOnly
                   variant="light"
                   size="lg"
-                  onPress={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  onPress={() =>
+                    setTheme(resolvedTheme === "dark" ? "light" : "dark")
+                  }
                   className="relative overflow-hidden rounded-2xl transition-all duration-300 hover:bg-gradient-to-r hover:from-yellow-100 hover:to-orange-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 group-hover:scale-110 group-hover:shadow-lg"
                   aria-label="Přepnout režim"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 dark:from-blue-500/20 dark:to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
                   <div className="relative z-10 transition-all duration-500 group-hover:rotate-180">
-                    {theme === "light" ? (
-                      <HiMoon className="w-6 h-6 text-slate-600 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300" />
+                    {/* Render neutral placeholder on server to avoid hydration mismatch */}
+                    {!mounted ? (
+                      <span className="w-6 h-6 inline-block" aria-hidden />
+                    ) : resolvedTheme === "light" ? (
+                      <HiMoon className="w-6 h-6 text-slate-600 dark:text-slate-400 transition-colors duration-300" />
                     ) : (
                       <HiSun className="w-6 h-6 text-orange-500 group-hover:text-yellow-500 transition-colors duration-300" />
                     )}
@@ -396,53 +503,309 @@ export default function PublicNavbar() {
               ) : (
                 <div className="flex items-center gap-3">
                   {/* Login Button - Enhanced */}
-                  <div className="relative group">
-                    <Button
-                      as={NextLink}
-                      href={webRoutes.LogIn}
-                      variant="light"
-                      size="lg"
-                      className="hidden sm:flex font-semibold px-6 py-3 rounded-2xl border-2 border-transparent hover:border-orange-200 dark:hover:border-orange-800 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 dark:hover:from-orange-900/20 dark:hover:to-red-900/20 transition-all duration-300 group-hover:scale-105 overflow-hidden"
+
+                  {/* Login trigger: hover opens popover, click toggles */}
+                  <div
+                    className="relative group"
+                    onMouseEnter={() => {
+                      // open popover after a small delay to avoid accidental opens
+                      hoverOpenTimerRef.current = window.setTimeout(() => {
+                        setLoginFlyoutOpen(true);
+                        setLoginFlyoutOpenedByHover(true);
+                      }, 150);
+                    }}
+                    onMouseLeave={() => {
+                      if (hoverOpenTimerRef.current) {
+                        clearTimeout(hoverOpenTimerRef.current);
+                        hoverOpenTimerRef.current = null;
+                      }
+                      // Only close if opened by hover
+                      if (loginFlyoutOpenedByHover) {
+                        setLoginFlyoutOpen(false);
+                        setLoginFlyoutOpenedByHover(false);
+                      }
+                    }}
+                  >
+                    <Popover
+                      isOpen={loginFlyoutOpen}
+                      onOpenChange={(isOpen) => {
+                        console.warn("Popover onOpenChange:", isOpen);
+                        setLoginFlyoutOpen(isOpen);
+                        // If opened by click, mark as not opened by hover
+                        if (isOpen) {
+                          setLoginFlyoutOpenedByHover(false);
+                        }
+                      }}
+                      placement="bottom"
+                      classNames={{
+                        base: "z-50",
+                        content: "z-50",
+                      }}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <span className="relative flex items-center gap-2">
-                        <IoPerson className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
-                        Přihlásit se
-                      </span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
-                    </Button>
-                    {/* Subtle glow */}
-                    <div className="absolute inset-0 rounded-2xl bg-orange-500/20 opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-xl scale-110" />
+                      <PopoverTrigger asChild>
+                        <Button
+                          ref={loginTriggerRef}
+                          variant="bordered"
+                          size="lg"
+                          aria-haspopup="dialog"
+                          aria-expanded={loginFlyoutOpen}
+                          onPress={() => setLoginFlyoutOpen(!loginFlyoutOpen)}
+                          className={`hidden sm:flex font-black px-6 py-4 rounded-3xl border-4 transition-all duration-300 hover:scale-110 overflow-hidden relative group cursor-pointer ${
+                            loginFlyoutOpen ? "scale-110" : ""
+                          } ${
+                            resolvedTheme === "dark"
+                              ? "border-purple-500 hover:border-purple-400 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:via-indigo-500 hover:to-blue-500 text-white shadow-2xl shadow-purple-500/60 hover:shadow-purple-400/80"
+                              : "border-orange-600 hover:border-orange-500 bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 hover:from-orange-500 hover:via-red-500 hover:to-pink-500 text-white shadow-2xl shadow-orange-600/60 hover:shadow-orange-500/80"
+                          }`}
+                        >
+                          {/* Neon glow layers - theme-aware */}
+                          <div
+                            className={`absolute inset-0 rounded-3xl blur-lg opacity-60 group-hover:opacity-85 transition-opacity duration-300 ${
+                              resolvedTheme === "dark"
+                                ? "bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400"
+                                : "bg-gradient-to-r from-orange-400 via-red-400 to-pink-400"
+                            }`}
+                          />
+                          <div
+                            className={`absolute inset-0 rounded-3xl blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-300 ${
+                              resolvedTheme === "dark"
+                                ? "bg-gradient-to-r from-purple-300 via-indigo-300 to-blue-300"
+                                : "bg-gradient-to-r from-orange-300 via-red-300 to-pink-300"
+                            }`}
+                          />
+
+                          {/* Electric spark effects - theme-aware */}
+                          <div className="absolute inset-0 rounded-3xl">
+                            <div
+                              className={`absolute top-2 left-4 w-1 h-1 rounded-full animate-ping opacity-80 ${
+                                resolvedTheme === "dark"
+                                  ? "bg-purple-300"
+                                  : "bg-yellow-300"
+                              }`}
+                            />
+                            <div
+                              className={`absolute top-3 right-6 w-0.5 h-0.5 rounded-full animate-pulse opacity-90 ${
+                                resolvedTheme === "dark"
+                                  ? "bg-indigo-300"
+                                  : "bg-white"
+                              }`}
+                              style={{ animationDelay: "0.2s" }}
+                            />
+                            <div
+                              className={`absolute bottom-3 left-8 w-0.5 h-0.5 rounded-full animate-bounce opacity-70 ${
+                                resolvedTheme === "dark"
+                                  ? "bg-blue-300"
+                                  : "bg-yellow-200"
+                              }`}
+                              style={{ animationDelay: "0.4s" }}
+                            />
+                            <div
+                              className={`absolute bottom-2 right-3 w-1 h-1 rounded-full animate-ping opacity-60 ${
+                                resolvedTheme === "dark"
+                                  ? "bg-purple-200"
+                                  : "bg-orange-200"
+                              }`}
+                              style={{ animationDelay: "0.6s" }}
+                            />
+                          </div>
+
+                          {/* Energy wave animation */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-3xl" />
+
+                          {/* Content */}
+                          <span className="relative flex items-center gap-4 z-10">
+                            <div className="relative">
+                              <IoPerson className="w-7 h-7 group-hover:rotate-180 group-hover:scale-125 transition-all duration-500 drop-shadow-lg text-white" />
+                              {/* Electric ring */}
+                              <div
+                                className="absolute inset-0 border-2 border-white/50 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-spin transition-all duration-300"
+                                style={{ animationDuration: "2s" }}
+                              />
+                            </div>
+                            <span
+                              className="tracking-wider text-lg font-black drop-shadow-2xl text-white"
+                              style={{
+                                textShadow:
+                                  resolvedTheme === "dark"
+                                    ? "0 0 3px rgba(0,0,0,0.7), 1px 1px 2px rgba(0,0,0,0.9)"
+                                    : "0 0 4px rgba(0,0,0,0.6), 1px 1px 2px rgba(0,0,0,0.8)",
+                              }}
+                            >
+                              PŘIHLÁSIT SE
+                            </span>
+                          </span>
+
+                          {/* Outer glow ring */}
+                          <div className="absolute inset-0 rounded-3xl border-2 border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
+                        </Button>
+                      </PopoverTrigger>
+
+                      {/* Subtle glow - theme-aware */}
+                      <div
+                        className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-xl scale-110 ${
+                          resolvedTheme === "dark"
+                            ? "bg-purple-500/20"
+                            : "bg-orange-500/20"
+                        }`}
+                      />
+
+                      <PopoverContent className="w-80 p-0">
+                        <div className="p-4 rounded-2xl shadow-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-white/10 dark:border-slate-800/40">
+                          <div className="space-y-4">
+                            <div>
+                              <h3 className="text-lg font-bold">Přihlášení</h3>
+                              <p className="text-sm text-slate-500">
+                                Přihlaste se do svého účtu
+                              </p>
+                            </div>
+
+                            <form
+                              onSubmit={async (e) => {
+                                e.preventDefault();
+                                setLoginLoading(true);
+                                setLoginError(null);
+                                try {
+                                  const res = (await signIn("credentials", {
+                                    redirect: false,
+                                    email: loginEmail,
+                                    password: loginPassword,
+                                    callbackUrl: window.location.href,
+                                  })) as
+                                    | {
+                                        error?: string;
+                                        ok?: boolean;
+                                        status?: number;
+                                      }
+                                    | undefined
+                                    | void;
+
+                                  if (
+                                    res &&
+                                    typeof res === "object" &&
+                                    "error" in res &&
+                                    res.error
+                                  ) {
+                                    setLoginError(
+                                      res.error ||
+                                        "Neznámá chyba při přihlášení"
+                                    );
+                                    setLoginLoading(false);
+                                    return;
+                                  }
+
+                                  // success: close popover
+                                  setLoginLoading(false);
+                                  setLoginFlyoutOpen(false);
+                                } catch (err: unknown) {
+                                  if (err instanceof Error)
+                                    setLoginError(err.message);
+                                  else if (typeof err === "string")
+                                    setLoginError(err);
+                                  else setLoginError("Chyba při přihlášení");
+                                  setLoginLoading(false);
+                                }
+                              }}
+                              className="space-y-3"
+                            >
+                              <Input
+                                ref={flyoutFirstInputRef}
+                                placeholder="E-mail"
+                                type="email"
+                                value={loginEmail}
+                                onChange={(e) => setLoginEmail(e.target.value)}
+                                required
+                                classNames={{
+                                  input: "text-sm",
+                                  inputWrapper: "rounded-md",
+                                }}
+                              />
+                              <Input
+                                placeholder="Heslo"
+                                type="password"
+                                value={loginPassword}
+                                onChange={(e) =>
+                                  setLoginPassword(e.target.value)
+                                }
+                                required
+                                classNames={{
+                                  input: "text-sm",
+                                  inputWrapper: "rounded-md",
+                                }}
+                              />
+
+                              {loginError && (
+                                <div className="text-sm text-red-600">
+                                  {loginError}
+                                </div>
+                              )}
+
+                              <div className="flex items-center justify-between gap-2">
+                                <Button
+                                  type="submit"
+                                  size="sm"
+                                  className="flex-1"
+                                  disabled={loginLoading}
+                                >
+                                  {loginLoading ? "Probíhá..." : "Přihlásit"}
+                                </Button>
+                                <NextLink
+                                  href={webRoutes.ForgottenPassword}
+                                  className="text-sm text-slate-500 underline"
+                                >
+                                  Zapomenuté
+                                </NextLink>
+                              </div>
+
+                              <div className="text-center text-sm">
+                                <span className="mr-2">Ještě nemáte účet?</span>
+                                <NextLink
+                                  href={webRoutes.SignUp}
+                                  className="font-semibold text-orange-600"
+                                >
+                                  Registrovat se
+                                </NextLink>
+                              </div>
+
+                              <div className="pt-2 border-t mt-2">
+                                <div className="text-center text-sm text-slate-500 mb-2">
+                                  Nebo pokračujte přes
+                                </div>
+                                <div className="flex gap-2">
+                                  <Button
+                                    variant="ghost"
+                                    className="flex-1"
+                                    onClick={async () => {
+                                      setLoginLoading(true);
+                                      setLoginError(null);
+                                      try {
+                                        await signIn("google", {
+                                          callbackUrl: window.location.href,
+                                        });
+                                      } catch (err: unknown) {
+                                        if (err instanceof Error)
+                                          setLoginError(err.message);
+                                        else if (typeof err === "string")
+                                          setLoginError(err);
+                                        else
+                                          setLoginError(
+                                            "Chyba při přesměrování na Google"
+                                          );
+                                        setLoginLoading(false);
+                                      }
+                                    }}
+                                    disabled={loginLoading}
+                                  >
+                                    Google
+                                  </Button>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   </div>
-
-                  {/* Register Button - Premium */}
-                  <div className="relative group">
-                    <Button
-                      as={NextLink}
-                      href={webRoutes.SignUp}
-                      size="lg"
-                      className="relative px-8 py-3 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group-hover:scale-105 overflow-hidden"
-                    >
-                      {/* Animated background */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                      {/* Shimmer effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-
-                      {/* Content */}
-                      <span className="relative flex items-center gap-2">
-                        <HiSparkles className="w-5 h-5 group-hover:animate-spin transition-transform duration-500" />
-                        <span className="tracking-wide">Registrovat se</span>
-                        <IoArrowForward className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-                      </span>
-                    </Button>
-
-                    {/* Enhanced glow */}
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500/40 via-red-500/40 to-pink-500/40 opacity-0 group-hover:opacity-80 transition-opacity duration-300 blur-xl scale-125" />
-
-                    {/* Pulse ring */}
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 animate-ping opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
-                  </div>
+                  {/* Register CTA removed from desktop header to declutter; registration remains available via LogIn flow */}
                 </div>
               )}
 
@@ -453,7 +816,7 @@ export default function PublicNavbar() {
                   variant="light"
                   size="lg"
                   onPress={() => setMobileOpen(!mobileOpen)}
-                  className="relative overflow-hidden rounded-2xl transition-all duration-300 hover:bg-gradient-to-r hover:from-orange-100 hover:to-red-100 dark:hover:from-orange-900/30 dark:hover:to-red-900/30 group-hover:scale-110 group-hover:shadow-lg"
+                  className="relative overflow-hidden rounded-2xl transition-all duration-300 hover:bg-gradient-to-r hover:from-orange-100 hover:to-red-100 dark:hover:from-orange-900/30 dark:hover:to-red-900/30 group-hover:scale-110 group-hover:shadow-lg cursor-pointer"
                   aria-label="Menu"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
@@ -606,7 +969,7 @@ export default function PublicNavbar() {
                   as={NextLink}
                   href={webRoutes.LogIn}
                   variant="bordered"
-                  className="w-full h-14 border-2 border-slate-300 dark:border-slate-600 hover:border-orange-500 dark:hover:border-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-all duration-300 font-semibold text-base rounded-2xl group overflow-hidden"
+                  className="w-full h-14 border-2 border-slate-300 dark:border-slate-600 hover:border-orange-500 dark:hover:border-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-all duration-300 font-semibold text-base rounded-2xl group overflow-hidden cursor-pointer"
                   onClick={() => setMobileOpen(false)}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -615,18 +978,7 @@ export default function PublicNavbar() {
                     Přihlásit se
                   </span>
                 </Button>
-                <Button
-                  as={NextLink}
-                  href={webRoutes.SignUp}
-                  className="w-full h-14 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold text-base rounded-2xl shadow-xl hover:shadow-2xl hover:from-orange-600 hover:to-red-600 transition-all duration-300 group overflow-hidden"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20 opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                  <span className="relative flex items-center gap-2">
-                    <HiSparkles className="w-5 h-5 group-hover:animate-spin transition-transform duration-500" />
-                    Registrovat se
-                  </span>
-                </Button>
+                {/* Sign-up button removed from mobile menu to keep registration accessible only in the full login modal */}
               </div>
             )}
           </div>

@@ -1,8 +1,9 @@
 "use client";
 
 import { SessionProvider } from "next-auth/react";
-import PublicFooter from "@/components/web/layout/PublicFooter";
-import PublicNavbar from "@/components/web/layout/PublicNavbar";
+
+import PublicFooter from "@/components/features/layout/PublicFooter";
+import PublicNavbar from "@/components/features/layout/PublicNavbar";
 import { Providers } from "@/config/heroUI/providers";
 
 export default function PublicLayout({
@@ -53,14 +54,17 @@ export default function PublicLayout({
               <div className="animate-in fade-in duration-1000 slide-in-from-bottom-6">
                 <div className="relative">
                   {children}
-                  
+
                   {/* Subtle page transitions overlay */}
                   <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 opacity-0 animate-pulse" style={{ animationDelay: '0.5s' }} />
+                    <div
+                      className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 opacity-0 animate-pulse"
+                      style={{ animationDelay: "0.5s" }}
+                    />
                   </div>
                 </div>
               </div>
-              
+
               {/* Enhanced floating accent elements with better positioning */}
               <div
                 className="absolute top-24 right-8 w-3 h-3 bg-gradient-to-br from-orange-400 to-red-400 rounded-full opacity-20 animate-bounce shadow-lg"

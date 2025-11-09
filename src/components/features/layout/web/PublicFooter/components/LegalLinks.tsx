@@ -14,7 +14,7 @@ export const LegalLinks = () => {
         <li>
           <NextLink
             href="/privacy"
-            className="text-slate-600 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200 whitespace-nowrap"
+            className="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors duration-200 whitespace-nowrap"
           >
             Ochrana soukromí
           </NextLink>
@@ -22,7 +22,7 @@ export const LegalLinks = () => {
         <li>
           <NextLink
             href="/terms"
-            className="text-slate-600 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200 whitespace-nowrap"
+            className="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors duration-200 whitespace-nowrap"
           >
             Podmínky použití
           </NextLink>
@@ -30,7 +30,7 @@ export const LegalLinks = () => {
         <li>
           <NextLink
             href="/cookies"
-            className="text-slate-600 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200 whitespace-nowrap"
+            className="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors duration-200 whitespace-nowrap"
           >
             Cookies
           </NextLink>
@@ -38,7 +38,7 @@ export const LegalLinks = () => {
         <li>
           <NextLink
             href="/contact"
-            className="text-slate-600 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200 whitespace-nowrap"
+            className="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors duration-200 whitespace-nowrap"
           >
             Kontakt
           </NextLink>

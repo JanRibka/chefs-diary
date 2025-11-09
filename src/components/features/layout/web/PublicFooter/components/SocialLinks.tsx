@@ -38,7 +38,7 @@ export const SocialLinks = () => {
             isIconOnly
             variant="flat"
             size="lg"
-            className={`bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-all duration-200 ${social.color}`}
+            className={`bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm hover:bg-primary/10 dark:hover:bg-primary/20 transition-all duration-200 ${social.color}`}
             aria-label={social.label}
           >
             <Icon className="w-5 h-5" />

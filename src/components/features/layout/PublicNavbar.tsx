@@ -243,7 +243,7 @@ export default function PublicNavbar() {
                     ) : resolvedTheme === "light" ? (
                       <HiMoon className="w-6 h-6 text-slate-600 dark:text-slate-400 transition-colors duration-300" />
                     ) : (
-                      <HiSun className="w-6 h-6 text-orange-500 group-hover:text-yellow-500 transition-colors duration-300" />
+                      <HiSun className="w-6 h-6 text-primary group-hover:text-yellow-500 transition-colors duration-300" />
                     )}
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
@@ -257,21 +257,21 @@ export default function PublicNavbar() {
                 <div className="relative group">
                   <Dropdown placement="bottom-end" backdrop="blur">
                     <DropdownTrigger>
-                      <div className="flex items-center gap-3 cursor-pointer transition-all duration-300 group-hover:scale-105 px-3 py-2 rounded-2xl hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 dark:hover:from-orange-900/20 dark:hover:to-red-900/20">
+                      <div className="flex items-center gap-3 cursor-pointer transition-all duration-300 group-hover:scale-105 px-3 py-2 rounded-2xl hover:bg-gradient-to-r hover:from-primary/10 hover:to-primary/20 dark:hover:from-primary/20 dark:hover:to-primary/30">
                         <div className="relative">
                           <Avatar
                             src={user?.image}
                             alt={user?.name || "Uživatel"}
                             size="md"
-                            className="ring-3 ring-orange-200 dark:ring-orange-800 hover:ring-orange-300 dark:hover:ring-orange-700 transition-all duration-300 group-hover:ring-4 group-hover:ring-orange-400 dark:group-hover:ring-orange-600"
+                            className="ring-3 ring-primary/30 dark:ring-primary/50 hover:ring-primary/50 dark:hover:ring-primary/70 transition-all duration-300 group-hover:ring-4 group-hover:ring-primary/60 dark:group-hover:ring-primary/80"
                           />
                           {/* Online indicator */}
                           <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-slate-900 animate-pulse" />
                           {/* Glow effect */}
-                          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500/30 to-red-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg scale-150" />
+                          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg scale-150" />
                         </div>
                         <div className="hidden md:block">
-                          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-200">
+                          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 group-hover:text-primary dark:group-hover:text-primary-light transition-colors duration-200">
                             {user?.name}
                           </p>
                           <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -301,9 +301,9 @@ export default function PublicNavbar() {
                               src={user?.image}
                               alt={user?.name || "Uživatel"}
                               size="lg"
-                              className="ring-2 ring-orange-300 dark:ring-orange-700"
+                              className="ring-2 ring-primary/40 dark:ring-primary/60"
                             />
-                            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-primary to-primary-dark rounded-full flex items-center justify-center">
                               <HiSparkles className="w-3 h-3 text-white" />
                             </div>
                           </div>
@@ -315,7 +315,7 @@ export default function PublicNavbar() {
                               Aktivní kuchař
                             </p>
                             <div className="flex items-center gap-1 mt-1">
-                              <span className="text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white px-2 py-1 rounded-full font-medium">
+                              <span className="text-xs bg-gradient-to-r from-primary to-primary-dark text-white px-2 py-1 rounded-full font-medium">
                                 ⭐ Level 3
                               </span>
                             </div>
@@ -324,7 +324,7 @@ export default function PublicNavbar() {
                       </DropdownItem>
 
                       {/* Divider with gradient */}
-                      <div className="my-2 h-px bg-gradient-to-r from-transparent via-orange-300 to-transparent dark:via-orange-700" />
+                      <div className="my-2 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent dark:via-primary/50" />
 
                       {/* Menu Items */}
                       <DropdownItem
@@ -390,7 +390,7 @@ export default function PublicNavbar() {
                       <DropdownItem
                         key="signout"
                         startContent={
-                          <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-xl flex items-center justify-center">
+                          <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-primary rounded-xl flex items-center justify-center">
                             <IoLogOut className="w-4 h-4 text-white" />
                           </div>
                         }
@@ -469,7 +469,7 @@ export default function PublicNavbar() {
                           } ${
                             resolvedTheme === "dark"
                               ? "border-purple-500 hover:border-purple-400 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:via-indigo-500 hover:to-blue-500 text-white shadow-2xl shadow-purple-500/60 hover:shadow-purple-400/80"
-                              : "border-orange-600 hover:border-orange-500 bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 hover:from-orange-500 hover:via-red-500 hover:to-pink-500 text-white shadow-2xl shadow-orange-600/60 hover:shadow-orange-500/80"
+                              : "border-primary hover:border-primary-light bg-gradient-to-r from-primary via-primary-dark to-primary-light hover:from-primary-light hover:via-primary hover:to-primary-dark text-white shadow-2xl shadow-primary/60 hover:shadow-primary/80"
                           }`}
                         >
                           {/* Neon glow layers - theme-aware */}
@@ -477,14 +477,14 @@ export default function PublicNavbar() {
                             className={`absolute inset-0 rounded-3xl blur-lg opacity-60 group-hover:opacity-85 transition-opacity duration-300 ${
                               resolvedTheme === "dark"
                                 ? "bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400"
-                                : "bg-gradient-to-r from-orange-400 via-red-400 to-pink-400"
+                                : "bg-gradient-to-r from-primary/40 via-primary/50 to-primary/60"
                             }`}
                           />
                           <div
                             className={`absolute inset-0 rounded-3xl blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-300 ${
                               resolvedTheme === "dark"
                                 ? "bg-gradient-to-r from-purple-300 via-indigo-300 to-blue-300"
-                                : "bg-gradient-to-r from-orange-300 via-red-300 to-pink-300"
+                                : "bg-gradient-to-r from-primary/30 via-primary/40 to-primary/50"
                             }`}
                           />
 
@@ -517,7 +517,7 @@ export default function PublicNavbar() {
                               className={`absolute bottom-2 right-3 w-1 h-1 rounded-full animate-ping opacity-60 ${
                                 resolvedTheme === "dark"
                                   ? "bg-purple-200"
-                                  : "bg-orange-200"
+                                  : "bg-primary/20"
                               }`}
                               style={{ animationDelay: "0.6s" }}
                             />
@@ -559,7 +559,7 @@ export default function PublicNavbar() {
                         className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-xl scale-110 ${
                           resolvedTheme === "dark"
                             ? "bg-purple-500/20"
-                            : "bg-orange-500/20"
+                            : "bg-primary/20"
                         }`}
                       />
 
@@ -674,7 +674,7 @@ export default function PublicNavbar() {
                                 <span className="mr-2">Ještě nemáte účet?</span>
                                 <NextLink
                                   href={webRoutes.SignUp}
-                                  className="font-semibold text-orange-600"
+                                  className="font-semibold text-primary"
                                 >
                                   Registrovat se
                                 </NextLink>
@@ -738,7 +738,7 @@ export default function PublicNavbar() {
                     {mobileOpen ? (
                       <IoClose className="w-6 h-6 text-slate-600 dark:text-slate-400 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors duration-300 group-hover:rotate-90" />
                     ) : (
-                      <IoMenu className="w-6 h-6 text-slate-600 dark:text-slate-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300" />
+                      <IoMenu className="w-6 h-6 text-slate-600 dark:text-slate-400 group-hover:text-primary dark:group-hover:text-primary-light transition-colors duration-300" />
                     )}
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
@@ -747,18 +747,18 @@ export default function PublicNavbar() {
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 flex gap-1">
                   <div
                     className={`w-1 h-1 rounded-full transition-all duration-300 ${
-                      mobileOpen ? "bg-red-500 scale-125" : "bg-orange-500"
+                      mobileOpen ? "bg-red-500 scale-125" : "bg-primary"
                     }`}
                   />
                   <div
                     className={`w-1 h-1 rounded-full transition-all duration-300 ${
-                      mobileOpen ? "bg-red-500 scale-125" : "bg-orange-500"
+                      mobileOpen ? "bg-red-500 scale-125" : "bg-primary"
                     }`}
                     style={{ animationDelay: "0.1s" }}
                   />
                   <div
                     className={`w-1 h-1 rounded-full transition-all duration-300 ${
-                      mobileOpen ? "bg-red-500 scale-125" : "bg-orange-500"
+                      mobileOpen ? "bg-red-500 scale-125" : "bg-primary"
                     }`}
                     style={{ animationDelay: "0.2s" }}
                   />
@@ -781,8 +781,8 @@ export default function PublicNavbar() {
         `}
         >
           {/* Animated background elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 via-red-50/30 to-pink-50/20 dark:from-orange-950/20 dark:via-red-950/10 dark:to-pink-950/5" />
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-200/30 to-red-200/30 dark:from-orange-900/20 dark:to-red-900/20 rounded-full blur-2xl animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/15 to-primary/20 dark:from-primary/20 dark:via-primary/15 dark:to-primary/10" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/30 to-primary/20 dark:from-primary/20 dark:to-primary/10 rounded-full blur-2xl animate-pulse" />
 
           <div className="relative z-10 px-6 py-8 space-y-6">
             {/* Mobile Search with enhanced styling */}
@@ -791,15 +791,15 @@ export default function PublicNavbar() {
                 <Input
                   placeholder="Hledat recepty, ingredience..."
                   startContent={
-                    <IoSearch className="w-5 h-5 text-orange-500 group-focus-within:animate-pulse" />
+                    <IoSearch className="w-5 h-5 text-primary group-focus-within:animate-pulse" />
                   }
                   classNames={{
                     input: "text-base font-medium",
                     inputWrapper:
-                      "bg-gradient-to-r from-white to-orange-50/50 dark:from-slate-800 dark:to-orange-950/50 border-2 border-orange-200 dark:border-orange-800 hover:border-orange-300 dark:hover:border-orange-700 focus-within:border-orange-500 dark:focus-within:border-orange-400 transition-all duration-300 shadow-lg hover:shadow-xl backdrop-blur-sm",
+                      "bg-gradient-to-r from-white to-primary/10 dark:from-slate-800 dark:to-primary/20 border-2 border-primary/30 dark:border-primary/40 hover:border-primary/50 dark:hover:border-primary/60 focus-within:border-primary dark:focus-within:border-primary-light transition-all duration-300 shadow-lg hover:shadow-xl backdrop-blur-sm",
                   }}
                 />
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-orange-500/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl" />
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/10 to-primary/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl" />
               </div>
             </div>
 
@@ -878,15 +878,15 @@ export default function PublicNavbar() {
 
             {/* Enhanced Mobile Auth Buttons */}
             {!session && (
-              <div className="space-y-4 pt-6 border-t border-gradient-to-r from-orange-200/50 to-red-200/50 dark:from-orange-800/50 dark:to-red-800/50">
+              <div className="space-y-4 pt-6 border-t border-gradient-to-r from-primary/30 to-primary/40 dark:from-primary/40 dark:to-primary/50">
                 <Button
                   as={NextLink}
                   href={webRoutes.LogIn}
                   variant="bordered"
-                  className="w-full h-14 border-2 border-slate-300 dark:border-slate-600 hover:border-orange-500 dark:hover:border-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-all duration-300 font-semibold text-base rounded-2xl group overflow-hidden cursor-pointer"
+                  className="w-full h-14 border-2 border-slate-300 dark:border-slate-600 hover:border-primary dark:hover:border-primary-light hover:bg-primary/10 dark:hover:bg-primary/20 transition-all duration-300 font-semibold text-base rounded-2xl group overflow-hidden cursor-pointer"
                   onClick={() => setMobileOpen(false)}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-primary/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <span className="relative flex items-center gap-2">
                     <IoPerson className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
                     Přihlásit se
@@ -898,7 +898,7 @@ export default function PublicNavbar() {
           </div>
 
           {/* Bottom wave decoration */}
-          <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 opacity-60" />
+          <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-primary via-primary-dark to-primary-light opacity-60" />
         </div>
       </nav>
 
@@ -919,7 +919,7 @@ export default function PublicNavbar() {
           <ModalBody className="py-8">
             <div className="space-y-6">
               <div className="text-center">
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">
+                <h3 className="text-2xl font-bold bg-gradient-to-r from-primary via-primary-dark to-primary-light bg-clip-text text-transparent mb-2">
                   Hledat recepty
                 </h3>
                 <p className="text-default-600">
@@ -934,7 +934,7 @@ export default function PublicNavbar() {
                 classNames={{
                   input: "text-lg",
                   inputWrapper:
-                    "bg-default-100 hover:bg-default-200 border-2 border-transparent focus-within:border-orange-500 transition-all duration-200 shadow-lg",
+                    "bg-default-100 hover:bg-default-200 border-2 border-transparent focus-within:border-primary transition-all duration-200 shadow-lg",
                 }}
                 autoFocus
               />
@@ -951,7 +951,7 @@ export default function PublicNavbar() {
                     key={tag}
                     size="sm"
                     variant="flat"
-                    className="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 hover:bg-orange-200 dark:hover:bg-orange-900/50 transition-colors"
+                    className="bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light hover:bg-primary/15 dark:hover:bg-primary/25 transition-colors"
                   >
                     {tag}
                   </Button>

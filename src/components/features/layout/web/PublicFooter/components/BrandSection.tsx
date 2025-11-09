@@ -28,25 +28,25 @@ export const BrandSection = () => {
       <div className="space-y-3">
         <NextLink
           href="mailto:kucharuv.denik@gmail.com"
-          className="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200 group"
+          className="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors duration-200 group"
         >
-          <HiMail className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform duration-200" />
+          <HiMail className="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-200" />
           <span>kucharuv.denik@gmail.com</span>
         </NextLink>
         <NextLink
           href="tel:+420777811790"
-          className="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200 group"
+          className="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors duration-200 group"
         >
-          <HiPhone className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform duration-200" />
+          <HiPhone className="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-200" />
           <span>+420 777 811 790</span>
         </NextLink>
         <NextLink
           href="https://maps.google.com/?q=Opava, Česká republika"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200 group"
+          className="flex items-center gap-3 text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors duration-200 group"
         >
-          <HiLocationMarker className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform duration-200" />
+          <HiLocationMarker className="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-200" />
           <span>Opava, Česká republika</span>
         </NextLink>
       </div>

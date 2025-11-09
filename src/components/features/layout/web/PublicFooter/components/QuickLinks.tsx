@@ -27,7 +27,7 @@ export const QuickLinks = () => {
   return (
     <div className="text-center md:text-left">
       <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg mb-6 flex items-center justify-center md:justify-start gap-2">
-        <IoRestaurant className="w-5 h-5 text-orange-500" />
+        <IoRestaurant className="w-5 h-5 text-primary" />
         Rychlé odkazy
       </h3>
       <ul className="space-y-4 text-center md:text-left">
@@ -35,9 +35,9 @@ export const QuickLinks = () => {
           <li key={link.href}>
             <NextLink
               href={link.href}
-              className="group flex items-center justify-center md:justify-start gap-3 text-slate-600 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 transition-all duration-200"
+              className="group flex items-center justify-center md:justify-start gap-3 text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-all duration-200"
             >
-              <span className="group-hover:text-orange-500 transition-colors">
+              <span className="group-hover:text-primary transition-colors">
                 {getIcon(link.iconName)}
               </span>
               {link.label}

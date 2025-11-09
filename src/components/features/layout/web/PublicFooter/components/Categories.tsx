@@ -17,7 +17,7 @@ export const Categories = () => {
           <li key={category.href}>
             <NextLink
               href={category.href}
-              className="text-slate-600 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200 hover:translate-x-1 transform inline-block"
+              className="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary-light transition-colors duration-200 hover:translate-x-1 transform inline-block"
             >
               {category.label}
             </NextLink>

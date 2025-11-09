@@ -8,19 +8,19 @@ import Button from "@/components/shared/button/Button";
  */
 export const NewsletterSection = () => {
   return (
-    <div className="border-b border-orange-200/30 dark:border-orange-800/30">
+    <div className="border-b border-primary/20 dark:border-primary/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center max-w-3xl mx-auto">
           {/* TODO: Vtvo5it kompoernentu */}
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 px-6 py-3 rounded-full mb-6">
-            <HiSparkles className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-            <span className="text-orange-800 dark:text-orange-300 font-medium">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary/10 to-primary/20 dark:from-primary/20 dark:to-primary/30 px-6 py-3 rounded-full mb-6">
+            <HiSparkles className="w-5 h-5 text-primary dark:text-primary-light" />
+            <span className="text-primary-dark dark:text-primary-light font-medium">
               Zůstaňte v obraze
             </span>
           </div>
           {/* TODO: Vtvo5it kompoernentu */}
           <h3 className="text-3xl lg:text-4xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary via-primary-dark to-primary-light bg-clip-text text-transparent">
               Týdenní kulinářské inspirace
             </span>
           </h3>
@@ -35,12 +35,12 @@ export const NewsletterSection = () => {
               <input
                 type="email"
                 placeholder="váš@email.cz"
-                className="w-full px-6 py-4 rounded-2xl border-2 border-orange-200 dark:border-orange-800 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:border-orange-500 dark:focus:border-orange-400 focus:ring-4 focus:ring-orange-500/20 transition-all"
+                className="w-full px-6 py-4 rounded-2xl border-2 border-primary/30 dark:border-primary/40 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:border-primary dark:focus:border-primary-light focus:ring-4 focus:ring-primary/20 transition-all"
               />
             </div>
             <Button
               size="lg"
-              className="bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl hover:from-orange-600 hover:to-red-600 transition-all duration-200"
+              className="bg-gradient-to-r from-primary to-primary-dark text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl hover:from-primary-dark hover:to-primary transition-all duration-200"
             >
               Odebírat
             </Button>

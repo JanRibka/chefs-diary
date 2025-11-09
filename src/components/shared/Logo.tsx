@@ -17,27 +17,27 @@ export default function Logo({
   size = "lg",
   showText = true,
   href = "/",
-  className = ""
+  className = "",
 }: LogoProps) {
   const sizeClasses = {
     sm: "w-8 h-8 lg:w-10 lg:h-10",
     md: "w-12 h-12 lg:w-14 lg:h-14",
     lg: "w-16 h-16 lg:w-20 lg:h-20",
-    xl: "w-20 h-20 lg:w-24 lg:h-24"
+    xl: "w-20 h-20 lg:w-24 lg:h-24",
   };
 
   const iconSizes = {
     sm: "w-4 h-4 lg:w-5 lg:h-5",
     md: "w-6 h-6 lg:w-7 lg:h-7",
     lg: "w-8 h-8 lg:w-10 lg:h-10",
-    xl: "w-10 h-10 lg:w-12 lg:h-12"
+    xl: "w-10 h-10 lg:w-12 lg:h-12",
   };
 
   const textSizes = {
     sm: "text-xs lg:text-sm",
     md: "text-sm lg:text-base",
     lg: "text-lg lg:text-xl",
-    xl: "text-xl lg:text-2xl"
+    xl: "text-xl lg:text-2xl",
   };
 
   const LogoContent = () => (
@@ -52,7 +52,13 @@ export default function Logo({
               className={`text-white drop-shadow-lg ${iconSizes[size]}`}
             />
             <GiChefToque
-              className={`text-white absolute -top-1 -right-1 drop-shadow-lg ${iconSizes[size] === 'w-8 h-8 lg:w-10 lg:h-10' ? 'w-6 h-6 lg:w-8 lg:h-8' : iconSizes[size] === 'w-10 h-10 lg:w-12 lg:h-12' ? 'w-8 h-8 lg:w-10 lg:h-10' : 'w-4 h-4 lg:w-5 lg:h-5'}`}
+              className={`text-white absolute -top-1 -right-1 drop-shadow-lg ${
+                iconSizes[size] === "w-8 h-8 lg:w-10 lg:h-10"
+                  ? "w-6 h-6 lg:w-8 lg:h-8"
+                  : iconSizes[size] === "w-10 h-10 lg:w-12 lg:h-12"
+                  ? "w-8 h-8 lg:w-10 lg:h-10"
+                  : "w-4 h-4 lg:w-5 lg:h-5"
+              }`}
             />
             <HiSparkles className="w-3 h-3 text-yellow-200 absolute -top-2 -right-2 animate-pulse" />
           </div>
@@ -70,9 +76,7 @@ export default function Logo({
           <span className={`${fontDisplay.variable} sr-only`}>
             display-font
           </span>
-          <span className={`${fontOrn.variable} sr-only`}>
-            serif-font
-          </span>
+          <span className={`${fontOrn.variable} sr-only`}>serif-font</span>
           <span
             className={`${fontOrn.variable} tracking-widest uppercase text-amber-700 dark:text-amber-300 font-semibold opacity-95 ${textSizes[size]}`}
             style={{ fontFamily: `var(${fontOrn.variable})` }}

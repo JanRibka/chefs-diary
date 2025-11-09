@@ -8,6 +8,13 @@ args:
 
 # 🏗️ Monorepo Architecture Review
 
+## ⚠️ **STRIKTNÍ INSTRUKCE - DRŽET SE PRAVIDEL**
+
+**VŽDY aplikujte VŠECHNA pravidla z [Architecture Guidelines](../rules/architecture-guidelines.md) - žádné vlastní interpretace nebo zjednodušení!**
+
+- ✅ **Pouze pravidla z guidelines** - ne vlastní úsudek
+- ✅ **Žádné zjednodušení** - pravidla platí pro VŠECHNU architekturu
+
 High-level review architektury monorepo projektu.
 
 ## 🎯 Kontroluj

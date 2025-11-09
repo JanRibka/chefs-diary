@@ -17,6 +17,21 @@ const config: Config = {
         "background-color": "background-color",
         all: "all",
       },
+      animation: {
+        "animate-in": "animate-in 0.6s ease-out forwards",
+      },
+      keyframes: {
+        "animate-in": {
+          from: {
+            opacity: "0",
+            transform: "translateY(16px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+      },
       maxWidth: {
         main: "1140px",
       },

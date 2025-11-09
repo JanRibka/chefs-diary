@@ -8,64 +8,37 @@ args:
 
 # 🔨 Types Refactoring{{#if typesPath}}: {{typesPath}}{{/if}}
 
+## ⚠️ **STRIKTNÍ INSTRUKCE - DRŽET SE PRAVIDEL**
+
+**VŽDY aplikujte VŠECHNA pravidla z [Architecture Guidelines](../rules/architecture-guidelines.md) - žádné vlastní interpretace nebo zjednodušení!**
+
+- ✅ **Pouze pravidla z guidelines** - ne vlastní úsudek
+- ✅ **Žádné zjednodušení** - pravidla platí pro VŠECHNY types
+
 Refactoruj {{#if typesPath}}**{{typesPath}}**{{else}}aktuálně otevřený types soubor{{/if}} podle review best practices.
+
+## ⚠️ Scope refactoringu
+
+- Vycházej z existujících typů a pouze je zpřesni/rozděl podle guidelines.
+- Neměň veřejné kontrakty mimo rámec review feedbacku.
+- Nepřepisuj definice od nuly, pokud je lze upravit úpravou stávajícího kódu.
+
+## 📋 Reference Guidelines
+
+**DŮLEŽITÉ:** Tento příkaz implementuje **VŠECHNA** pravidla z [Architecture Guidelines](../rules/architecture-guidelines.md):
+
+- **[Documentation Guidelines](../rules/architecture-guidelines.md#documentation-guidelines)** - JSDoc dokumentace, property descriptions, examples
+- **[Error Handling Patterns](../rules/architecture-guidelines.md#error-handling-patterns)** - Type guards, proper validation, branded types
 
 ## 🎯 Refactoring Checklist
 
-**DŮLEŽITÉ:** Aplikuj VŠECHNA následující pravidla:
+**NEOPAKUJ pravidla zde - aplikuj přímo z [Architecture Guidelines](../rules/architecture-guidelines.md)!**
 
-### 📁 Naming
-
-- [ ] PascalCase types/interfaces
-- [ ] NO `I` prefix (use `User`, not `IUser`)
-- [ ] Proper suffixes (`Props`, `Dto`, `Response`)
-- [ ] Descriptive generics (`TData` not just `T`)
-
-### 💎 Type vs Interface
-
-- [ ] Type pro unions/intersections/primitives/tuples
-- [ ] Interface pro object shapes/props/extendable
-- [ ] Interface pro extendable objekty
-
-### 🎯 Design
-
-- [ ] NO `any` (use `unknown`)
-- [ ] Proper `?` vs `| undefined`
-- [ ] `readonly` where immutable
-- [ ] Discriminated unions
-- [ ] Proper null handling
-
-### 🛠️ Utility Types
-
-- [ ] Use built-ins (Partial, Pick, Omit, Record)
-- [ ] Custom reusable utilities
-- [ ] Type guards pro runtime validation
-
-### 🎣 Generics
-
-- [ ] Constraints where needed
-- [ ] Default types
-- [ ] Descriptive names for complex
-- [ ] NO unnecessary generics
-
-### � Enums
-
-- [ ] Prefer union types (`type Status = 'a' | 'b'`)
-- [ ] Enums only for numeric/reverse mapping
-
-### 🛡️ Type Safety
-
-- [ ] Minimal `as` assertions
-- [ ] NO `as any`
-- [ ] Type guards
-- [ ] Branded types for important primitives
-- [ ] Proper narrowing
-
-### 📚 Documentation
-
-- [ ] JSDoc for complex types
-- [ ] Property descriptions
-- [ ] Examples for complex patterns
+- [ ] **Žádné `any` types** (use `unknown` nebo specifické typy)?
+- [ ] **NO `I` prefix** na interfaces (use `User`, not `IUser`)?
+- [ ] **Proper type guards** a branded types pro type safety?
+- [ ] **JSDoc dokumentace** pro komplexní typy?
+- [ ] Prochází `review-types.md` s 8+/10?
 
 ---
 

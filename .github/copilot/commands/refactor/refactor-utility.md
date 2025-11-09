@@ -8,72 +8,39 @@ args:
 
 # 🔨 Utility Refactoring{{#if utilityPath}}: {{utilityPath}}{{/if}}
 
+## ⚠️ **STRIKTNÍ INSTRUKCE - DRŽET SE PRAVIDEL**
+
+**VŽDY aplikujte VŠECHNA pravidla z [Architecture Guidelines](../rules/architecture-guidelines.md) - žádné vlastní interpretace nebo zjednodušení!**
+
+- ✅ **Pouze pravidla z guidelines** - ne vlastní úsudek
+- ✅ **Žádné zjednodušení** - pravidla platí pro VŠECHNY utilities
+
 Refactoruj {{#if utilityPath}}**{{utilityPath}}**{{else}}aktuálně otevřenou utility funkci{{/if}} podle review best practices.
+
+## ⚠️ Scope refactoringu
+
+- Zachovej podpis utility i očekávané chování; pracuj s aktuální implementací.
+- Úpravy směřuj k vyčištění, zpřesnění typů a validaci, ne k přepsání funkce od nuly.
+- Nepřidávej nové helpery ani rozšířenou funkcionalitu, pokud to není součást review požadavků.
+
+## 📋 Reference Guidelines
+
+**DŮLEŽITÉ:** Tento příkaz implementuje **VŠECHNA** pravidla z [Architecture Guidelines](../rules/architecture-guidelines.md):
+
+- **[Performance Guidelines](../rules/architecture-guidelines.md#performance-guidelines)** - Pure functions, optimal algorithms, efficient data structures
+- **[Documentation Guidelines](../rules/architecture-guidelines.md#documentation-guidelines)** - JSDoc dokumentace, clear descriptions, examples
+- **[Error Handling Patterns](../rules/architecture-guidelines.md#error-handling-patterns)** - Typed errors, input validation, clear error messages
 
 ## 🎯 Refactoring Checklist
 
-**DŮLEŽITÉ:** Aplikuj VŠECHNA následující pravidla:
+**NEOPAKUJ pravidla zde - aplikuj přímo z [Architecture Guidelines](../rules/architecture-guidelines.md)!**
 
-### 📁 Naming
-
-- [ ] Function: camelCase, verb-based (`formatDate`, `validateEmail`)
-- [ ] Booleans: `is*/has*/can*`
-- [ ] Transformers: `to*/parse*/convert*`
-- [ ] NO abbreviations
-
-### 💎 TypeScript
-
-- [ ] Explicit param types
-- [ ] Explicit return type
-- [ ] Generics for reusable
-- [ ] Type guards
-- [ ] NO `any` (use `unknown`)
-
-### ⚙️ Design
-
-- [ ] Pure function (no side effects)
-- [ ] Same input = same output
-- [ ] Single responsibility
-- [ ] NO external state mutations
-- [ ] Predictable
-
-### 🛡️ Error Handling
-
-- [ ] Input validation
-- [ ] Try-catch where needed
-- [ ] Clear error messages
-- [ ] Typed errors
-- [ ] NO silent failures
-- [ ] Edge cases handled
-
-### 🚀 Performance
-
-- [ ] Optimal algorithm complexity
-- [ ] NO unnecessary loops
-- [ ] Early returns
-- [ ] Efficient data structures
-- [ ] Large data considered
-
-### 🧪 Testability
-
-- [ ] Pure = easy to test
-- [ ] Predictable I/O
-- [ ] Edge cases identified
-- [ ] Mock-free testing
-
-### 📚 Documentation
-
-- [ ] JSDoc with @param/@returns/@throws/@example
-- [ ] Clear descriptions
-- [ ] Complex logic explained
-
-### � Reusability
-
-- [ ] Flexible params
-- [ ] Good defaults
-- [ ] NO hard-coded values
-- [ ] Composable
-- [ ] Well-defined API
+- [ ] **Pure function** (no side effects, predictable)?
+- [ ] **Input validation** a error handling přítomny?
+- [ ] **NO `any` types** (use `unknown` nebo specifické typy)?
+- [ ] **JSDoc dokumentace** s @param/@returns/@throws/@example?
+- [ ] **Edge cases handled** a type guards použity?
+- [ ] Prochází `review-utility.md` s 8+/10?
 
 ---
 
@@ -110,10 +77,7 @@ export class ValidationError extends Error {
 }
 
 export class FormatError extends Error {
-  constructor(
-    message: string,
-    public readonly input: unknown
-  ) {
+  constructor(message: string, public readonly input: unknown) {
     super(message);
     this.name = "FormatError";
   }

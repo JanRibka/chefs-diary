@@ -8,45 +8,38 @@ args:
 
 # 🔨 Context Refactoring{{#if contextPath}}: {{contextPath}}{{/if}}
 
+## ⚠️ **STRIKTNÍ INSTRUKCE - DRŽET SE PRAVIDEL**
+
+**VŽDY aplikujte VŠECHNA pravidla z [Architecture Guidelines](../rules/architecture-guidelines.md) - žádné vlastní interpretace nebo zjednodušení!**
+
+- ✅ **Pouze pravidla z guidelines** - ne vlastní úsudek
+- ✅ **Žádné zjednodušení** - pravidla platí pro VŠECHNY Contexts
+
 Refactoruj {{#if contextPath}}**{{contextPath}}**{{else}}aktuálně otevřený Context{{/if}} podle review best practices.
+
+## ⚠️ Scope refactoringu
+
+- Pracuj s existujícím contextem, pouze ho reorganizuj; neměň veřejné API ani chování.
+- Nepřidávej nové hodnoty nebo efekty, pokud to nevyplývá z review.
+- Dodrž guidelines úpravou stávající logiky, ne přepisem kontextu od nuly.
+
+## 📋 Reference Guidelines
+
+**DŮLEŽITÉ:** Tento příkaz implementuje **VŠECHNA** pravidla z [Architecture Guidelines](../rules/architecture-guidelines.md):
+
+- **[Performance Guidelines](../rules/architecture-guidelines.md#performance-guidelines)** - useMemo/useCallback memoization, selective re-renders
+- **[Documentation Guidelines](../rules/architecture-guidelines.md#documentation-guidelines)** - JSDoc dokumentace pro Provider a hook
+- **[Error Handling Patterns](../rules/architecture-guidelines.md#error-handling-patterns)** - Error handling v hooku pro missing Provider
 
 ## 🎯 Refactoring Checklist
 
-**DŮLEŽITÉ:** Aplikuj VŠECHNA následující pravidla:
+**NEOPAKUJ pravidla zde - aplikuj přímo z [Architecture Guidelines](../rules/architecture-guidelines.md)!**
 
-### 📁 Naming
-
-- [ ] Context: `{Name}Context`
-- [ ] Provider: `{Name}Provider`
-- [ ] Hook: `use{Name}`
-
-### 💎 TypeScript
-
-- [ ] Context value interface explicitní
-- [ ] Provider props typované
-- [ ] Hook return type explicitní
-- [ ] NO `any`
-
-### ⚙️ React
-
-- [ ] Context value memoized (useMemo)
-- [ ] Functions memoized (useCallback)
-- [ ] Provider children typované
-- [ ] Error handling v hooku
-
-### 🚀 Performance
-
-- [ ] Context value memoized (useMemo)
-- [ ] Functions memoized (useCallback)
-- [ ] NO objekty/arrays v value
-- [ ] Selective re-renders
-
-### �️ Architecture
-
-- [ ] Single responsibility
-- [ ] Provider separovaný
-- [ ] Hook pro consumption
-- [ ] Testable
+- [ ] **Context value memoized** (useMemo)?
+- [ ] **Functions memoized** (useCallback)?
+- [ ] **Error handling v hooku** pro missing Provider?
+- [ ] **JSDoc dokumentace** pro Provider a hook?
+- [ ] Prochází `review-context.md` s 8+/10?
 
 ---
 

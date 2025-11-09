@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
 import { IoClose, IoEye, IoEyeOff } from "react-icons/io5";
 
 import FocusTrapWrapper from "./FocusTrapWrapper";
@@ -35,7 +35,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       } else {
         onClose();
       }
-    } catch (error) {
+    } catch {
       setError("Došlo k chybě při přihlašování");
     } finally {
       setIsLoading(false);
@@ -45,7 +45,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   if (!isOpen) return null;
 
   return (
-    <FocusTrapWrapper>
+    <FocusTrapWrapper active={isOpen}>
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
           <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
@@ -68,7 +68,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
                 Email
               </label>
               <input
@@ -82,7 +85,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
                 Heslo
               </label>
               <div className="relative">
@@ -99,7 +105,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 >
-                  {showPassword ? <IoEyeOff className="w-5 h-5" /> : <IoEye className="w-5 h-5" />}
+                  {showPassword ? (
+                    <IoEyeOff className="w-5 h-5" />
+                  ) : (
+                    <IoEye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>

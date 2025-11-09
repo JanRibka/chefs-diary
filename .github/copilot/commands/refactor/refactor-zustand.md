@@ -8,79 +8,39 @@ args:
 
 # 🔨 Zustand Store Refactoring{{#if storePath}}: {{storePath}}{{/if}}
 
+## ⚠️ **STRIKTNÍ INSTRUKCE - DRŽET SE PRAVIDEL**
+
+**VŽDY aplikujte VŠECHNA pravidla z [Architecture Guidelines](../rules/architecture-guidelines.md) - žádné vlastní interpretace nebo zjednodušení!**
+
+- ✅ **Pouze pravidla z guidelines** - ne vlastní úsudek
+- ✅ **Žádné zjednodušení** - pravidla platí pro VŠECHNY Zustand stores
+
 Refactoruj {{#if storePath}}**{{storePath}}**{{else}}aktuálně otevřený Zustand store{{/if}} podle review best practices.
+
+## ⚠️ Scope refactoringu
+
+- Zachovej současné store API (state shape, actions); reorganizuj existující logiku.
+- Nepřidávej nové slices ani perzistované položky, pokud to není požadováno v review.
+- Úpravy dělej na základě stávajícího kódu místo kompletního přepisu.
+
+## 📋 Reference Guidelines
+
+**DŮLEŽITÉ:** Tento příkaz implementuje **VŠECHNA** pravidla z [Architecture Guidelines](../rules/architecture-guidelines.md):
+
+- **[Performance Guidelines](../rules/architecture-guidelines.md#performance-guidelines)** - Selective subscriptions, shallow selectors, useShallow
+- **[Error Handling Patterns](../rules/architecture-guidelines.md#error-handling-patterns)** - Typed errors, loading states, proper async handling
+- **[Documentation Guidelines](../rules/architecture-guidelines.md#documentation-guidelines)** - JSDoc dokumentace pro store a selectors
 
 ## 🎯 Refactoring Checklist
 
-**DŮLEŽITÉ:** Aplikuj VŠECHNA následující pravidla:
+**NEOPAKUJ pravidla zde - aplikuj přímo z [Architecture Guidelines](../rules/architecture-guidelines.md)!**
 
-### 📁 Naming
-
-- [ ] Store hook: `use{Feature}Store`
-- [ ] State properties: descriptive
-- [ ] Actions: verb-based (`setUser`, `updateSettings`, `resetStore`)
-- [ ] Selectors: `select{Property}`
-
-### 💎 TypeScript
-
-- [ ] Strongly typed state interface
-- [ ] Typed actions
-- [ ] Proper return types
-- [ ] Generic `StoreApi<T>`
-- [ ] NO `any`
-
-### 🏗️ Structure
-
-- [ ] Flat state (avoid deep nesting)
-- [ ] Actions co-located with state
-- [ ] Selectors separate or inline
-- [ ] Proper state shape
-
-### ⚙️ Actions
-
-- [ ] Pure updates via `set/get`
-- [ ] Immutable updates (spread operator)
-- [ ] Batch updates where needed
-- [ ] Async actions properly handled
-
-### 🎣 Selectors
-
-- [ ] Shallow selectors for performance
-- [ ] Computed values via selectors
-- [ ] `useShallow` for multiple values
-- [ ] Avoid selecting entire state
-
-### 🚀 Performance
-
-- [ ] Slice pattern for large stores
-- [ ] Selective subscriptions
-- [ ] `persist` middleware properly configured
-- [ ] Devtools in dev only
-
-### 🔄 Side Effects
-
-- [ ] Async actions in store actions (not components)
-- [ ] Proper error handling
-- [ ] Loading states
-- [ ] Optimistic updates where appropriate
-
-### 💾 Persistence
-
-- [ ] `persist` middleware config (storage, partialize, merge)
-- [ ] Migration strategy
-- [ ] Sensitive data NOT persisted
-
-### 🐛 DevTools
-
-- [ ] `devtools` middleware in dev
-- [ ] Meaningful action names
-- [ ] Proper store name
-
-### 🧪 Testing
-
-- [ ] Store testable without React
-- [ ] Actions unit testable
-- [ ] State transformations predictable
+- [ ] **Immutable updates** (spread operator, no direct mutations)?
+- [ ] **Selective subscriptions** a shallow selectors?
+- [ ] **Proper error handling** a loading states?
+- [ ] **Persist only non-sensitive data**?
+- [ ] **DevTools configured properly** (dev only)?
+- [ ] Prochází `review-zustand.md` s 8+/10?
 
 ---
 

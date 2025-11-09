@@ -3,10 +3,11 @@
 import { SessionProvider } from "next-auth/react";
 import { memo } from "react";
 
-import PublicFooter from "@/components/features/layout/PublicFooter";
 import PublicNavbar from "@/components/features/layout/PublicNavbar";
 import { Providers } from "@/config/heroUI/providers";
 
+import { ScrollToTopButton } from "../PublicFooter/components/ScrollToTopButton";
+import PublicFooter from "../PublicFooter/PublicFooter";
 import { PublicLayoutBackground } from "./components/PublicLayoutBackground";
 import { PublicLayoutContent } from "./components/PublicLayoutContent";
 import { usePublicLayoutProviders } from "./hooks/usePublicLayoutProviders";
@@ -49,6 +50,9 @@ export const PublicLayout = memo(({ children }: PublicLayoutProps) => {
               <PublicFooter />
             </div>
           </div>
+
+          {/* Scroll to Top Button - globally positioned */}
+          <ScrollToTopButton />
         </div>
       </SessionProvider>
     </Providers>

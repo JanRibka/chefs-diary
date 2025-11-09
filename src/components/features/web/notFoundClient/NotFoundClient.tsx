@@ -5,8 +5,9 @@ import { GiChefToque } from "react-icons/gi";
 import { IoArrowBack, IoHome } from "react-icons/io5";
 
 import Logo from "@/components/shared/Logo";
+import webRoutes from "@/lib/routes/webRoutes";
 
-export default function NotFound() {
+export default function NotFoundClient() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4">
       {/* Animated background elements */}
@@ -25,7 +26,7 @@ export default function NotFound() {
       <div className="relative z-10 max-w-2xl mx-auto text-center">
         {/* Logo/Icon Section */}
         <div className="mb-8 flex justify-center">
-          <Logo size="xl" showText={true} href="/" />
+          <Logo size="xl" href={webRoutes.Home} />
         </div>
 
         {/* Error Code - less prominent */}
@@ -45,7 +46,7 @@ export default function NotFound() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <NextLink
-            href="/"
+            href={webRoutes.Home}
             className="group relative px-8 py-4 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 hover:from-orange-600 hover:via-red-600 hover:to-pink-600 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500" />

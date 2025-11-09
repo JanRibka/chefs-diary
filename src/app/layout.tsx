@@ -33,7 +33,7 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         className={mergeStyles(
-          "min-h-screen font-sans overflow-y-auto pt-16 lg:pt-20",
+          "min-h-screen font-sans overflow-y-auto pt-20 lg:pt-24",
           mergeStyles(
             fontSans.variable,
             fontDisplay.variable,

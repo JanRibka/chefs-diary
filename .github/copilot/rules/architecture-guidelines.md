@@ -28,6 +28,8 @@ Komplexní pravidla pro refactoring a architekturu React aplikací s detailní f
 - ✅ **Každý typ v samostatném souboru** - žádné `.types.ts` soubory
 - ✅ **Všechny adresáře** (hooks/, types/, utils/, constants/) i když jsou prázdné
 - ✅ **Žádné zjednodušení** - pravidla platí pro VŠECHNY komponenty
+- ✅ **Rekurzivní refactoring** - pokud vytvoříte komponentu > 100 řádků, aplikujte pravidla znovu
+- ✅ **Žádná komponenta nesmí být > 100 řádků** - vždy rozdělte na menší části
 
 **Toto platí pro všechny review a refactor pravidla!**
 
@@ -319,7 +321,58 @@ export enum UserRole {
 - **Komponenta má > 1 event handler** → rozdělit logiku
 - **Komponenta má komplexní JSX** → rozdělit na menší komponenty
 
-### ❌ Nepoužívej adresářovou strukturu když:
+### ⚠️ **RECURSIVE REFACTORING RULE - STŘÍDNÍ INSTRUKCE**
+
+**Pokud při refactoringu vytvoříš velkou komponentu (> 100 řádků), která je potřeba také zrefaktorovat:**
+
+- ✅ **AUTOMATICKY aplikuj stejná pravidla** jako na původní komponentu
+- ✅ **Spusť refactor-component** znovu pro nově vytvořenou komponentu
+- ✅ **Rozděl velkou subkomponentu** na další subkomponenty podle stejných principů
+- ✅ **Zachovej Pure Orchestration Pattern** - žádná komponenta nesmí být > 100 řádků
+- ✅ **Rekurzivní aplikace pravidel** - pokračuj dokud všechny komponenty nejsou < 100 řádků
+
+**Příklad rekurzivního refactoringu:**
+
+```
+ComponentName/
+├── ComponentName.tsx              # 🎯 HLAVNÍ orchestrátor - koordinuje hooks a subkomponenty
+├── components/                    # Subkomponenty (vždy rozdělit UI logiku)
+│   ├── ComponentContent.tsx       # UI pro obsah (80 řádků) ✅ OK
+│   ├── ComponentLoading.tsx       # Loading states (40 řádků) ✅ OK
+│   ├── ComponentError.tsx         # Error states (30 řádků) ✅ OK
+│   ├── ComponentItem.tsx          # Jednotlivé položky (50 řádků) ✅ OK
+│   └── LargeSubComponent.tsx      # VELKÁ SUBKOMPONENTA (150 řádků) → REFACTOR ZNOVU
+│       ├── LargeSubComponent.tsx  # 🎯 HLAVNÍ orchestrátor pro subkomponentu
+│       ├── components/            # Další úroveň subkomponent
+│       │   ├── SubContent.tsx     # UI pro obsah (60 řádků) ✅ OK
+│       │   ├── SubActions.tsx     # Akce (50 řádků) ✅ OK
+│       │   └── SubDetails.tsx     # Detaily (30 řádků) ✅ OK
+│       ├── hooks/                 # Hooks specifické pro subkomponentu
+│       │   ├── useSubData.ts
+│       │   └── useSubActions.ts
+│       ├── types/                 # Types specifické pro subkomponentu
+│       │   ├── SubItem.ts
+│       │   └── SubAction.ts
+│       ├── utils/                 # Utility funkce
+│       │   └── subValidators.ts
+│       └── constants/             # Konstanty
+│           └── subConfig.ts
+├── hooks/                         # Hooks pro hlavní komponentu
+│   ├── useComponentData.ts
+│   └── useComponentActions.ts
+├── types/                         # Types pro hlavní komponentu
+│   ├── Component.ts
+│   └── ComponentState.ts
+├── utils/                         # Utility funkce
+│   ├── formatters.ts
+│   └── validators.ts
+├── constants/                     # Konstanty
+│   └── config.ts
+├── ComponentName.test.tsx         # Hlavní test soubor
+└── ComponentName.stories.tsx      # Storybook stories
+```
+
+**❌ Nepoužívej adresářovou strukturu když:**
 
 - **Jednoduchá presentational komponenta**
 - **< 20 řádků**
@@ -349,12 +402,42 @@ export enum UserRole {
 3. **Refaktoruj hlavní komponentu** na čistého orchestrátora
 4. **Aktualizuj importy** - přímo z konkrétních souborů
 
+### ⚠️ **Fáze 3.5: Recursive Refactoring (REKURZIVNÍ REFACTORING)**
+
+**Po vytvoření subkomponent automaticky zkontroluj každou novou komponentu:**
+
+1. **Změř velikost** každé nově vytvořené komponenty
+2. **Pokud > 100 řádků** → aplikuj refactoring znovu na tuto komponentu
+3. **Rozděl velkou subkomponentu** na další subkomponenty
+4. **Opakuj rekurzivně** dokud všechny komponenty nejsou < 100 řádků
+5. **Zachovej Pure Orchestration Pattern** v každé úrovni
+
+**Příklad rekurzivního postupu:**
+
+```
+1. ComponentName.tsx (985 řádků) → REFACTOR
+   ├── Vytvořeny: ComponentContent, ComponentLoading, ComponentError, LargeSubComponent...
+
+2. Zkontroluj velikosti nových komponent:
+   ├── ComponentContent.tsx (80 řádků) ✅ OK
+   ├── ComponentLoading.tsx (40 řádků) ✅ OK
+   ├── ComponentError.tsx (30 řádků) ✅ OK
+   ├── LargeSubComponent.tsx (150 řádků) → REFACTOR ZNOVU
+
+3. Refaktoruj LargeSubComponent.tsx:
+   ├── Vytvořeny: SubContent, SubActions, SubDetails
+   └── Zkontroluj velikosti → vše < 100 řádků ✅
+
+4. Konec - všechny komponenty < 100 řádků
+```
+
 ### Fáze 4: Verification (Ověření)
 
 1. **Zkontroluj orchestraci** - hlavní komponenta bez UI logiky
 2. **Ověř subkomponenty** - každá má single responsibility
-3. **Testuj funkcionalitu** - vše funguje jako předtím
-4. **Validuj strukturu** proti guidelines
+3. **Ověř rekurzivní refactoring** - žádná komponenta > 100 řádků
+4. **Testuj funkcionalitu** - vše funguje jako předtím
+5. **Validuj strukturu** proti guidelines
 
 ## 📏 Naming Conventions
 
@@ -899,3 +982,10 @@ ComponentName/
 - [ ] Všechny subkomponenty jsou v components/ adresáři?
 - [ ] Importy jsou přímé z konkrétních souborů (bez index.ts)?
 - [ ] Funkcionalita zůstala stejná?
+
+**⚠️ Rekurzivní refactoring kontrola:**
+
+- [ ] Zkontroloval jsem velikost všech nově vytvořených komponent?
+- [ ] Žádná komponenta nemá > 100 řádků?
+- [ ] Aplikoval jsem refactoring rekurzivně na velké subkomponenty?
+- [ ] Všechny komponenty v hierarchii dodržují Pure Orchestration Pattern?

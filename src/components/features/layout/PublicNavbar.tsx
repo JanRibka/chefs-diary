@@ -4,7 +4,6 @@ import { signIn, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import NextLink from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { GiChefToque, GiScrollQuill } from "react-icons/gi";
 import { HiMoon, HiSun } from "react-icons/hi";
 import { HiSparkles } from "react-icons/hi2";
 import {
@@ -17,7 +16,7 @@ import {
   IoSettings,
 } from "react-icons/io5";
 
-import { fontDisplay, fontOrn, fontSerif } from "@/config/app/fonts";
+import Logo from "@/components/shared/Logo";
 import webRoutes from "@/lib/routes/webRoutes";
 import {
   Avatar,
@@ -112,112 +111,27 @@ export default function PublicNavbar() {
         fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out
         ${
           scrolled
-            ? "backdrop-blur-2xl bg-white/95 dark:bg-slate-900/95 shadow-2xl shadow-black/10 border-b border-white/30 dark:border-slate-800/60 h-14 lg:h-16"
-            : "backdrop-blur-md bg-white/80 dark:bg-slate-900/80 shadow-lg shadow-black/5 border-b border-white/20 dark:border-slate-800/30 h-16 lg:h-20"
+            ? "backdrop-blur-2xl bg-white/95 dark:bg-slate-900/95 shadow-2xl shadow-black/10 border-b border-white/30 dark:border-slate-800/60 h-16 lg:h-20"
+            : "backdrop-blur-md bg-white/80 dark:bg-slate-900/80 shadow-lg shadow-black/5 border-b border-white/20 dark:border-slate-800/30 h-20 lg:h-24"
         }
       `}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`flex items-center justify-between transition-all duration-500 ease-out ${
-              scrolled ? "h-14 lg:h-16" : "h-16 lg:h-20"
+              scrolled ? "h-16 lg:h-20" : "h-20 lg:h-24"
             }`}
           >
             {/* Logo Section */}
             <div className="flex items-center">
-              <NextLink href="/" className="flex items-center gap-3 group">
-                {/* Enhanced Logo with 3D effect - responsive to scroll */}
-                <div className="relative">
-                  <div
-                    className={`bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 rounded-2xl shadow-xl shadow-orange-500/25 group-hover:shadow-orange-500/40 transition-all duration-500 flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 ${
-                      scrolled
-                        ? "w-10 h-10 lg:w-12 lg:h-12"
-                        : "w-12 h-12 lg:w-14 lg:h-14"
-                    }`}
-                  >
-                    <div className="relative">
-                      <GiScrollQuill
-                        className={`text-white drop-shadow-lg ${
-                          scrolled
-                            ? "w-5 h-5 lg:w-6 lg:h-6"
-                            : "w-6 h-6 lg:w-7 lg:h-7"
-                        }`}
-                      />
-                      <GiChefToque
-                        className={`text-white absolute -top-1 -right-1 drop-shadow-lg ${
-                          scrolled
-                            ? "w-4 h-4 lg:w-5 lg:h-5"
-                            : "w-5 h-5 lg:w-6 lg:h-6"
-                        }`}
-                      />
-                      <HiSparkles className="w-3 h-3 text-yellow-200 absolute -top-2 -right-2 animate-pulse" />
-                    </div>
-                  </div>
-                  {/* Glow effect */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 -z-10 ${
-                      scrolled
-                        ? "w-10 h-10 lg:w-12 lg:h-12"
-                        : "w-12 h-12 lg:w-14 lg:h-14"
-                    }`}
-                  />
-                </div>
-
-                {/* Brand Text - elegant serif wordmark */}
-                <div className="hidden sm:flex flex-col leading-none">
-                  {/* keep fontDisplay and fontSerif imported for other components and builds */}
-                  <span className={`${fontDisplay.variable} sr-only`}>
-                    display-font
-                  </span>
-                  <span className={`${fontSerif.variable} sr-only`}>
-                    serif-font
-                  </span>
-                  <span
-                    className={`${
-                      fontOrn.variable
-                    } tracking-widest uppercase text-amber-700 dark:text-amber-300 font-semibold opacity-95 ${
-                      scrolled ? "text-xs" : "text-sm"
-                    }`}
-                    style={{ fontFamily: `var(${fontOrn.variable})` }}
-                  >
-                    Kuchařův
-                  </span>
-                  <span
-                    className={`${
-                      fontOrn.variable
-                    } font-extrabold tracking-tight text-amber-900 dark:text-amber-100 -mt-1 flex items-center gap-2 ${
-                      scrolled ? "text-xl lg:text-2xl" : "text-2xl lg:text-3xl"
-                    }`}
-                    style={{ fontFamily: `var(${fontOrn.variable})` }}
-                  >
-                    Deník
-                    <svg
-                      width="28"
-                      height="8"
-                      viewBox="0 0 28 8"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="opacity-80"
-                    >
-                      <path
-                        d="M0 4C2 2 6 1 9 1C12 1 16 2 18 3C20 4 24 6 28 4"
-                        stroke="currentColor"
-                        strokeWidth="0.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                  {/* tagline removed per user request */}
-                </div>
-              </NextLink>
+              <Logo />
             </div>
 
             {/* Desktop Navigation - Ultra Modern */}
             <div className="hidden lg:flex items-center space-x-2">
               {[
                 {
-                  href: "/",
+                  href: webRoutes.Home,
                   label: "Domů",
                   icon: "🏠",
                   description: "Hlavní stránka",
@@ -244,7 +158,7 @@ export default function PublicNavbar() {
                 <div key={item.href} className="relative group">
                   <NextLink
                     href={item.href}
-                    className="relative px-6 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 transition-all duration-300 rounded-2xl overflow-hidden group-hover:text-white"
+                    className="relative px-8 py-4 text-sm font-semibold text-slate-700 dark:text-slate-300 transition-all duration-300 rounded-2xl overflow-hidden group-hover:text-white"
                   >
                     {/* Background hover effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-x-0 group-hover:scale-x-100 origin-left" />
@@ -893,7 +807,7 @@ export default function PublicNavbar() {
             <div className="space-y-3">
               {[
                 {
-                  href: "/",
+                  href: webRoutes.Home,
                   label: "Domů",
                   icon: "🏠",
                   color: "from-blue-500 to-cyan-500",

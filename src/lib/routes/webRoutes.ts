@@ -1,9 +1,8 @@
 const webRoutes = {
+  Home: "/",
   LogIn: "/prihlaseni",
   SignUp: "/registrace",
   ForgottenPassword: "/zapomenute-heslo",
-  Test: "/test",
-  Test2: "/test2",
 } as const;
 
 export default webRoutes;

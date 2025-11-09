@@ -1,6 +1,13 @@
 import NextLink from "next/link";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaTiktok,
+  FaTwitter,
+  FaYoutube,
+} from "react-icons/fa";
+
 import { Button } from "@heroui/react";
-import { FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaTiktok } from "react-icons/fa";
 
 import { socialLinksData } from "../constants/config";
 

@@ -1,39 +1,21 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
-import { useTheme } from "next-themes";
-import NextLink from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { HiMoon, HiSun } from "react-icons/hi";
-import { HiSparkles } from "react-icons/hi2";
+import { signIn, useSession } from 'next-auth/react';
+import { useTheme } from 'next-themes';
+import NextLink from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import { HiMoon, HiSun } from 'react-icons/hi';
+import { HiSparkles } from 'react-icons/hi2';
 import {
-  IoArrowForward,
-  IoClose,
-  IoLogOut,
-  IoMenu,
-  IoPerson,
-  IoSearch,
-  IoSettings,
-} from "react-icons/io5";
+    IoArrowForward, IoClose, IoLogOut, IoMenu, IoPerson, IoSearch, IoSettings
+} from 'react-icons/io5';
 
-import Logo from "@/components/shared/Logo";
-import webRoutes from "@/lib/routes/webRoutes";
+import Logo from '@/components/shared/logo/Logo';
+import webRoutes from '@/lib/routes/webRoutes';
 import {
-  Avatar,
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  useDisclosure,
-} from "@heroui/react";
+    Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Modal, ModalBody,
+    ModalContent, Popover, PopoverContent, PopoverTrigger, useDisclosure
+} from '@heroui/react';
 
 export default function PublicNavbar() {
   const { data: session } = useSession();

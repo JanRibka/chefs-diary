@@ -1,11 +1,11 @@
 "use client";
 
-import NextLink from "next/link";
-import { GiChefToque } from "react-icons/gi";
-import { IoArrowBack, IoHome } from "react-icons/io5";
+import NextLink from 'next/link';
+import { GiChefToque } from 'react-icons/gi';
+import { IoArrowBack, IoHome } from 'react-icons/io5';
 
-import Logo from "@/components/shared/Logo";
-import webRoutes from "@/lib/routes/webRoutes";
+import Logo from '@/components/shared/logo/Logo';
+import webRoutes from '@/lib/routes/webRoutes';
 
 export default function NotFoundClient() {
   return (

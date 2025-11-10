@@ -1,9 +1,9 @@
-import NextLink from "next/link";
-import { HiLocationMarker, HiMail, HiPhone } from "react-icons/hi";
+import NextLink from 'next/link';
+import { HiLocationMarker, HiMail, HiPhone } from 'react-icons/hi';
 
-import Logo from "@/components/shared/Logo";
+import Logo from '@/components/shared/logo/Logo';
 
-import { SocialLinks } from "./SocialLinks";
+import { SocialLinks } from './SocialLinks';
 
 /**
  * BrandSection - Brand and contact information section

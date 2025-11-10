@@ -35,6 +35,9 @@ importers:
       react-dom:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
+      tailwind-variants:
+        specifier: ^3.1.1
+        version: 3.1.1(tailwind-merge@3.3.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.15.19)(typescript@5.8.3)))
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.1
@@ -3488,6 +3491,16 @@ packages:
     engines: {node: '>=16.x', pnpm: '>=7.x'}
     peerDependencies:
       tailwindcss: '*'
+
+  tailwind-variants@3.1.1:
+    resolution: {integrity: sha512-ftLXe3krnqkMHsuBTEmaVUXYovXtPyTK7ckEfDRXS8PBZx0bAUas+A0jYxuKA5b8qg++wvQ3d2MQ7l/xeZxbZQ==}
+    engines: {node: '>=16.x', pnpm: '>=7.x'}
+    peerDependencies:
+      tailwind-merge: '>=3.0.0'
+      tailwindcss: '*'
+    peerDependenciesMeta:
+      tailwind-merge:
+        optional: true
 
   tailwindcss-animate@1.0.7:
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
@@ -8040,6 +8053,12 @@ snapshots:
     dependencies:
       tailwind-merge: 2.5.4
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@22.15.19)(typescript@5.8.3))
+
+  tailwind-variants@3.1.1(tailwind-merge@3.3.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.15.19)(typescript@5.8.3))):
+    dependencies:
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@22.15.19)(typescript@5.8.3))
+    optionalDependencies:
+      tailwind-merge: 3.3.0
 
   tailwindcss-animate@1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.15.19)(typescript@5.8.3))):
     dependencies:

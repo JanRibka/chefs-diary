@@ -3,9 +3,9 @@
 import { SessionProvider } from "next-auth/react";
 import { memo } from "react";
 
-import PublicNavbar from "@/components/features/layout/PublicNavbar";
 import { Providers } from "@/config/heroUI/providers";
 
+import PublicNavbar from "../../PublicNavbar/PublicNavbar";
 import { ScrollToTopButton } from "../PublicFooter/components/ScrollToTopButton";
 import PublicFooter from "../PublicFooter/PublicFooter";
 import { PublicLayoutBackground } from "./components/PublicLayoutBackground";

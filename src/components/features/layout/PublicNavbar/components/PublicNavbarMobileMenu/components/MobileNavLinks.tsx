@@ -19,7 +19,7 @@ export const MobileNavLinks = memo(
     const navLinks = useMemo(
       () =>
         items.map((item, index) => (
-          <div key={item.href} className="relative group">
+          <li key={item.href} className="relative group">
             <NextLink
               href={item.href}
               className="relative block px-6 py-4 text-lg font-semibold text-slate-700 dark:text-slate-300 rounded-2xl overflow-hidden transition-all duration-300 group-hover:text-white transform group-hover:scale-105"
@@ -60,12 +60,16 @@ export const MobileNavLinks = memo(
             <div
               className={`absolute inset-y-0 -left-2 w-1 bg-gradient-to-b ${item.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full blur-sm`}
             />
-          </div>
+          </li>
         )),
       [items, onClose]
     );
 
-    return <div className="space-y-3">{navLinks}</div>;
+    return (
+      <nav>
+        <ul className="space-y-3">{navLinks}</ul>
+      </nav>
+    );
   }
 );
 

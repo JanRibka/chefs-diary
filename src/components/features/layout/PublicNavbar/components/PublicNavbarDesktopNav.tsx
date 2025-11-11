@@ -16,7 +16,7 @@ export const PublicNavbarDesktopNav = memo(() => {
   const navItems = useMemo(
     () =>
       NAV_ITEMS.map((item, index) => (
-        <div key={item.href} className="relative group">
+        <li key={item.href} className="relative group">
           <NextLink
             href={item.href}
             className="relative px-8 py-4 text-sm font-semibold text-slate-700 dark:text-slate-300 transition-all duration-300 rounded-2xl overflow-hidden group-hover:text-white"
@@ -54,13 +54,15 @@ export const PublicNavbarDesktopNav = memo(() => {
             {/* Tooltip arrow */}
             <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-slate-900 dark:bg-white rotate-45" />
           </div>
-        </div>
+        </li>
       )),
     []
   );
 
   return (
-    <div className="hidden lg:flex items-center space-x-2">{navItems}</div>
+    <nav className="hidden lg:flex items-center">
+      <ul className="flex items-center space-x-2">{navItems}</ul>
+    </nav>
   );
 });
 

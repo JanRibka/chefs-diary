@@ -55,7 +55,7 @@ export const PublicNavbar = memo(() => {
   // 4. UI orchestration - struktura a koordinace subkomponent
   // Konstanty (NAV_ITEMS, SEARCH_TAGS) jsou uvnitř subkomponent
   return (
-    <>
+    <header>
       <nav className={styles.nav()}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={styles.container()}>
@@ -127,7 +127,7 @@ export const PublicNavbar = memo(() => {
         isOpen={searchState.isOpen}
         onClose={searchState.onClose}
       />
-    </>
+    </header>
   );
 });
 

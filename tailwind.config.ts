@@ -1,4 +1,4 @@
-import { heroui } from "@heroui/react";
+import { heroui } from '@heroui/react';
 
 import type { Config } from "tailwindcss";
 
@@ -33,7 +33,18 @@ const config: Config = {
         },
       },
       maxWidth: {
-        main: "1140px",
+        main: "1280px",
+      },
+      minWidth: {
+        "dropdown-user": "340px",
+      },
+      minHeight: {
+        "auth-form": "400px",
+      },
+      height: {
+        auth: "700px",
+        hero: "500px",
+        "hero-lg": "600px",
       },
       backgroundSize: {
         70: "70%",

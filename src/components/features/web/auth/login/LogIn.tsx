@@ -28,7 +28,7 @@ export default function LogIn() {
   }, [state]);
 
   if (state?.generalState === LogInStatusEnum.SUCCESS) {
-    return <ClientReplaceGetReturnToUrl defaultRoute={webRoutes.Test} />;
+    return <ClientReplaceGetReturnToUrl defaultRoute={webRoutes.Home} />;
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

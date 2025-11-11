@@ -9,7 +9,7 @@ import Button from "@/components/shared/button/Button";
 export const NewsletterSection = () => {
   return (
     <div className="border-b border-primary/20 dark:border-primary/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-main mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center max-w-3xl mx-auto">
           {/* TODO: Vtvo5it kompoernentu */}
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary/10 to-primary/20 dark:from-primary/20 dark:to-primary/30 px-6 py-3 rounded-full mb-6">

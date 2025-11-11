@@ -58,7 +58,7 @@ export default function HeroSection() {
         />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-main mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Enhanced Left Content */}
           <div className="space-y-10 text-center lg:text-left">
@@ -148,7 +148,7 @@ export default function HeroSection() {
 
           {/* Enhanced Right Content - Hero Image */}
           <div className="relative">
-            <div className="relative w-full h-[500px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+            <div className="relative w-full h-hero lg:h-hero-lg rounded-3xl overflow-hidden shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
               <Image
                 src="/api/placeholder/700/600"
                 alt="Delicious food presentation"

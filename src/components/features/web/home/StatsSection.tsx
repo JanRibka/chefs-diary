@@ -1,4 +1,4 @@
-import { IoDocumentText, IoHeart, IoPeople, IoStar } from 'react-icons/io5';
+import { IoDocumentText, IoHeart, IoPeople, IoStar } from "react-icons/io5";
 
 const stats = [
   {
@@ -34,7 +34,7 @@ const stats = [
 export default function StatsSection() {
   return (
     <section className="py-20 bg-gradient-to-r from-orange-500 to-red-500">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-main mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Naše komunita roste

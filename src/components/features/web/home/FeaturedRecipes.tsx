@@ -1,10 +1,10 @@
 "use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { IoHeart, IoStar, IoTime } from 'react-icons/io5';
+import Image from "next/image";
+import Link from "next/link";
+import { IoHeart, IoStar, IoTime } from "react-icons/io5";
 
-import { Avatar, Button, Card, CardBody, Chip } from '@heroui/react';
+import { Avatar, Button, Card, CardBody, Chip } from "@heroui/react";
 
 const featuredRecipes = [
   {
@@ -57,7 +57,7 @@ const featuredRecipes = [
 export default function FeaturedRecipes() {
   return (
     <section className="py-20 bg-gray-50 dark:bg-default-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-main mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Nejoblíbenější recepty

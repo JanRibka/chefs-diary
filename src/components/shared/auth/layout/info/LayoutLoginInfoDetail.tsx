@@ -1,4 +1,4 @@
-import Image from "@/components/shared/image/Image";
+import Logo from "@/components/shared/logo/Logo";
 
 type Props = {
   header: string;
@@ -10,16 +10,8 @@ const LayoutLoginInfoDetail = ({ header, description }: Props) => {
     <div className="relative flex flex-col w-full h-full z-2">
       <div className="flex w-full">
         <div className="w-full mx-5 md:mx-12">
-          <div className="w-24 my-12 h-9 lg:mb-0">
-            <a
-              href={process.env.PUBLIC_URL}
-              title={process.env.NEXT_PUBLIC_APP_NAME}
-            >
-              <Image
-                src={"admin/logo-light.png"}
-                alt={`Logo | ${process.env.NEXT_PUBLIC_APP_NAME}`}
-              />
-            </a>
+          <div className="my-12 lg:mb-0">
+            <Logo size="lg" showText={true} variant="dark" />
           </div>
         </div>
       </div>

@@ -1,24 +1,26 @@
 "use client";
 
-import { memo, useCallback } from "react";
+import { memo, useCallback } from 'react';
 
-import Logo from "@/components/shared/logo/Logo";
+import Logo from '@/components/shared/logo/Logo';
 
-import { PublicNavbarDesktopNav } from "./components/PublicNavbarDesktopNav";
-import { PublicNavbarLoginButton } from "./components/PublicNavbarLoginButton/PublicNavbarLoginButton";
-import { PublicNavbarMobileMenu } from "./components/PublicNavbarMobileMenu/PublicNavbarMobileMenu";
-import { PublicNavbarMobileToggle } from "./components/PublicNavbarMobileToggle";
-import { PublicNavbarSearchButton } from "./components/PublicNavbarSearchButton";
-import { PublicNavbarSearchModal } from "./components/PublicNavbarSearchModal";
-import { PublicNavbarThemeToggle } from "./components/PublicNavbarThemeToggle";
-import { PublicNavbarUserMenu } from "./components/PublicNavbarUserMenu/PublicNavbarUserMenu";
-import { useNavbarAuth } from "./hooks/useNavbarAuth";
-import { useNavbarLogin } from "./hooks/useNavbarLogin";
-import { useNavbarMobile } from "./hooks/useNavbarMobile";
-import { useNavbarScroll } from "./hooks/useNavbarScroll";
-import { useNavbarSearch } from "./hooks/useNavbarSearch";
-import { useNavbarTheme } from "./hooks/useNavbarTheme";
-import { navbarStyles } from "./styles/navbarStyles";
+import { PublicNavbarDesktopNav } from './components/PublicNavbarDesktopNav';
+import {
+    PublicNavbarLoginButton
+} from './components/PublicNavbarLoginButton/PublicNavbarLoginButton';
+import { PublicNavbarMobileMenu } from './components/PublicNavbarMobileMenu/PublicNavbarMobileMenu';
+import { PublicNavbarMobileToggle } from './components/PublicNavbarMobileToggle';
+import { PublicNavbarSearchButton } from './components/PublicNavbarSearchButton';
+import { PublicNavbarSearchModal } from './components/PublicNavbarSearchModal';
+import { PublicNavbarThemeToggle } from './components/PublicNavbarThemeToggle';
+import { PublicNavbarUserMenu } from './components/PublicNavbarUserMenu/PublicNavbarUserMenu';
+import { useNavbarAuth } from './hooks/useNavbarAuth';
+import { useNavbarLogin } from './hooks/useNavbarLogin';
+import { useNavbarMobile } from './hooks/useNavbarMobile';
+import { useNavbarScroll } from './hooks/useNavbarScroll';
+import { useNavbarSearch } from './hooks/useNavbarSearch';
+import { useNavbarTheme } from './hooks/useNavbarTheme';
+import { navbarStyles } from './styles/navbarStyles';
 
 /**
  * PublicNavbar - Main public navigation component (Pure Orchestrator)
@@ -53,11 +55,10 @@ export const PublicNavbar = memo(() => {
   }, [mobileState]);
 
   // 4. UI orchestration - struktura a koordinace subkomponent
-  // Konstanty (NAV_ITEMS, SEARCH_TAGS) jsou uvnitř subkomponent
   return (
     <header>
       <nav className={styles.nav()}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-main mx-auto px-4 sm:px-6 lg:px-8">
           <div className={styles.container()}>
             {/* Left section - Logo */}
             <div className="flex items-center">

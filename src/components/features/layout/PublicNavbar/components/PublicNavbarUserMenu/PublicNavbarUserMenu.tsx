@@ -1,18 +1,13 @@
 "use client";
 
-import { memo } from "react";
+import { memo } from 'react';
 
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@heroui/react";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/react';
 
-import { UserMenuHeader } from "./components/UserMenuHeader";
-import { UserMenuItems } from "./components/UserMenuItems";
-import { UserMenuSignOut } from "./components/UserMenuSignOut";
-import { UserMenuTrigger } from "./components/UserMenuTrigger";
+import { UserMenuHeader } from './components/UserMenuHeader';
+import { UserMenuItems } from './components/UserMenuItems';
+import { UserMenuSignOut } from './components/UserMenuSignOut';
+import { UserMenuTrigger } from './components/UserMenuTrigger';
 
 import type { UserSession } from "../../types/UserSession";
 interface PublicNavbarUserMenuProps {
@@ -31,7 +26,7 @@ export const PublicNavbarUserMenu = memo(
     return (
       <Dropdown
         placement="bottom-end"
-        className="min-w-[340px] bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 shadow-2xl"
+        className="min-w-dropdown-user bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 shadow-2xl"
       >
         <DropdownTrigger>
           <UserMenuTrigger user={user} />

@@ -1,9 +1,9 @@
 "use client";
 
-import { memo } from "react";
+import { memo } from 'react';
 
-import { LoginPopoverWrapper } from "./components/LoginPopoverWrapper/LoginPopoverWrapper";
-import { loginButtonStyles } from "./styles/loginButtonStyles";
+import { LoginPopoverWrapper } from './components/LoginPopoverWrapper/LoginPopoverWrapper';
+import { loginButtonStyles } from './styles/loginButtonStyles';
 
 interface PublicNavbarLoginButtonProps {
   loginFlyoutOpen: boolean;
@@ -49,7 +49,9 @@ export const PublicNavbarLoginButton = memo(
     resolvedTheme,
   }: PublicNavbarLoginButtonProps) => {
     // Get styles from tailwind-variants with theme variant
-    const styles = loginButtonStyles({ resolvedTheme: resolvedTheme as "light" | "dark" });
+    const styles = loginButtonStyles({
+      resolvedTheme: resolvedTheme as "light" | "dark",
+    });
 
     return (
       <div

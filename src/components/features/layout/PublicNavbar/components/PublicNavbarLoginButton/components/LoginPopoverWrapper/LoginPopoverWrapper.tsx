@@ -1,12 +1,12 @@
 "use client";
 
-import { memo } from "react";
+import { memo } from 'react';
 
-import { Popover, PopoverContent } from "@heroui/react";
+import { Popover, PopoverContent } from '@heroui/react';
 
-import { LoginButtonTrigger } from "../LoginButtonTrigger";
-import { LoginFormContent } from "../LoginFormContent";
-import { loginPopoverWrapperStyles } from "./styles/loginPopoverWrapperStyles";
+import { LoginButtonTrigger } from '../LoginButtonTrigger';
+import { LoginFormContent } from '../LoginFormContent';
+import { loginPopoverWrapperStyles } from './styles/loginPopoverWrapperStyles';
 
 interface LoginPopoverWrapperProps {
   loginFlyoutOpen: boolean;

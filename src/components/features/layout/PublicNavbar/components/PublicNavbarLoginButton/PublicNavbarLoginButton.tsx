@@ -2,7 +2,8 @@
 
 import { memo } from "react";
 
-import { LoginPopoverWrapper } from "./components/LoginPopoverWrapper";
+import { LoginPopoverWrapper } from "./components/LoginPopoverWrapper/LoginPopoverWrapper";
+import { loginButtonStyles } from "./styles/loginButtonStyles";
 
 interface PublicNavbarLoginButtonProps {
   loginFlyoutOpen: boolean;
@@ -47,9 +48,12 @@ export const PublicNavbarLoginButton = memo(
     handleGoogleLogin,
     resolvedTheme,
   }: PublicNavbarLoginButtonProps) => {
+    // Get styles from tailwind-variants with theme variant
+    const styles = loginButtonStyles({ resolvedTheme: resolvedTheme as "light" | "dark" });
+
     return (
       <div
-        className="relative group"
+        className={styles.container()}
         onMouseEnter={() => {
           hoverOpenTimerRef.current = window.setTimeout(() => {
             setLoginFlyoutOpen(true);
@@ -85,11 +89,7 @@ export const PublicNavbarLoginButton = memo(
         />
 
         {/* Subtle glow */}
-        <div
-          className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-xl scale-110 ${
-            resolvedTheme === "dark" ? "bg-purple-500/20" : "bg-primary/20"
-          }`}
-        />
+        <div className={styles.glowEffect()} />
       </div>
     );
   }

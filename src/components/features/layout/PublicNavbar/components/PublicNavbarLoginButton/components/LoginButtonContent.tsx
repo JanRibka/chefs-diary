@@ -1,7 +1,7 @@
 "use client";
 
-import { memo } from "react";
-import { IoPerson } from "react-icons/io5";
+import { memo } from 'react';
+import { IoPerson } from 'react-icons/io5';
 
 interface LoginButtonContentProps {
   resolvedTheme: string | undefined;
@@ -14,30 +14,33 @@ interface LoginButtonContentProps {
  */
 export const LoginButtonContent = memo(
   ({ resolvedTheme }: LoginButtonContentProps) => {
+    // SSR-safe theme resolution
+    const theme = resolvedTheme || "light";
+
     return (
       <>
         {/* Electric spark effects - theme-aware */}
         <div className="absolute inset-0 rounded-3xl">
           <div
             className={`absolute top-2 left-4 w-1 h-1 rounded-full animate-ping opacity-80 ${
-              resolvedTheme === "dark" ? "bg-purple-300" : "bg-yellow-300"
+              theme === "dark" ? "bg-purple-300" : "bg-yellow-300"
             }`}
           />
           <div
             className={`absolute top-3 right-6 w-0.5 h-0.5 rounded-full animate-pulse opacity-90 ${
-              resolvedTheme === "dark" ? "bg-indigo-300" : "bg-white"
+              theme === "dark" ? "bg-indigo-300" : "bg-white"
             }`}
             style={{ animationDelay: "0.2s" }}
           />
           <div
             className={`absolute bottom-3 left-8 w-0.5 h-0.5 rounded-full animate-bounce opacity-70 ${
-              resolvedTheme === "dark" ? "bg-blue-300" : "bg-yellow-200"
+              theme === "dark" ? "bg-blue-300" : "bg-yellow-200"
             }`}
             style={{ animationDelay: "0.4s" }}
           />
           <div
             className={`absolute bottom-2 right-3 w-1 h-1 rounded-full animate-ping opacity-60 ${
-              resolvedTheme === "dark" ? "bg-purple-200" : "bg-primary/20"
+              theme === "dark" ? "bg-purple-200" : "bg-primary/20"
             }`}
             style={{ animationDelay: "0.6s" }}
           />
@@ -60,7 +63,7 @@ export const LoginButtonContent = memo(
             className="tracking-wider text-lg font-black drop-shadow-2xl text-white"
             style={{
               textShadow:
-                resolvedTheme === "dark"
+                theme === "dark"
                   ? "0 0 3px rgba(0,0,0,0.7), 1px 1px 2px rgba(0,0,0,0.9)"
                   : "0 0 4px rgba(0,0,0,0.6), 1px 1px 2px rgba(0,0,0,0.8)",
             }}

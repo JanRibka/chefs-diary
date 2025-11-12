@@ -4,15 +4,23 @@ import { memo, useCallback } from 'react';
 
 import Logo from '@/components/shared/logo/Logo';
 
-import { PublicNavbarDesktopNav } from './components/PublicNavbarDesktopNav';
+import { PublicNavbarDesktopNav } from './components/PublicNavbarDesktopNav/PublicNavbarDesktopNav';
 import {
     PublicNavbarLoginButton
 } from './components/PublicNavbarLoginButton/PublicNavbarLoginButton';
 import { PublicNavbarMobileMenu } from './components/PublicNavbarMobileMenu/PublicNavbarMobileMenu';
-import { PublicNavbarMobileToggle } from './components/PublicNavbarMobileToggle';
-import { PublicNavbarSearchButton } from './components/PublicNavbarSearchButton';
-import { PublicNavbarSearchModal } from './components/PublicNavbarSearchModal';
-import { PublicNavbarThemeToggle } from './components/PublicNavbarThemeToggle';
+import {
+    PublicNavbarMobileToggle
+} from './components/PublicNavbarMobileToggle/PublicNavbarMobileToggle';
+import {
+    PublicNavbarSearchButton
+} from './components/PublicNavbarSearchButton/PublicNavbarSearchButton';
+import {
+    PublicNavbarSearchModal
+} from './components/PublicNavbarSearchModal/PublicNavbarSearchModal';
+import {
+    PublicNavbarThemeToggle
+} from './components/PublicNavbarThemeToggle/PublicNavbarThemeToggle';
 import { PublicNavbarUserMenu } from './components/PublicNavbarUserMenu/PublicNavbarUserMenu';
 import { useNavbarAuth } from './hooks/useNavbarAuth';
 import { useNavbarLogin } from './hooks/useNavbarLogin';
@@ -72,13 +80,11 @@ export const PublicNavbar = memo(() => {
             <div className="flex items-center gap-2">
               <PublicNavbarSearchButton onOpen={searchState.onOpen} />
 
-              {themeState.mounted && (
-                <PublicNavbarThemeToggle
-                  mounted={themeState.mounted}
-                  resolvedTheme={themeState.resolvedTheme}
-                  setTheme={themeState.setTheme}
-                />
-              )}
+              <PublicNavbarThemeToggle
+                mounted={themeState.mounted}
+                resolvedTheme={themeState.resolvedTheme}
+                setTheme={themeState.setTheme}
+              />
 
               {authState.session ? (
                 <PublicNavbarUserMenu user={authState.user} />

@@ -4,8 +4,9 @@ import { memo } from "react";
 
 import { Popover, PopoverContent } from "@heroui/react";
 
-import { LoginButtonTrigger } from "./LoginButtonTrigger";
-import { LoginFormContent } from "./LoginFormContent";
+import { LoginButtonTrigger } from "../LoginButtonTrigger";
+import { LoginFormContent } from "../LoginFormContent";
+import { loginPopoverWrapperStyles } from "./styles/loginPopoverWrapperStyles";
 
 interface LoginPopoverWrapperProps {
   loginFlyoutOpen: boolean;
@@ -44,6 +45,9 @@ export const LoginPopoverWrapper = memo(
     handleGoogleLogin,
     resolvedTheme,
   }: LoginPopoverWrapperProps) => {
+    // Get styles from tailwind-variants
+    const styles = loginPopoverWrapperStyles();
+
     return (
       <Popover
         isOpen={loginFlyoutOpen}
@@ -54,7 +58,10 @@ export const LoginPopoverWrapper = memo(
           }
         }}
         placement="bottom"
-        classNames={{ base: "z-50", content: "z-50" }}
+        classNames={{
+          base: styles.popoverBase(),
+          content: styles.popoverContent(),
+        }}
       >
         <LoginButtonTrigger
           loginTriggerRef={loginTriggerRef}
@@ -63,7 +70,7 @@ export const LoginPopoverWrapper = memo(
           resolvedTheme={resolvedTheme}
         />
 
-        <PopoverContent className="w-80 p-0">
+        <PopoverContent className={styles.content()}>
           <LoginFormContent
             flyoutFirstInputRef={flyoutFirstInputRef}
             loginEmail={loginEmail}

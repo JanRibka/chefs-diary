@@ -22,5 +22,13 @@ export const loginButtonStyles = tv({
         glowEffect: "bg-primary/20",
       },
     },
+    isOpen: {
+      true: {
+        container: "scale-110",
+      },
+      false: {
+        container: "",
+      },
+    },
   },
 });

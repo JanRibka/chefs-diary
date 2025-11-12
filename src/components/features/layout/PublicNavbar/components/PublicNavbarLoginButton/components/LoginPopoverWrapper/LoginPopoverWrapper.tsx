@@ -4,7 +4,7 @@ import { memo } from 'react';
 
 import { Popover, PopoverContent } from '@heroui/react';
 
-import { LoginButtonTrigger } from '../LoginButtonTrigger';
+import { LoginButtonTrigger } from '../LoginButtonTrigger/LoginButtonTrigger';
 import { LoginFormContent } from '../LoginFormContent';
 import { loginPopoverWrapperStyles } from './styles/loginPopoverWrapperStyles';
 

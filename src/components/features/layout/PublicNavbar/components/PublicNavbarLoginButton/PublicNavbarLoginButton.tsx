@@ -51,6 +51,7 @@ export const PublicNavbarLoginButton = memo(
     // Get styles from tailwind-variants with theme variant
     const styles = loginButtonStyles({
       resolvedTheme: resolvedTheme as "light" | "dark",
+      isOpen: loginFlyoutOpen,
     });
 
     return (

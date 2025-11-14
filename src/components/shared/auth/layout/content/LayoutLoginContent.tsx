@@ -27,7 +27,9 @@ const LayoutLoginContent = memo(({ children }: Props) => {
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
 
           {/* Content */}
-          <div className="relative z-10 h-full">{children}</div>
+          <div className="relative z-10 h-full flex flex-col items-center justify-center">
+            {children}
+          </div>
         </div>
       </div>
     </section>

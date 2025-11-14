@@ -1,5 +1,4 @@
-"use client";
-
+import { memo } from "react";
 import Link from "next/link";
 
 import Button from "@/components/shared/button/Button";
@@ -14,23 +13,21 @@ import resendVerificationEmailValidationSchema, {
   ResendVerificationEmailFormType,
 } from "@/lib/validations/schemas/web/resendVerificationEmail/resendVerificationEmailValidationSchema";
 
-type Props = {
-  email: string;
-  errors: Record<string, string>;
-  isLoading: boolean;
-  action: (payload: FormData) => void;
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  handleChange: () => void;
-};
+import { EmailNotVerifiedFormProps } from "../types/EmailNotVerifiedFormProps";
 
-export default function EmailNotVerifiedForm({
+/**
+ * EmailNotVerifiedFormContent component - renders the email verification form UI
+ * @param props - Component props
+ * @returns JSX.Element
+ */
+const EmailNotVerifiedFormContent = memo<EmailNotVerifiedFormProps>(({
   email,
   errors,
   isLoading,
   action,
   handleSubmit,
   handleChange,
-}: Props) {
+}) => {
   return (
     <section>
       <div className="flex flex-col items-center">
@@ -84,4 +81,8 @@ export default function EmailNotVerifiedForm({
       </div>
     </section>
   );
-}
+});
+
+EmailNotVerifiedFormContent.displayName = "EmailNotVerifiedFormContent";
+
+export default EmailNotVerifiedFormContent;

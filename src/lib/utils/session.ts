@@ -43,7 +43,7 @@ export async function getProtectedSessionWeb(returnPathName: boolean = true) {
 
     if (returnPathName) {
       const headersList = await headers();
-      pathname = headersList.get("x-pathname") ?? webRoutes.Test;
+      pathname = headersList.get("x-pathname") ?? webRoutes.Home;
     }
 
     return {

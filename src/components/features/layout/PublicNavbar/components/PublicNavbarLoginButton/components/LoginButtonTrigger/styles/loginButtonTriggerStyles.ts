@@ -8,7 +8,7 @@ export const loginButtonTriggerStyles = tv({
   slots: {
     // Main button
     button:
-      "hidden sm:flex font-black px-6 py-4 rounded-3xl border-4 transition-all duration-300 overflow-hidden relative group cursor-pointer",
+      "hidden sm:flex font-black px-6 py-4 rounded-3xl border-4 transition-all duration-300 overflow-hidden relative group cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
 
     // Neon glow layers
     glowLayer1:

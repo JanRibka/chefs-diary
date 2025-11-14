@@ -37,9 +37,23 @@ export const LoginButtonTrigger = memo(
           size="lg"
           aria-haspopup="dialog"
           aria-expanded={loginFlyoutOpen}
+          aria-label={
+            loginFlyoutOpen
+              ? "Zavřít přihlašovací formulář"
+              : "Otevřít přihlašovací formulář"
+          }
+          aria-describedby="login-button-description"
+          role="button"
+          tabIndex={0}
+          data-testid="login-button-trigger"
           onPress={() => setLoginFlyoutOpen(!loginFlyoutOpen)}
           className={styles.button()}
         >
+          {/* Hidden description for screen readers */}
+          <span id="login-button-description" className="sr-only">
+            Kliknutím otevřete nebo zavřete přihlašovací formulář. Použijte
+            klávesu Enter nebo mezerník pro aktivaci.
+          </span>
           {/* Neon glow layers */}
           <div className={styles.glowLayer1()} />
           <div className={styles.glowLayer2()} />

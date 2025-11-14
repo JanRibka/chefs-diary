@@ -1,17 +1,16 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from 'react';
 
-import { logInAction } from "@/actions/admin/auth";
-import ClientReplaceGetReturnToUrl from "@/components/shared/clientReplaceGetReturnToUrl/ClientReplaceGetReturnToUrl";
-import LogInStatusEnum from "@/lib/enums/LogInStatusEnum";
-import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
-import adminRoutes from "@/lib/routes/adminRoutes";
-import { LogInFormErrorType } from "@/lib/validations/schemas/shared/logIn/logInValidationSchema";
-import { validateLogInForm } from "@/lib/validations/validations/shared/logIn/validateLogInForm";
-
-import EmailNotVerified from "../../../../shared/auth/logIn/EmailNotVerified";
-import LogInForm from "../../../../shared/auth/logIn/LogInForm";
+import { logInAction } from '@/actions/admin/auth';
+import EmailNotVerified from '@/components/shared/auth/logIn/EmailNotVerified/EmailNotVerified';
+import LogInForm from '@/components/shared/auth/logIn/LogInForm/LogInForm';
+import ClientReplaceGetReturnToUrl from '@/components/shared/clientReplaceGetReturnToUrl/ClientReplaceGetReturnToUrl';
+import LogInStatusEnum from '@/lib/enums/LogInStatusEnum';
+import useIsFirstRender from '@/lib/hooks/useIsFirstRender';
+import adminRoutes from '@/lib/routes/adminRoutes';
+import { LogInFormErrorType } from '@/lib/validations/schemas/shared/logIn/logInValidationSchema';
+import { validateLogInForm } from '@/lib/validations/validations/shared/logIn/validateLogInForm';
 
 //TODO: I když tam mam replace, tak bych to měl pro jistotu dát redirect na dashbord pokud jsem prihlaseny
 export default function LogIn() {

@@ -12,7 +12,7 @@ export default async function ProtectedLayout({ children }: Props) {
 
   if (!session?.user?.id) {
     const headersList = await headers();
-    const returnTo = headersList.get("x-pathname") ?? webRoutes.Test;
+    const returnTo = headersList.get("x-pathname") ?? webRoutes.Home;
 
     return (
       <ClientReplace

@@ -6,7 +6,7 @@ import { getVerificationTokenByToken } from "@/lib/repositories/verificationToke
 import webRoutes from "@/lib/routes/webRoutes";
 import { verifyEmail } from "@/lib/services/verifyEmailService";
 
-import EmailNotVerified from "../../../../components/shared/auth/emailNotVerified/EmailNotVerified";
+import EmailNotVerified from "@/components/shared/auth/logIn/EmailNotVerified/EmailNotVerified";
 import VerifyEmailSuccessful from "../../../../components/shared/auth/verifyEmailSuccess/VerifyEmailSuccess";
 
 type Props = {

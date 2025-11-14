@@ -1,14 +1,19 @@
-import Link from "next/link";
+import Link from 'next/link';
+import { memo } from 'react';
 
-import Button from "@/components/shared/button/Button";
-import FormHeading from "@/components/shared/form/FormHeading";
-import webRoutes from "@/lib/routes/webRoutes";
+import Button from '@/components/shared/button/Button';
+import FormHeading from '@/components/shared/form/FormHeading';
+import webRoutes from '@/lib/routes/webRoutes';
 
-type Props = {
-  email: string;
-};
-
-export default function VerifyLinkSentSuccess({ email }: Props) {
+/**
+ * VerifyLinkSentSuccess - komponenta pro zobrazení úspěšného odeslání ověřovacího odkazu
+ *
+ * @param email - email adresa, na kterou byl odeslán ověřovací odkaz
+ *
+ * @example
+ * <VerifyLinkSentSuccess email="user@example.com" />
+ */
+const VerifyLinkSentSuccess = memo(({ email }: { email: string }) => {
   return (
     <section>
       <div className="flex flex-col items-center">
@@ -30,4 +35,8 @@ export default function VerifyLinkSentSuccess({ email }: Props) {
       </div>
     </section>
   );
-}
+});
+
+VerifyLinkSentSuccess.displayName = "VerifyLinkSentSuccess";
+
+export default VerifyLinkSentSuccess;

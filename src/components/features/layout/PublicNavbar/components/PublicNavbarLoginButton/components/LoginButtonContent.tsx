@@ -19,8 +19,8 @@ export const LoginButtonContent = memo(
 
     return (
       <>
-        {/* Electric spark effects - theme-aware */}
-        <div className="absolute inset-0 rounded-3xl">
+        {/* Electric spark effects - decorative only */}
+        <div className="absolute inset-0 rounded-3xl" aria-hidden="true">
           <div
             className={`absolute top-2 left-4 w-1 h-1 rounded-full animate-ping opacity-80 ${
               theme === "dark" ? "bg-purple-300" : "bg-yellow-300"
@@ -46,17 +46,24 @@ export const LoginButtonContent = memo(
           />
         </div>
 
-        {/* Energy wave animation */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-3xl" />
+        {/* Energy wave animation - decorative */}
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-3xl"
+          aria-hidden="true"
+        />
 
         {/* Content */}
         <span className="relative flex items-center gap-4 z-10">
-          <div className="relative">
-            <IoPerson className="w-7 h-7 group-hover:rotate-180 group-hover:scale-125 transition-all duration-500 drop-shadow-lg text-white" />
-            {/* Electric ring */}
+          <div className="relative" aria-hidden="true">
+            <IoPerson
+              className="w-7 h-7 group-hover:rotate-180 group-hover:scale-125 transition-all duration-500 drop-shadow-lg text-white"
+              aria-hidden="true"
+            />
+            {/* Electric ring - decorative */}
             <div
               className="absolute inset-0 border-2 border-white/50 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-spin transition-all duration-300"
               style={{ animationDuration: "2s" }}
+              aria-hidden="true"
             />
           </div>
           <span
@@ -72,8 +79,11 @@ export const LoginButtonContent = memo(
           </span>
         </span>
 
-        {/* Outer glow ring */}
-        <div className="absolute inset-0 rounded-3xl border-2 border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
+        {/* Outer glow ring - decorative */}
+        <div
+          className="absolute inset-0 rounded-3xl border-2 border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"
+          aria-hidden="true"
+        />
       </>
     );
   }

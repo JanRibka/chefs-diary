@@ -1,7 +1,7 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { signIn } from 'next-auth/react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * useNavbarLogin - hook for login popover state and form management

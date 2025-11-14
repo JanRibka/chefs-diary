@@ -95,12 +95,13 @@ const LogInFormContent = memo<LogInFormContentProps>(
                     value={persistLogin.toString()}
                     name={nameof<LogInFormType>("persistLogin")}
                     onChange={handleChangePersistLogin}
+                    className="whitespace-nowrap"
                   >
                     Zůstat přihlášený
                   </Checkbox>
                 )}
               </Tooltip>
-              <p>
+              <p className="ml-4 whitespace-nowrap">
                 <Link href={forgottenPasswordLink} className="text-primary">
                   Zapomněli jste heslo?
                 </Link>

@@ -28,7 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/features/layout/PublicNavbar/**/*"
+    "src/components/features/layout/web/PublicNavbar/**/*"
   ],
   "exclude": ["node_modules"]
 }

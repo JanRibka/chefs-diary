@@ -5,9 +5,9 @@ import { memo } from "react";
 
 import { Providers } from "@/config/heroUI/providers";
 
-import PublicNavbar from "../../PublicNavbar/PublicNavbar";
 import { ScrollToTopButton } from "../PublicFooter/components/ScrollToTopButton";
 import PublicFooter from "../PublicFooter/PublicFooter";
+import PublicNavbar from "../PublicNavbar/PublicNavbar";
 import { PublicLayoutBackground } from "./components/PublicLayoutBackground";
 import { PublicLayoutContent } from "./components/PublicLayoutContent";
 import { usePublicLayoutProviders } from "./hooks/usePublicLayoutProviders";

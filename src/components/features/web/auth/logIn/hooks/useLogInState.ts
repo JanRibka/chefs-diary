@@ -1,12 +1,12 @@
 "use client";
 
-import { useActionState, useEffect, useMemo, useState } from 'react';
+import { useActionState, useEffect, useMemo, useState } from "react";
 
-import { logInAction } from '@/actions/web/auth';
-import useIsFirstRender from '@/lib/hooks/useIsFirstRender';
-import { LogInFormErrorType } from '@/lib/validations/schemas/shared/logIn/logInValidationSchema';
+import { logInAction } from "@/actions/web/auth";
+import useIsFirstRender from "@/lib/hooks/useIsFirstRender";
+import { LogInFormErrorType } from "@/lib/validations/schemas/shared/logIn/logInValidationSchema";
 
-import { LogInState } from '../types/LogInState';
+import { LogInState } from "../types/LogInState";
 
 /**
  * Hook for managing LogIn component state
@@ -19,12 +19,12 @@ export function useLogInState(): LogInState & {
   const isFirstRender = useIsFirstRender();
 
   const [state, action, isLoading] = useActionState(logInAction, {});
-  const [errors, setErrors] = useState<LogInFormErrorType>({});
+  const [localErrors, setLocalErrors] = useState<LogInFormErrorType>({});
 
   useEffect(() => {
     if (isFirstRender || !state.errors) return;
 
-    setErrors(state.errors);
+    setLocalErrors(state.errors);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
@@ -32,9 +32,10 @@ export function useLogInState(): LogInState & {
     () => ({
       state,
       action,
-      errors,
+      errors: localErrors,
+      setErrors: setLocalErrors,
       isLoading,
     }),
-    [state, action, errors, isLoading]
+    [state, action, localErrors, setLocalErrors, isLoading]
   );
 }

@@ -21,6 +21,8 @@ export const LoginPopoverWrapper = memo(
     setLoginFlyoutOpenedByHover,
     loginTriggerRef,
     resolvedTheme,
+    handleFocusIn,
+    handleFocusOut,
   }: LoginPopoverWrapperProps) => {
     // Get styles from tailwind-variants
     const styles = loginPopoverWrapperStyles();
@@ -49,7 +51,9 @@ export const LoginPopoverWrapper = memo(
         />
 
         <PopoverContent className={styles.content()}>
-          <LoginFormContent />
+          <div onFocus={handleFocusIn} onBlur={handleFocusOut}>
+            <LoginFormContent />
+          </div>
         </PopoverContent>
       </Popover>
     );

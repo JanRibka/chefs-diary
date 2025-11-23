@@ -7,6 +7,7 @@ import { PublicNavbarUserButtonProps } from "./types/PublicNavbarUserButtonProps
 
 export const PublicNavbarUserButton = memo(
   ({
+    user,
     loginFlyoutOpen,
     setLoginFlyoutOpen,
     loginFlyoutOpenedByHover,
@@ -38,12 +39,16 @@ export const PublicNavbarUserButton = memo(
         onMouseLeave={handleMouseLeave}
       >
         <UserPopoverWrapper
+          user={user}
           loginFlyoutOpen={loginFlyoutOpen}
           setLoginFlyoutOpen={setLoginFlyoutOpen}
           setLoginFlyoutOpenedByHover={setLoginFlyoutOpenedByHover}
           loginTriggerRef={loginTriggerRef}
           resolvedTheme={resolvedTheme}
         />
+
+        {/* Subtle glow */}
+        <div className={styles.glowEffect()} />
       </div>
     );
   }

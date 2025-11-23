@@ -1,11 +1,11 @@
 "use client";
 
-import { memo } from 'react';
+import { memo } from "react";
 
-import LogInContent from './components/LogInContent';
-import LogInEmailNotVerified from './components/LogInEmailNotVerified';
-import LogInSuccess from './components/LogInSuccess';
-import { useLogInOrchestration } from './hooks/useLogInOrchestration';
+import LogInContent from "./components/LogInContent";
+import LogInEmailNotVerified from "./components/LogInEmailNotVerified";
+import LogInSuccess from "./components/LogInSuccess";
+import { useLogInOrchestration } from "./hooks/useLogInOrchestration";
 
 /**
  * LogIn component - Main orchestrator for login functionality

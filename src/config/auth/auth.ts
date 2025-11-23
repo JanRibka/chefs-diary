@@ -6,11 +6,13 @@ import Credentials, {
 import Google from "next-auth/providers/google";
 
 import { prisma } from "@/config/prisma/prisma";
+import { getPermissionsByIdUser } from "@/lib/repositories/userRepository";
 import { logIn, verifyUser } from "@/lib/services/authService";
-import { PrismaAdapter } from "@auth/prisma-adapter";
+
+import PrismaAdapterWeb from "../prisma/PrismAdapterWeb";
 
 //TODO: Asi bych m2l ud2lat adaúter pro i pro web. GetSesionAndUser mi bude vracet nějaké blbosti kvůli user
-const adapter = PrismaAdapter(prisma);
+const adapter = PrismaAdapterWeb(prisma);
 
 const credentials: CredentialsConfig = {
   id: "credentials",
@@ -28,7 +30,7 @@ const credentials: CredentialsConfig = {
       JSON.parse(credentials.persistLogin as string) ?? false;
 
     const user = await verifyUser(email, password);
-    //TODO: Nekde bych tu měl do session pridat value z rolí a oprávnění. Pouze por admina
+
     return {
       ...user,
       persistLogin: persistLogin,
@@ -46,9 +48,19 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         token.idUser = user.id;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         token.persistLogin = (user as any).persistLogin;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        token.permissions = (user as any).permissions;
       }
 
       return token;
+    },
+
+    async session({ session }) {
+      const permissions = await getPermissionsByIdUser(session.user.id);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (session.user as any).permissions = permissions;
+      return session;
     },
   },
 

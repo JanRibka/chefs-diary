@@ -4,6 +4,7 @@ import { memo } from "react";
 
 import { Button, PopoverTrigger } from "@heroui/react";
 
+import { UserContent } from "../UserContent";
 import { useButtonTriggerState } from "./hooks/useButtonTriggerState";
 import { loginButtonTriggerStyles } from "./styles/userButtonTriggerStyles";
 import { UserButtonTriggerProps } from "./types/UserButtonTriggerProps";
@@ -13,6 +14,7 @@ import { UserButtonTriggerProps } from "./types/UserButtonTriggerProps";
  */
 export const UserButtonTrigger = memo(
   ({
+    user,
     loginTriggerRef,
     loginFlyoutOpen,
     setLoginFlyoutOpen,
@@ -33,7 +35,7 @@ export const UserButtonTrigger = memo(
       <PopoverTrigger asChild>
         <Button
           ref={loginTriggerRef}
-          variant="bordered"
+          variant="light"
           size="lg"
           aria-haspopup="dialog"
           aria-expanded={loginFlyoutOpen}
@@ -54,9 +56,8 @@ export const UserButtonTrigger = memo(
             Kliknutím otevřete nebo zavřete uživatelské menu. Použijte klávesu
             Enter nebo mezerník pro aktivaci.
           </span>
-          {/* Neon glow layers */}
-          <div className={styles.glowLayer1()} />
-          <div className={styles.glowLayer2()} />
+
+          <UserContent user={user} />
         </Button>
       </PopoverTrigger>
     );

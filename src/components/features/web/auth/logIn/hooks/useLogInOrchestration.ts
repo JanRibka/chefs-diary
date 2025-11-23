@@ -1,11 +1,11 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from "react";
 
-import LogInStatusEnum from '@/lib/enums/LogInStatusEnum';
+import LogInStatusEnum from "@/lib/enums/LogInStatusEnum";
 
-import { LogInActions } from '../types/LogInActions';
-import { LogInState } from '../types/LogInState';
-import { useLogInActions } from './useLogInActions';
-import { useLogInState } from './useLogInState';
+import { LogInActions } from "../types/LogInActions";
+import { LogInState } from "../types/LogInState";
+import { useLogInActions } from "./useLogInActions";
+import { useLogInState } from "./useLogInState";
 
 /**
  * Return type for useLogInOrchestration hook
@@ -34,47 +34,21 @@ export const useLogInOrchestration = (): LogInRenderState => {
   // PERFORMANCE: useLogInState hook handles server state and initial errors
   const logInState = useLogInState();
 
-  // PERFORMANCE: Memoize state object to prevent unnecessary re-renders
-  const state = useMemo<LogInState & typeof logInState>(
-    () => ({
-      errors: logInState.errors,
-      isLoading: logInState.isLoading,
-      state: logInState.state,
-      action: logInState.action,
-    }),
-    [logInState]
-  );
-
-  // PERFORMANCE: Use local state for errors to handle client-side validation
-  const [localErrors, setLocalErrors] = useState(state.errors);
-
-  // PERFORMANCE: Memoize setLocalErrors callback to prevent unnecessary re-renders in useLogInActions
-  const memoizedSetLocalErrors = useCallback(
-    (value: React.SetStateAction<typeof localErrors>) => setLocalErrors(value),
-    []
-  );
-
-  // PERFORMANCE: Memoize state with local errors for actions
-  const stateWithErrors = useMemo(
-    () => ({ ...state, errors: localErrors }),
-    [state, localErrors]
-  );
-
   // PERFORMANCE: useLogInActions hook handles form submission and change events
-  const actions = useLogInActions(stateWithErrors, memoizedSetLocalErrors);
+  const actions = useLogInActions(logInState, logInState.setErrors);
 
   // PERFORMANCE: Determine render state based on server response
   return useMemo((): LogInRenderState => {
     // Early return for success state
-    if (state.state?.generalState === LogInStatusEnum.SUCCESS) {
+    if (logInState.state?.generalState === LogInStatusEnum.SUCCESS) {
       return { type: "success" };
     }
 
     // Early return for email not verified state
-    if (state.state?.generalState === LogInStatusEnum.EMAIL_NOT_VERIFIED) {
+    if (logInState.state?.generalState === LogInStatusEnum.EMAIL_NOT_VERIFIED) {
       return {
         type: "email-not-verified",
-        email: state.state.form?.email ?? "",
+        email: logInState.state.form?.email ?? "",
       };
     }
 
@@ -82,12 +56,20 @@ export const useLogInOrchestration = (): LogInRenderState => {
     return {
       type: "content",
       state: {
-        errors: localErrors,
-        isLoading: state.isLoading,
-        state: state.state,
-        action: state.action,
+        errors: logInState.errors,
+        setErrors: logInState.setErrors,
+        isLoading: logInState.isLoading,
+        state: logInState.state,
+        action: logInState.action,
       },
       actions,
     };
-  }, [state.isLoading, state.state, state.action, localErrors, actions]);
+  }, [
+    logInState.isLoading,
+    logInState.state,
+    logInState.action,
+    logInState.errors,
+    logInState.setErrors,
+    actions,
+  ]);
 };

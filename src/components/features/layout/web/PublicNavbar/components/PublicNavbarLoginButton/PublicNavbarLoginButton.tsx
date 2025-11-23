@@ -25,7 +25,12 @@ export const PublicNavbarLoginButton = memo(
     resolvedTheme,
   }: PublicNavbarLoginButtonProps) => {
     // PERFORMANCE: Extract hover behavior to custom hook
-    const { handleMouseEnter, handleMouseLeave } = useHoverBehavior(
+    const {
+      handleMouseEnter,
+      handleMouseLeave,
+      handleFocusIn,
+      handleFocusOut,
+    } = useHoverBehavior(
       hoverOpenTimerRef,
       hoverCloseTimerRef,
       setLoginFlyoutOpen,
@@ -44,6 +49,8 @@ export const PublicNavbarLoginButton = memo(
         className={styles.container()}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onFocus={handleFocusIn}
+        onBlur={handleFocusOut}
       >
         <LoginPopoverWrapper
           loginFlyoutOpen={loginFlyoutOpen}
@@ -51,6 +58,8 @@ export const PublicNavbarLoginButton = memo(
           setLoginFlyoutOpenedByHover={setLoginFlyoutOpenedByHover}
           loginTriggerRef={loginTriggerRef}
           resolvedTheme={resolvedTheme}
+          handleFocusIn={handleFocusIn}
+          handleFocusOut={handleFocusOut}
         />
 
         {/* Subtle glow */}

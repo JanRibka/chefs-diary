@@ -8,7 +8,7 @@ export const mobileMenuStyles = tv({
   slots: {
     // Main container with animations
     container:
-      "lg:hidden absolute top-full left-0 right-0 backdrop-blur-2xl bg-white/98 dark:bg-slate-900/98 border-b border-white/30 dark:border-slate-800/50 shadow-2xl overflow-hidden transition-all duration-500 ease-out transform-gpu",
+      "lg:hidden absolute top-full left-0 right-0 backdrop-blur-2xl bg-background/98 border-b border-border/50 shadow-2xl overflow-hidden transition-all duration-500 ease-out transform-gpu",
 
     // Background gradient
     backgroundGradient:

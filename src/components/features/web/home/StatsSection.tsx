@@ -33,13 +33,13 @@ const stats = [
 
 export default function StatsSection() {
   return (
-    <section className="py-20 bg-gradient-to-r from-orange-500 to-red-500">
+    <section className="py-20 bg-gradient-to-r from-primary to-primary-dark">
       <div className="max-w-main mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-primary-foreground mb-4">
             Naše komunita roste
           </h2>
-          <p className="text-xl text-orange-100 max-w-2xl mx-auto">
+          <p className="text-xl text-primary-foreground/90 max-w-2xl mx-auto">
             Připojte se k tisícům kuchařů, kteří už objevili radost z vaření s
             námi.
           </p>
@@ -61,27 +61,27 @@ export default function StatsSection() {
                   {stat.value}
                 </div>
 
-                <div className="text-orange-100 font-medium">{stat.label}</div>
+                <div className="text-primary-foreground/90 font-medium">{stat.label}</div>
               </div>
             );
           })}
         </div>
 
         <div className="text-center mt-12">
-          <p className="text-orange-100 text-lg mb-6">
+          <p className="text-primary-foreground/90 text-lg mb-6">
             Každý den přidáváme nové recepty a funkce pro lepší kuchařský
             zážitek.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20">
               <span className="text-white font-semibold">+127</span>
-              <span className="text-orange-100 ml-2">
+              <span className="text-primary-foreground/90 ml-2">
                 nových receptů tento týden
               </span>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20">
               <span className="text-white font-semibold">+89</span>
-              <span className="text-orange-100 ml-2">
+              <span className="text-primary-foreground/90 ml-2">
                 nových uživatelů denně
               </span>
             </div>

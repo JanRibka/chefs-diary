@@ -13,11 +13,11 @@ export const navbarStyles = tv({
   variants: {
     scrolled: {
       true: {
-        nav: "backdrop-blur-2xl bg-white/95 dark:bg-slate-900/95 shadow-2xl shadow-black/10 border-white/30 dark:border-slate-800/60 h-16 lg:h-20",
+        nav: "backdrop-blur-2xl bg-background/95 shadow-2xl shadow-black/10 border-border/60 h-16 lg:h-20",
         container: "h-16 lg:h-20",
       },
       false: {
-        nav: "backdrop-blur-md bg-white/80 dark:bg-slate-900/80 shadow-lg shadow-black/5 border-white/20 dark:border-slate-800/30 h-20 lg:h-24",
+        nav: "backdrop-blur-md bg-background/80 shadow-lg shadow-black/5 border-border/30 h-20 lg:h-24",
         container: "h-20 lg:h-24",
       },
     },

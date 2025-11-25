@@ -66,13 +66,13 @@ const categories = [
 
 export default function CategoriesSection() {
   return (
-    <section className="py-20 bg-white dark:bg-default-800">
+    <section className="py-20 bg-background">
       <div className="max-w-main mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
             Kulinářské kategorie
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Najděte recepty podle vašeho vkusu a nálady. Od rychlých snídaní po
             luxusní večeře.
           </p>
@@ -86,7 +86,7 @@ export default function CategoriesSection() {
                 key={category.id}
                 as={Link}
                 href={`/categories/${category.id}`}
-                className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg cursor-pointer"
+                className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg cursor-pointer bg-card"
               >
                 <CardBody className="p-8 text-center">
                   <div
@@ -95,15 +95,15 @@ export default function CategoriesSection() {
                     <IconComponent className="w-10 h-10 text-white" />
                   </div>
 
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">
+                  <h3 className="text-xl font-bold text-card-foreground mb-2 group-hover:text-primary transition-colors">
                     {category.name}
                   </h3>
 
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     {category.description}
                   </p>
 
-                  <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4">
                     <IoFastFood className="w-4 h-4" />
                     <span>{category.recipes} receptů</span>
                   </div>
@@ -111,7 +111,7 @@ export default function CategoriesSection() {
                   <Button
                     variant="ghost"
                     color="primary"
-                    className="font-medium group-hover:bg-primary group-hover:text-white transition-colors"
+                    className="font-medium group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
                   >
                     Prozkoumat
                   </Button>
@@ -127,7 +127,7 @@ export default function CategoriesSection() {
             href="/categories"
             size="lg"
             variant="bordered"
-            className="font-semibold px-8 py-3 text-lg border-2"
+            className="font-semibold px-8 py-3 text-lg border-2 border-border text-foreground hover:bg-secondary"
           >
             Zobrazit všechny kategorie
           </Button>

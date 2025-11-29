@@ -4,7 +4,6 @@ import { Divider } from "@heroui/react";
 
 import { BottomSection } from "./components/BottomSection";
 import { FooterContent } from "./components/FooterContent";
-import { NewsletterSection } from "./components/NewsletterSection";
 
 /**
  * WebFooter - Main footer component using Pure Orchestration Pattern
@@ -22,9 +21,6 @@ export default function WebFooter() {
       <div className="absolute -bottom-16 -left-16 w-40 h-40 bg-gradient-to-tr from-secondary/20 to-primary/10 rounded-full blur-2xl" />
 
       <div className="relative z-10">
-        {/* Newsletter Section */}
-        <NewsletterSection />
-
         {/* Main Footer Content */}
         <FooterContent />
 

@@ -52,7 +52,7 @@ export const WebNavbar = memo(() => {
   const handleMobileClose = useCallback(() => {
     mobileState.setMobileOpen(false);
   }, [mobileState]);
-  console.log("userContext", userContext);
+
   // 4. UI orchestration - struktura a koordinace subkomponent
   return (
     <header>

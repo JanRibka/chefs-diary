@@ -33,59 +33,25 @@ const stats = [
 
 export default function StatsSection() {
   return (
-    <section className="py-20 bg-gradient-to-r from-primary to-primary-dark">
-      <div className="max-w-main mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-primary-foreground mb-4">
-            Naše komunita roste
-          </h2>
-          <p className="text-xl text-primary-foreground/90 max-w-2xl mx-auto">
-            Připojte se k tisícům kuchařů, kteří už objevili radost z vaření s
-            námi.
-          </p>
-        </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <section className="py-20 bg-gradient-to-r from-primary to-orange-600 text-white">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat) => {
-            const IconComponent = stat.icon;
+            const Icon = stat.icon;
             return (
-              <div
-                key={stat.id}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300"
-              >
-                <div className="w-16 h-16 mx-auto mb-6 bg-white/20 rounded-2xl flex items-center justify-center">
-                  <IconComponent className={`w-8 h-8 ${stat.color}`} />
+              <div key={stat.label} className="flex flex-col items-center text-center group">
+                <div className="mb-4 p-4 rounded-2xl bg-white/20 backdrop-blur-sm shadow-sm group-hover:scale-110 transition-transform duration-300">
+                  <Icon className="w-8 h-8 text-white" />
                 </div>
-
-                <div className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                <div className="text-4xl font-black mb-2 tracking-tight">
                   {stat.value}
                 </div>
-
-                <div className="text-primary-foreground/90 font-medium">{stat.label}</div>
+                <div className="text-white/80 font-medium uppercase tracking-wider text-sm">
+                  {stat.label}
+                </div>
               </div>
             );
           })}
-        </div>
-
-        <div className="text-center mt-12">
-          <p className="text-primary-foreground/90 text-lg mb-6">
-            Každý den přidáváme nové recepty a funkce pro lepší kuchařský
-            zážitek.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20">
-              <span className="text-white font-semibold">+127</span>
-              <span className="text-primary-foreground/90 ml-2">
-                nových receptů tento týden
-              </span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20">
-              <span className="text-white font-semibold">+89</span>
-              <span className="text-primary-foreground/90 ml-2">
-                nových uživatelů denně
-              </span>
-            </div>
-          </div>
         </div>
       </div>
     </section>

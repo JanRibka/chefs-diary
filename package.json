@@ -31,6 +31,7 @@
     "@heroui/system": "^2.4.18",
     "@heroui/theme": "^2.4.17",
     "@heroui/tooltip": "^2.2.19",
+    "import-in-the-middle": "^2.0.0",
     "next": "15.3.3",
     "next-auth": "^5.0.0-beta.28",
     "nodemailer": "^6.10.1",

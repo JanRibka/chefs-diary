@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { IoHeart, IoStar, IoTime } from "react-icons/io5";
 
-import { Avatar, Button, Card, CardBody, Chip } from "@heroui/react";
+import { IoStar, IoTime } from "react-icons/io5";
+
+import { Card, Chip } from "@heroui/react";
 
 const featuredRecipes = [
   {
@@ -56,135 +56,81 @@ const featuredRecipes = [
 
 export default function FeaturedRecipes() {
   return (
-    <section className="py-20 bg-secondary/30">
-      <div className="max-w-main mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-secondary/30 relative overflow-hidden">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            Nejoblíbenější recepty
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Trending <span className="text-primary">Now</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Objevte recepty, které si zamilovali tisíce kuchařů. Každý recept je
-            pečlivě vybrán pro svou kvalitu a chuť.
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            To nejlepší z naší kuchyně, co musíte vyzkoušet.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {featuredRecipes.map((recipe) => (
-            <Card
-              key={recipe.id}
-              className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg bg-card"
-            >
-              <CardBody className="p-0">
-                <div className="relative overflow-hidden rounded-t-xl">
-                  <Image
-                    src={recipe.image}
-                    alt={recipe.title}
-                    width={400}
-                    height={300}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 right-4">
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="solid"
-                      className="bg-background/90 hover:bg-background text-destructive hover:text-destructive/90 shadow-lg"
-                    >
-                      <IoHeart className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <div className="absolute top-4 left-4">
-                    <Chip
-                      color={
-                        recipe.difficulty === "Jednoduché"
-                          ? "success"
-                          : recipe.difficulty === "Střední"
-                          ? "warning"
-                          : "danger"
-                      }
-                      variant="solid"
-                      className="text-white font-medium"
-                    >
-                      {recipe.difficulty}
-                    </Chip>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-card-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                    {recipe.title}
-                  </h3>
-
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                    {recipe.description}
-                  </p>
-
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <IoTime className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">
-                        {recipe.cookTime}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <IoStar className="w-4 h-4 text-yellow-500 fill-current" />
-                      <span className="text-sm text-muted-foreground">
-                        {recipe.rating}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Avatar
-                        src={recipe.author.avatar}
-                        size="sm"
-                        name={recipe.author.name}
-                      />
-                      <span className="text-sm text-muted-foreground">
-                        {recipe.author.name}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {recipe.tags.slice(0, 3).map((tag) => (
-                      <Chip
-                        key={tag}
-                        size="sm"
-                        variant="flat"
-                        className="text-xs"
-                      >
-                        {tag}
-                      </Chip>
-                    ))}
-                  </div>
-
-                  <Button
-                    as={Link}
-                    href={`/recipes/${recipe.id}`}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[400px]">
+          {/* Main Feature - Large Card */}
+          <Card className="md:col-span-2 row-span-1 md:row-span-2 group relative overflow-hidden border-0 bg-black/5 dark:bg-white/5 backdrop-blur-lg">
+            <Image
+              src={featuredRecipes[0].image}
+              alt={featuredRecipes[0].title}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-60"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            <div className="absolute bottom-0 left-0 p-8 w-full">
+              <div className="flex gap-2 mb-4">
+                {featuredRecipes[0].tags.map((tag) => (
+                  <Chip
+                    key={tag}
                     color="primary"
                     variant="solid"
-                    className="w-full font-medium text-primary-foreground"
+                    className="uppercase font-bold tracking-wider text-xs"
                   >
-                    Zobrazit recept
-                  </Button>
+                    {tag}
+                  </Chip>
+                ))}
+              </div>
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
+                {featuredRecipes[0].title}
+              </h3>
+              <div className="flex items-center gap-6 text-white/80">
+                <div className="flex items-center gap-2">
+                  <IoTime /> {featuredRecipes[0].cookTime}
                 </div>
-              </CardBody>
+                <div className="flex items-center gap-2">
+                  <IoStar className="text-yellow-400" />{" "}
+                  {featuredRecipes[0].rating}
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Secondary Cards */}
+          {featuredRecipes.slice(1).map((recipe) => (
+            <Card
+              key={recipe.id}
+              className="group relative overflow-hidden border-0 bg-black/5 dark:bg-white/5 backdrop-blur-lg"
+            >
+              <Image
+                src={recipe.image}
+                alt={recipe.title}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-60"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+              <div className="absolute bottom-0 left-0 p-6 w-full">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                  {recipe.title}
+                </h3>
+                <div className="flex justify-between items-center text-white/80 text-sm">
+                  <span>{recipe.cookTime}</span>
+                  <div className="flex items-center gap-1">
+                    <IoStar className="text-yellow-400" /> {recipe.rating}
+                  </div>
+                </div>
+              </div>
             </Card>
           ))}
-        </div>
-
-        <div className="text-center">
-          <Button
-            as={Link}
-            href="/recipes"
-            size="lg"
-            variant="bordered"
-            className="font-semibold px-8 py-3 text-lg border-2 border-border text-foreground hover:bg-secondary"
-          >
-            Zobrazit všechny recepty
-          </Button>
         </div>
       </div>
     </section>

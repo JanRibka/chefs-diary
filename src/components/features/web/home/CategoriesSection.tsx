@@ -9,9 +9,8 @@ import {
   GiMeat,
   GiNoodles,
 } from "react-icons/gi";
-import { IoFastFood } from "react-icons/io5";
 
-import { Button, Card, CardBody } from "@heroui/react";
+import { Button } from "@heroui/react";
 
 const categories = [
   {
@@ -66,71 +65,56 @@ const categories = [
 
 export default function CategoriesSection() {
   return (
-    <section className="py-20 bg-background">
-      <div className="max-w-main mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            Kulinářské kategorie
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Najděte recepty podle vašeho vkusu a nálady. Od rychlých snídaní po
-            luxusní večeře.
-          </p>
+    <section className="py-24 bg-background relative">
+      {/* Subtle Pattern Overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `radial-gradient(#000 1px, transparent 1px)`,
+          backgroundSize: "24px 24px",
+        }}
+      />
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="flex justify-between items-end mb-12">
+          <div>
+            <h2 className="text-4xl font-bold mb-2">Kategorie</h2>
+            <p className="text-muted-foreground">Prozkoumejte chutě světa</p>
+          </div>
+          <Button variant="light" color="primary" className="font-semibold">
+            Všechny kategorie
+          </Button>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {categories.map((category) => {
             const IconComponent = category.icon;
             return (
-              <Card
+              <Link
                 key={category.id}
-                as={Link}
                 href={`/categories/${category.id}`}
-                className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg cursor-pointer bg-card"
+                className="group relative h-48 rounded-3xl overflow-hidden bg-secondary/30 hover:bg-primary transition-colors duration-500"
               >
-                <CardBody className="p-8 text-center">
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-4 z-10">
                   <div
-                    className={`w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br ${category.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
+                    className={`p-4 rounded-2xl bg-background/50 backdrop-blur-md mb-4 group-hover:bg-white/20 transition-colors duration-300`}
                   >
-                    <IconComponent className="w-10 h-10 text-white" />
+                    <IconComponent className="w-8 h-8 text-foreground group-hover:text-white transition-colors" />
                   </div>
-
-                  <h3 className="text-xl font-bold text-card-foreground mb-2 group-hover:text-primary transition-colors">
+                  <span className="font-bold text-foreground group-hover:text-white transition-colors">
                     {category.name}
-                  </h3>
+                  </span>
+                  <span className="text-xs text-muted-foreground group-hover:text-white/80 mt-1">
+                    {category.recipes} receptů
+                  </span>
+                </div>
 
-                  <p className="text-muted-foreground mb-4">
-                    {category.description}
-                  </p>
-
-                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4">
-                    <IoFastFood className="w-4 h-4" />
-                    <span>{category.recipes} receptů</span>
-                  </div>
-
-                  <Button
-                    variant="ghost"
-                    color="primary"
-                    className="font-medium group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-                  >
-                    Prozkoumat
-                  </Button>
-                </CardBody>
-              </Card>
+                {/* Decorative blob */}
+                <div
+                  className={`absolute -bottom-8 -right-8 w-24 h-24 rounded-full bg-gradient-to-br ${category.color} blur-2xl opacity-40 group-hover:opacity-100 transition-opacity duration-500`}
+                />
+              </Link>
             );
           })}
-        </div>
-
-        <div className="text-center mt-12">
-          <Button
-            as={Link}
-            href="/categories"
-            size="lg"
-            variant="bordered"
-            className="font-semibold px-8 py-3 text-lg border-2 border-border text-foreground hover:bg-secondary"
-          >
-            Zobrazit všechny kategorie
-          </Button>
         </div>
       </div>
     </section>

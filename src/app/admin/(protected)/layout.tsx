@@ -2,25 +2,25 @@ import NavBar from "@/components/features/layout/admin/protectedLayout/navBar/Na
 import MenuItems from "@/components/features/layout/admin/protectedLayout/sideBar/menuItems/MenuItems";
 import SideBar from "@/components/features/layout/admin/protectedLayout/sideBar/SideBar";
 import ClientReplace from "@/components/shared/clientReplace/ClientReplace";
-import SetUser from "@/components/shared/layout/setUser/SetUser";
+import { UserContextProvider } from "@/lib/context/UserContext";
 import SessionUserType from "@/lib/types/common/SessionUserType";
 import { getProtectedSessionAdmin } from "@/lib/utils/session";
 
 type Props = { children: React.ReactNode };
 
-export default async function ProtectedLayout({ children }: Props) {
+export default async function ProtectedAdminLayout({ children }: Props) {
   const { session, isSession, redirectPath } = await getProtectedSessionAdmin();
 
   if (!isSession) {
     return (
-      <SetUser user={null}>
+      <UserContextProvider initialUser={null}>
         <ClientReplace path={redirectPath} />
-      </SetUser>
+      </UserContextProvider>
     );
   }
 
   return (
-    <SetUser user={session.user as SessionUserType}>
+    <UserContextProvider initialUser={session.user as SessionUserType}>
       <div className="flex flex-col min-h-screen h-screen">
         <NavBar />
         <SideBar>
@@ -32,6 +32,6 @@ export default async function ProtectedLayout({ children }: Props) {
           </main>
         </div>
       </div>
-    </SetUser>
+    </UserContextProvider>
   );
 }

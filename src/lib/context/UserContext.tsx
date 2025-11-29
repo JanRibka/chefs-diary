@@ -1,8 +1,7 @@
 "use client";
 
 import { createContext, ReactNode, useContext, useState } from "react";
-
-import SessionUserType from "@/lib/types/common/SessionUserType";
+import type SessionUserType from "../types/common/SessionUserType";
 
 type UserContext = {
   user: SessionUserType | null;
@@ -13,10 +12,11 @@ export const UserContext = createContext<UserContext | null>(null);
 
 type Props = {
   children: ReactNode;
+  initialUser?: SessionUserType | null;
 };
 
-export function UserContextProvider({ children }: Props) {
-  const [user, setUser] = useState<SessionUserType | null>(null);
+export function UserContextProvider({ children, initialUser = null }: Props) {
+  const [user, setUser] = useState<SessionUserType | null>(initialUser);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

@@ -1,214 +1,161 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { GiChefToque } from "react-icons/gi";
-import { IoArrowForward, IoSearch } from "react-icons/io5";
+import { IoHeart, IoRestaurant, IoSearch } from "react-icons/io5";
 
 import { Button } from "@heroui/react";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Enhanced Background with multiple layers */}
-      <div className="absolute inset-0">
-        {/* Primary gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 pt-20">
+      {/* Background Layers */}
+      <div className="absolute inset-0 z-0">
+        {/* Animated Gradient Orbs - Adjusted for Dark Theme */}
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/30 blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-orange-600/20 blur-[120px] animate-pulse delay-1000" />
+        <div className="absolute top-[40%] left-[40%] w-[30%] h-[30%] rounded-full bg-primary/20 blur-[100px] animate-pulse delay-2000" />
 
-        {/* Floating gradient orbs - larger and more prominent */}
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-3xl animate-pulse" />
+        {/* Grid Pattern Overlay - Light on Dark */}
         <div
-          className="absolute -bottom-32 -left-32 w-80 h-80 bg-gradient-to-tr from-secondary/20 to-primary/15 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "2s" }}
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`,
+            backgroundSize: "4rem 4rem",
+          }}
         />
-        <div
-          className="absolute top-1/3 left-1/3 w-64 h-64 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "4s" }}
-        />
+      </div>
 
-        {/* Subtle pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.03]">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
-              backgroundSize: "32px 32px",
-            }}
-          />
+      {/* Content Container */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+        {/* Premium Badge */}
+        <div className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            <span className="text-sm font-medium text-white/90">
+              Nejlepší kuchařská komunita v ČR
+            </span>
+          </div>
         </div>
-      </div>
 
-      {/* Animated floating elements with improved timing */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-20 left-[10%] w-6 h-6 bg-gradient-to-br from-primary to-primary-light rounded-full opacity-40 animate-bounce"
-          style={{ animationDelay: "0s", animationDuration: "3s" }}
-        />
-        <div
-          className="absolute top-32 right-[15%] w-4 h-4 bg-gradient-to-br from-secondary to-secondary-dark rounded-full opacity-30 animate-bounce"
-          style={{ animationDelay: "1s", animationDuration: "4s" }}
-        />
-        <div
-          className="absolute bottom-40 left-[20%] w-5 h-5 bg-gradient-to-br from-primary-light to-primary rounded-full opacity-35 animate-bounce"
-          style={{ animationDelay: "2s", animationDuration: "5s" }}
-        />
-        <div
-          className="absolute top-1/2 right-[8%] w-3 h-3 bg-gradient-to-br from-secondary-light to-secondary rounded-full opacity-25 animate-bounce"
-          style={{ animationDelay: "3s", animationDuration: "6s" }}
-        />
-      </div>
+        {/* Main Heading */}
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-8 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-150">
+          Vařte s{" "}
+          <span className="text-primary relative">
+            vášní
+            <svg
+              className="absolute w-full h-3 -bottom-1 left-0 text-primary/30"
+              viewBox="0 0 100 10"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M0 5 Q 50 10 100 5"
+                stroke="currentColor"
+                strokeWidth="8"
+                fill="none"
+              />
+            </svg>
+          </span>
+          <br className="hidden sm:block" />
+          sdílejte s <span className="text-orange-400 relative">láskou</span>
+        </h1>
 
-      <div className="relative z-10 max-w-main mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Enhanced Left Content */}
-          <div className="space-y-10 text-center lg:text-left">
-            {/* Premium badge */}
-            <div className="inline-flex items-center gap-3 bg-secondary/50 px-6 py-3 rounded-full text-foreground text-sm font-semibold border border-border backdrop-blur-sm shadow-lg">
-              <GiChefToque className="w-5 h-5 text-primary" />
-              <span>Vítejte v kulinářském světě</span>
-              <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+        {/* Description */}
+        <p className="text-lg sm:text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-12 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+          Objevte tisíce ověřených receptů, vytvořte si vlastní digitální
+          kuchařku a staňte se součástí komunity, která žije jídlem.
+        </p>
+
+        {/* Search Bar */}
+        <div className="w-full max-w-2xl mx-auto mb-16 relative group animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-450">
+          <div className="absolute -inset-1 bg-gradient-to-r from-primary via-orange-500 to-primary rounded-2xl blur opacity-40 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
+          <div className="relative flex items-center bg-slate-900/90 border border-white/10 rounded-2xl p-2 shadow-2xl transition-transform duration-300 group-hover:scale-[1.01]">
+            <div className="pl-4 text-slate-400">
+              <IoSearch className="w-6 h-6" />
             </div>
+            <input
+              type="text"
+              placeholder="Hledat recept, surovinu nebo kuchaře..."
+              className="w-full bg-transparent border-none focus:ring-0 text-lg px-4 py-3 text-white placeholder:text-slate-500"
+            />
+            <Button
+              size="lg"
+              color="primary"
+              className="rounded-xl px-8 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300"
+            >
+              Hledat
+            </Button>
+          </div>
 
-            {/* Enhanced heading with better typography */}
-            <div className="space-y-4">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight tracking-tight">
-                <span className="text-foreground">
-                  Objevte chuť
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-primary via-primary-light to-secondary bg-clip-text text-transparent animate-pulse">
-                  dokonalosti
-                </span>
-              </h1>
-
-              <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary-light mx-auto lg:mx-0 rounded-full" />
-            </div>
-
-            {/* Enhanced description */}
-            <p className="text-xl sm:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto lg:mx-0 font-light">
-              Tisíce receptů od profesionálních kuchařů i domácích nadšenců.
-              <span className="font-medium text-foreground">
-                {" "}
-                Sdílejte své kulinářské umění
-              </span>{" "}
-              a inspirujte se ostatními.
-            </p>
-
-            {/* Enhanced action buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start">
-              <Button
-                as={Link}
-                href="/recipes"
-                size="lg"
-                className="bg-primary text-primary-foreground font-bold px-10 py-4 text-lg rounded-2xl shadow-2xl hover:shadow-3xl hover:bg-primary-dark transition-all duration-300 transform hover:scale-105"
-                endContent={<IoArrowForward className="w-6 h-6" />}
+          {/* Popular Tags */}
+          <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm text-slate-400">
+            <span>Populární:</span>
+            {[
+              "Rychlá večeře",
+              "Zdravé snídaně",
+              "Italská kuchyně",
+              "Dezerty",
+            ].map((tag) => (
+              <button
+                key={tag}
+                className="hover:text-primary transition-colors underline decoration-dotted"
               >
-                Prozkoumat recepty
-              </Button>
-              <Button
-                as={Link}
-                href="/create-recipe"
-                size="lg"
-                variant="bordered"
-                className="font-bold px-10 py-4 text-lg rounded-2xl border-3 border-border hover:border-primary hover:bg-secondary/50 transition-all duration-300 backdrop-blur-sm text-foreground"
-                startContent={<GiChefToque className="w-6 h-6" />}
-              >
-                Vytvořit recept
-              </Button>
-            </div>
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
 
-            {/* Enhanced search bar */}
-            <div className="max-w-lg mx-auto lg:mx-0">
-              <div className="relative group">
-                <input
-                  type="text"
-                  placeholder="Hledat recepty, ingredience, kuchaře..."
-                  className="w-full px-8 py-5 pr-16 rounded-3xl border-3 border-border bg-background/90 backdrop-blur-md text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-6 focus:ring-primary/20 transition-all duration-300 shadow-lg group-hover:shadow-xl text-lg"
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-3 bg-primary hover:bg-primary-dark rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
-                  <IoSearch className="w-6 h-6 text-primary-foreground" />
-                </button>
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-600">
+          <Button
+            as={Link}
+            href="/recipes"
+            size="lg"
+            color="primary"
+            variant="shadow"
+            className="w-full sm:w-auto px-8 py-6 text-lg font-semibold rounded-2xl"
+            startContent={<IoRestaurant className="w-5 h-5" />}
+          >
+            Prozkoumat recepty
+          </Button>
+          <Button
+            as={Link}
+            href="/register"
+            size="lg"
+            variant="bordered"
+            className="w-full sm:w-auto px-8 py-6 text-lg font-semibold rounded-2xl border-2 border-white/20 text-white hover:bg-white/10"
+          >
+            Přidat vlastní recept
+          </Button>
+        </div>
+
+        {/* Floating Stats Cards - Decorative (Dark Mode Version) */}
+        <div className="absolute top-1/4 left-0 hidden xl:block animate-float-slow">
+          <div className="bg-slate-800/80 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-xl transform -rotate-6 hover:rotate-0 transition-transform duration-300">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">
+                <IoRestaurant />
               </div>
-
-              {/* Popular search tags */}
-              <div className="flex flex-wrap gap-2 mt-4 justify-center lg:justify-start">
-                {["🍕 Pizza", "🥗 Salády", "🍰 Dezerty", "🥘 Rychlé"].map(
-                  (tag) => (
-                    <span
-                      key={tag}
-                      className="px-4 py-2 bg-background/60 backdrop-blur-sm rounded-full text-sm text-muted-foreground border border-border hover:bg-secondary cursor-pointer transition-all duration-200"
-                    >
-                      {tag}
-                    </span>
-                  )
-                )}
+              <div>
+                <div className="font-bold text-white">5000+</div>
+                <div className="text-xs text-slate-400">Receptů</div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Enhanced Right Content - Hero Image */}
-          <div className="relative">
-            <div className="relative w-full h-hero lg:h-hero-lg rounded-3xl overflow-hidden shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-              <Image
-                src="/api/placeholder/700/600"
-                alt="Delicious food presentation"
-                fill
-                className="object-cover transition-transform duration-700 hover:scale-110"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/5 to-transparent" />
-
-              {/* Overlay content */}
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="bg-background/90 backdrop-blur-md rounded-2xl p-4 shadow-xl">
-                  <p className="text-foreground font-semibold">
-                    ✨ Nejnovější recept
-                  </p>
-                  <p className="text-muted-foreground text-sm">
-                    Italská pasta s truflemi
-                  </p>
-                </div>
+        <div className="absolute bottom-1/4 right-0 hidden xl:block animate-float-delayed">
+          <div className="bg-slate-800/80 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-xl transform rotate-6 hover:rotate-0 transition-transform duration-300">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400">
+                <IoHeart />
               </div>
-            </div>
-
-            {/* Enhanced floating stats cards */}
-            <div className="absolute -top-8 -left-8 bg-card/95 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-border transform -rotate-6 hover:rotate-0 transition-transform duration-300">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg">
-                  <span className="text-3xl">⭐</span>
-                </div>
-                <div>
-                  <p className="font-bold text-2xl text-foreground">
-                    4.9/5
-                  </p>
-                  <p className="text-muted-foreground font-medium">
-                    Průměrné hodnocení
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute -bottom-8 -right-8 bg-card/95 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-border transform rotate-6 hover:rotate-0 transition-transform duration-300">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
-                  <span className="text-3xl">👥</span>
-                </div>
-                <div>
-                  <p className="font-bold text-2xl text-foreground">
-                    25k+
-                  </p>
-                  <p className="text-muted-foreground font-medium">
-                    Aktivních kuchařů
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Additional floating element */}
-            <div className="absolute top-1/2 -right-4 bg-primary text-primary-foreground rounded-2xl p-4 shadow-xl transform rotate-12 hover:rotate-6 transition-transform duration-300">
-              <div className="text-center">
-                <p className="font-bold text-xl">1000+</p>
-                <p className="text-sm opacity-90">Nových receptů</p>
+              <div>
+                <div className="font-bold text-white">10k+</div>
+                <div className="text-xs text-slate-400">Oblíbených</div>
               </div>
             </div>
           </div>

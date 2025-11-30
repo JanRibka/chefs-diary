@@ -2,6 +2,7 @@
 
 import { memo } from "react";
 
+import { useSSRSafeTheme } from "@/lib/context/SSRSafeThemeContext";
 import { LoginPopoverWrapper } from "./components/LoginPopoverWrapper/LoginPopoverWrapper";
 import { useHoverBehavior } from "./hooks/useHoverBehavior";
 import { loginButtonStyles } from "./styles/loginButtonStyles";
@@ -22,8 +23,10 @@ export const WebNavbarLoginButton = memo(
     loginTriggerRef,
     hoverOpenTimerRef,
     hoverCloseTimerRef,
-    resolvedTheme,
   }: WebNavbarLoginButtonProps) => {
+    // SSR-safe theme from context
+    const theme = useSSRSafeTheme();
+
     // PERFORMANCE: Extract hover behavior to custom hook
     const {
       handleMouseEnter,
@@ -40,7 +43,7 @@ export const WebNavbarLoginButton = memo(
 
     // Get styles from tailwind-variants with theme variant
     const styles = loginButtonStyles({
-      resolvedTheme: resolvedTheme as "light" | "dark",
+      resolvedTheme: theme,
       isOpen: loginFlyoutOpen,
     });
 
@@ -57,7 +60,6 @@ export const WebNavbarLoginButton = memo(
           setLoginFlyoutOpen={setLoginFlyoutOpen}
           setLoginFlyoutOpenedByHover={setLoginFlyoutOpenedByHover}
           loginTriggerRef={loginTriggerRef}
-          resolvedTheme={resolvedTheme}
           handleFocusIn={handleFocusIn}
           handleFocusOut={handleFocusOut}
         />

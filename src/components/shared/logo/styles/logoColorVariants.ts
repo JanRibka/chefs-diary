@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 export const logoColorVariants = tv({
-  base: "bg-gradient-to-br shadow-xl transition-all duration-500 flex items-center justify-center",
+  base: "bg-gradient-to-br shadow-xl transition-all duration-500 flex items-center justify-center animate-float",
   variants: {
     variant: {
       default:

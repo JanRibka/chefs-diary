@@ -4,6 +4,7 @@ import { memo } from "react";
 
 import { Button, PopoverTrigger } from "@heroui/react";
 
+import { useSSRSafeTheme } from "@/lib/context/SSRSafeThemeContext";
 import { LoginButtonContent } from "../LoginButtonContent";
 import { useButtonTriggerState } from "./hooks/useButtonTriggerState";
 import { loginButtonTriggerStyles } from "./styles/loginButtonTriggerStyles";
@@ -18,11 +19,12 @@ export const LoginButtonTrigger = memo(
     loginTriggerRef,
     loginFlyoutOpen,
     setLoginFlyoutOpen,
-    resolvedTheme,
   }: LoginButtonTriggerProps) => {
+    const theme = useSSRSafeTheme();
+
     // Get styles from tailwind-variants with theme variant
     const styles = loginButtonTriggerStyles({
-      resolvedTheme: resolvedTheme as "light" | "dark",
+      resolvedTheme: theme,
     });
 
     // PERFORMANCE: Extract button trigger logic to custom hook
@@ -60,7 +62,7 @@ export const LoginButtonTrigger = memo(
           <div className={styles.glowLayer1()} />
           <div className={styles.glowLayer2()} />
 
-          <LoginButtonContent resolvedTheme={resolvedTheme} />
+          <LoginButtonContent />
         </Button>
       </PopoverTrigger>
     );

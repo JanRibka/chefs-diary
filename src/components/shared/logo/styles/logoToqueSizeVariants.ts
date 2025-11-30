@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 export const logoToqueSizeVariants = tv({
-  base: "text-white absolute -top-1 -right-1 drop-shadow-lg",
+  base: "text-white absolute -top-1 -right-1 drop-shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-1",
   variants: {
     size: {
       sm: "w-4 h-4 lg:w-5 lg:h-5",

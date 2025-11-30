@@ -34,8 +34,9 @@ export default function Logo({
         className
       )}
     >
-      {/* Enhanced Logo with 3D effect - responsive to scroll */}
+      {/* Enhanced Logo with 3D effect and animations */}
       <div className="relative">
+        {/* Main logo container */}
         <div
           className={logoColorVariants({
             variant,
@@ -45,15 +46,20 @@ export default function Logo({
           })}
         >
           <div className="relative">
+            {/* Scroll icon */}
             <GiScrollQuill
               className={logoScrollSizeVariants({ size, scrolled })}
             />
+            {/* Chef toque */}
             <GiChefToque
               className={logoToqueSizeVariants({ size, scrolled })}
             />
-            <HiSparkles className="w-3 h-3 text-yellow-200 absolute -top-2 -right-2 animate-pulse" />
+            {/* Sparkles */}
+            <HiSparkles className="w-3 h-3 text-yellow-300 absolute -top-2 -right-2 animate-sparkle" />
+            <HiSparkles className="w-2 h-2 text-yellow-200 absolute -bottom-1 -left-1 animate-sparkle-delayed" />
           </div>
         </div>
+
         {/* Glow effect */}
         <div
           className={logoGlowSizeVariants({
@@ -63,16 +69,23 @@ export default function Logo({
             disableHover,
           })}
         />
+
+        {/* Rotating glow ring on hover */}
+        <div className="absolute inset-0 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-secondary to-primary blur-xl animate-spin-slow" />
+        </div>
       </div>
 
-      {/* Brand Text - elegant serif wordmark */}
+      {/* Brand Text */}
       {showText && (
         <div className="hidden sm:flex flex-col leading-none">
-          {/* keep fontDisplay and fontSerif imported for other components and builds */}
+          {/* Font imports for build */}
           <span className={`${fontDisplay.variable} sr-only`}>
             display-font
           </span>
           <span className={`${fontSerif.variable} sr-only`}>serif-font</span>
+
+          {/* Top text */}
           <span
             className={mergeStyles(
               fontOrn.variable,
@@ -82,6 +95,8 @@ export default function Logo({
           >
             Kuchařův
           </span>
+
+          {/* Bottom text */}
           <span
             className={mergeStyles(
               fontOrn.variable,
@@ -91,8 +106,9 @@ export default function Logo({
           >
             Deník
             <LogoTextDecoration />
+            {/* Underline effect */}
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-primary group-hover:w-full transition-all duration-500" />
           </span>
-          {/* tagline removed per user request */}
         </div>
       )}
     </div>

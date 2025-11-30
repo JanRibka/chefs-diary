@@ -20,7 +20,6 @@ export const LoginPopoverWrapper = memo(
     setLoginFlyoutOpen,
     setLoginFlyoutOpenedByHover,
     loginTriggerRef,
-    resolvedTheme,
     handleFocusIn,
     handleFocusOut,
   }: LoginPopoverWrapperProps) => {
@@ -47,7 +46,6 @@ export const LoginPopoverWrapper = memo(
           loginTriggerRef={loginTriggerRef}
           loginFlyoutOpen={loginFlyoutOpen}
           setLoginFlyoutOpen={setLoginFlyoutOpen}
-          resolvedTheme={resolvedTheme}
         />
 
         <PopoverContent className={styles.content()}>

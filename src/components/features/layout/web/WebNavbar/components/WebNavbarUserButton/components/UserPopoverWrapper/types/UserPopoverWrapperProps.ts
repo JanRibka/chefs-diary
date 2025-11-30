@@ -9,5 +9,4 @@ export interface UserPopoverWrapperProps {
   setLoginFlyoutOpen: (open: boolean) => void;
   setLoginFlyoutOpenedByHover: (opened: boolean) => void;
   loginTriggerRef: React.RefObject<HTMLButtonElement | null>;
-  resolvedTheme: string | undefined;
 }

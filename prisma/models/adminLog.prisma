@@ -9,3 +9,5 @@ model AdminLog {
 
     user User @relation(fields: [idUser], references: [idUser])
 }
+
+//TODO: V tabulce můžu udělat export dat a následně data smzataz tabulky pro ušetření místa

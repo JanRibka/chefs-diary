@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 export const logoTextBottomVariants = tv({
-  base: "font-extrabold tracking-tight -mt-1 flex items-center gap-2 text-left",
+  base: "font-extrabold tracking-tight -mt-1 flex items-center gap-2 text-left relative bg-gradient-to-r from-primary via-foreground to-primary bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] dark:drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] group-hover:from-foreground group-hover:via-primary group-hover:to-foreground transition-all duration-700",
   variants: {
     variant: {
       default: "text-amber-900 dark:text-amber-100",

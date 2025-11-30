@@ -12,5 +12,4 @@ export interface WebNavbarUserButtonProps {
   loginTriggerRef: React.RefObject<HTMLButtonElement | null>;
   hoverOpenTimerRef: React.RefObject<number | null>;
   hoverCloseTimerRef: React.RefObject<number | null>;
-  resolvedTheme: string | undefined;
 }

@@ -20,7 +20,6 @@ export const UserPopoverWrapper = memo(
     setLoginFlyoutOpen,
     setLoginFlyoutOpenedByHover,
     loginTriggerRef,
-    resolvedTheme,
   }: UserPopoverWrapperProps) => {
     // Get styles from tailwind-variants
     const styles = userPopoverWrapperStyles();
@@ -46,7 +45,6 @@ export const UserPopoverWrapper = memo(
           loginTriggerRef={loginTriggerRef}
           loginFlyoutOpen={loginFlyoutOpen}
           setLoginFlyoutOpen={setLoginFlyoutOpen}
-          resolvedTheme={resolvedTheme}
         />
 
         <PopoverContent

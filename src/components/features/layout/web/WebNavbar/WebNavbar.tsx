@@ -17,7 +17,6 @@ import { useNavbarLogin } from "./hooks/useNavbarLogin";
 import { useNavbarMobile } from "./hooks/useNavbarMobile";
 import { useNavbarScroll } from "./hooks/useNavbarScroll";
 import { useNavbarSearch } from "./hooks/useNavbarSearch";
-import { useNavbarTheme } from "./hooks/useNavbarTheme";
 import { navbarStyles } from "./styles/navbarStyles";
 import { useUserContext } from "@/lib/context/UserContext";
 
@@ -38,7 +37,6 @@ import { useUserContext } from "@/lib/context/UserContext";
  */
 export const WebNavbar = memo(() => {
   // 1. Custom hooks - business logic only
-  const themeState = useNavbarTheme();
   const scrollState = useNavbarScroll();
   const mobileState = useNavbarMobile();
   const searchState = useNavbarSearch();
@@ -60,7 +58,7 @@ export const WebNavbar = memo(() => {
         <div className={styles.container()}>
           {/* Left section - Logo */}
           <div className="flex items-center">
-            <Logo />
+            <Logo scrolled={scrollState.scrolled} />
           </div>
 
           {/* Center section - Desktop Navigation */}
@@ -70,11 +68,7 @@ export const WebNavbar = memo(() => {
           <div className="flex items-center gap-2">
             <WebNavbarSearchButton onOpen={searchState.onOpen} />
 
-            <WebNavbarThemeToggle
-              mounted={themeState.mounted}
-              resolvedTheme={themeState.resolvedTheme}
-              setTheme={themeState.setTheme}
-            />
+            <WebNavbarThemeToggle />
 
             {userContext.user ? (
               <WebNavbarUserButton
@@ -88,7 +82,6 @@ export const WebNavbar = memo(() => {
                 loginTriggerRef={loginState.loginTriggerRef}
                 hoverOpenTimerRef={loginState.hoverOpenTimerRef}
                 hoverCloseTimerRef={loginState.hoverCloseTimerRef}
-                resolvedTheme={themeState.resolvedTheme}
               />
             ) : (
               <WebNavbarLoginButton
@@ -101,7 +94,6 @@ export const WebNavbar = memo(() => {
                 loginTriggerRef={loginState.loginTriggerRef}
                 hoverOpenTimerRef={loginState.hoverOpenTimerRef}
                 hoverCloseTimerRef={loginState.hoverCloseTimerRef}
-                resolvedTheme={themeState.resolvedTheme}
               />
             )}
 

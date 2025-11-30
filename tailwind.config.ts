@@ -81,11 +81,56 @@ const config: Config = {
             transform: "translateY(0)",
           },
         },
+        // Logo animations
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
+        sparkle: {
+          "0%, 100%": {
+            opacity: "1",
+            transform: "scale(1) rotate(0deg)",
+          },
+          "50%": {
+            opacity: "0.3",
+            transform: "scale(1.3) rotate(180deg)",
+          },
+        },
+        "sparkle-delayed": {
+          "0%, 100%": {
+            opacity: "0.7",
+            transform: "scale(1) rotate(0deg)",
+          },
+          "50%": {
+            opacity: "0.2",
+            transform: "scale(1.5) rotate(-180deg)",
+          },
+        },
+        "glow-pulse": {
+          "0%, 100%": {
+            opacity: "0.6",
+            transform: "scale(1)",
+          },
+          "50%": {
+            opacity: "1",
+            transform: "scale(1.1)",
+          },
+        },
+        "spin-slow": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "animate-in": "animate-in 0.6s ease-out forwards",
+        // Logo animations
+        float: "float 3s ease-in-out infinite",
+        sparkle: "sparkle 2s ease-in-out infinite",
+        "sparkle-delayed": "sparkle-delayed 2s ease-in-out infinite 0.5s",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "spin-slow": "spin-slow 8s linear infinite",
       },
       maxWidth: {
         main: "1280px",

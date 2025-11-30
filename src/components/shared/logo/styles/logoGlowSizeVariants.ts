@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 export const logoGlowSizeVariants = tv({
-  base: "absolute inset-0 bg-gradient-to-br rounded-2xl blur-xl opacity-30 transition-opacity duration-500 -z-10",
+  base: "absolute inset-0 bg-gradient-to-br rounded-2xl blur-xl opacity-30 transition-opacity duration-500 -z-10 animate-glow-pulse",
   variants: {
     variant: {
       default: "from-orange-500 to-red-500",

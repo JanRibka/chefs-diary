@@ -2,16 +2,15 @@
 
 import { memo, useCallback } from "react";
 import { HiMoon, HiSun } from "react-icons/hi";
+import { useTheme as useNextTheme } from "next-themes";
 
 import Button from "@/components/shared/button/Button";
+import {
+  useSSRSafeTheme,
+  useThemeMounted,
+} from "@/lib/context/SSRSafeThemeContext";
 
 import { themeToggleStyles } from "./styles/themeToggleStyles";
-
-interface WebNavbarThemeToggleProps {
-  mounted: boolean;
-  resolvedTheme: string | undefined;
-  setTheme: (theme: string) => void;
-}
 
 /**
  * WebNavbarThemeToggle - Theme toggle button with animations
@@ -27,44 +26,46 @@ interface WebNavbarThemeToggleProps {
  *   setTheme={setTheme}
  * />
  */
-export const WebNavbarThemeToggle = memo(
-  ({ mounted, resolvedTheme, setTheme }: WebNavbarThemeToggleProps) => {
-    // PERFORMANCE: useCallback to prevent unnecessary re-renders
-    const handleThemeToggle = useCallback(() => {
-      setTheme(resolvedTheme === "dark" ? "light" : "dark");
-    }, [resolvedTheme, setTheme]);
+export const WebNavbarThemeToggle = memo(() => {
+  const { setTheme } = useNextTheme();
+  const theme = useSSRSafeTheme();
+  const mounted = useThemeMounted();
 
-    // Get styles from tailwind-variants
-    const styles = themeToggleStyles();
+  // PERFORMANCE: useCallback to prevent unnecessary re-renders
+  const handleThemeToggle = useCallback(() => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  }, [theme, setTheme]);
 
-    return (
-      <div className={styles.container()}>
-        <Button
-          isIconOnly
-          variant="light"
-          size="lg"
-          onPress={handleThemeToggle}
-          className={styles.button()}
-          aria-label="Přepnout režim"
-        >
-          <div className={styles.innerGradient()} />
-          <div className={styles.iconContainer()}>
-            {/* Render neutral placeholder on server to avoid hydration mismatch */}
-            {!mounted ? (
-              <span className={styles.placeholder()} aria-hidden />
-            ) : resolvedTheme === "light" ? (
-              <HiMoon className={styles.moonIcon()} />
-            ) : (
-              <HiSun className={styles.sunIcon()} />
-            )}
-          </div>
-          <div className={styles.energyWave()} />
-        </Button>
-        <div className={styles.glowEffect()} />
-      </div>
-    );
-  }
-);
+  // Get styles from tailwind-variants
+  const styles = themeToggleStyles();
+
+  return (
+    <div className={styles.container()}>
+      <Button
+        isIconOnly
+        variant="light"
+        size="lg"
+        onPress={handleThemeToggle}
+        className={styles.button()}
+        aria-label="Přepnout režim"
+      >
+        <div className={styles.innerGradient()} />
+        <div className={styles.iconContainer()}>
+          {/* Render neutral placeholder on server to avoid hydration mismatch */}
+          {!mounted ? (
+            <span className={styles.placeholder()} aria-hidden />
+          ) : theme === "light" ? (
+            <HiMoon className={styles.moonIcon()} />
+          ) : (
+            <HiSun className={styles.sunIcon()} />
+          )}
+        </div>
+        <div className={styles.energyWave()} />
+      </Button>
+      <div className={styles.glowEffect()} />
+    </div>
+  );
+});
 
 // PERFORMANCE: displayName for React DevTools
 WebNavbarThemeToggle.displayName = "WebNavbarThemeToggle";

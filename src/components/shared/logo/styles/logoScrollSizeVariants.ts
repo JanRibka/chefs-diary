@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 export const logoScrollSizeVariants = tv({
-  base: "text-white drop-shadow-lg",
+  base: "text-white drop-shadow-lg transition-transform duration-700 group-hover:rotate-12",
   variants: {
     size: {
       sm: "w-5 h-5 lg:w-6 lg:h-6",

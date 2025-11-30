@@ -1,17 +1,15 @@
 import { WebLayout } from "@/components/features/layout/web/WebLayout/WebLayout";
-import { UserContextProvider } from "@/lib/context/UserContext";
-import SessionUserType from "@/lib/types/common/SessionUserType";
-import { getProtectedSessionWeb } from "@/lib/utils/session";
+import { SSRSafeThemeProvider } from "@/lib/context/SSRSafeThemeContext";
 
-type Props = { children: React.ReactNode };
-
-export default async function RootWebLayout({ children }: Props) {
-  // Načteme session, ale nepřesměrováváme, pokud není (public access)
-  const { session } = await getProtectedSessionWeb(false);
-
+export default async function RootWebLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Pass-through layout - specific layouts handle providers and structure
   return (
-    <UserContextProvider initialUser={session?.user as SessionUserType}>
+    <SSRSafeThemeProvider>
       <WebLayout>{children}</WebLayout>
-    </UserContextProvider>
+    </SSRSafeThemeProvider>
   );
 }

@@ -1,5 +1,6 @@
 import { memo } from "react";
 
+import { useSSRSafeTheme } from "@/lib/context/SSRSafeThemeContext";
 import { useHoverBehavior } from "../WebNavbarLoginButton/hooks/useHoverBehavior";
 import { UserPopoverWrapper } from "./components/UserPopoverWrapper/UserPopoverWrapper";
 import { userButtonStyles } from "./styles/userButtonStyles";
@@ -15,8 +16,9 @@ export const WebNavbarUserButton = memo(
     loginTriggerRef,
     hoverOpenTimerRef,
     hoverCloseTimerRef,
-    resolvedTheme,
   }: WebNavbarUserButtonProps) => {
+    const theme = useSSRSafeTheme();
+
     // PERFORMANCE: Extract hover behavior to custom hook
     const { handleMouseEnter, handleMouseLeave } = useHoverBehavior(
       hoverOpenTimerRef,
@@ -28,7 +30,7 @@ export const WebNavbarUserButton = memo(
 
     // Get styles from tailwind-variants with theme variant
     const styles = userButtonStyles({
-      resolvedTheme: resolvedTheme as "light" | "dark",
+      resolvedTheme: theme,
       isOpen: loginFlyoutOpen,
     });
 
@@ -44,7 +46,6 @@ export const WebNavbarUserButton = memo(
           setLoginFlyoutOpen={setLoginFlyoutOpen}
           setLoginFlyoutOpenedByHover={setLoginFlyoutOpenedByHover}
           loginTriggerRef={loginTriggerRef}
-          resolvedTheme={resolvedTheme}
         />
 
         {/* Subtle glow */}

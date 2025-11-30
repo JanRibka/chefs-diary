@@ -1,5 +1,6 @@
 import { WebLayout } from "@/components/features/layout/web/WebLayout/WebLayout";
 import { SSRSafeThemeProvider } from "@/lib/context/SSRSafeThemeContext";
+import { UserContextProvider } from "@/lib/context/UserContext";
 
 export default async function RootWebLayout({
   children,
@@ -8,8 +9,10 @@ export default async function RootWebLayout({
 }) {
   // Pass-through layout - specific layouts handle providers and structure
   return (
-    <SSRSafeThemeProvider>
-      <WebLayout>{children}</WebLayout>
-    </SSRSafeThemeProvider>
+    <UserContextProvider initialUser={null}>
+      <SSRSafeThemeProvider>
+        <WebLayout>{children}</WebLayout>
+      </SSRSafeThemeProvider>
+    </UserContextProvider>
   );
 }

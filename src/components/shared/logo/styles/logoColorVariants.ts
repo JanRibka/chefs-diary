@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 export const logoColorVariants = tv({
-  base: "bg-gradient-to-br shadow-xl transition-all duration-500 flex items-center justify-center animate-float",
+  base: "bg-gradient-to-br shadow-xl transition-all duration-500 flex items-center justify-center",
   variants: {
     variant: {
       default:
@@ -22,7 +22,8 @@ export const logoColorVariants = tv({
     },
     disableHover: {
       true: "",
-      false: "transform group-hover:scale-105 group-hover:rotate-3",
+      false:
+        "transform group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-orange-500/40",
     },
   },
   compoundVariants: [

@@ -108,12 +108,12 @@ const config: Config = {
         },
         "glow-pulse": {
           "0%, 100%": {
-            opacity: "0.6",
+            opacity: "0.3",
             transform: "scale(1)",
           },
           "50%": {
-            opacity: "1",
-            transform: "scale(1.1)",
+            opacity: "0.5",
+            transform: "scale(1.05)",
           },
         },
         "spin-slow": {

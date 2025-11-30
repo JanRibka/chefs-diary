@@ -6,7 +6,7 @@ import { PaginatedDTO } from "../dTOs/shared/PaginatedDTO";
 import AuthenticationModeEnum from "../enums/AuthenticationModeEnum";
 import UserRoleTypeEnum from "../enums/UserRoleTypeEnum";
 import { hashPassword } from "../services/hashService";
-
+//TODO: Pokud zablokuju uživatele, měl bych z databáze odstrant i všechny jeho session aby ho to odhlásilo
 /**
  * Gets user by user name
  * @param userName User name

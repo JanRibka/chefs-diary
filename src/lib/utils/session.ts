@@ -1,10 +1,8 @@
-import { headers } from 'next/headers';
-
-import { auth as authWeb } from '@/config/auth/auth';
-import { auth as authAdmin } from '@/config/auth/authAdmin';
-import adminRoutes from '@/lib/routes/adminRoutes';
-
-import webRoutes from '../routes/webRoutes';
+import { headers } from "next/headers";
+import { auth as authAdmin } from "@/config/auth/authAdmin";
+import { auth as authWeb } from "@/config/auth/auth";
+import adminRoutes from "@/lib/routes/adminRoutes";
+import webRoutes from "../routes/webRoutes";
 
 export async function getProtectedSessionAdmin(returnPathName: boolean = true) {
   const session = await authAdmin();

@@ -1,64 +1,108 @@
-import { tv } from 'tailwind-variants';
+import { tv } from "tailwind-variants";
 
 /**
- * mobileNavLinksStyles - Mobile navigation links styling with tailwind-variants
- * Organized into logical slots for better maintainability
+ * mobileNavLinksStyles - Mobile navigation styling with expandable categories
+ * Matches desktop design with underline animations
  */
 export const mobileNavLinksStyles = tv({
   slots: {
     // Navigation container
-    nav: "",
+    nav: "w-full",
+    navList: "flex flex-col gap-1 py-2",
+    navItem: "w-full",
 
-    // Navigation list
-    navList: "space-y-3",
-
-    // Navigation item
-    navItem: "relative group",
-
-    // Navigation link
+    // Regular nav link (no subitems)
     navLink:
-      "relative block px-6 py-4 text-lg font-semibold text-slate-700 dark:text-slate-300 rounded-2xl overflow-hidden transition-all duration-300 group-hover:text-white transform group-hover:scale-105",
+      "flex items-center w-full px-4 py-3 min-h-[44px] text-base font-medium transition-colors duration-300 rounded-lg hover:bg-accent",
 
-    // Animated background (color will be dynamic)
-    animatedBackground:
-      "absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-x-0 group-hover:scale-x-100 origin-left",
+    label: "relative inline-block",
 
-    // Ripple effect
-    rippleEffect:
-      "absolute inset-0 bg-gradient-to-r from-white/20 via-white/40 to-white/20 opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700",
-
-    // Content container
-    content: "relative flex items-center gap-4",
-
-    // Icon container
-    iconContainer: "relative",
-
-    // Icon
-    icon: "text-2xl group-hover:animate-bounce transition-transform duration-200",
-
-    // Icon glow effect
-    iconGlow:
-      "absolute inset-0 bg-gradient-to-r from-white/30 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm",
-
-    // Text container
-    textContainer: "flex-1",
-
-    // Label text
-    label: "block font-bold tracking-wide group-hover:text-shadow-lg",
-
-    // Underline effect
+    // Underline animation (matches desktop)
     underline:
-      "w-0 group-hover:w-full h-0.5 bg-white/80 transition-all duration-300 mt-1 rounded-full",
+      "absolute -bottom-0.5 left-0 w-full h-0.5 bg-gradient-to-r from-amber-500 to-orange-500 transform origin-left transition-transform duration-300",
 
-    // Arrow container
-    arrowContainer:
-      "opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0",
+    // Expandable trigger (for items with subitems)
+    expandTrigger:
+      "flex items-center justify-between w-full px-4 py-3 min-h-[44px] text-base font-medium transition-colors duration-300 rounded-lg hover:bg-accent text-slate-700 dark:text-slate-300",
 
-    // Arrow icon
-    arrow: "w-5 h-5",
+    chevron: "w-5 h-5 transition-transform duration-300 text-slate-400",
 
-    // Side glow effect (color will be dynamic)
-    sideGlow:
-      "absolute inset-y-0 -left-2 w-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full blur-sm",
+    // Subitems list wrapper for animation
+    subitemsWrapper: "grid transition-all duration-300 ease-in-out",
+    subitemsInner: "overflow-hidden",
+
+    // Subitems list
+    subitemsList: "flex flex-col gap-1 pl-4",
+    subitemLink:
+      "flex items-center w-full px-4 py-2.5 min-h-[44px] text-sm transition-colors duration-300 rounded-lg hover:bg-accent/50",
+    subitemLabel: "relative inline-block",
+    subitemUnderline:
+      "absolute -bottom-0.5 left-0 w-full h-0.5 bg-gradient-to-r from-amber-400 to-orange-400 transform origin-left transition-transform duration-300",
   },
+  variants: {
+    active: {
+      true: {},
+      false: {},
+    },
+    expanded: {
+      true: {
+        subitemsWrapper: "grid-rows-[1fr] opacity-100",
+      },
+      false: {
+        subitemsWrapper: "grid-rows-[0fr] opacity-0",
+      },
+    },
+  },
+  compoundSlots: [
+    {
+      slots: ["navLink"],
+      active: true,
+      class: "text-amber-600 dark:text-amber-400",
+    },
+    {
+      slots: ["navLink"],
+      active: false,
+      class: "text-slate-700 dark:text-slate-300",
+    },
+    {
+      slots: ["underline"],
+      active: true,
+      class: "scale-x-100",
+    },
+    {
+      slots: ["underline"],
+      active: false,
+      class: "scale-x-0",
+    },
+    {
+      slots: ["subitemLink"],
+      active: true,
+      class: "text-amber-600 dark:text-amber-400",
+    },
+    {
+      slots: ["subitemLink"],
+      active: false,
+      class: "text-slate-600 dark:text-slate-400",
+    },
+    {
+      slots: ["subitemUnderline"],
+      active: true,
+      class: "scale-x-100",
+    },
+    {
+      slots: ["subitemUnderline"],
+      active: false,
+      class: "scale-x-0",
+    },
+    {
+      slots: ["chevron"],
+      expanded: true,
+      class: "rotate-180",
+    },
+    {
+      slots: ["chevron"],
+      expanded: false,
+      class: "rotate-0",
+    },
+  ],
 });

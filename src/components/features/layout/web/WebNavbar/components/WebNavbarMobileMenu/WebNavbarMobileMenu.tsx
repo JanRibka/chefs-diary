@@ -2,9 +2,8 @@
 
 import { memo } from "react";
 
-import { NAV_ITEMS } from "../../constants/navItems";
+import webMenuItems from "@/lib/config/webMenuItems";
 import { MobileNavLinks } from "./components/MobileNavLinks/MobileNavLinks";
-import { MobileSearchSection } from "./components/MobileSearchSection/MobileSearchSection";
 import { mobileMenuStyles } from "./styles/mobileMenuStyles";
 import SessionUserType from "@/lib/types/common/SessionUserType";
 
@@ -16,7 +15,7 @@ interface WebNavbarMobileMenuProps {
 
 /**
  * WebNavbarMobileMenu - Mobile navigation menu orchestrator
- * DATA COLOCATION: NAV_ITEMS constant is here because it's only used here
+ * Uses webMenuItems configuration following admin pattern
  *
  * Coordinates mobile search, navigation links, and animations.
  */
@@ -26,14 +25,12 @@ export const WebNavbarMobileMenu = memo(
     const styles = mobileMenuStyles({ mobileOpen });
 
     return (
-      <div className={styles.container()}>
-        {/* Animated background elements */}
-        <div className={styles.backgroundGradient()} />
-        <div className={styles.animatedBackground()} />
-
+      <div
+        className={styles.container({ mobileOpen })}
+        aria-hidden={!mobileOpen}
+      >
         <div className={styles.content()}>
-          <MobileSearchSection />
-          <MobileNavLinks items={NAV_ITEMS} onClose={onClose} />
+          <MobileNavLinks items={webMenuItems} onClose={onClose} />
 
           {/* Mobile Auth Section - placeholder */}
           {!user && (
@@ -42,9 +39,6 @@ export const WebNavbarMobileMenu = memo(
             </div>
           )}
         </div>
-
-        {/* Bottom wave decoration */}
-        <div className={styles.bottomWave()} />
       </div>
     );
   }

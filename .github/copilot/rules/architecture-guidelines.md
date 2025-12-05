@@ -43,70 +43,91 @@ Komplexní pravidla pro refactoring a architekturu React aplikací s detailní f
 
 ## ⚡ Performance Best Practices
 
-### POVINNÉ performance optimalizace pro VŠECHNY komponenty
+### Performance optimalizace - Kdy a jak používat
 
-**1. React.memo pro VŠECHNY orchestrační komponenty a subkomponenty**
+**DŮLEŽITÉ: Používej memoizaci pouze tam, kde to dává smysl!**
+
+Memoizace má vlastní režii - používej ji pouze když:
+
+- Komponenta se renderuje často s **nezměněnými props**
+- Komponenta je **výpočetně náročná** (> 50ms render time)
+- Komponenta obsahuje **velké seznamy** (> 100 položek)
+- Komponenta je v **hot path** (renderuje se při každém user action)
+
+**1. React.memo - Pouze pro komponenty s častými re-rendery**
 
 ```tsx
 import { memo } from "react";
 
-// VŽDY wrap orchestrátor i subkomponenty v React.memo
-export const UserProfile = memo(() => {
-  // ... orchestrace
+// ✅ POUŽÍVEJ: Komponenta v listu s mnoha položkami
+export const UserListItem = memo(({ user }: Props) => {
+  return <div>{user.name}</div>;
 });
 
-UserProfile.displayName = "UserProfile"; // VŽDY přidej displayName
+UserListItem.displayName = "UserListItem";
 
-export const UserProfileContent = memo(({ user }: Props) => {
-  // ... UI
-});
-
-UserProfileContent.displayName = "UserProfileContent";
+// ❌ NEPOUŽÍVEJ: Jednoduchá komponenta co se renderuje jednou
+export const UserProfile = () => {
+  return <div>Profile</div>;
+};
 ```
 
-**2. useCallback pro VŠECHNY callback props**
+**2. useCallback - Pouze pro callbacks v memoizovaných child komponentách**
 
 ```tsx
 import { useCallback, memo } from "react";
 
-export const UserProfile = memo(() => {
-  const userData = useUserData();
+// ✅ POUŽÍVEJ: Child komponenta je memoizovaná
+const MemoizedChild = memo(({ onUpdate }: Props) => (
+  <button onClick={onUpdate}>Update</button>
+));
 
-  // PERFORMANCE: useCallback previne re-render child komponent
+export const UserProfile = () => {
+  // useCallback má smysl - MemoizedChild se nepřerenderuje
   const handleUpdate = useCallback((id: string, data: UpdateData) => {
     updateUser(id, data);
-  }, []); // stable dependency array
+  }, []);
 
-  return <UserProfileContent onUpdate={handleUpdate} />;
-});
+  return <MemoizedChild onUpdate={handleUpdate} />;
+};
+
+// ❌ NEPOUŽÍVEJ: Child není memoizovaný, useCallback zbytečný
+export const UserProfile2 = () => {
+  const handleClick = useCallback(() => {
+    console.log("clicked");
+  }, []); // ZBYTEČNÉ - child není memo()
+
+  return <Button onClick={handleClick} />; // Button není memo()
+};
 ```
 
-**3. useMemo pro složité výpočty a derived state**
+**3. useMemo - Pouze pro výpočetně náročné operace**
 
 ```tsx
-import { useMemo, memo } from "react";
+import { useMemo } from "react";
 
-export const UserProfile = memo(() => {
+export const UserProfile = () => {
   const { users } = useUsers();
 
-  // PERFORMANCE: useMemo pro expensive computation
+  // ✅ POUŽÍVEJ: Složitý výpočet s velkým datasetem (> 100 položek)
   const sortedUsers = useMemo(() => {
-    return users
+    return users // předpokládáme 1000+ uživatelů
       .filter((u) => u.active)
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [users]); // recompute pouze když se změní users
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((u) => ({ ...u, formatted: formatUser(u) })); // expensive
+  }, [users]);
 
-  // PERFORMANCE: useMemo pro derived state
-  const stats = useMemo(
-    () => ({
-      total: users.length,
-      active: users.filter((u) => u.active).length,
-    }),
-    [users]
-  );
+  // ❌ NEPOUŽÍVEJ: Jednoduchý výpočet je rychlejší bez useMemo
+  const activeCount = users.filter((u) => u.active).length; // RYCHLEJŠÍ bez useMemo
 
-  return <UserList users={sortedUsers} stats={stats} />;
-});
+  // ❌ NEPOUŽÍVEJ: Vytvoření objektu je levné
+  const stats = {
+    total: users.length,
+    active: activeCount,
+  }; // RYCHLEJŠÍ bez useMemo
+
+  return <UserList users={sortedUsers} />;
+};
 ```
 
 **4. Lazy loading pro velké komponenty**
@@ -173,36 +194,47 @@ export const useUserProfileState = (userId: string) => {
   const userActions = useUserActions();
   const userPermissions = useUserPermissions(userId);
 
-  // PERFORMANCE: return stable object reference
-  return useMemo(
-    () => ({
-      ...userData,
-      ...userActions,
-      ...userPermissions,
-    }),
-    [userData, userActions, userPermissions]
-  );
+  // ❌ NEPOUŽÍVEJ useMemo pokud není UserProfileContent memo()
+  // Vytvoření objektu je levné, useMemo má vlastní režii
+  return {
+    ...userData,
+    ...userActions,
+    ...userPermissions,
+  };
 };
 
-// Orchestrátor používá composed hook
-export const UserProfile = memo(({ userId }: Props) => {
+// Orchestrátor - memo() POUZE pokud se často renderuje s nezměněnými props
+export const UserProfile = ({ userId }: Props) => {
   const state = useUserProfileState(userId);
 
   return <UserProfileContent {...state} />;
-});
+};
 ```
 
-### Performance checklist pro KAŽDOU komponentu:
+### Performance checklist - Kdy optimalizovat:
 
-- ✅ **React.memo** na orchestrátoru i subkomponentách
-- ✅ **displayName** na všech memo() komponentách
-- ✅ **useCallback** na všech callbacks předávaných jako props
-- ✅ **useMemo** na derived state a expensive výpočtech
-- ✅ **lazy()** na velkých/heavy komponentách (> 100 KB)
-- ✅ **Error Boundary** okolo kritických částí aplikace
-- ✅ **Composed hooks** místo mnoha samostatných hooks v orchestrátoru
-- ✅ **Cleanup v useEffect** - prevence memory leaks
-- ✅ **Proper dependency arrays** - žádné eslint-disable comments
+**Měření nejprve, optimalizace potom!** Použij React DevTools Profiler.
+
+- ✅ **React.memo** - Pouze pro:
+  - Komponenty v listech s mnoha položkami (> 50)
+  - Komponenty s častými re-rendery a stabilními props
+  - Výpočetně náročné komponenty (> 50ms render)
+- ✅ **displayName** - Na všech memo() komponentách (pro debugging)
+- ✅ **useCallback** - Pouze pro:
+  - Callbacks předávané do memo() komponent
+  - Dependencies v useEffect/useMemo
+  - Event handlers v velkých listech
+- ✅ **useMemo** - Pouze pro:
+  - Výpočetně náročné operace (> 10ms)
+  - Velké dataset transformace (> 100 položek)
+  - Reference stability pro memo() dependencies
+- ✅ **lazy()** - Na velkých komponentách (> 100 KB)
+- ✅ **Error Boundary** - Okolo kritických částí aplikace
+- ✅ **Composed hooks** - Místo mnoha hooks v orchestrátoru
+- ✅ **Cleanup v useEffect** - Prevence memory leaks
+- ✅ **Proper dependency arrays** - Žádné eslint-disable
+
+**Pravidlo: Pokud si nejsi jistý, NEOPTIMALIZUJ. Předčasná optimalizace škodí.**
 
 ## �️ Error Handling Guidelines
 
@@ -494,14 +526,13 @@ DataTable/
 - ✅ **Pouze koordinuje** hooks a subkomponenty
 - ✅ **Pouze předává** data z hooks do subkomponent
 - ✅ **Může obsahovat** jednoduché conditional rendering (mounted check, ternary pro user/guest)
-- ✅ **Může obsahovat** useMemo/useCallback pro derived state a callbacks
+- ✅ **Může obsahovat** useMemo/useCallback pouze když je to potřeba (měřeno Profilerem)
 - ✅ **Může obsahovat** UI strukturu (nav, div, sections) - orchestrace layout
-- ✅ **VŽDY používá React.memo** pro prevenci zbytečných re-renderů
-- ✅ **VŽDY má displayName** pro React DevTools
+- ✅ **React.memo pouze pokud** komponenta má časté re-rendery s nezměněnými props
+- ✅ **displayName vždy** když používáš memo() (pro React DevTools)
 
 ```tsx
-// ✅ UserProfile.tsx - ČISTÝ ORCHESTRÁTOR S BEST PRACTICES
-import { memo, useCallback, useMemo } from "react";
+// ✅ UserProfile.tsx - ČISTÝ ORCHESTRÁTOR
 import Logo from "@/components/shared/logo/Logo";
 import { UserProfileHeader } from "./components/UserProfileHeader";
 import { UserProfileStats } from "./components/UserProfileStats";
@@ -510,33 +541,27 @@ import { useUserData } from "./hooks/useUserData";
 import { useUserActions } from "./hooks/useUserActions";
 import { useUserTheme } from "./hooks/useUserTheme";
 
-export const UserProfile = memo(() => {
+// memo() pouze pokud komponenta má časté re-rendery s nezměněnými props
+export const UserProfile = () => {
   // 1. Custom hooks - business logic
   const userData = useUserData();
   const userActions = useUserActions();
   const themeState = useUserTheme();
 
-  // 2. useMemo pro derived state (PERFORMANCE: vypočítáme jednou)
-  const userStats = useMemo(
-    () => ({
-      totalPosts: userData.user?.posts.length ?? 0,
-      joinedDate: userData.user?.createdAt
-        ? new Date(userData.user.createdAt)
-        : null,
-    }),
-    [userData.user?.posts.length, userData.user?.createdAt]
-  );
+  // 2. Derived state - JEDNODUCHÉ výpočty BEZ useMemo
+  const userStats = {
+    totalPosts: userData.user?.posts.length ?? 0,
+    joinedDate: userData.user?.createdAt
+      ? new Date(userData.user.createdAt)
+      : null,
+  };
 
-  // 3. useCallback pro stable function reference (PERFORMANCE: předejdeme re-renderům dětí)
-  const handleUpdate = useCallback(
-    (userId: string, data: UpdateData) => {
-      userActions.updateUser(userId, data);
-    },
-    [userActions.updateUser]
-  );
+  // 3. Callbacks - useCallback POUZE pokud je UserProfileActions memo()
+  const handleUpdate = (userId: string, data: UpdateData) => {
+    userActions.updateUser(userId, data);
+  };
 
   // 4. UI orchestration - struktura a koordinace subkomponent
-  // Konstanty (NAV_ITEMS) jsou UVNITŘ subkomponent podle Data Colocation
   return (
     <div className="user-profile">
       <header>
@@ -557,16 +582,13 @@ export const UserProfile = memo(() => {
       </main>
     </div>
   );
-});
-
-// displayName pro React DevTools
-UserProfile.displayName = "UserProfile";
+};
 ```
 
-### 2. Subkomponenty pro všechny UI stavy
+### 2. Subkomponenty - memo() pouze pro listy a časté re-rendery
 
 **Každý UI stav má vlastní subkomponentu:**
-**Všechny subkomponenty VŽDY používají React.memo:**
+**memo() pouze pro komponenty v listech nebo s častými re-rendery:**
 **DŮLEŽITÉ: Subkomponenty mají vlastní konstanty - ŽÁDNÉ props drilling!**
 
 ```tsx
@@ -1563,53 +1585,39 @@ export const Modal = ({ isOpen, children, onClose }: ModalProps) => {
 
 ## 🎨 Styling Guidelines
 
-### ⚠️ **STRIKTNÍ STYLING PRAVIDLA**
+**📖 Pro detailní styling pravidla viz [Styling Guidelines](./styling-guidelines.md)**
+
+### ⚠️ **ZÁKLADNÍ PRAVIDLA - POVINNÉ**
 
 **VÝHRADNĚ styluj pomocí Tailwind CSS - žádné custom CSS nebo inline styles!**
 
-- ✅ **Pouze Tailwind CSS** - žádné custom CSS soubory
-- ✅ **Styly patří do `styles/` složky** - každý styl v samostatném souboru
-- ✅ **Vždy použij existující styly** - nekopíruj, použij stávající Tailwind třídy
+- ✅ **Pouze Tailwind CSS** - žádné custom CSS soubory nebo inline object styles
+- ✅ **Tailwind variants pro složité styly** - více než 5 tříd nebo podmínky = CVA
+- ✅ **mergeStyles pro slučování** - použij `mergeStyles()` z `@/lib/mergeStyles`
 - ✅ **Tailwind first** - pokud lze styl nadefinovat v Tailwind, použij ho
 - ✅ **Global styles do `src/styles/global.css`** nebo `src/app/global.css`
+- ❌ **Žádné inline object styles** - `style={{ ... }}` je zakázáno (výjimka: dynamické hodnoty)
 
-### CSS Architecture
+### Kdy použít jaký přístup
 
-**Vždy používej Tailwind CSS třídy místo custom CSS:**
+#### ✅ Inline Tailwind classes
 
-```tsx
-// ✅ DOBRĚ - Pouze Tailwind utility classes
-<div className="bg-white dark:bg-slate-900 p-4 rounded-lg shadow-md">
-  <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-    Title
-  </h2>
-</div>
+- Méně než 5 tříd
+- Žádné podmínky nebo ternary
+- Statické, jednoduché styly
 
-// ❌ ŠPATNĚ - Žádné custom CSS nebo inline styles
-<div style={{ backgroundColor: 'white', padding: '16px' }}>
-  <h2 style={{ color: 'gray' }}>Title</h2>
-</div>
-```
+#### ✅ Tailwind Variants (CVA)
 
-### Používání existujících stylů
+- Více než 5 tříd na jednom elementu
+- Obsahuje ternary operátory nebo podmínky
+- Komponenta má různé varianty (size, color, variant, state)
+- Styly se opakují nebo jsou složité
 
-**VŽDY se dívej, jestli už styl existuje - nekopíruj, použij stávající!**
+#### ✅ Utils/styles soubory
 
-```tsx
-// ✅ DOBRĚ - Použij existující Tailwind třídy
-<div className="bg-white dark:bg-slate-900 p-4 rounded-lg shadow-md">
-  <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-    Title
-  </h2>
-</div>
-
-// ❌ ŠPATNĚ - Nekopíruj styly, použij existující
-<div className="bg-white p-4 rounded shadow-md">
-  <h2 className="text-xl font-semibold text-gray-800">
-    Title
-  </h2>
-</div>
-```
+- Složité výpočty stylů na základě props
+- Sdíleno mezi více komponentami
+- Business logika pro styling
 
 ### Struktura stylů v komponentách
 

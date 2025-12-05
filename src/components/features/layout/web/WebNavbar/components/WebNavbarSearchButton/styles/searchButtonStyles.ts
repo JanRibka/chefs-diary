@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants';
+import { tv } from "tailwind-variants";
 
 /**
  * searchButtonStyles - Search button styling with tailwind-variants
@@ -29,11 +29,7 @@ export const searchButtonStyles = tv({
     energyWave:
       "absolute inset-0 bg-gradient-to-r from-transparent via-background/40 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500",
 
-    // Pulse ring effect
-    pulseRing:
-      "absolute inset-0 rounded-2xl bg-primary/20 animate-ping opacity-0 group-hover:opacity-75 transition-opacity duration-300 pointer-events-none",
-
-    // Glow effect
+    // Glow effect (same as theme toggle)
     glowEffect:
       "absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/30 to-primary/50 opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-xl scale-150 pointer-events-none",
   },

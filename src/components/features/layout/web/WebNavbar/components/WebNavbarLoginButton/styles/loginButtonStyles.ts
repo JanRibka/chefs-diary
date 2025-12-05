@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants';
+import { tv } from "tailwind-variants";
 
 /**
  * loginButtonStyles - Login button styling with tailwind-variants
@@ -6,8 +6,9 @@ import { tv } from 'tailwind-variants';
  */
 export const loginButtonStyles = tv({
   slots: {
-    // Main container with group
-    container: "relative group",
+    // Main container with group and hover scale
+    container:
+      "relative group transition-transform duration-300 hover:scale-110",
 
     // Subtle glow effect
     glowEffect:
@@ -24,7 +25,8 @@ export const loginButtonStyles = tv({
     },
     isOpen: {
       true: {
-        container: "scale-110",
+        // Additional scale when popup is open (on top of hover scale)
+        container: "!scale-110",
       },
       false: {
         container: "",

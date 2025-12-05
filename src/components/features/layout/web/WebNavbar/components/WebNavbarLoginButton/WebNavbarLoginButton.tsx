@@ -27,13 +27,8 @@ export const WebNavbarLoginButton = memo(
     // SSR-safe theme from context
     const theme = useSSRSafeTheme();
 
-    // PERFORMANCE: Extract hover behavior to custom hook
-    const {
-      handleMouseEnter,
-      handleMouseLeave,
-      handleFocusIn,
-      handleFocusOut,
-    } = useHoverBehavior(
+    // PERFORMANCE: Extract hover behavior to custom hook (only focus handlers used)
+    const { handleFocusIn, handleFocusOut } = useHoverBehavior(
       hoverOpenTimerRef,
       hoverCloseTimerRef,
       setLoginFlyoutOpen,
@@ -50,8 +45,6 @@ export const WebNavbarLoginButton = memo(
     return (
       <div
         className={styles.container()}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         onFocus={handleFocusIn}
         onBlur={handleFocusOut}
       >

@@ -1,14 +1,14 @@
-import { tv } from 'tailwind-variants';
+import { tv } from "tailwind-variants";
+import { navbarSharedConfig } from "../../../styles/sharedNavbarStyles";
 
 /**
  * mobileMenuStyles - Mobile menu styling with tailwind-variants
- * Organized into logical slots for better maintainability
+ * Uses shared configuration for consistency with desktop
  */
 export const mobileMenuStyles = tv({
   slots: {
     // Main container with animations
-    container:
-      "lg:hidden absolute top-full left-0 right-0 backdrop-blur-2xl bg-background/98 border-b border-border/50 shadow-2xl overflow-hidden transition-all duration-500 ease-out transform-gpu",
+    container: `lg:hidden absolute top-full left-0 right-0 ${navbarSharedConfig.glass} border-b ${navbarSharedConfig.borderColor} shadow-2xl overflow-hidden transition-all duration-500 ease-out transform-gpu`,
 
     // Background gradient
     backgroundGradient:
@@ -32,7 +32,8 @@ export const mobileMenuStyles = tv({
   variants: {
     mobileOpen: {
       true: {
-        container: "opacity-100 translate-y-0 scale-100",
+        container:
+          "opacity-100 translate-y-0 scale-100 pointer-events-auto max-h-[calc(100dvh-100%)] overflow-y-auto overscroll-contain",
       },
       false: {
         container: "opacity-0 -translate-y-8 scale-95 pointer-events-none",

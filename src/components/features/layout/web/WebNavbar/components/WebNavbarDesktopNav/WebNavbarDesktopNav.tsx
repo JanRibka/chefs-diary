@@ -1,70 +1,39 @@
 "use client";
 
-import NextLink from "next/link";
-import { memo, useMemo } from "react";
+import { memo } from "react";
 
-import { NAV_ITEMS } from "../../constants/navItems";
-import { desktopNavStyles } from "./styles/desktopNavStyles";
+import webMenuItems from "@/lib/config/webMenuItems";
+import { DesktopNavItem } from "./components/DesktopNavItem";
+import { useMegaMenuState } from "./hooks/useMegaMenuState";
 
 /**
- * WebNavbarDesktopNav - Desktop navigation links with hover effects
- * DATA COLOCATION: NAV_ITEMS constant is here because it's only used here
+ * WebNavbarDesktopNav - Desktop navigation component
+ * Uses Data Colocation: hooks called where they're used
  *
  * @example
  * <WebNavbarDesktopNav />
  */
 export const WebNavbarDesktopNav = memo(() => {
-  // Get styles from tailwind-variants
-  const styles = desktopNavStyles();
-
-  const navItems = useMemo(
-    () =>
-      NAV_ITEMS.map((item, index) => (
-        <li key={item.href} className={styles.navItem()}>
-          <NextLink href={item.href} className={styles.navLink()}>
-            {/* Background hover effect */}
-            <div className={styles.backgroundHover()} />
-
-            {/* Shimmer effect */}
-            <div className={styles.shimmerEffect()} />
-
-            {/* Glow effect */}
-            <div className={styles.glowEffect()} />
-
-            {/* Content */}
-            <div className={styles.content()}>
-              <span
-                className={styles.icon()}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {item.icon}
-              </span>
-              <span className={styles.label()}>{item.label}</span>
-            </div>
-
-            {/* Bottom indicator */}
-            <div className={styles.bottomIndicator()} />
-          </NextLink>
-
-          {/* Tooltip */}
-          <div className={styles.tooltip()}>
-            <div className={styles.tooltipContent()}>
-              <span>{item.icon}</span>
-              <span>{item.description}</span>
-            </div>
-            {/* Tooltip arrow */}
-            <div className={styles.tooltipArrow()} />
-          </div>
-        </li>
-      )),
-    [styles]
-  );
+  // DATA COLOCATION: only shared state hooks here
+  const megaMenuState = useMegaMenuState();
 
   return (
-    <nav className={styles.nav()}>
-      <ul className={styles.navList()}>{navItems}</ul>
+    <nav className="hidden lg:flex items-center justify-center flex-1">
+      <ul className="flex items-center gap-8">
+        {webMenuItems.map((item) => (
+          <DesktopNavItem
+            key={item.key}
+            item={item}
+            activeMegaMenu={megaMenuState.activeMegaMenu}
+            onMouseEnter={megaMenuState.handleMouseEnter}
+            onMouseLeave={megaMenuState.handleMouseLeave}
+            onCloseMegaMenu={megaMenuState.handleCloseMegaMenu}
+          />
+        ))}
+      </ul>
     </nav>
   );
 });
 
+// PERFORMANCE: displayName for React DevTools
 WebNavbarDesktopNav.displayName = "WebNavbarDesktopNav";

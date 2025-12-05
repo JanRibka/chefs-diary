@@ -40,7 +40,6 @@ export const WebNavbarSearchButton = memo(
           </div>
           <div className={styles.energyWave()} />
         </Button>
-        <div className={styles.pulseRing()} />
         <div className={styles.glowEffect()} />
       </div>
     );

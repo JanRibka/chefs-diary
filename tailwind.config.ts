@@ -116,6 +116,17 @@ const config: Config = {
             transform: "scale(1.05)",
           },
         },
+        // Slow pulse animation for search button
+        "slow-pulse": {
+          "0%, 100%": {
+            opacity: "0.75",
+            transform: "scale(1)",
+          },
+          "50%": {
+            opacity: "0",
+            transform: "scale(1.5)",
+          },
+        },
         "spin-slow": {
           from: { transform: "rotate(0deg)" },
           to: { transform: "rotate(360deg)" },
@@ -131,6 +142,7 @@ const config: Config = {
         "sparkle-delayed": "sparkle-delayed 2s ease-in-out infinite 0.5s",
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
         "spin-slow": "spin-slow 8s linear infinite",
+        "slow-pulse": "slow-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       maxWidth: {
         main: "1280px",

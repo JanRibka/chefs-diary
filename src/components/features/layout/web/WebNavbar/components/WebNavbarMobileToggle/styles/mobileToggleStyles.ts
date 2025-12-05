@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants';
+import { tv } from "tailwind-variants";
 
 /**
  * mobileToggleStyles - Mobile toggle button styling with tailwind-variants
@@ -20,33 +20,8 @@ export const mobileToggleStyles = tv({
     // Icon container
     iconContainer: "relative z-10 transition-all duration-300",
 
-    // Close icon (when menu is open)
-    closeIcon:
-      "w-6 h-6 text-muted-foreground group-hover:text-destructive transition-colors duration-300 group-hover:rotate-90",
-
-    // Menu icon (when menu is closed)
-    menuIcon:
-      "w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors duration-300",
-
     // Energy wave animation
     energyWave:
       "absolute inset-0 bg-gradient-to-r from-transparent via-background/40 to-transparent opacity-0 group-hover:opacity-100 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500",
-
-    // Indicator dots container
-    indicatorContainer:
-      "absolute -bottom-1 left-1/2 transform -translate-x-1/2 flex gap-1",
-
-    // Indicator dot with variants for mobileOpen state
-    indicatorDot: "w-1 h-1 rounded-full transition-all duration-300",
-  },
-  variants: {
-    mobileOpen: {
-      true: {
-        indicatorDot: "bg-destructive scale-125",
-      },
-      false: {
-        indicatorDot: "bg-primary",
-      },
-    },
   },
 });

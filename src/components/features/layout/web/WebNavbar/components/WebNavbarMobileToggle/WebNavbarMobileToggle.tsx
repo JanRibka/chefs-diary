@@ -1,11 +1,10 @@
 "use client";
 
 import { memo } from "react";
-import { IoClose, IoMenu } from "react-icons/io5";
-
 import { Button } from "@heroui/react";
 
 import { mobileToggleStyles } from "./styles/mobileToggleStyles";
+import { AnimatedHamburger } from "./components/AnimatedHamburger";
 
 interface WebNavbarMobileToggleProps {
   mobileOpen: boolean;
@@ -26,8 +25,8 @@ interface WebNavbarMobileToggleProps {
  */
 export const WebNavbarMobileToggle = memo(
   ({ mobileOpen, onToggle }: WebNavbarMobileToggleProps) => {
-    // Get styles from tailwind-variants with mobileOpen variant
-    const styles = mobileToggleStyles({ mobileOpen });
+    // Get styles from tailwind-variants
+    const styles = mobileToggleStyles();
 
     return (
       <div className={styles.container()}>
@@ -37,30 +36,14 @@ export const WebNavbarMobileToggle = memo(
           size="lg"
           onPress={onToggle}
           className={styles.button()}
-          aria-label="Menu"
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
           <div className={styles.innerGradient()} />
           <div className={styles.iconContainer()}>
-            {mobileOpen ? (
-              <IoClose className={styles.closeIcon()} />
-            ) : (
-              <IoMenu className={styles.menuIcon()} />
-            )}
+            <AnimatedHamburger isOpen={mobileOpen} />
           </div>
           <div className={styles.energyWave()} />
         </Button>
-        {/* Animated indicator dots */}
-        <div className={styles.indicatorContainer()}>
-          <div className={styles.indicatorDot()} />
-          <div
-            className={styles.indicatorDot()}
-            style={{ animationDelay: "0.1s" }}
-          />
-          <div
-            className={styles.indicatorDot()}
-            style={{ animationDelay: "0.2s" }}
-          />
-        </div>
       </div>
     );
   }

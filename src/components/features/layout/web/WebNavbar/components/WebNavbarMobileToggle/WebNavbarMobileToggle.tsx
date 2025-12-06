@@ -5,6 +5,7 @@ import { Button } from "@heroui/react";
 
 import { mobileToggleStyles } from "./styles/mobileToggleStyles";
 import { AnimatedHamburger } from "./components/AnimatedHamburger";
+import { mergeStyles } from "@/lib/utils/styles";
 
 interface WebNavbarMobileToggleProps {
   mobileOpen: boolean;
@@ -33,13 +34,17 @@ export const WebNavbarMobileToggle = memo(
         <Button
           isIconOnly
           variant="light"
-          size="lg"
           onPress={onToggle}
           className={styles.button()}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
           <div className={styles.innerGradient()} />
-          <div className={styles.iconContainer()}>
+          <div
+            className={mergeStyles(
+              styles.iconContainer(),
+              "flex items-center justify-center"
+            )}
+          >
             <AnimatedHamburger isOpen={mobileOpen} />
           </div>
           <div className={styles.energyWave()} />

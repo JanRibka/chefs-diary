@@ -64,7 +64,7 @@ export const LoginButtonContent = memo(() => {
           />
         </div>
         <span
-          className="tracking-wider text-lg font-black drop-shadow-2xl text-white"
+          className="hidden xl:block tracking-wider text-lg font-black drop-shadow-2xl text-white"
           style={{
             textShadow:
               theme === "dark"

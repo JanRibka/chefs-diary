@@ -13,10 +13,10 @@ export const navbarStyles = tv({
   variants: {
     scrolled: {
       true: {
-        container: `w-[90%] md:w-[80%] lg:w-[70%] h-14 lg:h-16 ${navbarSharedConfig.glass} px-6`,
+        container: `w-[95%] md:w-[90%] lg:w-[85%] max-w-7xl h-14 lg:h-16 ${navbarSharedConfig.glass} px-6`,
       },
       false: {
-        container: `w-[95%] md:w-[90%] lg:w-[85%] h-16 lg:h-20 ${navbarSharedConfig.glass} px-8`,
+        container: `w-full max-w-7xl h-16 lg:h-20 ${navbarSharedConfig.glass} px-4 md:px-8`,
       },
     },
   },

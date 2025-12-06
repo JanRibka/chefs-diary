@@ -11,7 +11,7 @@ export const mobileToggleStyles = tv({
 
     // Button base styles
     button:
-      "relative overflow-hidden rounded-2xl transition-all duration-300 hover:bg-accent group-hover:scale-110 group-hover:shadow-lg cursor-pointer",
+      "relative overflow-hidden rounded-2xl transition-all duration-300 hover:bg-accent group-hover:scale-110 group-hover:shadow-lg cursor-pointer p-0 min-w-0 w-12 h-12 flex items-center justify-center",
 
     // Inner gradient overlay
     innerGradient:

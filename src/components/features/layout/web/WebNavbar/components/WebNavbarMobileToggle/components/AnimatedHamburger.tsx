@@ -15,32 +15,31 @@ export const AnimatedHamburger = memo(
   ({ isOpen, className }: AnimatedHamburgerProps) => {
     return (
       <MotionConfig transition={{ duration: 0.4, ease: "easeInOut" }}>
-        <motion.button
+        <motion.div
           initial={false}
           animate={isOpen ? "open" : "closed"}
           className={mergeStyles(
-            `relative h-12 w-12 rounded-full flex flex-col items-center justify-center gap-1.5`,
+            `relative h-12 w-12 rounded-full group`,
             className
           )}
-          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-hidden="true"
         >
           {/* Top Line */}
           <motion.span
             style={{
               left: "50%",
-              top: "35%",
+              top: "50%",
               x: "-50%",
-              y: "-50%",
             }}
-            className="absolute h-0.5 w-6 bg-current rounded-full origin-center"
+            className="absolute h-0.5 w-6 bg-muted-foreground group-hover:bg-primary transition-colors duration-300 rounded-full origin-center"
             variants={{
               open: {
                 rotate: 45,
-                top: "50%",
+                y: "-50%",
               },
               closed: {
                 rotate: 0,
-                top: "35%",
+                y: "calc(-50% - 8px)",
               },
             }}
           />
@@ -53,7 +52,7 @@ export const AnimatedHamburger = memo(
               x: "-50%",
               y: "-50%",
             }}
-            className="absolute h-0.5 w-6 bg-current rounded-full"
+            className="absolute h-0.5 w-6 bg-muted-foreground group-hover:bg-primary transition-colors duration-300 rounded-full"
             variants={{
               open: {
                 opacity: 0,
@@ -70,23 +69,22 @@ export const AnimatedHamburger = memo(
           <motion.span
             style={{
               left: "50%",
-              top: "65%",
+              top: "50%",
               x: "-50%",
-              y: "-50%",
             }}
-            className="absolute h-0.5 w-6 bg-current rounded-full origin-center"
+            className="absolute h-0.5 w-6 bg-muted-foreground group-hover:bg-primary transition-colors duration-300 rounded-full origin-center"
             variants={{
               open: {
                 rotate: -45,
-                top: "50%",
+                y: "-50%",
               },
               closed: {
                 rotate: 0,
-                top: "65%",
+                y: "calc(-50% + 8px)",
               },
             }}
           />
-        </motion.button>
+        </motion.div>
       </MotionConfig>
     );
   }

@@ -1,4 +1,4 @@
-import { tv } from 'tailwind-variants';
+import { tv } from "tailwind-variants";
 
 /**
  * loginButtonTriggerStyles - Login button trigger styling with tailwind-variants
@@ -8,7 +8,7 @@ export const loginButtonTriggerStyles = tv({
   slots: {
     // Main button
     button:
-      "hidden sm:flex font-black px-6 py-4 rounded-3xl border-4 transition-all duration-300 overflow-hidden relative group cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+      "flex items-center justify-center font-black p-0 w-10 h-10 min-w-0 xl:w-auto xl:h-auto xl:min-w-fit xl:py-2 xl:px-6 rounded-full border-2 xl:border-4 transition-all duration-300 overflow-hidden relative group cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
 
     // Neon glow layers
     glowLayer1:

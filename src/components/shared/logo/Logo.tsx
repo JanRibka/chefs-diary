@@ -78,7 +78,7 @@ export default function Logo({
 
       {/* Brand Text */}
       {showText && (
-        <div className="hidden sm:flex flex-col leading-none">
+        <div className="hidden xl:flex flex-col leading-none">
           {/* Font imports for build */}
           <span className={`${fontDisplay.variable} sr-only`}>
             display-font

@@ -19,7 +19,7 @@ export const WebNavbarDesktopNav = memo(() => {
 
   return (
     <nav className="hidden lg:flex items-center justify-center flex-1">
-      <ul className="flex items-center gap-8">
+      <ul className="flex items-center gap-4 lg:gap-6 xl:gap-8">
         {webMenuItems.map((item) => (
           <DesktopNavItem
             key={item.key}

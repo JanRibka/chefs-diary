@@ -22,26 +22,56 @@ const webMenuItems: WebMenuItemType[] = [
     href: webRoutes.Recipes,
     megaMenu: true,
     subitems: [
-      // Placeholder categories - to be replaced with DB data
+      //TODO: DO href doplnit odkazy z webRoutes
       {
-        key: "breakfast",
-        label: "Snídaně",
-        href: "/recepty/snidane",
+        key: "meatless",
+        label: "Bezmasá jídla",
+        href: "/recepty/bezmasa-jidla",
       },
       {
-        key: "lunch",
-        label: "Oběd",
-        href: "/recepty/obed",
+        key: "sweets",
+        label: "Cukroví",
+        href: "/recepty/cukrovi",
       },
       {
-        key: "dinner",
-        label: "Večeře",
-        href: "/recepty/vecere",
+        key: "diet",
+        label: "Dietní recepty",
+        href: "/recepty/dietni-recepty",
+      },
+      {
+        key: "cakes",
+        label: "Dorty",
+        href: "/recepty/dorty",
+      },
+      {
+        key: "grill",
+        label: "Grilování",
+        href: "/recepty/grilovani",
+      },
+      {
+        key: "mushrooms",
+        label: "Houby",
+        href: "/recepty/houby",
+      },
+      {
+        key: "legumes",
+        label: "Luštěniny",
+        href: "/recepty/lusteniny",
+      },
+      {
+        key: "meat",
+        label: "Maso",
+        href: "/recepty/maso",
       },
       {
         key: "desserts",
-        label: "Dezerty",
-        href: "/recepty/dezerty",
+        label: "Moučníky",
+        href: "/recepty/moucniky",
+      },
+      {
+        key: "drinks",
+        label: "Nápoje",
+        href: "/recepty/napoje",
       },
       {
         key: "soups",
@@ -52,36 +82,6 @@ const webMenuItems: WebMenuItemType[] = [
         key: "salads",
         label: "Saláty",
         href: "/recepty/salaty",
-      },
-      {
-        key: "appetizers",
-        label: "Předkrmy",
-        href: "/recepty/predkrmy",
-      },
-      {
-        key: "baking",
-        label: "Pečení",
-        href: "/recepty/peceni",
-      },
-      {
-        key: "drinks",
-        label: "Nápoje",
-        href: "/recepty/napoje",
-      },
-      {
-        key: "vegetarian",
-        label: "Vegetariánské",
-        href: "/recepty/vegetarianske",
-      },
-      {
-        key: "vegan",
-        label: "Veganské",
-        href: "/recepty/veganske",
-      },
-      {
-        key: "glutenfree",
-        label: "Bezlepkové",
-        href: "/recepty/bezlepkove",
       },
     ],
   },

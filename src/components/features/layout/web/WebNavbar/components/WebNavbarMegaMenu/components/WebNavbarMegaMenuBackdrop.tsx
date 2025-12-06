@@ -15,7 +15,7 @@ export const WebNavbarMegaMenuBackdrop = memo(
   ({ onClose }: WebNavbarMegaMenuBackdropProps) => {
     return (
       <div
-        className="fixed inset-x-0 top-[72px] bottom-0 bg-black/20 backdrop-blur-sm z-40"
+        className="fixed inset-x-0 top-[72px] bottom-0 z-40 bg-transparent"
         onClick={onClose}
       />
     );

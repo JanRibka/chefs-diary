@@ -40,36 +40,31 @@ export const WebNavbarMegaMenuCategoryCard = memo(
 
     return (
       <NextLink href={item.href} onClick={onClose} className={styles.card()}>
-        {/* Gradient Background - Visible by default, darkens on hover */}
-        <div className={styles.gradientOverlay()} />
-
-        {/* Gradient Overlay on Hover - for better text contrast */}
-        <div className={styles.textOverlay()} />
-
-        {/* Pattern Background */}
-        <div
-          className={styles.patternBg()}
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 20px 20px, currentColor 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
+        {/* Icon Circle */}
+        <div className={styles.iconCircle()}>
+          <div className={styles.icon()}>{icon}</div>
+        </div>
 
         {/* Content */}
         <div className={styles.content()}>
-          <div className="relative">
-            {/* Icon Circle */}
-            <div className={styles.iconCircle()}>
-              <div className={styles.icon()}>{icon}</div>
-            </div>
-
-            <h4 className={styles.title()}>{item.label}</h4>
-          </div>
+          <h4 className={styles.title()}>{item.label}</h4>
+          <p className={styles.description()}>Prozkoumat recepty</p>
         </div>
 
-        {/* Shimmer Effect */}
-        <div className={styles.shimmer()} />
+        {/* Arrow Icon (visible on hover) */}
+        <svg
+          className={styles.arrow()}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
       </NextLink>
     );
   }

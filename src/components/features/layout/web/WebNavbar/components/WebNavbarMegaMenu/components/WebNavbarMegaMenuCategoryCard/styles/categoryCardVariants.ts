@@ -10,7 +10,7 @@ export const categoryCardVariants = tv({
     card: "group relative flex items-center gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-default-100/50 dark:hover:bg-default-50/5 border border-transparent hover:border-default-200/50 dark:hover:border-default-700/50",
     iconCircle:
       "relative flex items-center justify-center w-10 h-10 rounded-lg bg-default-100 dark:bg-default-50/10 group-hover:scale-110 transition-transform duration-300",
-    icon: "w-5 h-5 transition-colors duration-300",
+    icon: "w-6 h-6 transition-colors duration-300",
     content: "flex-1",
     title:
       "text-sm font-medium text-default-700 dark:text-default-200 group-hover:text-primary transition-colors duration-300",

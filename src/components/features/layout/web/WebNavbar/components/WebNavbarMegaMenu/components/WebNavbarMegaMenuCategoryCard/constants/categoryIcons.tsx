@@ -17,21 +17,21 @@ import { GiMushroomGills, GiPieSlice } from "react-icons/gi";
  * Maps category keys to their corresponding React icon components
  */
 export const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  meatless: <FaCarrot className="w-6 h-6" />,
-  sweets: <FaCookie className="w-6 h-6" />,
-  diet: <FaLeaf className="w-6 h-6" />,
-  cakes: <FaBirthdayCake className="w-6 h-6" />,
-  grill: <FaFire className="w-6 h-6" />,
-  mushrooms: <GiMushroomGills className="w-6 h-6" />,
-  legumes: <FaSeedling className="w-6 h-6" />,
-  meat: <FaDrumstickBite className="w-6 h-6" />,
-  desserts: <GiPieSlice className="w-6 h-6" />,
-  drinks: <FaCocktail className="w-6 h-6" />,
-  soups: <FaUtensilSpoon className="w-6 h-6" />,
-  salads: <FaLeaf className="w-6 h-6" />,
+  meatless: <FaCarrot />,
+  sweets: <FaCookie />,
+  diet: <FaLeaf />,
+  cakes: <FaBirthdayCake />,
+  grill: <FaFire />,
+  mushrooms: <GiMushroomGills />,
+  legumes: <FaSeedling />,
+  meat: <FaDrumstickBite />,
+  desserts: <GiPieSlice />,
+  drinks: <FaCocktail />,
+  soups: <FaUtensilSpoon />,
+  salads: <FaLeaf />,
 };
 
 /**
  * Default icon for categories without a specific icon
  */
-export const DEFAULT_CATEGORY_ICON = <IoCafeOutline className="w-6 h-6" />;
+export const DEFAULT_CATEGORY_ICON = <IoCafeOutline />;

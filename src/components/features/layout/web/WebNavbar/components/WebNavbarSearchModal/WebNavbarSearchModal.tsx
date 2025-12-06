@@ -1,87 +1,54 @@
 "use client";
 
-import { memo, useMemo } from "react";
-import { IoSearch } from "react-icons/io5";
+import { memo } from "react";
+import { Modal, ModalBody, ModalContent } from "@heroui/react";
 
-import { Button, Input, Modal, ModalBody, ModalContent } from "@heroui/react";
-
-import { SEARCH_TAGS } from "../../constants/searchTags";
 import { searchModalStyles } from "./styles/searchModalStyles";
-
-interface WebNavbarSearchModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { WebNavbarSearchModalProps } from "./types/WebNavbarSearchModalProps";
+import { WebNavbarSearchModalHeader } from "./components/WebNavbarSearchModalHeader/WebNavbarSearchModalHeader";
+import { WebNavbarSearchModalInput } from "./components/WebNavbarSearchModalInput/WebNavbarSearchModalInput";
+import { WebNavbarSearchModalTags } from "./components/WebNavbarSearchModalTags/WebNavbarSearchModalTags";
+import { WebNavbarSearchModalTips } from "./components/WebNavbarSearchModalTips/WebNavbarSearchModalTips";
 
 /**
- * WebNavbarSearchModal - Search modal with input and tags
- * DATA COLOCATION: SEARCH_TAGS constant is here because it's only used here
+ * WebNavbarSearchModal - Search modal orchestrator
+ * Orchestrates the search modal layout and subcomponents
  *
  * @param isOpen - Whether the modal is open
  * @param onClose - Callback to close the modal
- *
- * @example
- * <WebNavbarSearchModal
- *   isOpen={true}
- *   onClose={() => setOpen(false)}
- * />
  */
 export const WebNavbarSearchModal = memo(
   ({ isOpen, onClose }: WebNavbarSearchModalProps) => {
     // Get styles from tailwind-variants
     const styles = searchModalStyles();
 
-    // PERFORMANCE: useMemo - memoizace mapovaných tagů (nevytvářet znovu při každém re-renderu)
-    const searchTagButtons = useMemo(
-      () =>
-        SEARCH_TAGS.map((tag) => (
-          <Button
-            key={tag}
-            size="sm"
-            variant="flat"
-            className={styles.tagButton()}
-          >
-            {tag}
-          </Button>
-        )),
-      [styles]
-    );
-
     return (
       <Modal
         isOpen={isOpen}
         onClose={onClose}
         backdrop="blur"
-        size="2xl"
+        size="4xl"
         placement="top"
         classNames={{
           backdrop: styles.modalBackdrop(),
           wrapper: styles.modalWrapper(),
           base: styles.modalBase(),
+          closeButton: styles.closeButton(),
         }}
+        // PERFORMANCE: Disable animation for faster feel on mobile if needed, but keeping default for now
       >
-        <ModalContent>
+        <ModalContent className={styles.modalContent()}>
           <ModalBody className={styles.modalBody()}>
-            <div className={styles.content()}>
-              <div className={styles.header()}>
-                <h3 className={styles.title()}>Hledat recepty</h3>
-                <p className={styles.subtitle()}>
-                  Objevte tisíce skvělých receptů
-                </p>
+            <div className={styles.gridContainer()}>
+              {/* Left Column - Search & Tags */}
+              <div className={styles.leftColumn()}>
+                <WebNavbarSearchModalHeader />
+                <WebNavbarSearchModalInput />
+                <WebNavbarSearchModalTags />
               </div>
 
-              <Input
-                placeholder="Napište název receptu, ingredienci nebo kategorii..."
-                startContent={<IoSearch className={styles.searchIcon()} />}
-                size="lg"
-                classNames={{
-                  input: styles.inputInput(),
-                  inputWrapper: styles.inputWrapper(),
-                }}
-                autoFocus
-              />
-
-              <div className={styles.tagsContainer()}>{searchTagButtons}</div>
+              {/* Right Column - Tips */}
+              <WebNavbarSearchModalTips />
             </div>
           </ModalBody>
         </ModalContent>

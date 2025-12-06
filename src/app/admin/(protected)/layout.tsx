@@ -1,4 +1,4 @@
-import NavBar from "@/components/features/layout/admin/protectedLayout/navBar/NabBar";
+import NavBar from "@/components/features/layout/admin/protectedLayout/navBar/NavBar";
 import MenuItems from "@/components/features/layout/admin/protectedLayout/sideBar/menuItems/MenuItems";
 import SideBar from "@/components/features/layout/admin/protectedLayout/sideBar/SideBar";
 import ClientReplace from "@/components/shared/clientReplace/ClientReplace";

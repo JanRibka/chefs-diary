@@ -7,8 +7,8 @@ import { navbarSharedConfig } from "./sharedNavbarStyles";
  */
 export const navbarStyles = tv({
   slots: {
-    nav: "fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 pointer-events-none",
-    container: `pointer-events-auto flex items-center justify-between transition-all duration-500 ease-out rounded-full border ${navbarSharedConfig.borderColor} ${navbarSharedConfig.glass} shadow-lg shadow-black/5`,
+    nav: "fixed top-0 left-0 right-0 z-50 flex justify-center pt-3 px-4 pointer-events-none",
+    container: `pointer-events-auto flex items-center justify-between transition-all duration-500 ease-out rounded-full ${navbarSharedConfig.glass} ${navbarSharedConfig.boxShadow}`,
   },
   variants: {
     scrolled: {

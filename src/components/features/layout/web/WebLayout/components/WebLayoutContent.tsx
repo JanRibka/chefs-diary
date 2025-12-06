@@ -13,7 +13,7 @@ export const WebLayoutContent = ({ children }: WebLayoutContentProps) => {
   const animations = useWebLayoutAnimations();
 
   return (
-    <main className="flex-1 relative">
+    <main className="flex-1 relative pt-2">
       {/* Content wrapper with enhanced animations */}
       <div className="animate-animate-in fade-in duration-1000 slide-in-from-bottom-6">
         <div className="relative">

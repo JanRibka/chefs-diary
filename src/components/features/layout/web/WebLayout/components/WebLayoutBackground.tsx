@@ -7,7 +7,7 @@ export const WebLayoutBackground = () => {
     <div className="fixed inset-0 -z-10">
       {/* Base gradient background */}
       {/* Base gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
 
       {/* Animated gradient orbs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-3xl animate-pulse" />

@@ -8,7 +8,7 @@ import { navbarSharedConfig } from "../../../styles/sharedNavbarStyles";
 export const mobileMenuStyles = tv({
   slots: {
     // Main container with animations
-    container: `lg:hidden absolute top-full left-0 right-0 ${navbarSharedConfig.glass} border-b ${navbarSharedConfig.borderColor} shadow-2xl overflow-hidden transition-all duration-500 ease-out transform-gpu`,
+    container: `lg:hidden absolute top-full left-0 right-0 ${navbarSharedConfig.glass} ${navbarSharedConfig.boxShadow} overflow-hidden transition-all duration-500 ease-out transform-gpu`,
 
     // Background gradient
     backgroundGradient:

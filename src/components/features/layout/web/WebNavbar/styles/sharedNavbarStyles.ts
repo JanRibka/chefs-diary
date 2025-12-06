@@ -6,6 +6,7 @@ export const navbarSharedConfig = {
   // Glassmorphism effect (background + blur)
   glass: "backdrop-blur-xl bg-background/80",
 
-  // Border color for glass effect
-  borderColor: "border-white/20 dark:border-white/10",
+  // Box shadow for glass effect
+  boxShadow:
+    "shadow-[0_0_20px_rgba(0,0,0,0.15)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)]",
 };

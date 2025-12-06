@@ -527,6 +527,34 @@ async function main() {
   //     },
   //   });
   // }
+  // Vytváření typů výtěžnosti
+  const yieldTypes = [
+    { name: "Porce", singular: "porce", paucal: "porce", plural: "porcí" },
+    { name: "Kusy", singular: "kus", paucal: "kusy", plural: "kusů" },
+    { name: "Plechy", singular: "plech", paucal: "plechy", plural: "plechů" },
+    { name: "Dávky", singular: "dávka", paucal: "dávky", plural: "dávek" },
+    { name: "Litry", singular: "litr", paucal: "litry", plural: "litrů" },
+    { name: "Jiné", singular: "jiné", paucal: "jiné", plural: "jiných" },
+  ];
+
+  for (const type of yieldTypes) {
+    await prisma.recipeYieldType.upsert({
+      where: { name: type.name },
+      update: {
+        singular: type.singular,
+        paucal: type.paucal,
+        plural: type.plural,
+      },
+      create: {
+        name: type.name,
+        singular: type.singular,
+        paucal: type.paucal,
+        plural: type.plural,
+      },
+    });
+  }
+
+  console.log("Yield Types seeded successfully.");
 }
 
 main()

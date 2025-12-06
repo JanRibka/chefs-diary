@@ -1,0 +1,9 @@
+model RecipeYieldType {
+    idRecipeYieldType Int    @id @default(autoincrement()) @db.Integer
+    name              String @unique @db.VarChar(50)
+    singular          String @default("") @db.VarChar(50)
+    paucal            String @default("") @db.VarChar(50)
+    plural            String @default("") @db.VarChar(50)
+
+    recipes Recipe[]
+}
